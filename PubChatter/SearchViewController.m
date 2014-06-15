@@ -10,6 +10,7 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import "TDOAuth.h"
 #import "Bar.h"
+#import "SearchTableViewCell.h"
 
 
 @interface SearchViewController () <UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate, MKMapViewDelegate>
@@ -18,7 +19,12 @@
 @property CLLocationManager *locationManager;
 @property CLLocation *userLocation;
 @property NSString *userLocationString;
+@property NSString *queryString;
 @property NSArray *barLocations;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *toggleControlOutlet;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (weak, nonatomic) IBOutlet UIButton *searchButtonOutlet;
+@property CGFloat span;
 
 @end
 
@@ -28,10 +34,29 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.queryString = @"bar";
+    self.span = 0.02;
+    self.toggleControlOutlet.selectedSegmentIndex = 0;
+    self.mapView.hidden = NO;
+    self.tableView.hidden = YES;
     self.locationManager = [[CLLocationManager alloc] init];
     [self.locationManager startUpdatingLocation];
     self.locationManager.delegate = self;
     self.navigationItem.title = @"PubChatter";
+}
+
+- (IBAction)onSearchButtonPressed:(id)sender
+{
+    [self.mapView removeAnnotations:self.mapView.annotations];
+    self.queryString = self.searchBar.text;
+    self.span = .15;
+    [self findBarNear:self.userLocation inSpan:self.span];
+    self.searchButtonOutlet.enabled = NO;
+    [self.searchBar endEditing:YES];
+    CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(self.userLocation.coordinate.latitude, self.userLocation.coordinate.longitude);
+    MKCoordinateSpan mapspan = MKCoordinateSpanMake(self.span, self.span);
+    MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, mapspan);
+    [self.mapView setRegion:region animated:YES];
 }
 
 // Finds user location and sets the userLocation property
@@ -43,10 +68,10 @@
             self.userLocation = location;
             [self getUserLocationString];
             CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(self.userLocation.coordinate.latitude, self.userLocation.coordinate.longitude);
-            MKCoordinateSpan span = MKCoordinateSpanMake(.02, .02);
-            MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, span);
+            MKCoordinateSpan mapspan = MKCoordinateSpanMake(self.span, self.span);
+            MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, mapspan);
             [self.mapView setRegion:region animated:YES];
-            [self findBarNear:self.userLocation];
+            [self findBarNear:self.userLocation inSpan:self.span];
 
 //            [self getJSON];
             break;
@@ -54,12 +79,11 @@
     }
 }
 
--(void)findBarNear:(CLLocation *)location
+-(void)findBarNear:(CLLocation *)location inSpan:(CGFloat)span
 {
-    NSLog(@"FindBarNear ran");
     MKLocalSearchRequest *request = [[MKLocalSearchRequest alloc] init];
-    request.naturalLanguageQuery = @"bar";
-    request.region = MKCoordinateRegionMake(location.coordinate, MKCoordinateSpanMake(.02, .02));
+    request.naturalLanguageQuery = self.queryString;
+    request.region = MKCoordinateRegionMake(location.coordinate, MKCoordinateSpanMake(span, span));
     MKLocalSearch *search = [[MKLocalSearch alloc] initWithRequest:request];
     [search startWithCompletionHandler:^(MKLocalSearchResponse *response, NSError *error) {
 
@@ -76,15 +100,16 @@
             NSLog(@"%lu", (unsigned long)arrayOfBarLocationMapItems.count);
 
             CLLocation *barLocation = [[CLLocation alloc] initWithLatitude:bar.latitude longitude:bar.longitude];
-            self.barAnnotation = [[MKPointAnnotation alloc] init];
-            self.barAnnotation.coordinate = barLocation.coordinate;
-            self.barAnnotation.title = bar.name;
-            self.barAnnotation.subtitle = [NSString stringWithFormat:@"%.02f miles", bar.distanceFromUser * 0.000621371];
-            [self.mapView addAnnotation:self.barAnnotation];
+            MKPointAnnotation *barAnnotation = [[MKPointAnnotation alloc] init];
+            barAnnotation.coordinate = barLocation.coordinate;
+            barAnnotation.title = bar.name;
+            barAnnotation.subtitle = [NSString stringWithFormat:@"%.02f miles", bar.distanceFromUser * 0.000621371];
+            [self.mapView addAnnotation:barAnnotation];
                 }
         NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"distanceFromUser" ascending:YES];
         self.barLocations = [arrayOfBarLocationMapItems sortedArrayUsingDescriptors:@[descriptor]];
         [self.tableView reloadData];
+        self.searchButtonOutlet.enabled = YES;
     }];
 }
 
@@ -129,15 +154,34 @@
     return self.barLocations.count;
 }
 
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+-(SearchTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Bar *bar = [self.barLocations objectAtIndex:indexPath.row];
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    SearchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     NSString *milesFromUser = [NSString stringWithFormat:@"%.02f miles", bar.distanceFromUser * 0.000621371];
 
-    cell.textLabel.text = bar.name;
-    cell.detailTextLabel.text = milesFromUser;
+    cell.barNameLabel.text = bar.name;
+    cell.barDistanceLabel.text = milesFromUser;
+    cell.barAddressLabel.text = bar.address;
+    
     return cell;
+}
+- (IBAction)onToggleMapListViewPressed:(id)sender
+{
+    [self segmentChanged:sender];
+}
+
+- (void)segmentChanged:(id)sender
+{
+    if ([sender selectedSegmentIndex] == 0) {
+            self.mapView.hidden = NO;
+            self.tableView.hidden = YES;
+        }
+        else
+        {
+            self.mapView.hidden = YES;
+            self.tableView.hidden = NO;
+        }
 }
 
 #pragma mark - OAuth methods

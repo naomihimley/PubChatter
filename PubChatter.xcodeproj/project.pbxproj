@@ -14,6 +14,7 @@
 		0EB32005194BD2D4005A3B82 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EB32004194BD2D4005A3B82 /* Parse.framework */; };
 		0EB3200B194CBDD0005A3B82 /* TDOAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB3200A194CBDD0005A3B82 /* TDOAuth.m */; };
 		0EB3200E194E384D005A3B82 /* Bar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB3200D194E384D005A3B82 /* Bar.m */; };
+		0EB32011194E4AC3005A3B82 /* SearchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB32010194E4AC3005A3B82 /* SearchTableViewCell.m */; };
 		B0782C3C194BB3700022E6E7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C3B194BB3700022E6E7 /* Foundation.framework */; };
 		B0782C3E194BB3700022E6E7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C3D194BB3700022E6E7 /* CoreGraphics.framework */; };
 		B0782C40194BB3700022E6E7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C3F194BB3700022E6E7 /* UIKit.framework */; };
@@ -64,6 +65,8 @@
 		0EB3200A194CBDD0005A3B82 /* TDOAuth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDOAuth.m; sourceTree = "<group>"; };
 		0EB3200C194E384D005A3B82 /* Bar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bar.h; sourceTree = "<group>"; };
 		0EB3200D194E384D005A3B82 /* Bar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bar.m; sourceTree = "<group>"; };
+		0EB3200F194E4AC3005A3B82 /* SearchTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchTableViewCell.h; sourceTree = "<group>"; };
+		0EB32010194E4AC3005A3B82 /* SearchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchTableViewCell.m; sourceTree = "<group>"; };
 		B0782C38194BB3700022E6E7 /* PubChatter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PubChatter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0782C3B194BB3700022E6E7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B0782C3D194BB3700022E6E7 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -185,6 +188,8 @@
 				B0782C4D194BB3700022E6E7 /* Main.storyboard */,
 				0EB31FF9194BC158005A3B82 /* SearchViewController.h */,
 				0EB31FFA194BC158005A3B82 /* SearchViewController.m */,
+				0EB3200F194E4AC3005A3B82 /* SearchTableViewCell.h */,
+				0EB32010194E4AC3005A3B82 /* SearchTableViewCell.m */,
 				0EB32009194CBDD0005A3B82 /* TDOAuth.h */,
 				0EB3200A194CBDD0005A3B82 /* TDOAuth.m */,
 				0EB31FFC194BC176005A3B82 /* ProfileViewController.h */,
@@ -326,6 +331,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0782C4C194BB3700022E6E7 /* AppDelegate.m in Sources */,
+				0EB32011194E4AC3005A3B82 /* SearchTableViewCell.m in Sources */,
 				0EB3200E194E384D005A3B82 /* Bar.m in Sources */,
 				0EB3200B194CBDD0005A3B82 /* TDOAuth.m in Sources */,
 				0EB32001194BC19E005A3B82 /* ChatViewController.m in Sources */,
