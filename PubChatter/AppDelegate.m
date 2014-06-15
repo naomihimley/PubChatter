@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import <Parse/Parse.h>
+#import "Bar.h"
 
 @implementation AppDelegate
 
@@ -15,6 +16,9 @@
 {
     [Parse setApplicationId:@"B8JvVtX5W4w0OwlMSLzLQZBvW3j8xbHQ7bElMK47"
                   clientKey:@"v9ld8HOcNGdn3xIzeFZ9WS9KofND8Y4rsEzH6mwU"];
+
+    [Bar registerSubclass];
+
     return YES;
 }
 							
