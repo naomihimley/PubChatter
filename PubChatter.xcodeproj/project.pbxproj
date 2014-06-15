@@ -40,6 +40,7 @@
 		B0782C83194BB4260022E6E7 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C82194BB4260022E6E7 /* Social.framework */; };
 		B0782C85194BB42B0022E6E7 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C84194BB42B0022E6E7 /* Accounts.framework */; };
 		B0782C87194BB4340022E6E7 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C86194BB4340022E6E7 /* Parse.framework */; };
+		B0782CCE194E0D560022E6E7 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782CCD194E0D560022E6E7 /* CoreBluetooth.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +97,7 @@
 		B0782C82194BB4260022E6E7 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		B0782C84194BB42B0022E6E7 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		B0782C86194BB4340022E6E7 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = ../../../Desktop/Parse.framework; sourceTree = "<group>"; };
+		B0782CCD194E0D560022E6E7 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0782CCE194E0D560022E6E7 /* CoreBluetooth.framework in Frameworks */,
 				0EB32003194BC369005A3B82 /* MapKit.framework in Frameworks */,
 				B0782C85194BB42B0022E6E7 /* Accounts.framework in Frameworks */,
 				B0782C83194BB4260022E6E7 /* Social.framework in Frameworks */,
@@ -158,13 +161,15 @@
 		B0782C3A194BB3700022E6E7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B0782C7E194BB4170022E6E7 /* AudioToolbox.framework */,
+				B0782C84194BB42B0022E6E7 /* Accounts.framework */,
+				B0782C80194BB41D0022E6E7 /* CoreLocation.framework */,
+				B0782C3D194BB3700022E6E7 /* CoreGraphics.framework */,
+				B0782CCD194E0D560022E6E7 /* CoreBluetooth.framework */,
 				0EB32004194BD2D4005A3B82 /* Parse.framework */,
 				0EB32002194BC369005A3B82 /* MapKit.framework */,
 				B0782C86194BB4340022E6E7 /* Parse.framework */,
-				B0782C84194BB42B0022E6E7 /* Accounts.framework */,
 				B0782C82194BB4260022E6E7 /* Social.framework */,
-				B0782C80194BB41D0022E6E7 /* CoreLocation.framework */,
-				B0782C7E194BB4170022E6E7 /* AudioToolbox.framework */,
 				B0782C7C194BB40F0022E6E7 /* CFNetwork.framework */,
 				B0782C7A194BB40A0022E6E7 /* libz.dylib */,
 				B0782C78194BB4040022E6E7 /* MobileCoreServices.framework */,
@@ -173,7 +178,6 @@
 				B0782C72194BB3F20022E6E7 /* StoreKit.framework */,
 				B0782C70194BB3ED0022E6E7 /* SystemConfiguration.framework */,
 				B0782C3B194BB3700022E6E7 /* Foundation.framework */,
-				B0782C3D194BB3700022E6E7 /* CoreGraphics.framework */,
 				B0782C3F194BB3700022E6E7 /* UIKit.framework */,
 				B0782C5A194BB3700022E6E7 /* XCTest.framework */,
 			);
