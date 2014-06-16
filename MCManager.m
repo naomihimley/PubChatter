@@ -53,6 +53,7 @@
 {
     self.peerID = [[MCPeerID alloc]initWithDisplayName:displayName];
     self.session = [[MCSession alloc]initWithPeer:self.peerID];
+    self.session.delegate = self;
 }
 
 -(void)setupMCBrowser
