@@ -34,6 +34,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [self setTextFields];
     if (![PFUser currentUser])
     {
         PFLogInViewController *loginViewController = [PFLogInViewController new];
@@ -43,7 +44,6 @@
         loginViewController.signUpController = signupViewController;
         [self presentViewController:loginViewController animated:YES completion:nil];
     }
-    self.nameLabel.text = [[[PFUser currentUser]objectForKey:@"username"] uppercaseString];
     [self.barNameLabel sizeToFit];
     self.inARegion = NO;
     self.locationManager = [[CLLocationManager alloc] init];
@@ -59,11 +59,41 @@
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Unable To Monitor Location" message:@"Only works on iOS 5 and later" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
         [alert show];
     }
+    PFFile *file = [[PFUser currentUser]objectForKey:@"picture"];
+    [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
+     {
+         self.profileImageView.image = [UIImage imageWithData:data];
+     }];
 }
 
-//automatically dismisses LogInVC when user hits enter or ok
+- (void)setTextFields
+{
+    PFQuery *query = [PFQuery queryWithClassName:@"_User"];
+    [query whereKey:@"username" equalTo:[[PFUser currentUser] objectForKey:@"username"]];
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error)
+     {
+         if (!error)
+         {
+             self.nameLabel.text = [object[@"username"] uppercaseString];
+             self.ageLabel.text = object[@"age"];
+             self.genderLabel.text = [object[@"gender"] uppercaseString];
+             self.bioTextView.text = object[@"bio"];
+             self.sexualOrientationLabel.text = object[@"sexualOrientation"];
+             self.favDrinkLabel.text = object[@"favoriteDrinkLabel"];
+         } else {
+             // Did not find any user for the current user
+             NSLog(@"Error in EditView: %@", error);
+         }
+     }];
+}
+
 - (void)logInViewController:(PFLogInViewController *)controller
                didLogInUser:(PFUser *)user {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)signUpViewController:(PFSignUpViewController *)signUpController didSignUpUser:(PFUser *)user
+{
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
