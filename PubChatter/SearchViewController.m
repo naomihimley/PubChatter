@@ -118,12 +118,14 @@
             Bar *bar = [[Bar alloc] init];
             bar.distanceFromUser = [self.userLocation distanceFromLocation:barMapItem.placemark.location];
             bar.name = barMapItem.name;
-            bar.telephone = barMapItem.phoneNumber;
+            if ([barMapItem.phoneNumber hasPrefix:@"+"]) {
+                bar.telephone = [barMapItem.phoneNumber substringFromIndex:1];
+            }
+            NSLog(@"%@", bar.telephone);
             bar.address = ABCreateStringWithAddressDictionary(barMapItem.placemark.addressDictionary, NO);
             bar.latitude = barMapItem.placemark.location.coordinate.latitude;
             bar.longitude = barMapItem.placemark.location.coordinate.longitude;
             bar.businessURL = barMapItem.url;
-            NSLog(@"%@", bar.businessURL);
             [arrayOfBarLocationMapItems addObject:bar];
 
             CLLocation *barLocation = [[CLLocation alloc] initWithLatitude:bar.latitude longitude:bar.longitude];
