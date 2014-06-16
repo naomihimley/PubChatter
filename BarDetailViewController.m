@@ -25,7 +25,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"%@", self.barFromSourceVC.name);
 
     self.barNameLabel.text = self.barFromSourceVC.name;
     self.barAddressLabel.text = self.barFromSourceVC.address;

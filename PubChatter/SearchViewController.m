@@ -22,6 +22,7 @@
 @property NSString *userLocationString;
 @property NSString *queryString;
 @property NSArray *barLocations;
+@property Bar *selectedBar;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *toggleControlOutlet;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UIButton *searchButtonOutlet;
@@ -189,12 +190,21 @@
     return pin;
 }
 
-//- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view
-//calloutAccessoryControlTapped:(UIControl *)control
-//{
-//    [self performSegueWithIdentifier:@"segue" sender:self];
-//}
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view
+calloutAccessoryControlTapped:(UIControl *)control
+{
+    [self performSegueWithIdentifier:@"segue" sender:self];
+}
 
+-(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKPinAnnotationView *)view
+{
+    for (Bar *bar in self.barLocations)
+    {
+        if ([view.annotation.title isEqualToString:bar.name]) {
+            self.selectedBar = bar;
+        }
+    }
+}
 
 - (void)getUserLocationString
 {
@@ -224,16 +234,21 @@
     cell.barNameLabel.text = bar.name;
     cell.barDistanceLabel.text = milesFromUser;
     cell.barAddressLabel.text = bar.address;
-    
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSIndexPath *selectedIndexPath = self.tableView.indexPathForSelectedRow;
+    self.selectedBar = [self.barLocations objectAtIndex:selectedIndexPath.row];
+    [self performSegueWithIdentifier:@"segue" sender:self];
+
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSIndexPath *selectedIndexPath = self.tableView.indexPathForSelectedRow;
-    Bar *bar = [self.barLocations objectAtIndex:selectedIndexPath.row];
     BarDetailViewController *detailViewController = segue.destinationViewController;
-    detailViewController.barFromSourceVC = bar;
+    detailViewController.barFromSourceVC = self.selectedBar;
 }
 
 - (void)segmentChanged:(id)sender
@@ -242,7 +257,6 @@
             self.mapView.hidden = NO;
             self.tableView.hidden = YES;
             self.redrawAreaButtonOutlet.hidden = NO;
-
         }
         else
         {
