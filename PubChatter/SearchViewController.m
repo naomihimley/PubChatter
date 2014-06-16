@@ -120,7 +120,6 @@
             bar.latitude = barMapItem.placemark.location.coordinate.latitude;
             bar.longitude = barMapItem.placemark.location.coordinate.longitude;
             [arrayOfBarLocationMapItems addObject:bar];
-            NSLog(@"%lu", (unsigned long)arrayOfBarLocationMapItems.count);
 
             CLLocation *barLocation = [[CLLocation alloc] initWithLatitude:bar.latitude longitude:bar.longitude];
             MKPointAnnotation *barAnnotation = [[MKPointAnnotation alloc] init];
@@ -138,10 +137,9 @@
 }
 
 // Gets JSON data from Yelp
-//-(void)getJSON
+//-(void)getYelpData
 //{
-//    NSMutableArray *tempArray = [[NSMutableArray alloc] init];
-//    NSString *urlString = @"http://www.divvybikes.com/stations/json";
+//    NSString *urlString = @"";
 //    NSURL *url = [NSURL URLWithString:urlString];
 //    NSURLRequest *request = [NSURLRequest requestWithURL:url];
 //
@@ -149,12 +147,33 @@
 //     {
 //         NSDictionary *dictionary  = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&connectionError];
 //
-//         NSArray *stationsArray = [dictionary objectForKey:@"stationBeanList"];
+//         NSArray *yelpBars = [dictionary objectForKey:@"businesses"];
+//         NSMutableArray *arrayOfYelpBarItems = [NSMutableArray new];
 //
-//         for (NSDictionary *dictionary in stationsArray) {
+//         for (NSDictionary *dictionary in yelpBars) {
+//             YelpBar *yelpBar = [[YelpBar alloc] init];
+//             yelpBar.distanceFromUser =
+//             yelpBar.name =
+//             yelpBar.address =
+//             yelpBar.latitude =
+//             yelpBar.longitude =
+//             yelpBar.businessImageURL =
+//             yelpBar.businessRatingImageURL =
+//             yelpBar.isClosed =
+//             [arrayOfYelpBarItems addObject:yelpBar];
 //
-//             DivvyStation *divvyStation = [[DivvyStation alloc] init];
+//             CLLocation *yelpBarLocation = [[CLLocation alloc] initWithLatitude:yelpBar.latitude longitude:yelpBar.longitude];
+//             MKPointAnnotation *yelpBarAnnotation = [[MKPointAnnotation alloc] init];
+//             yelpBarAnnotation.coordinate = yelpBarLocation.coordinate;
+//             yelpBarAnnotation.title = yelpBar.name;
+//             yelpBarAnnotation.subtitle = [NSString stringWithFormat:@"%.02f miles", yelpBar.distanceFromUser * 0.000621371];
+//             [self.mapView addAnnotation:yelpBarAnnotation];
 //         }
+//         NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"distanceFromUser" ascending:YES];
+//         self.barLocations = [arrayOfYelpBarItems sortedArrayUsingDescriptors:@[descriptor]];
+//         [self.tableView reloadData];
+//         self.searchButtonOutlet.enabled = YES;
+//         self.redrawAreaButtonOutlet.enabled = YES;
 //    }];
 //}
 
