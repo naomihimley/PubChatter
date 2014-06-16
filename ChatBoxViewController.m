@@ -8,9 +8,8 @@
 
 #import "ChatBoxViewController.h"
 #import "AppDelegate.h"
-#import <MultipeerConnectivity/MultipeerConnectivity.h>
 
-@interface ChatBoxViewController ()<UITextFieldDelegate, MCSessionDelegate>
+@interface ChatBoxViewController ()<UITextFieldDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *chatTextField;
 @property (weak, nonatomic) IBOutlet UITextView *chatTextView;
 @property AppDelegate *appDelegate;
@@ -66,15 +65,23 @@
                                          toPeers:peerToSendTo
                                         withMode:MCSessionSendDataReliable
                                            error:&error];
-
     if (error)
     {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Please connect to another user to chat"
+                                                           message:nil
+                                                          delegate:self
+                                                 cancelButtonTitle:@"OK"
+                                                 otherButtonTitles:nil, nil];
+        [alertView show];
         NSLog(@"%@", [error localizedDescription]);
     }
 
-    [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:[NSString stringWithFormat:@"I wrote:\n%@\n\n", self.chatTextField.text]]];
-    NSLog(@"sent data");
-    self.chatTextField.text = @"";
+    else
+    {
+        [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:[NSString stringWithFormat:@"I wrote:\n%@\n\n", self.chatTextField.text]]];
+        self.chatTextField.text = @"";
+    }
+    
     [self.chatTextField resignFirstResponder];
 }
 
@@ -91,13 +98,6 @@
     [self.chatTextView performSelectorOnMainThread:@selector(setText:) withObject:[self.chatTextView.text stringByAppendingString:[NSString stringWithFormat:@"%@:\n%@\n\n", peerDisplayName, receivedText]] waitUntilDone:NO];
 }
 
-//-(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID
-//{
-//    NSDictionary *dictionary = @{@"data": data,
-//                                 @"peerID": peerID};
-//    [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidReceiveDataNotification"
-//                                                        object:nil
-//                                                      userInfo:dictionary];
-//}
+
 
 @end

@@ -9,6 +9,7 @@
 #import "ChatViewController.h"
 #import "ListOfUsersTableViewCell.h"
 #import <Parse/Parse.h>
+#import "OPPViewController.h"
 
 @interface ChatViewController ()<UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -57,6 +58,16 @@
             NSLog(@"%@", self.userArray);
         }
     }];
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    OPPViewController *destinationVC = segue.destinationViewController;
+
+    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+
+    destinationVC.user = [self.userArray objectAtIndex:indexPath.row];
+
 }
 
 @end

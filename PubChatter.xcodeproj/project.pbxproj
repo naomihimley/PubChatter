@@ -64,10 +64,10 @@
 /* Begin PBXFileReference section */
 		0EB31FF9194BC158005A3B82 /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
 		0EB31FFA194BC158005A3B82 /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
-		0EB31FFC194BC176005A3B82 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
-		0EB31FFD194BC176005A3B82 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
-		0EB31FFF194BC19E005A3B82 /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
-		0EB32000194BC19E005A3B82 /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
+		0EB31FFC194BC176005A3B82 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProfileViewController.h; path = PubChatter/ProfileViewController.h; sourceTree = "<group>"; };
+		0EB31FFD194BC176005A3B82 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProfileViewController.m; path = PubChatter/ProfileViewController.m; sourceTree = "<group>"; };
+		0EB31FFF194BC19E005A3B82 /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatViewController.h; path = PubChatter/ChatViewController.h; sourceTree = "<group>"; };
+		0EB32000194BC19E005A3B82 /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChatViewController.m; path = PubChatter/ChatViewController.m; sourceTree = "<group>"; };
 		0EB32002194BC369005A3B82 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		0EB32004194BD2D4005A3B82 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		0EB32009194CBDD0005A3B82 /* TDOAuth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDOAuth.h; sourceTree = "<group>"; };
@@ -78,16 +78,16 @@
 		0EB32010194E4AC3005A3B82 /* SearchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchTableViewCell.m; sourceTree = "<group>"; };
 		0ECEAEE6194F69A000B92C40 /* YelpBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YelpBar.h; sourceTree = "<group>"; };
 		0ECEAEE7194F69A000B92C40 /* YelpBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YelpBar.m; sourceTree = "<group>"; };
-		0ECEAEE9194F6FAC00B92C40 /* BarDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BarDetailViewController.h; path = ../BarDetailViewController.h; sourceTree = "<group>"; };
-		0ECEAEEA194F6FAC00B92C40 /* BarDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BarDetailViewController.m; path = ../BarDetailViewController.m; sourceTree = "<group>"; };
+		0ECEAEE9194F6FAC00B92C40 /* BarDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BarDetailViewController.h; sourceTree = "<group>"; };
+		0ECEAEEA194F6FAC00B92C40 /* BarDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BarDetailViewController.m; sourceTree = "<group>"; };
 		0ECEAEEC194F8AD200B92C40 /* BarWebpageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BarWebpageViewController.h; path = ../BarWebpageViewController.h; sourceTree = "<group>"; };
 		0ECEAEED194F8AD200B92C40 /* BarWebpageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BarWebpageViewController.m; path = ../BarWebpageViewController.m; sourceTree = "<group>"; };
-		9BDBE4FB194F3EB50045C05B /* MCManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MCManager.h; path = ../MCManager.h; sourceTree = "<group>"; };
-		9BDBE4FC194F3EB50045C05B /* MCManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MCManager.m; path = ../MCManager.m; sourceTree = "<group>"; };
-		9BDBE4FE194F47380045C05B /* OPPViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OPPViewController.h; path = ../OPPViewController.h; sourceTree = "<group>"; };
-		9BDBE4FF194F47380045C05B /* OPPViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OPPViewController.m; path = ../OPPViewController.m; sourceTree = "<group>"; };
-		9BDBE501194F47830045C05B /* ChatBoxViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatBoxViewController.h; path = ../ChatBoxViewController.h; sourceTree = "<group>"; };
-		9BDBE502194F47830045C05B /* ChatBoxViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChatBoxViewController.m; path = ../ChatBoxViewController.m; sourceTree = "<group>"; };
+		9BDBE4FB194F3EB50045C05B /* MCManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCManager.h; sourceTree = "<group>"; };
+		9BDBE4FC194F3EB50045C05B /* MCManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCManager.m; sourceTree = "<group>"; };
+		9BDBE4FE194F47380045C05B /* OPPViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OPPViewController.h; sourceTree = "<group>"; };
+		9BDBE4FF194F47380045C05B /* OPPViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OPPViewController.m; sourceTree = "<group>"; };
+		9BDBE501194F47830045C05B /* ChatBoxViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatBoxViewController.h; sourceTree = "<group>"; };
+		9BDBE502194F47830045C05B /* ChatBoxViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatBoxViewController.m; sourceTree = "<group>"; };
 		9BDBE504194F50200045C05B /* ListOfUsersTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ListOfUsersTableViewCell.h; path = ../ListOfUsersTableViewCell.h; sourceTree = "<group>"; };
 		9BDBE505194F50200045C05B /* ListOfUsersTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ListOfUsersTableViewCell.m; path = ../ListOfUsersTableViewCell.m; sourceTree = "<group>"; };
 		9BDBE507194F8A400045C05B /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
@@ -163,6 +163,55 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9BDBE559194FA3D00045C05B /* ChatVCs */ = {
+			isa = PBXGroup;
+			children = (
+				0EB31FFF194BC19E005A3B82 /* ChatViewController.h */,
+				0EB32000194BC19E005A3B82 /* ChatViewController.m */,
+				9BDBE4FE194F47380045C05B /* OPPViewController.h */,
+				9BDBE4FF194F47380045C05B /* OPPViewController.m */,
+				9BDBE501194F47830045C05B /* ChatBoxViewController.h */,
+				9BDBE502194F47830045C05B /* ChatBoxViewController.m */,
+			);
+			name = ChatVCs;
+			path = ..;
+			sourceTree = "<group>";
+		};
+		9BDBE55A194FA3FE0045C05B /* Search/Bar VCs */ = {
+			isa = PBXGroup;
+			children = (
+				0ECEAEEC194F8AD200B92C40 /* BarWebpageViewController.h */,
+				0ECEAEED194F8AD200B92C40 /* BarWebpageViewController.m */,
+				0EB31FF9194BC158005A3B82 /* SearchViewController.h */,
+				0EB31FFA194BC158005A3B82 /* SearchViewController.m */,
+				0EB3200F194E4AC3005A3B82 /* SearchTableViewCell.h */,
+				0EB32010194E4AC3005A3B82 /* SearchTableViewCell.m */,
+			);
+			name = "Search/Bar VCs";
+			sourceTree = "<group>";
+		};
+		9BDBE55B194FA42C0045C05B /* MCManager */ = {
+			isa = PBXGroup;
+			children = (
+				9BDBE4FB194F3EB50045C05B /* MCManager.h */,
+				9BDBE4FC194F3EB50045C05B /* MCManager.m */,
+			);
+			name = MCManager;
+			path = ..;
+			sourceTree = "<group>";
+		};
+		9BDBE55C194FA44F0045C05B /* UserProfileVCs */ = {
+			isa = PBXGroup;
+			children = (
+				0ECEAEE9194F6FAC00B92C40 /* BarDetailViewController.h */,
+				0ECEAEEA194F6FAC00B92C40 /* BarDetailViewController.m */,
+				0EB31FFC194BC176005A3B82 /* ProfileViewController.h */,
+				0EB31FFD194BC176005A3B82 /* ProfileViewController.m */,
+			);
+			name = UserProfileVCs;
+			path = ..;
+			sourceTree = "<group>";
+		};
 		B0782C2F194BB3700022E6E7 = {
 			isa = PBXGroup;
 			children = (
@@ -216,28 +265,14 @@
 				B0782C4D194BB3700022E6E7 /* Main.storyboard */,
 				B0782CCF194F850B0022E6E7 /* EditProfileViewController.h */,
 				B0782CD0194F850B0022E6E7 /* EditProfileViewController.m */,
-				0ECEAEE9194F6FAC00B92C40 /* BarDetailViewController.h */,
-				0ECEAEEA194F6FAC00B92C40 /* BarDetailViewController.m */,
-				0EB31FF9194BC158005A3B82 /* SearchViewController.h */,
-				0EB31FFA194BC158005A3B82 /* SearchViewController.m */,
-				0EB3200F194E4AC3005A3B82 /* SearchTableViewCell.h */,
-				0EB32010194E4AC3005A3B82 /* SearchTableViewCell.m */,
-				0ECEAEEC194F8AD200B92C40 /* BarWebpageViewController.h */,
-				0ECEAEED194F8AD200B92C40 /* BarWebpageViewController.m */,
+				9BDBE55A194FA3FE0045C05B /* Search/Bar VCs */,
 				9BDBE504194F50200045C05B /* ListOfUsersTableViewCell.h */,
 				9BDBE505194F50200045C05B /* ListOfUsersTableViewCell.m */,
 				0EB32009194CBDD0005A3B82 /* TDOAuth.h */,
 				0EB3200A194CBDD0005A3B82 /* TDOAuth.m */,
-				0EB31FFC194BC176005A3B82 /* ProfileViewController.h */,
-				0EB31FFD194BC176005A3B82 /* ProfileViewController.m */,
-				0EB31FFF194BC19E005A3B82 /* ChatViewController.h */,
-				0EB32000194BC19E005A3B82 /* ChatViewController.m */,
-				9BDBE4FE194F47380045C05B /* OPPViewController.h */,
-				9BDBE4FF194F47380045C05B /* OPPViewController.m */,
-				9BDBE501194F47830045C05B /* ChatBoxViewController.h */,
-				9BDBE502194F47830045C05B /* ChatBoxViewController.m */,
-				9BDBE4FB194F3EB50045C05B /* MCManager.h */,
-				9BDBE4FC194F3EB50045C05B /* MCManager.m */,
+				9BDBE55C194FA44F0045C05B /* UserProfileVCs */,
+				9BDBE559194FA3D00045C05B /* ChatVCs */,
+				9BDBE55B194FA42C0045C05B /* MCManager */,
 				0EB3200C194E384D005A3B82 /* Bar.h */,
 				0EB3200D194E384D005A3B82 /* Bar.m */,
 				0ECEAEE6194F69A000B92C40 /* YelpBar.h */,
