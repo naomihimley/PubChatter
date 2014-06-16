@@ -8,6 +8,7 @@
 
 #import "SearchViewController.h"
 #import <AddressBookUI/AddressBookUI.h>
+#import "BarDetailViewController.h"
 #import "TDOAuth.h"
 #import "Bar.h"
 #import "YelpBar.h"
@@ -116,6 +117,7 @@
             Bar *bar = [[Bar alloc] init];
             bar.distanceFromUser = [self.userLocation distanceFromLocation:barMapItem.placemark.location];
             bar.name = barMapItem.name;
+            bar.telephone = barMapItem.phoneNumber;
             bar.address = ABCreateStringWithAddressDictionary(barMapItem.placemark.addressDictionary, NO);
             bar.latitude = barMapItem.placemark.location.coordinate.latitude;
             bar.longitude = barMapItem.placemark.location.coordinate.longitude;
@@ -178,6 +180,22 @@
 //}
 
 // Finds an address string from the user's current location.
+
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation
+{
+    MKPinAnnotationView *pin = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil];
+    pin.canShowCallout = YES;
+    pin.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+    return pin;
+}
+
+//- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view
+//calloutAccessoryControlTapped:(UIControl *)control
+//{
+//    [self performSegueWithIdentifier:@"segue" sender:self];
+//}
+
+
 - (void)getUserLocationString
 {
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
@@ -208,6 +226,14 @@
     cell.barAddressLabel.text = bar.address;
     
     return cell;
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSIndexPath *selectedIndexPath = self.tableView.indexPathForSelectedRow;
+    Bar *bar = [self.barLocations objectAtIndex:selectedIndexPath.row];
+    BarDetailViewController *detailViewController = segue.destinationViewController;
+    detailViewController.barFromSourceVC = bar;
 }
 
 - (void)segmentChanged:(id)sender
