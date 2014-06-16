@@ -9,9 +9,18 @@
 #import "ProfileViewController.h"
 
 @interface ProfileViewController ()<CLLocationManagerDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate>
-@property BOOL inARegion;
+@property (weak, nonatomic) IBOutlet UILabel *barNameLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
+@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *genderLabel;
+@property (weak, nonatomic) IBOutlet UILabel *ageLabel;
+@property (weak, nonatomic) IBOutlet UITextView *bioTextView;
+@property (weak, nonatomic) IBOutlet UILabel *sexualOrientationLabel;
+@property (weak, nonatomic) IBOutlet UILabel *favDrinkLabel;
+
 @property (strong, nonatomic) CLBeaconRegion *beaconRegion;
 @property (strong, nonatomic) CLLocationManager *locationManager;
+@property BOOL inARegion;
 @end
 
 @implementation ProfileViewController
@@ -33,13 +42,14 @@
         loginViewController.signUpController = signupViewController;
         [self presentViewController:loginViewController animated:YES completion:nil];
     }
+    self.inARegion = NO;
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
     [self createBeaconRegion];
-    self.inARegion = NO;
     //possibly making the app keep updating in the background?
     [self.locationManager startMonitoringForRegion:self.beaconRegion];
     [self.locationManager startUpdatingLocation];
+    self.nameLabel.text = [[[PFUser currentUser]objectForKey:@"username"] uppercaseString];
 }
 
 //automatically dismisses LogInVC when user hits enter or ok
@@ -64,19 +74,26 @@
 
 #pragma mark - CLLocationManagerDelegate Methods
 
-- (void) locationManager:(CLLocationManager *)manager didStartMonitoringForRegion:(CLRegion *)region
-{
-    [self.locationManager requestStateForRegion:self.beaconRegion];
-}
-
 -(void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region
 {
     if (state == CLRegionStateInside)
     {
-        //this method is good for if the user opens the app already inside of a region. DidEnterRegion will not get called because they wont cross the boundary, but this checks the CLRegionState and changes our bool.
+        //this method is for when the user opens the app already inside of a region. DidEnterRegion will not get called because they wont cross the boundary, but this checks the CLRegionState and changes our bool.
         [manager startRangingBeaconsInRegion:self.beaconRegion];
         NSLog(@"CLRegionStateInside");
         self.inARegion = YES;
+    }
+    else if (state == CLRegionStateOutside)
+    {
+        NSLog(@"CLRegionStateOutside");
+        PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
+        [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
+        [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            PFObject *bar = [objects firstObject];
+            [bar removeObject:[PFUser currentUser] forKey:@"usersInBar"];
+            [bar saveInBackground];
+        }];
+        self.inARegion = NO;
     }
     else
     {
@@ -105,10 +122,12 @@
                 [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                 [bar saveInBackground];
                 self.inARegion = NO;
+                self.barNameLabel.text = [bar objectForKey:@"barName"];
             }];
         }
         else if ([beacon.minor isEqual: @23023]) //rich's iPhone
         {
+            NSLog(@"rich's iPhone");
             PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
             [queryForBar whereKey:@"objectId" equalTo:@"UL0yMO2bGj"];
             [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -116,6 +135,7 @@
                 [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                 [bar saveInBackground];
                 self.inARegion = NO;
+                self.barNameLabel.text = [bar objectForKey:@"barName"];
             }];
         }
     }
