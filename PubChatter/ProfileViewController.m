@@ -64,19 +64,26 @@
 
 #pragma mark - CLLocationManagerDelegate Methods
 
-- (void) locationManager:(CLLocationManager *)manager didStartMonitoringForRegion:(CLRegion *)region
-{
-    [self.locationManager requestStateForRegion:self.beaconRegion];
-}
-
 -(void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region
 {
     if (state == CLRegionStateInside)
     {
-        //this method is good for if the user opens the app already inside of a region. DidEnterRegion will not get called because they wont cross the boundary, but this checks the CLRegionState and changes our bool.
+        //this method is for when the user opens the app already inside of a region. DidEnterRegion will not get called because they wont cross the boundary, but this checks the CLRegionState and changes our bool.
         [manager startRangingBeaconsInRegion:self.beaconRegion];
         NSLog(@"CLRegionStateInside");
         self.inARegion = YES;
+    }
+    else if (state == CLRegionStateOutside)
+    {
+        NSLog(@"CLRegionStateOutside");
+        PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
+        [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
+        [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            PFObject *bar = [objects firstObject];
+            [bar removeObject:[PFUser currentUser] forKey:@"usersInBar"];
+            [bar saveInBackground];
+        }];
+        self.inARegion = NO;
     }
     else
     {
@@ -109,6 +116,7 @@
         }
         else if ([beacon.minor isEqual: @23023]) //rich's iPhone
         {
+            NSLog(@"rich's iPhone");
             PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
             [queryForBar whereKey:@"objectId" equalTo:@"UL0yMO2bGj"];
             [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
