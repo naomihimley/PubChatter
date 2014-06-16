@@ -11,7 +11,6 @@
 
 @interface SearchViewController : UIViewController
 
-@property MKPointAnnotation *barAnnotation;
 
 
 @end

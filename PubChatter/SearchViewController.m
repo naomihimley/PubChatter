@@ -10,7 +10,8 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import "TDOAuth.h"
 #import "Bar.h"
-
+#import "YelpBar.h"
+#import "SearchTableViewCell.h"
 
 @interface SearchViewController () <UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate, MKMapViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -18,7 +19,14 @@
 @property CLLocationManager *locationManager;
 @property CLLocation *userLocation;
 @property NSString *userLocationString;
+@property NSString *queryString;
 @property NSArray *barLocations;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *toggleControlOutlet;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (weak, nonatomic) IBOutlet UIButton *searchButtonOutlet;
+@property (weak, nonatomic) IBOutlet UIButton *redrawAreaButtonOutlet;
+@property CGFloat span;
+@property MKCoordinateSpan mapSpan;
 
 @end
 
@@ -28,10 +36,51 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.queryString = @"bar";
+    self.mapSpan = MKCoordinateSpanMake(0.02, 0.02);
+    self.toggleControlOutlet.selectedSegmentIndex = 0;
+    self.mapView.hidden = NO;
+    self.redrawAreaButtonOutlet.hidden = NO;
+    self.redrawAreaButtonOutlet.layer.cornerRadius = 5.0f;
+    self.tableView.hidden = YES;
     self.locationManager = [[CLLocationManager alloc] init];
     [self.locationManager startUpdatingLocation];
     self.locationManager.delegate = self;
     self.navigationItem.title = @"PubChatter";
+}
+
+#pragma mark - IBActions
+
+// Removes all annotations off mapView, sets querystring to searchbar text, creates a sufficiently large search area, and calls the findBarNear method. The search button is also disabled until a list of bars are returned to prevent bombarding with requests.
+- (IBAction)onSearchButtonPressed:(id)sender
+{
+
+    [self.mapView removeAnnotations:self.mapView.annotations];
+    self.queryString = self.searchBar.text;
+    self.mapSpan = MKCoordinateSpanMake(0.15, 0.15);
+    [self findBarNear:self.userLocation inSpan:self.mapSpan];
+    self.searchButtonOutlet.enabled = NO;
+    [self.searchBar endEditing:YES];
+    CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(self.userLocation.coordinate.latitude, self.userLocation.coordinate.longitude);
+    MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, self.mapSpan);
+    [self.mapView setRegion:region animated:YES];
+}
+
+// Removes all annotations off mapView, creates a new map region from the current mapView region, which is used to make another call to findBarNear. Disables button until results are returned.
+- (IBAction)onRedrawRegionButtonPressed:(id)sender
+{
+    self.redrawAreaButtonOutlet.enabled = NO;
+    [self.mapView removeAnnotations:self.mapView.annotations];
+    CLLocation *centerLocation = [[CLLocation alloc] initWithLatitude:self.mapView.centerCoordinate.latitude longitude:self.mapView.centerCoordinate.longitude];
+    self.mapSpan = self.mapView.region.span;
+    MKCoordinateRegion region = MKCoordinateRegionMake(centerLocation.coordinate, self.mapSpan);
+    [self.mapView setRegion:region animated:YES];
+    [self findBarNear:centerLocation inSpan:self.mapSpan];
+}
+
+- (IBAction)onToggleMapListViewPressed:(id)sender
+{
+    [self segmentChanged:sender];
 }
 
 // Finds user location and sets the userLocation property
@@ -43,10 +92,9 @@
             self.userLocation = location;
             [self getUserLocationString];
             CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(self.userLocation.coordinate.latitude, self.userLocation.coordinate.longitude);
-            MKCoordinateSpan span = MKCoordinateSpanMake(.02, .02);
-            MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, span);
+            MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, self.mapSpan);
             [self.mapView setRegion:region animated:YES];
-            [self findBarNear:self.userLocation];
+            [self findBarNear:self.userLocation inSpan:self.mapSpan];
 
 //            [self getJSON];
             break;
@@ -54,12 +102,11 @@
     }
 }
 
--(void)findBarNear:(CLLocation *)location
+-(void)findBarNear:(CLLocation *)location inSpan:(MKCoordinateSpan)mapSpan
 {
-    NSLog(@"FindBarNear ran");
     MKLocalSearchRequest *request = [[MKLocalSearchRequest alloc] init];
-    request.naturalLanguageQuery = @"bar";
-    request.region = MKCoordinateRegionMake(location.coordinate, MKCoordinateSpanMake(.02, .02));
+    request.naturalLanguageQuery = self.queryString;
+    request.region = MKCoordinateRegionMake(location.coordinate, mapSpan);
     MKLocalSearch *search = [[MKLocalSearch alloc] initWithRequest:request];
     [search startWithCompletionHandler:^(MKLocalSearchResponse *response, NSError *error) {
 
@@ -76,15 +123,17 @@
             NSLog(@"%lu", (unsigned long)arrayOfBarLocationMapItems.count);
 
             CLLocation *barLocation = [[CLLocation alloc] initWithLatitude:bar.latitude longitude:bar.longitude];
-            self.barAnnotation = [[MKPointAnnotation alloc] init];
-            self.barAnnotation.coordinate = barLocation.coordinate;
-            self.barAnnotation.title = bar.name;
-            self.barAnnotation.subtitle = [NSString stringWithFormat:@"%.02f miles", bar.distanceFromUser * 0.000621371];
-            [self.mapView addAnnotation:self.barAnnotation];
+            MKPointAnnotation *barAnnotation = [[MKPointAnnotation alloc] init];
+            barAnnotation.coordinate = barLocation.coordinate;
+            barAnnotation.title = bar.name;
+            barAnnotation.subtitle = [NSString stringWithFormat:@"%.02f miles", bar.distanceFromUser * 0.000621371];
+            [self.mapView addAnnotation:barAnnotation];
                 }
         NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"distanceFromUser" ascending:YES];
         self.barLocations = [arrayOfBarLocationMapItems sortedArrayUsingDescriptors:@[descriptor]];
         [self.tableView reloadData];
+        self.searchButtonOutlet.enabled = YES;
+        self.redrawAreaButtonOutlet.enabled = YES;
     }];
 }
 
@@ -129,15 +178,33 @@
     return self.barLocations.count;
 }
 
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+-(SearchTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Bar *bar = [self.barLocations objectAtIndex:indexPath.row];
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    SearchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     NSString *milesFromUser = [NSString stringWithFormat:@"%.02f miles", bar.distanceFromUser * 0.000621371];
 
-    cell.textLabel.text = bar.name;
-    cell.detailTextLabel.text = milesFromUser;
+    cell.barNameLabel.text = bar.name;
+    cell.barDistanceLabel.text = milesFromUser;
+    cell.barAddressLabel.text = bar.address;
+    
     return cell;
+}
+
+- (void)segmentChanged:(id)sender
+{
+    if ([sender selectedSegmentIndex] == 0) {
+            self.mapView.hidden = NO;
+            self.tableView.hidden = YES;
+            self.redrawAreaButtonOutlet.hidden = NO;
+
+        }
+        else
+        {
+            self.mapView.hidden = YES;
+            self.tableView.hidden = NO;
+            self.redrawAreaButtonOutlet.hidden = YES;
+        }
 }
 
 #pragma mark - OAuth methods

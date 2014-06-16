@@ -6,16 +6,17 @@
 //  Copyright (c) 2014 Naomi Himley. All rights reserved.
 //
 
-#import <Parse/Parse.h>
 #import <MapKit/MapKit.h>
 
-@interface Bar : PFObject <PFSubclassing>
+@interface Bar : NSObject
 
-+(id)parseClassName;
 @property NSString *name;
 @property NSString *address;
+@property NSURL *businessURL;
+@property NSString *telephone;
 @property CGFloat latitude;
 @property CGFloat longitude;
+@property BOOL isCurrentLocation;
 @property (nonatomic, assign) CGFloat distanceFromUser;
 
 @end

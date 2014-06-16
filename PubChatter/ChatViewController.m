@@ -7,43 +7,54 @@
 //
 
 #import "ChatViewController.h"
+#import "ListOfUsersTableViewCell.h"
+#import <Parse/Parse.h>
 
-@interface ChatViewController ()
+@interface ChatViewController ()<UITableViewDataSource, UITableViewDelegate>
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property NSArray *userArray;
 
 @end
 
 @implementation ChatViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
 }
 
-- (void)didReceiveMemoryWarning
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    return 1;
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    ListOfUsersTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CellID"];
+    PFUser *user = [self.userArray objectAtIndex:indexPath.row];
+
+    cell.userNameLabel.text = [user objectForKey:@"username"];
+
+    return cell;
 }
-*/
+//will need to work out a query that only pulls the users that are within the bar
+//-(void)queryForUsersInBar: (PFUser *)usersInLocation
+//{
+//    PFRelation *relation = [usersInLocation relationForKey:@"barUserIsIn"];
+//    PFQuery *query = [relation query];
+//}
+
+-(void)queryForUsers
+{
+    PFQuery *query = [PFQuery queryWithClassName:@"User"];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error)
+        {
+            self.userArray = [[NSArray alloc]initWithArray:objects];
+        }
+        [self.tableView reloadData];
+    }];
+}
 
 @end
