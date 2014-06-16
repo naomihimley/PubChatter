@@ -374,12 +374,15 @@
                                 <rect key="frame" x="201" y="213" width="78" height="27"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NqY-sw-dlb">
-                                <rect key="frame" x="20" y="204" width="85" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NqY-sw-dlb">
+                                <rect key="frame" x="20" y="204" width="139" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <segue destination="Wk9-KM-6JR" kind="push" id="QeH-c1-0aU"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -390,6 +393,7 @@
                         <outlet property="barImageView" destination="Jfy-xd-M5P" id="xw3-J4-9N2"/>
                         <outlet property="barNameLabel" destination="CVm-Bp-Wki" id="wlM-lN-fcw"/>
                         <outlet property="distanceFromUserLabel" destination="g4c-ne-jYB" id="piy-hu-CT9"/>
+                        <outlet property="goToBusinessWebPageOutlet" destination="NqY-sw-dlb" id="BeA-lo-4kj"/>
                         <outlet property="ratingImageView" destination="U5Z-M4-Ojn" id="dZ2-bT-V3h"/>
                         <outlet property="telephoneLabel" destination="DBE-KS-su6" id="WVZ-hg-zM7"/>
                     </connections>
@@ -397,6 +401,41 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wh6-5j-oBo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="841" y="-701"/>
+        </scene>
+        <!--Bar Webpage View Controller-->
+        <scene sceneID="tDh-xI-WfX">
+            <objects>
+                <viewController id="Wk9-KM-6JR" customClass="BarWebpageViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Av6-ss-mHQ"/>
+                        <viewControllerLayoutGuide type="bottom" id="bki-0e-A6q"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="agY-si-ydK">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4ig-Xt-ybr">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </webView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dLe-sT-Oei">
+                                <rect key="frame" x="74" y="243" width="102" height="56"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="Wb2-WR-k55"/>
+                    <connections>
+                        <outlet property="webView" destination="4ig-Xt-ybr" id="sv9-vg-u5G"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1BM-iQ-ekU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1227" y="-706"/>
         </scene>
         <!--Profile View Controller - Profile-->
         <scene sceneID="ie5-IB-Wxh">
