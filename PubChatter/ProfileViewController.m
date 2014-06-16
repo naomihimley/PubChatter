@@ -43,15 +43,22 @@
         loginViewController.signUpController = signupViewController;
         [self presentViewController:loginViewController animated:YES completion:nil];
     }
+    self.nameLabel.text = [[[PFUser currentUser]objectForKey:@"username"] uppercaseString];
+    [self.barNameLabel sizeToFit];
     self.inARegion = NO;
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
-    [self createBeaconRegion];
     //possibly making the app keep updating in the background?
-    [self.locationManager startMonitoringForRegion:self.beaconRegion];
-    [self.locationManager startUpdatingLocation];
-    self.nameLabel.text = [[[PFUser currentUser]objectForKey:@"username"] uppercaseString];
-    [self.barNameLabel sizeToFit];
+    if ([CLLocationManager isMonitoringAvailableForClass:[CLBeaconRegion class]]) {
+        [self.locationManager startMonitoringForRegion:self.beaconRegion];
+        [self.locationManager startUpdatingLocation];
+        [self createBeaconRegion];
+    }
+    else
+    {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Unable To Monitor Location" message:@"Only works on iOS 5 and later" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+    }
 }
 
 //automatically dismisses LogInVC when user hits enter or ok
@@ -169,7 +176,9 @@
     }];
 }
 
-
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    [self.locationManager stopUpdatingLocation];
+}
 
 
 

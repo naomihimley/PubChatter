@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *barImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *ratingImageView;
 @property (weak, nonatomic) IBOutlet UIButton *goToWebsiteButtonOutlet;
+@property (weak, nonatomic) IBOutlet UIButton *telephoneOutlet;
 
 @end
 
@@ -31,7 +32,8 @@
     self.barAddressLabel.text = self.barFromSourceVC.address;
     NSString *milesFromUser = [NSString stringWithFormat:@"%.02f miles", self.barFromSourceVC.distanceFromUser * 0.000621371];
     self.distanceFromUserLabel.text = milesFromUser;
-    self.telephoneLabel.text = self.barFromSourceVC.telephone;
+
+    [self.telephoneOutlet setTitle:[NSString stringWithFormat:@"(%@) %@-%@", [self.barFromSourceVC.telephone substringWithRange:NSMakeRange(1, 3)], [self.barFromSourceVC.telephone substringWithRange:NSMakeRange(4, 3)], [self.barFromSourceVC.telephone substringWithRange:NSMakeRange(7, 4)]] forState:UIControlStateNormal];
     [self.goToWebsiteButtonOutlet setTitle:[NSString stringWithFormat:@"Go to %@ website", self.barFromSourceVC.name] forState:UIControlStateNormal];
 }
 
@@ -44,9 +46,9 @@
     detailViewController.placeNameFromSource = name;
 }
 
-- (IBAction)onGoToWebsiteButtonPressed:(id)sender
+- (IBAction)onTelephoneButtonPressed:(id)sender
 {
-//    [sender setTitle:[NSString stringWithFormat:@"Go to %@ website", self.barFromSourceVC.name] forState:UIControlStateNormal];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@", self.barFromSourceVC.telephone]]];
 }
 
 @end
