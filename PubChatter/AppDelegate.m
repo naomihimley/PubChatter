@@ -19,6 +19,8 @@
 
     [Bar registerSubclass];
 
+    self.mcManager = [[MCManager alloc]init];
+
     return YES;
 }
 							
