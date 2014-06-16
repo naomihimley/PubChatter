@@ -69,7 +69,7 @@
         NSLog(@"%@", [error localizedDescription]);
     }
 
-    [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:[NSString stringWithFormat:@"I wrote:/n%@/n/n", self.chatTextField.text]]];
+    [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:[NSString stringWithFormat:@"I wrote:\n%@\n\n", self.chatTextField.text]]];
     self.chatTextField.text = @"";
     [self.chatTextField resignFirstResponder];
 }
@@ -79,7 +79,12 @@
     MCPeerID *peerID = [[notification userInfo] objectForKey:@"peerID"];
     NSString *peerDisplayName = peerID.displayName;
 
+    NSLog(@"got data");
+
     NSData *receivedData = [[notification userInfo] objectForKey:@"data"];
+    NSString *receivedText = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
+
+    [self.chatTextView performSelectorOnMainThread:@selector(setText:) withObject:[self.chatTextView.text stringByAppendingString:[NSString stringWithFormat:@"%@:\n%@\n\n", peerDisplayName, receivedText]] waitUntilDone:NO];
 }
 
 @end

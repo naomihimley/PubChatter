@@ -21,12 +21,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self queryForUsers];
     
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    return self.userArray.count;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -47,13 +48,14 @@
 
 -(void)queryForUsers
 {
-    PFQuery *query = [PFQuery queryWithClassName:@"User"];
+    PFQuery *query = [PFQuery queryWithClassName:@"_User"];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error)
         {
             self.userArray = [[NSArray alloc]initWithArray:objects];
+            [self.tableView reloadData];
+            NSLog(@"%@", self.userArray);
         }
-        [self.tableView reloadData];
     }];
 }
 
