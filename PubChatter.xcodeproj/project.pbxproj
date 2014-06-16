@@ -319,6 +319,16 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Naomi Himley";
 				TargetAttributes = {
+					B0782C37194BB3700022E6E7 = {
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.iOS = {
+								enabled = 0;
+							};
+						};
+					};
 					B0782C58194BB3700022E6E7 = {
 						TestTargetID = B0782C37194BB3700022E6E7;
 					};
