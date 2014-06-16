@@ -12,6 +12,7 @@
 
 @property NSString *businessImageURL;
 @property NSString *businessRatingImageURL;
+@property NSString *businessMobileURL;
 @property BOOL isClosed;
 
 @end
