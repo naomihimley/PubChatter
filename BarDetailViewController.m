@@ -7,15 +7,16 @@
 //
 
 #import "BarDetailViewController.h"
+#import "BarWebpageViewController.h"
 
 @interface BarDetailViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *barNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *barAddressLabel;
 @property (weak, nonatomic) IBOutlet UILabel *distanceFromUserLabel;
 @property (weak, nonatomic) IBOutlet UILabel *telephoneLabel;
-@property (weak, nonatomic) IBOutlet UILabel *barWebsiteURL;
 @property (weak, nonatomic) IBOutlet UIImageView *barImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *ratingImageView;
+@property (weak, nonatomic) IBOutlet UIButton *goToWebsiteButtonOutlet;
 
 @end
 
@@ -31,9 +32,21 @@
     NSString *milesFromUser = [NSString stringWithFormat:@"%.02f miles", self.barFromSourceVC.distanceFromUser * 0.000621371];
     self.distanceFromUserLabel.text = milesFromUser;
     self.telephoneLabel.text = self.barFromSourceVC.telephone;
-    self.barWebsiteURL.text = [NSString stringWithFormat:@"%@", self.barFromSourceVC.businessURL.description];
+    [self.goToWebsiteButtonOutlet setTitle:[NSString stringWithFormat:@"Go to %@ website", self.barFromSourceVC.name] forState:UIControlStateNormal];
 }
 
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSURL *url = self.barFromSourceVC.businessURL;
+    NSString *name = self.barFromSourceVC.name;
+    BarWebpageViewController *detailViewController = segue.destinationViewController;
+    detailViewController.urlFromSource = url;
+    detailViewController.placeNameFromSource = name;
+}
 
+- (IBAction)onGoToWebsiteButtonPressed:(id)sender
+{
+//    [sender setTitle:[NSString stringWithFormat:@"Go to %@ website", self.barFromSourceVC.name] forState:UIControlStateNormal];
+}
 
 @end

@@ -122,6 +122,8 @@
             bar.address = ABCreateStringWithAddressDictionary(barMapItem.placemark.addressDictionary, NO);
             bar.latitude = barMapItem.placemark.location.coordinate.latitude;
             bar.longitude = barMapItem.placemark.location.coordinate.longitude;
+            bar.businessURL = barMapItem.url;
+            NSLog(@"%@", bar.businessURL);
             [arrayOfBarLocationMapItems addObject:bar];
 
             CLLocation *barLocation = [[CLLocation alloc] initWithLatitude:bar.latitude longitude:bar.longitude];
