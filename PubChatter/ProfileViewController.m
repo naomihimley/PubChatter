@@ -37,6 +37,9 @@
     self.locationManager.delegate = self;
     [self createBeaconRegion];
     self.inARegion = NO;
+    //possibly making the app keep updating in the background?
+    [self.locationManager startMonitoringForRegion:self.beaconRegion];
+    [self.locationManager startUpdatingLocation];
 }
 
 //automatically dismisses LogInVC when user hits enter or ok
@@ -47,13 +50,40 @@
 
 - (void)createBeaconRegion
 {
-    NSUUID *uuid = [[NSUUID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"];
+    //all estimote iBeacons
+//    NSUUID *uuid = [[NSUUID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"];
+
+    NSUUID *uuid = [[NSUUID alloc] initWithUUIDString:@"8492E75F-4FD6-469D-B132-043FE94921D8"]; //rich's phone
     self.beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:uuid identifier:@"irrelevant identifier"];
+    //possibly will refresh the app in background?
+    self.beaconRegion.notifyOnEntry = YES;
+    self.beaconRegion.notifyOnExit=YES;
+    self.beaconRegion.notifyEntryStateOnDisplay=YES;
     [self.locationManager startMonitoringForRegion:self.beaconRegion];
-    NSLog(@"createBeaconRegion was called");
 }
 
 #pragma mark - CLLocationManagerDelegate Methods
+
+- (void) locationManager:(CLLocationManager *)manager didStartMonitoringForRegion:(CLRegion *)region
+{
+    [self.locationManager requestStateForRegion:self.beaconRegion];
+}
+
+-(void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region
+{
+    if (state == CLRegionStateInside)
+    {
+        //this method is good for if the user opens the app already inside of a region. DidEnterRegion will not get called because they wont cross the boundary, but this checks the CLRegionState and changes our bool.
+        [manager startRangingBeaconsInRegion:self.beaconRegion];
+        NSLog(@"CLRegionStateInside");
+        self.inARegion = YES;
+    }
+    else
+    {
+        [manager stopRangingBeaconsInRegion:self.beaconRegion];
+    }
+}
+
 - (void)locationManager:(CLLocationManager *)manager rangingBeaconsDidFailForRegion:(CLBeaconRegion *)region withError:(NSError *)error
 {
     NSLog(@"ranging failed : %@", error);
@@ -61,7 +91,6 @@
 
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region
 {
-    //this delegate method gets called every second while inside a region
     CLBeacon *beacon = [[CLBeacon alloc]init];
     //this code is for only looking for a single beacon. That is why we are calling lastObject on the beacons array. Otherwise you'd want to query all beacons and figure out which you are in proximity to.
     beacon = [beacons lastObject];
@@ -69,32 +98,26 @@
     {
         if ([beacon.minor  isEqual: @2])
         {
-            //getting the correct bar for the beacon.
             PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
             [queryForBar whereKey:@"objectId" equalTo:@"cxmc5pwBsf"];
             [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 PFObject *bar = [objects firstObject];
-                //setting the usersInBar relation
-                PFRelation *usersInBarRelation = [bar relationForKey:@"usersInBar"];
-                [usersInBarRelation addObject:[PFUser currentUser]];
-                [[PFUser currentUser]setObject:bar forKey:@"barUserIsIn"];
-                //do I need to save the currentUser here?
-                [[PFUser currentUser]saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                    NSLog(@"saving the user");
-                }];
-                [bar saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                    //save
-                }];
-                NSLog(@"%@", [bar objectForKey:@"barName"]);
-                //because this method gets called every second, I set the bool to NO here to keep it from setting the relation every second.
+                [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
+                [bar saveInBackground];
                 self.inARegion = NO;
             }];
         }
-        else if ([beacon.minor isEqual: @1])
+        else if ([beacon.minor isEqual: @23023]) //rich's iPhone
         {
-            //depending on what we set the minor values to for the other beacons once we get them we will repeat the code from right above, setting the usersInBar relation.
+            PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
+            [queryForBar whereKey:@"objectId" equalTo:@"UL0yMO2bGj"];
+            [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                PFObject *bar = [objects firstObject];
+                [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
+                [bar saveInBackground];
+                self.inARegion = NO;
+            }];
         }
-
     }
 }
 
@@ -102,14 +125,17 @@
 {
     [self.locationManager startRangingBeaconsInRegion:self.beaconRegion];
     self.inARegion = YES;
-    NSLog(@"did enter");
 }
 
 - (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
 {
     [self.locationManager stopRangingBeaconsInRegion:self.beaconRegion];
     self.inARegion = NO;
-    NSLog(@"exited region");
+    PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
+    [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        //this returns all Bar objects. just need the one the user is in
+        // need to remove current user from the usersInBar array on parse
+    }];
 }
 
 @end
