@@ -10,8 +10,8 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import "TDOAuth.h"
 #import "Bar.h"
+#import "YelpBar.h"
 #import "SearchTableViewCell.h"
-
 
 @interface SearchViewController () <UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate, MKMapViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;

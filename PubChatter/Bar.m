@@ -10,15 +10,5 @@
 
 @implementation Bar
 
-@dynamic name;
-@dynamic address;
-@dynamic latitude;
-@dynamic longitude;
-@dynamic distanceFromUser;
-
-+(id)parseClassName
-{
-    return @"Bar";
-}
 
 @end

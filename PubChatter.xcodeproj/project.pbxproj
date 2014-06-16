@@ -15,6 +15,7 @@
 		0EB3200B194CBDD0005A3B82 /* TDOAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB3200A194CBDD0005A3B82 /* TDOAuth.m */; };
 		0EB3200E194E384D005A3B82 /* Bar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB3200D194E384D005A3B82 /* Bar.m */; };
 		0EB32011194E4AC3005A3B82 /* SearchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB32010194E4AC3005A3B82 /* SearchTableViewCell.m */; };
+		0ECEAEE8194F69A000B92C40 /* YelpBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAEE7194F69A000B92C40 /* YelpBar.m */; };
 		9BDBE4FD194F3EB50045C05B /* MCManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE4FC194F3EB50045C05B /* MCManager.m */; };
 		9BDBE500194F47380045C05B /* OPPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE4FF194F47380045C05B /* OPPViewController.m */; };
 		9BDBE503194F47830045C05B /* ChatBoxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE502194F47830045C05B /* ChatBoxViewController.m */; };
@@ -72,6 +73,8 @@
 		0EB3200D194E384D005A3B82 /* Bar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bar.m; sourceTree = "<group>"; };
 		0EB3200F194E4AC3005A3B82 /* SearchTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchTableViewCell.h; sourceTree = "<group>"; };
 		0EB32010194E4AC3005A3B82 /* SearchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchTableViewCell.m; sourceTree = "<group>"; };
+		0ECEAEE6194F69A000B92C40 /* YelpBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YelpBar.h; sourceTree = "<group>"; };
+		0ECEAEE7194F69A000B92C40 /* YelpBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YelpBar.m; sourceTree = "<group>"; };
 		9BDBE4FB194F3EB50045C05B /* MCManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MCManager.h; path = ../MCManager.h; sourceTree = "<group>"; };
 		9BDBE4FC194F3EB50045C05B /* MCManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MCManager.m; path = ../MCManager.m; sourceTree = "<group>"; };
 		9BDBE4FE194F47380045C05B /* OPPViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OPPViewController.h; path = ../OPPViewController.h; sourceTree = "<group>"; };
@@ -222,6 +225,8 @@
 				9BDBE4FC194F3EB50045C05B /* MCManager.m */,
 				0EB3200C194E384D005A3B82 /* Bar.h */,
 				0EB3200D194E384D005A3B82 /* Bar.m */,
+				0ECEAEE6194F69A000B92C40 /* YelpBar.h */,
+				0ECEAEE7194F69A000B92C40 /* YelpBar.m */,
 				B0782C53194BB3700022E6E7 /* Images.xcassets */,
 				B0782C42194BB3700022E6E7 /* Supporting Files */,
 			);
@@ -363,6 +368,7 @@
 				9BDBE4FD194F3EB50045C05B /* MCManager.m in Sources */,
 				0EB32001194BC19E005A3B82 /* ChatViewController.m in Sources */,
 				0EB31FFB194BC158005A3B82 /* SearchViewController.m in Sources */,
+				0ECEAEE8194F69A000B92C40 /* YelpBar.m in Sources */,
 				B0782C48194BB3700022E6E7 /* main.m in Sources */,
 				0EB31FFE194BC176005A3B82 /* ProfileViewController.m in Sources */,
 				9BDBE506194F50200045C05B /* ListOfUsersTableViewCell.m in Sources */,
