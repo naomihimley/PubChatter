@@ -260,7 +260,6 @@
                                             <outlet property="barAddressLabel" destination="fx0-fM-mS5" id="oL5-8M-rRP"/>
                                             <outlet property="barDistanceLabel" destination="IIg-AO-3nx" id="UCX-DG-eew"/>
                                             <outlet property="barNameLabel" destination="3pr-Ng-fre" id="CaX-rm-jv1"/>
-                                            <segue destination="FmP-9A-1U9" kind="push" id="Mwr-ob-iyX"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -320,6 +319,7 @@
                         <outlet property="searchButtonOutlet" destination="MHJ-nx-Ugd" id="lVh-PV-tqe"/>
                         <outlet property="tableView" destination="yRl-4U-zPV" id="37b-6B-isQ"/>
                         <outlet property="toggleControlOutlet" destination="qoU-W5-RLD" id="wDG-cE-i3P"/>
+                        <segue destination="FmP-9A-1U9" kind="push" identifier="segue" id="DyX-Kh-UIq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
