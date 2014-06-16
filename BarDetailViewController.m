@@ -16,7 +16,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *telephoneLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *barImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *ratingImageView;
-@property (weak, nonatomic) IBOutlet UIButton *goToBusinessWebPageOutlet;
+@property (weak, nonatomic) IBOutlet UIButton *goToWebsiteButtonOutlet;
 
 @end
 
@@ -32,7 +32,7 @@
     NSString *milesFromUser = [NSString stringWithFormat:@"%.02f miles", self.barFromSourceVC.distanceFromUser * 0.000621371];
     self.distanceFromUserLabel.text = milesFromUser;
     self.telephoneLabel.text = self.barFromSourceVC.telephone;
-    self.goToBusinessWebPageOutlet.titleLabel.text = [NSString stringWithFormat:@"Go to %@ website", self.barFromSourceVC.name];
+    [self.goToWebsiteButtonOutlet setTitle:[NSString stringWithFormat:@"Go to %@ website", self.barFromSourceVC.name] forState:UIControlStateNormal];
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -44,5 +44,9 @@
     detailViewController.placeNameFromSource = name;
 }
 
+- (IBAction)onGoToWebsiteButtonPressed:(id)sender
+{
+//    [sender setTitle:[NSString stringWithFormat:@"Go to %@ website", self.barFromSourceVC.name] forState:UIControlStateNormal];
+}
 
 @end
