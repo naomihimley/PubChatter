@@ -22,6 +22,7 @@
 		9BDBE500194F47380045C05B /* OPPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE4FF194F47380045C05B /* OPPViewController.m */; };
 		9BDBE503194F47830045C05B /* ChatBoxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE502194F47830045C05B /* ChatBoxViewController.m */; };
 		9BDBE506194F50200045C05B /* ListOfUsersTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE505194F50200045C05B /* ListOfUsersTableViewCell.m */; };
+		9BDBE508194F8A400045C05B /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BDBE507194F8A400045C05B /* MultipeerConnectivity.framework */; };
 		B0782C3C194BB3700022E6E7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C3B194BB3700022E6E7 /* Foundation.framework */; };
 		B0782C3E194BB3700022E6E7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C3D194BB3700022E6E7 /* CoreGraphics.framework */; };
 		B0782C40194BB3700022E6E7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C3F194BB3700022E6E7 /* UIKit.framework */; };
@@ -89,6 +90,7 @@
 		9BDBE502194F47830045C05B /* ChatBoxViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChatBoxViewController.m; path = ../ChatBoxViewController.m; sourceTree = "<group>"; };
 		9BDBE504194F50200045C05B /* ListOfUsersTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ListOfUsersTableViewCell.h; path = ../ListOfUsersTableViewCell.h; sourceTree = "<group>"; };
 		9BDBE505194F50200045C05B /* ListOfUsersTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ListOfUsersTableViewCell.m; path = ../ListOfUsersTableViewCell.m; sourceTree = "<group>"; };
+		9BDBE507194F8A400045C05B /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
 		B0782C38194BB3700022E6E7 /* PubChatter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PubChatter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0782C3B194BB3700022E6E7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B0782C3D194BB3700022E6E7 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -127,6 +129,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BDBE508194F8A400045C05B /* MultipeerConnectivity.framework in Frameworks */,
 				B0782CCE194E0D560022E6E7 /* CoreBluetooth.framework in Frameworks */,
 				0EB32003194BC369005A3B82 /* MapKit.framework in Frameworks */,
 				B0782C85194BB42B0022E6E7 /* Accounts.framework in Frameworks */,
@@ -182,6 +185,7 @@
 		B0782C3A194BB3700022E6E7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9BDBE507194F8A400045C05B /* MultipeerConnectivity.framework */,
 				B0782C7E194BB4170022E6E7 /* AudioToolbox.framework */,
 				B0782C84194BB42B0022E6E7 /* Accounts.framework */,
 				B0782C80194BB41D0022E6E7 /* CoreLocation.framework */,
