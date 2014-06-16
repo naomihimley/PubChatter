@@ -7,10 +7,16 @@
 //
 
 #import "ChatBoxViewController.h"
+#import "AppDelegate.h"
 
-@interface ChatBoxViewController ()
+@interface ChatBoxViewController ()<UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *chatTextField;
 @property (weak, nonatomic) IBOutlet UITextView *chatTextView;
+@property AppDelegate *appDelegate;
+
+-(void)didReceiveDataWithNotification: (NSNotification *)notification;
+-(void)sendMyMessage;
+
 
 @end
 
@@ -19,11 +25,61 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didReceiveDataWithNotification:) name:@"MCDidReceiveDataNotification"
+                                               object:nil];
+
+    self.chatTextField.delegate = self;
 }
-- (IBAction)onButtonPressedCancelSendingChat:(id)sender {
+
+- (IBAction)onButtonPressedCancelSendingChat:(id)sender
+{
+    [self.chatTextField resignFirstResponder];
 }
-- (IBAction)onButtonPressedSendChat:(id)sender {
+
+- (IBAction)onButtonPressedSendChat:(id)sender
+{
+    [self sendMyMessage];
+}
+
+#pragma mark - TextField Delegat method
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [self sendMyMessage];
+    return YES;
+}
+
+#pragma mark - Helper method implementation
+
+-(void)sendMyMessage
+{
+    NSData *dataToSend = [self.chatTextField.text dataUsingEncoding:NSUTF8StringEncoding];
+    NSArray *peerToSendTo = self.appDelegate.mcManager.session.connectedPeers;
+    NSError *error;
+
+    [self.appDelegate.mcManager.session sendData:dataToSend
+                                         toPeers:peerToSendTo
+                                        withMode:MCSessionSendDataReliable
+                                           error:&error];
+
+    if (error)
+    {
+        NSLog(@"%@", [error localizedDescription]);
+    }
+
+    [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:[NSString stringWithFormat:@"I wrote:/n%@/n/n", self.chatTextField.text]]];
+    self.chatTextField.text = @"";
+    [self.chatTextField resignFirstResponder];
+}
+
+-(void)didReceiveDataWithNotification:(NSNotification *)notification
+{
+    MCPeerID *peerID = [[notification userInfo] objectForKey:@"peerID"];
+    NSString *peerDisplayName = peerID.displayName;
+
+    NSData *receivedData = [[notification userInfo] objectForKey:@"data"];
 }
 
 @end
