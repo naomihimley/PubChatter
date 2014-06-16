@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *favDrinkLabel;
 
 @property (strong, nonatomic) CLBeaconRegion *beaconRegion;
+@property (strong, nonatomic) CLBeaconRegion *estimoteRegion;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property BOOL inARegion;
 @end
@@ -50,6 +51,7 @@
     [self.locationManager startMonitoringForRegion:self.beaconRegion];
     [self.locationManager startUpdatingLocation];
     self.nameLabel.text = [[[PFUser currentUser]objectForKey:@"username"] uppercaseString];
+    [self.barNameLabel sizeToFit];
 }
 
 //automatically dismisses LogInVC when user hits enter or ok
@@ -61,11 +63,16 @@
 - (void)createBeaconRegion
 {
     //all estimote iBeacons
-//    NSUUID *uuid = [[NSUUID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"];
+    NSUUID *estimoteUUID = [[NSUUID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"];
+    self.estimoteRegion = [[CLBeaconRegion alloc]initWithProximityUUID:estimoteUUID identifier:@"irrelevant"];
+    self.estimoteRegion.notifyOnEntry = YES;
+    self.estimoteRegion.notifyOnExit = YES;
+    self.estimoteRegion.notifyEntryStateOnDisplay = YES;
+    [self.locationManager startMonitoringForRegion:self.estimoteRegion];
 
-    NSUUID *uuid = [[NSUUID alloc] initWithUUIDString:@"8492E75F-4FD6-469D-B132-043FE94921D8"]; //rich's phone
+    //rich's phone
+    NSUUID *uuid = [[NSUUID alloc] initWithUUIDString:@"8492E75F-4FD6-469D-B132-043FE94921D8"];
     self.beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:uuid identifier:@"irrelevant identifier"];
-    //possibly will refresh the app in background?
     self.beaconRegion.notifyOnEntry = YES;
     self.beaconRegion.notifyOnExit=YES;
     self.beaconRegion.notifyEntryStateOnDisplay=YES;
@@ -94,6 +101,8 @@
             [bar saveInBackground];
         }];
         self.inARegion = NO;
+        self.barNameLabel.text = @"You are not in a bar";
+        [self.barNameLabel sizeToFit];
     }
     else
     {
