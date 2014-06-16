@@ -44,7 +44,6 @@
 		B0782C81194BB41D0022E6E7 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C80194BB41D0022E6E7 /* CoreLocation.framework */; };
 		B0782C83194BB4260022E6E7 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C82194BB4260022E6E7 /* Social.framework */; };
 		B0782C85194BB42B0022E6E7 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C84194BB42B0022E6E7 /* Accounts.framework */; };
-		B0782C87194BB4340022E6E7 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C86194BB4340022E6E7 /* Parse.framework */; };
 		B0782CCE194E0D560022E6E7 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782CCD194E0D560022E6E7 /* CoreBluetooth.framework */; };
 /* End PBXBuildFile section */
 
@@ -111,7 +110,6 @@
 		B0782C80194BB41D0022E6E7 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		B0782C82194BB4260022E6E7 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		B0782C84194BB42B0022E6E7 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
-		B0782C86194BB4340022E6E7 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = ../../../Desktop/Parse.framework; sourceTree = "<group>"; };
 		B0782CCD194E0D560022E6E7 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -124,7 +122,6 @@
 				0EB32003194BC369005A3B82 /* MapKit.framework in Frameworks */,
 				B0782C85194BB42B0022E6E7 /* Accounts.framework in Frameworks */,
 				B0782C83194BB4260022E6E7 /* Social.framework in Frameworks */,
-				B0782C87194BB4340022E6E7 /* Parse.framework in Frameworks */,
 				B0782C3E194BB3700022E6E7 /* CoreGraphics.framework in Frameworks */,
 				B0782C81194BB41D0022E6E7 /* CoreLocation.framework in Frameworks */,
 				0EB32005194BD2D4005A3B82 /* Parse.framework in Frameworks */,
@@ -183,7 +180,6 @@
 				B0782CCD194E0D560022E6E7 /* CoreBluetooth.framework */,
 				0EB32004194BD2D4005A3B82 /* Parse.framework */,
 				0EB32002194BC369005A3B82 /* MapKit.framework */,
-				B0782C86194BB4340022E6E7 /* Parse.framework */,
 				B0782C82194BB4260022E6E7 /* Social.framework */,
 				B0782C7C194BB40F0022E6E7 /* CFNetwork.framework */,
 				B0782C7A194BB40A0022E6E7 /* libz.dylib */,

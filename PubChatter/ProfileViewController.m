@@ -132,10 +132,20 @@
     [self.locationManager stopRangingBeaconsInRegion:self.beaconRegion];
     self.inARegion = NO;
     PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
+    [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
     [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        //this returns all Bar objects. just need the one the user is in
-        // need to remove current user from the usersInBar array on parse
+        PFObject *bar = [objects firstObject];
+        [bar removeObject:[PFUser currentUser] forKey:@"usersInBar"];
+        [bar saveInBackground];
     }];
 }
+
+
+
+
+
+
+
+
 
 @end
