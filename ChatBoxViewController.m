@@ -8,8 +8,9 @@
 
 #import "ChatBoxViewController.h"
 #import "AppDelegate.h"
+#import <MultipeerConnectivity/MultipeerConnectivity.h>
 
-@interface ChatBoxViewController ()<UITextFieldDelegate>
+@interface ChatBoxViewController ()<UITextFieldDelegate, MCSessionDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *chatTextField;
 @property (weak, nonatomic) IBOutlet UITextView *chatTextView;
 @property AppDelegate *appDelegate;
@@ -26,8 +27,10 @@
 {
     [super viewDidLoad];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didReceiveDataWithNotification:) name:@"MCDidReceiveDataNotification"
+                                             selector:@selector(didReceiveDataWithNotification:)
+                                                 name:@"MCDidReceiveDataNotification"
                                                object:nil];
 
     self.chatTextField.delegate = self;
@@ -70,6 +73,7 @@
     }
 
     [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:[NSString stringWithFormat:@"I wrote:\n%@\n\n", self.chatTextField.text]]];
+    NSLog(@"sent data");
     self.chatTextField.text = @"";
     [self.chatTextField resignFirstResponder];
 }
@@ -86,5 +90,14 @@
 
     [self.chatTextView performSelectorOnMainThread:@selector(setText:) withObject:[self.chatTextView.text stringByAppendingString:[NSString stringWithFormat:@"%@:\n%@\n\n", peerDisplayName, receivedText]] waitUntilDone:NO];
 }
+
+//-(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID
+//{
+//    NSDictionary *dictionary = @{@"data": data,
+//                                 @"peerID": peerID};
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidReceiveDataNotification"
+//                                                        object:nil
+//                                                      userInfo:dictionary];
+//}
 
 @end
