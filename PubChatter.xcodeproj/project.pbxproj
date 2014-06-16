@@ -16,6 +16,7 @@
 		0EB3200E194E384D005A3B82 /* Bar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB3200D194E384D005A3B82 /* Bar.m */; };
 		0EB32011194E4AC3005A3B82 /* SearchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB32010194E4AC3005A3B82 /* SearchTableViewCell.m */; };
 		0ECEAEE8194F69A000B92C40 /* YelpBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAEE7194F69A000B92C40 /* YelpBar.m */; };
+		0ECEAEEB194F6FAC00B92C40 /* BarDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAEEA194F6FAC00B92C40 /* BarDetailViewController.m */; };
 		9BDBE4FD194F3EB50045C05B /* MCManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE4FC194F3EB50045C05B /* MCManager.m */; };
 		9BDBE500194F47380045C05B /* OPPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE4FF194F47380045C05B /* OPPViewController.m */; };
 		9BDBE503194F47830045C05B /* ChatBoxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE502194F47830045C05B /* ChatBoxViewController.m */; };
@@ -74,6 +75,8 @@
 		0EB32010194E4AC3005A3B82 /* SearchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchTableViewCell.m; sourceTree = "<group>"; };
 		0ECEAEE6194F69A000B92C40 /* YelpBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YelpBar.h; sourceTree = "<group>"; };
 		0ECEAEE7194F69A000B92C40 /* YelpBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YelpBar.m; sourceTree = "<group>"; };
+		0ECEAEE9194F6FAC00B92C40 /* BarDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BarDetailViewController.h; path = ../BarDetailViewController.h; sourceTree = "<group>"; };
+		0ECEAEEA194F6FAC00B92C40 /* BarDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BarDetailViewController.m; path = ../BarDetailViewController.m; sourceTree = "<group>"; };
 		9BDBE4FB194F3EB50045C05B /* MCManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MCManager.h; path = ../MCManager.h; sourceTree = "<group>"; };
 		9BDBE4FC194F3EB50045C05B /* MCManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MCManager.m; path = ../MCManager.m; sourceTree = "<group>"; };
 		9BDBE4FE194F47380045C05B /* OPPViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OPPViewController.h; path = ../OPPViewController.h; sourceTree = "<group>"; };
@@ -201,6 +204,8 @@
 				B0782C4A194BB3700022E6E7 /* AppDelegate.h */,
 				B0782C4B194BB3700022E6E7 /* AppDelegate.m */,
 				B0782C4D194BB3700022E6E7 /* Main.storyboard */,
+				0ECEAEE9194F6FAC00B92C40 /* BarDetailViewController.h */,
+				0ECEAEEA194F6FAC00B92C40 /* BarDetailViewController.m */,
 				0EB31FF9194BC158005A3B82 /* SearchViewController.h */,
 				0EB31FFA194BC158005A3B82 /* SearchViewController.m */,
 				0EB3200F194E4AC3005A3B82 /* SearchTableViewCell.h */,
@@ -368,6 +373,7 @@
 				B0782C48194BB3700022E6E7 /* main.m in Sources */,
 				0EB31FFE194BC176005A3B82 /* ProfileViewController.m in Sources */,
 				9BDBE506194F50200045C05B /* ListOfUsersTableViewCell.m in Sources */,
+				0ECEAEEB194F6FAC00B92C40 /* BarDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
