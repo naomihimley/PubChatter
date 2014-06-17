@@ -17,6 +17,7 @@
 @property AppDelegate *appDelegate;
 @property NSMutableArray *connectedUserDevices;
 @property (weak, nonatomic) IBOutlet UIButton *searchForConnectionButton;
+@property (weak, nonatomic) IBOutlet UILabel *sexLabel;
 
 -(void)peerDidChangeStateWithNotification: (NSNotification *)notification;
 @end
@@ -27,12 +28,12 @@
 {
     [super viewWillAppear:animated];
 
-    if (self.connectedUserDevices)
+    if (self.connectedUserDevices.count == 0)
     {
         [self.beginChattingButton setEnabled:NO];
         [self.searchForConnectionButton setEnabled:YES];
     }
-    else
+    else if (self.connectedUserDevices.count > 0)
     {
         [self.searchForConnectionButton setEnabled:NO];
         [self.beginChattingButton setEnabled:YES];
@@ -49,8 +50,12 @@
     [self.appDelegate.mcManager advertiseSelf:YES];
 
     self.userNameLabel.text = [self.user objectForKey:@"username"];
+    self.userAgeLabel.text = [self.user objectForKey:@"age"];
+    self.sexLabel.text = [self.user objectForKey:@"gender"];
 
     self.connectedUserDevices = [NSMutableArray array];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(peerDidChangeStateWithNotification:) name:@"MCDidChangeStateNotification" object:nil];
 }
 
 - (IBAction)onButtonPressedSearchForConnections:(id)sender
@@ -83,13 +88,23 @@
         if (state == MCSessionStateConnected)
         {
             [self.connectedUserDevices addObject:peerDisplayName];
+            [self.beginChattingButton setEnabled:YES];
+            [self.searchForConnectionButton setEnabled:NO];
         }
 
         else if (state == MCSessionStateNotConnected)
         {
-            if (self.connectedUserDevices.count > 0) {
-                int indexOfPeer = [self.connectedUserDevices indexOfObject:peerDisplayName];
-                [self.connectedUserDevices removeObjectAtIndex:indexOfPeer];
+            if (self.connectedUserDevices.count > 0)
+            {
+                UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Connection to User Lost" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alertView show];
+
+                [self.connectedUserDevices removeObjectAtIndex:[self.connectedUserDevices indexOfObject:peerDisplayName]];
+
+                [self.beginChattingButton setEnabled:NO];
+                [self.searchForConnectionButton setEnabled:YES];
+
+                NSLog(@"%@", self.connectedUserDevices);
             }
         }
     }
