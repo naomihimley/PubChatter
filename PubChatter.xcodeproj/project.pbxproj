@@ -120,8 +120,8 @@
 		B0782C82194BB4260022E6E7 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		B0782C84194BB42B0022E6E7 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		B0782CCD194E0D560022E6E7 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
-		B0782CCF194F850B0022E6E7 /* EditProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditProfileViewController.h; sourceTree = "<group>"; };
-		B0782CD0194F850B0022E6E7 /* EditProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditProfileViewController.m; sourceTree = "<group>"; };
+		B0782CCF194F850B0022E6E7 /* EditProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditProfileViewController.h; path = PubChatter/EditProfileViewController.h; sourceTree = "<group>"; };
+		B0782CD0194F850B0022E6E7 /* EditProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditProfileViewController.m; path = PubChatter/EditProfileViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,6 +203,8 @@
 		9BDBE55C194FA44F0045C05B /* UserProfileVCs */ = {
 			isa = PBXGroup;
 			children = (
+				B0782CCF194F850B0022E6E7 /* EditProfileViewController.h */,
+				B0782CD0194F850B0022E6E7 /* EditProfileViewController.m */,
 				0ECEAEE9194F6FAC00B92C40 /* BarDetailViewController.h */,
 				0ECEAEEA194F6FAC00B92C40 /* BarDetailViewController.m */,
 				0EB31FFC194BC176005A3B82 /* ProfileViewController.h */,
@@ -263,8 +265,6 @@
 				B0782C4A194BB3700022E6E7 /* AppDelegate.h */,
 				B0782C4B194BB3700022E6E7 /* AppDelegate.m */,
 				B0782C4D194BB3700022E6E7 /* Main.storyboard */,
-				B0782CCF194F850B0022E6E7 /* EditProfileViewController.h */,
-				B0782CD0194F850B0022E6E7 /* EditProfileViewController.m */,
 				9BDBE55A194FA3FE0045C05B /* Search/Bar VCs */,
 				9BDBE504194F50200045C05B /* ListOfUsersTableViewCell.h */,
 				9BDBE505194F50200045C05B /* ListOfUsersTableViewCell.m */,

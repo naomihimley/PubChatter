@@ -10,14 +10,20 @@
 #import <Parse/Parse.h>
 
 @interface EditProfileViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@property (weak, nonatomic) IBOutlet UITextField *nameTextField;
 @property (nonatomic, strong) UIImagePickerController *cameraController;
 @property (weak, nonatomic) IBOutlet UITextField *ageLabel;
-@property (weak, nonatomic) IBOutlet UITextField *genderLabel;
-@property (weak, nonatomic) IBOutlet UITextField *sexualOrientationLabel;
 @property (weak, nonatomic) IBOutlet UITextField *favoriteDrinkLabel;
 @property (weak, nonatomic) IBOutlet UITextView *bioTextView;
 @property (weak, nonatomic) IBOutlet UIImageView *pictureView;
 @property UIImage *profileImageTaken;
+@property (weak, nonatomic) IBOutlet UIButton *femaleGenderButton;
+@property (weak, nonatomic) IBOutlet UIButton *maleGenderButton;
+@property (weak, nonatomic) IBOutlet UIButton *otherGenderButton;
+@property (weak, nonatomic) IBOutlet UIButton *seekingMenButton;
+@property (weak, nonatomic) IBOutlet UIButton *seekingWomenButton;
+@property (weak, nonatomic) IBOutlet UIButton *seekingBothButton;
+
 
 @end
 
@@ -56,13 +62,31 @@
      {
          if (!error)
          {
-             self.ageLabel.text = object[@"age"];
-             self.genderLabel.text = object[@"gender"];
-             self.bioTextView.text = object[@"bio"];
-             self.sexualOrientationLabel.text = object[@"sexualOrientation"];
-             self.favoriteDrinkLabel.text = object[@"favoriteDrinkLabel"];
-         } else {
-             // Did not find any user for the current user
+             self.nameTextField.text = object[@"username"];
+             if (object[@"bio"])
+             {
+                 self.bioTextView.text = object[@"bio"];
+             }
+             else
+             {
+                 self.bioTextView.text = @"Enter your 120 character bio here";
+             }
+             if (object[@"age"]) {
+                 self.ageLabel.text = object[@"age"];
+             }
+             else
+             {
+                 self.ageLabel.text = @"enter age";
+             }
+             if (object[@"favoriteDrink"]) {
+                 self.favoriteDrinkLabel.text = object[@"favoriteDrink"];
+             }
+             else
+             {
+                 self.favoriteDrinkLabel.text = @"favorite drink";
+             }
+         }
+         else {
              NSLog(@"Error in EditView: %@", error);
          }
      }];
@@ -127,13 +151,33 @@
          {
              NSData *imgData = UIImagePNGRepresentation(self.profileImageTaken);
              PFFile *imgFile = [PFFile fileWithData:imgData];
+             object[@"username"] = self.nameTextField.text;
              object[@"age"] = self.ageLabel.text;
-             object[@"gender"] = self.genderLabel.text;
              object[@"bio"] = self.bioTextView.text;
              object[@"picture"] = imgFile;
              object[@"favoriteDrink"]= self.favoriteDrinkLabel.text;
-             object[@"sexualOrientation"]= self.sexualOrientationLabel.text;
-
+             if ([self.femaleGenderButton isSelected]) {
+                 object[@"gender"] = @0;
+             }
+             else if ([self.maleGenderButton isSelected])
+             {
+                 object[@"gender"] = @1;
+             }
+             else if ([self.otherGenderButton isSelected])
+             {
+                 object[@"gender"] = @2;
+             }
+             if ([self.seekingMenButton isSelected]) {
+                 object[@"sexualOrientation"] = @0;
+             }
+             else if ([self.seekingWomenButton isSelected])
+             {
+                 object[@"sexualOrientation"] = @1;
+             }
+             else if ([self.seekingBothButton isSelected])
+             {
+                 object[@"sexualOrientation"] = @2;
+             }
              [object saveInBackground];
          } else {
              // Did not find any user for the current user
@@ -141,6 +185,44 @@
          }
          [self dismissViewControllerAnimated:YES completion:nil];
      }];
+}
+- (IBAction)onFemaleGenderButtonPressed:(id)sender
+{
+    [self.femaleGenderButton setSelected:YES];
+    [self.maleGenderButton setSelected:NO];
+    [self.otherGenderButton setSelected:NO];
+}
+- (IBAction)onMaleGenderButtonPressed:(id)sender
+{
+    [self.femaleGenderButton setSelected:NO];
+    [self.maleGenderButton setSelected:YES];
+    [self.otherGenderButton setSelected:NO];
+}
+- (IBAction)onOtherGenderButtonPressed:(id)sender
+{
+    [self.femaleGenderButton setSelected:NO];
+    [self.maleGenderButton setSelected:NO];
+    [self.otherGenderButton setSelected:YES];
+}
+- (IBAction)onSeekingMenButtonPressed:(id)sender
+{
+    [self.seekingMenButton setSelected:YES];
+    [self.seekingWomenButton setSelected:NO];
+    [self.seekingBothButton setSelected:NO];
+}
+- (IBAction)onSeekingWomenButtonPressed:(id)sender
+{
+    [self.seekingMenButton setSelected:NO];
+    [self.seekingWomenButton setSelected:YES];
+    [self.seekingBothButton setSelected:NO];
+
+}
+- (IBAction)onSeekingBothButtonPressed:(id)sender
+{
+    [self.seekingMenButton setSelected:NO];
+    [self.seekingWomenButton setSelected:NO];
+    [self.seekingBothButton setSelected:YES
+     ];
 }
 
 @end
