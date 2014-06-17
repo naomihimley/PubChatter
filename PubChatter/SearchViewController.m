@@ -12,6 +12,7 @@
 #import "TDOAuth.h"
 #import "Bar.h"
 #import "YelpBar.h"
+#import "YelpRequest.h"
 #import "SearchTableViewCell.h"
 
 @interface SearchViewController () <UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate, MKMapViewDelegate>
@@ -38,6 +39,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
     self.queryString = @"bar";
     self.mapSpan = MKCoordinateSpanMake(0.02, 0.02);
     self.toggleControlOutlet.selectedSegmentIndex = 0;
@@ -98,7 +100,9 @@
             [self.mapView setRegion:region animated:YES];
             [self findBarNear:self.userLocation inSpan:self.mapSpan];
 
-//            [self getJSON];
+            YelpRequest *request = [[YelpRequest alloc] init];
+            [request getYelpJSONWithSearch:self.queryString andLongitude:self.userLocation.coordinate.longitude andLatitude:self.userLocation.coordinate.latitude];
+
             break;
         }
     }
@@ -121,7 +125,6 @@
             if ([barMapItem.phoneNumber hasPrefix:@"+"]) {
                 bar.telephone = [barMapItem.phoneNumber substringFromIndex:1];
             }
-            NSLog(@"%@", bar.telephone);
             bar.address = ABCreateStringWithAddressDictionary(barMapItem.placemark.addressDictionary, NO);
             bar.latitude = barMapItem.placemark.location.coordinate.latitude;
             bar.longitude = barMapItem.placemark.location.coordinate.longitude;
@@ -217,7 +220,6 @@ calloutAccessoryControlTapped:(UIControl *)control
     [geocoder reverseGeocodeLocation:self.userLocation completionHandler:^(NSArray *placemarks, NSError *error) {
         for (CLPlacemark *placemark in placemarks) {
             self.userLocationString = ABCreateStringWithAddressDictionary(placemark.addressDictionary, NO);
-            NSLog(@"%@", self.userLocationString);
         }
     }];
 }
