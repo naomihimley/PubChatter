@@ -18,6 +18,7 @@
 		0ECEAEE8194F69A000B92C40 /* YelpBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAEE7194F69A000B92C40 /* YelpBar.m */; };
 		0ECEAEEB194F6FAC00B92C40 /* BarDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAEEA194F6FAC00B92C40 /* BarDetailViewController.m */; };
 		0ECEAEEE194F8AD200B92C40 /* BarWebpageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAEED194F8AD200B92C40 /* BarWebpageViewController.m */; };
+		0ECEAEF01950D36200B92C40 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0ECEAEEF1950D36200B92C40 /* FacebookSDK.framework */; };
 		9BDBE4FD194F3EB50045C05B /* MCManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE4FC194F3EB50045C05B /* MCManager.m */; };
 		9BDBE500194F47380045C05B /* OPPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE4FF194F47380045C05B /* OPPViewController.m */; };
 		9BDBE503194F47830045C05B /* ChatBoxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE502194F47830045C05B /* ChatBoxViewController.m */; };
@@ -83,6 +84,7 @@
 		0ECEAEEA194F6FAC00B92C40 /* BarDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BarDetailViewController.m; sourceTree = "<group>"; };
 		0ECEAEEC194F8AD200B92C40 /* BarWebpageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BarWebpageViewController.h; path = ../BarWebpageViewController.h; sourceTree = "<group>"; };
 		0ECEAEED194F8AD200B92C40 /* BarWebpageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BarWebpageViewController.m; path = ../BarWebpageViewController.m; sourceTree = "<group>"; };
+		0ECEAEEF1950D36200B92C40 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
 		9BDBE4FB194F3EB50045C05B /* MCManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCManager.h; sourceTree = "<group>"; };
 		9BDBE4FC194F3EB50045C05B /* MCManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCManager.m; sourceTree = "<group>"; };
 		9BDBE4FE194F47380045C05B /* OPPViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OPPViewController.h; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9BDBE508194F8A400045C05B /* MultipeerConnectivity.framework in Frameworks */,
+				0ECEAEF01950D36200B92C40 /* FacebookSDK.framework in Frameworks */,
 				B0782CCE194E0D560022E6E7 /* CoreBluetooth.framework in Frameworks */,
 				0EB32003194BC369005A3B82 /* MapKit.framework in Frameworks */,
 				B0782C85194BB42B0022E6E7 /* Accounts.framework in Frameworks */,
@@ -256,6 +259,7 @@
 		B0782C3A194BB3700022E6E7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0ECEAEEF1950D36200B92C40 /* FacebookSDK.framework */,
 				9BDBE507194F8A400045C05B /* MultipeerConnectivity.framework */,
 				B0782C7E194BB4170022E6E7 /* AudioToolbox.framework */,
 				B0782C84194BB42B0022E6E7 /* Accounts.framework */,
@@ -577,6 +581,7 @@
 					"$(inherited)",
 					/Users/yeahright/Desktop,
 					"$(PROJECT_DIR)",
+					/Users/davidwarner/Desktop/FacebookSDK,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PubChatter/PubChatter-Prefix.pch";
@@ -595,6 +600,7 @@
 					"$(inherited)",
 					/Users/yeahright/Desktop,
 					"$(PROJECT_DIR)",
+					/Users/davidwarner/Desktop/FacebookSDK,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PubChatter/PubChatter-Prefix.pch";
