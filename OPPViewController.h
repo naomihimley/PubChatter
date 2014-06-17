@@ -12,4 +12,5 @@
 @interface OPPViewController : UIViewController
 
 @property PFUser *user;
+@property NSMutableArray *chatArray;
 @end
