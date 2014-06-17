@@ -29,12 +29,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    if (![CLLocationManager isMonitoringAvailableForClass:[CLBeaconRegion class]])
+    {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Unable To Monitor Location" message:@"Only works on iOS 5 and later" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+    }
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
-    [self setTextFields];
+    [super viewWillAppear:animated];
     if (![PFUser currentUser])
     {
         PFLogInViewController *loginViewController = [PFLogInViewController new];
@@ -50,15 +54,14 @@
     self.locationManager.delegate = self;
     //possibly making the app keep updating in the background?
     if ([CLLocationManager isMonitoringAvailableForClass:[CLBeaconRegion class]]) {
-        [self.locationManager startMonitoringForRegion:self.beaconRegion];
-        [self.locationManager startUpdatingLocation];
-        [self createBeaconRegion];
+        if ([PFUser currentUser])
+        {
+            [self createBeaconRegion];
+            [self.locationManager startUpdatingLocation];
+            [self setTextFields];
+        }
     }
-    else
-    {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Unable To Monitor Location" message:@"Only works on iOS 5 and later" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-        [alert show];
-    }
+
     PFFile *file = [[PFUser currentUser]objectForKey:@"picture"];
     [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
      {
@@ -76,13 +79,13 @@
          {
              self.nameLabel.text = [object[@"username"] uppercaseString];
              self.ageLabel.text = object[@"age"];
-             self.genderLabel.text = [object[@"gender"] uppercaseString];
+             self.genderLabel.text = [NSString stringWithFormat:@"%@", object[@"gender"]];
              self.bioTextView.text = object[@"bio"];
-             self.sexualOrientationLabel.text = object[@"sexualOrientation"];
-             self.favDrinkLabel.text = object[@"favoriteDrinkLabel"];
+             self.sexualOrientationLabel.text = [NSString stringWithFormat:@"%@", object[@"sexualOrientation"]];
+             self.favDrinkLabel.text = object[@"favoriteDrink"];
          } else {
              // Did not find any user for the current user
-             NSLog(@"Error in EditView: %@", error);
+             NSLog(@"Error in ProfileViewController setTextFields: %@", error);
          }
      }];
 }
@@ -99,11 +102,13 @@
 
 - (void)createBeaconRegion
 {
+    NSLog(@"create beacon region");
     //all estimote iBeacons
     NSUUID *estimoteUUID = [[NSUUID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"];
     self.estimoteRegion = [[CLBeaconRegion alloc]initWithProximityUUID:estimoteUUID identifier:@"irrelevant"];
     self.estimoteRegion.notifyOnEntry = YES;
     self.estimoteRegion.notifyOnExit = YES;
+    //location manager sends beacon notifications when the user turns on the display and the device is already inside the region. These notifications are sent even if your app is not running.
     self.estimoteRegion.notifyEntryStateOnDisplay = YES;
     [self.locationManager startMonitoringForRegion:self.estimoteRegion];
 
@@ -124,12 +129,14 @@
     {
         //this method is for when the user opens the app already inside of a region. DidEnterRegion will not get called because they wont cross the boundary, but this checks the CLRegionState and changes our bool.
         [manager startRangingBeaconsInRegion:self.beaconRegion];
+        [manager startRangingBeaconsInRegion:self.estimoteRegion];
         NSLog(@"CLRegionStateInside");
         self.inARegion = YES;
     }
     else if (state == CLRegionStateOutside)
     {
         NSLog(@"CLRegionStateOutside");
+        //checks parse to see what bar the user was in and removes them.
         PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
         [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
         [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -138,12 +145,8 @@
             [bar saveInBackground];
         }];
         self.inARegion = NO;
-        self.barNameLabel.text = @"You are not in a bar";
+        self.barNameLabel.text = @"PubChat";
         [self.barNameLabel sizeToFit];
-    }
-    else
-    {
-        [manager stopRangingBeaconsInRegion:self.beaconRegion];
     }
 }
 
@@ -154,13 +157,14 @@
 
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region
 {
+    //array is sorted by closest beacon to you
     CLBeacon *beacon = [[CLBeacon alloc]init];
-    //this code is for only looking for a single beacon. That is why we are calling lastObject on the beacons array. Otherwise you'd want to query all beacons and figure out which you are in proximity to.
-    beacon = [beacons lastObject];
+    beacon = [beacons firstObject];
     if (self.inARegion == YES)
     {
-        if ([beacon.minor  isEqual: @2])
+        if ([beacon.minor isEqual: @2] && [beacon.major isEqual:@40358])
         {
+            NSLog(@"estimote ranged");
             PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
             [queryForBar whereKey:@"objectId" equalTo:@"cxmc5pwBsf"];
             [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -169,9 +173,10 @@
                 [bar saveInBackground];
                 self.inARegion = NO;
                 self.barNameLabel.text = [bar objectForKey:@"barName"];
+                [self.barNameLabel sizeToFit];
             }];
         }
-        else if ([beacon.minor isEqual: @23023]) //rich's iPhone
+        else if ([beacon.minor isEqual: @23023] && [beacon.major isEqual: @4921]) //rich's iPhone
         {
             NSLog(@"rich's iPhone");
             PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
@@ -182,6 +187,7 @@
                 [bar saveInBackground];
                 self.inARegion = NO;
                 self.barNameLabel.text = [bar objectForKey:@"barName"];
+                [self.barNameLabel sizeToFit];
             }];
         }
     }
@@ -190,11 +196,14 @@
 - (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
 {
     [self.locationManager startRangingBeaconsInRegion:self.beaconRegion];
+    [self.locationManager startRangingBeaconsInRegion:self.estimoteRegion];
     self.inARegion = YES;
+    NSLog(@"did enter");
 }
 
 - (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
 {
+    NSLog(@"did exit");
     [self.locationManager stopRangingBeaconsInRegion:self.beaconRegion];
     self.inARegion = NO;
     PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
@@ -206,11 +215,10 @@
     }];
 }
 
--(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
     [self.locationManager stopUpdatingLocation];
 }
-
-
 
 
 #pragma mark - Segue Methods
@@ -219,5 +227,9 @@
 {
 
 }
+
+
+
+
 
 @end
