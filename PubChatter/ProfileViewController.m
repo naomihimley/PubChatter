@@ -83,21 +83,29 @@
              self.bioTextView.text = object[@"bio"];
              self.sexualOrientationLabel.text = [NSString stringWithFormat:@"%@", object[@"sexualOrientation"]];
              self.favDrinkLabel.text = object[@"favoriteDrink"];
+             [self.favDrinkLabel sizeToFit];
+             if ([object[@"gender"] isEqual:@0])
+             {
+                 self.genderLabel.text = @"F";
+             }
+             else if ([object[@"gender"] isEqual:@1])
+             {
+                 self.genderLabel.text = @"M";
+             }
+             else if ([object [@"gender"] isEqual:@3])
+             {
+                 self.genderLabel.text = @"Other";
+                 [self.genderLabel sizeToFit];
+             }
+             else
+             {
+                 self.genderLabel.text = @"";
+             }
          } else {
              // Did not find any user for the current user
              NSLog(@"Error in ProfileViewController setTextFields: %@", error);
          }
      }];
-}
-
-- (void)logInViewController:(PFLogInViewController *)controller
-               didLogInUser:(PFUser *)user {
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)signUpViewController:(PFSignUpViewController *)signUpController didSignUpUser:(PFUser *)user
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)createBeaconRegion
@@ -119,6 +127,18 @@
     self.beaconRegion.notifyOnExit=YES;
     self.beaconRegion.notifyEntryStateOnDisplay=YES;
     [self.locationManager startMonitoringForRegion:self.beaconRegion];
+}
+
+#pragma mark - Parse Login Methods
+
+- (void)logInViewController:(PFLogInViewController *)controller
+               didLogInUser:(PFUser *)user {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)signUpViewController:(PFSignUpViewController *)signUpController didSignUpUser:(PFUser *)user
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - CLLocationManagerDelegate Methods

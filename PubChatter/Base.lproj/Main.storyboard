@@ -473,7 +473,7 @@
                                             <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
-                                            <segue destination="TZQ-pU-qhq" kind="modal" identifier="editSegue" modalTransitionStyle="coverVertical" id="H99-Sq-TJ5"/>
+                                            <segue destination="TZQ-pU-qhq" kind="push" identifier="editSegue" id="H99-Sq-TJ5"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -595,7 +595,7 @@
                                 <rect key="frame" x="20" y="91" width="156" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="enter your bio here!" translatesAutoresizingMaskIntoConstraints="NO" id="Ukb-IM-q0g">
                                 <rect key="frame" x="27" y="207" width="263" height="89"/>

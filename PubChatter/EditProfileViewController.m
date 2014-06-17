@@ -45,6 +45,7 @@
      }];
     self.cameraController = [[UIImagePickerController alloc] init];
     self.cameraController.delegate = self;
+    [self.cameraController setAllowsEditing:YES];
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         self.cameraController.sourceType = UIImagePickerControllerSourceTypeCamera;
     }
@@ -53,6 +54,7 @@
         self.cameraController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     }
 }
+
 
 - (void)setTextFields
 {
@@ -94,6 +96,11 @@
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [self.view endEditing:YES];
+}
+
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
@@ -183,6 +190,8 @@
              // Did not find any user for the current user
              NSLog(@"Error in EditView: %@", error);
          }
+         [[PFUser currentUser] setUsername:self.nameTextField.text];
+         [[PFUser currentUser] saveInBackground];
          [self dismissViewControllerAnimated:YES completion:nil];
      }];
 }
