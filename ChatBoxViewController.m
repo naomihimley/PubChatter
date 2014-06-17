@@ -67,7 +67,7 @@
                                            error:&error];
     if (error)
     {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Please connect to another user to chat"
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Connection to User has been lost"
                                                            message:nil
                                                           delegate:self
                                                  cancelButtonTitle:@"OK"
@@ -90,14 +90,10 @@
     MCPeerID *peerID = [[notification userInfo] objectForKey:@"peerID"];
     NSString *peerDisplayName = peerID.displayName;
 
-    NSLog(@"got data");
-
     NSData *receivedData = [[notification userInfo] objectForKey:@"data"];
     NSString *receivedText = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
 
     [self.chatTextView performSelectorOnMainThread:@selector(setText:) withObject:[self.chatTextView.text stringByAppendingString:[NSString stringWithFormat:@"%@:\n%@\n\n", peerDisplayName, receivedText]] waitUntilDone:NO];
 }
-
-
 
 @end

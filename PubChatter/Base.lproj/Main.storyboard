@@ -137,6 +137,7 @@
                         <outlet property="beginChattingButton" destination="Y7c-ki-2PZ" id="Hc4-0T-eRe"/>
                         <outlet property="imageView" destination="T7p-c5-l9K" id="hAd-bS-4qp"/>
                         <outlet property="searchForConnectionButton" destination="1q5-7S-mok" id="usS-jI-Nn8"/>
+                        <outlet property="sexLabel" destination="9HZ-yj-T8t" id="DvJ-Hh-bVT"/>
                         <outlet property="userAgeLabel" destination="tjP-mW-TI0" id="QDw-uS-NR9"/>
                         <outlet property="userNameLabel" destination="iYi-sY-82D" id="k7O-eL-ti3"/>
                     </connections>

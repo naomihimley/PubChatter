@@ -55,7 +55,6 @@
         {
             self.userArray = [[NSArray alloc]initWithArray:objects];
             [self.tableView reloadData];
-            NSLog(@"%@", self.userArray);
         }
     }];
 }
