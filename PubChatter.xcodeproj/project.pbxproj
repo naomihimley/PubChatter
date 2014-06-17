@@ -25,7 +25,6 @@
 		9BDBE503194F47830045C05B /* ChatBoxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE502194F47830045C05B /* ChatBoxViewController.m */; };
 		9BDBE506194F50200045C05B /* ListOfUsersTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE505194F50200045C05B /* ListOfUsersTableViewCell.m */; };
 		9BDBE508194F8A400045C05B /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BDBE507194F8A400045C05B /* MultipeerConnectivity.framework */; };
-		9BDBE5A91950D4150045C05B /* ChatObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE5A81950D4150045C05B /* ChatObject.m */; };
 		B0782C3C194BB3700022E6E7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C3B194BB3700022E6E7 /* Foundation.framework */; };
 		B0782C3E194BB3700022E6E7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C3D194BB3700022E6E7 /* CoreGraphics.framework */; };
 		B0782C40194BB3700022E6E7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C3F194BB3700022E6E7 /* UIKit.framework */; };
@@ -94,11 +93,9 @@
 		9BDBE4FF194F47380045C05B /* OPPViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OPPViewController.m; sourceTree = "<group>"; };
 		9BDBE501194F47830045C05B /* ChatBoxViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatBoxViewController.h; sourceTree = "<group>"; };
 		9BDBE502194F47830045C05B /* ChatBoxViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatBoxViewController.m; sourceTree = "<group>"; };
-		9BDBE504194F50200045C05B /* ListOfUsersTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListOfUsersTableViewCell.h; sourceTree = "<group>"; };
-		9BDBE505194F50200045C05B /* ListOfUsersTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListOfUsersTableViewCell.m; sourceTree = "<group>"; };
+		9BDBE504194F50200045C05B /* ListOfUsersTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ListOfUsersTableViewCell.h; path = ../ListOfUsersTableViewCell.h; sourceTree = "<group>"; };
+		9BDBE505194F50200045C05B /* ListOfUsersTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ListOfUsersTableViewCell.m; path = ../ListOfUsersTableViewCell.m; sourceTree = "<group>"; };
 		9BDBE507194F8A400045C05B /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
-		9BDBE5A71950D4150045C05B /* ChatObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatObject.h; sourceTree = "<group>"; };
-		9BDBE5A81950D4150045C05B /* ChatObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatObject.m; sourceTree = "<group>"; };
 		B0782C38194BB3700022E6E7 /* PubChatter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PubChatter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0782C3B194BB3700022E6E7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B0782C3D194BB3700022E6E7 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -181,10 +178,6 @@
 				9BDBE4FF194F47380045C05B /* OPPViewController.m */,
 				9BDBE501194F47830045C05B /* ChatBoxViewController.h */,
 				9BDBE502194F47830045C05B /* ChatBoxViewController.m */,
-				9BDBE504194F50200045C05B /* ListOfUsersTableViewCell.h */,
-				9BDBE505194F50200045C05B /* ListOfUsersTableViewCell.m */,
-				9BDBE5A71950D4150045C05B /* ChatObject.h */,
-				9BDBE5A81950D4150045C05B /* ChatObject.m */,
 			);
 			name = ChatVCs;
 			path = ..;
@@ -225,19 +218,6 @@
 			);
 			name = UserProfileVCs;
 			path = ..;
-			sourceTree = "<group>";
-		};
-		9BDBE5A61950CDF30045C05B /* Yelp */ = {
-			isa = PBXGroup;
-			children = (
-				0EB32009194CBDD0005A3B82 /* TDOAuth.h */,
-				0EB3200A194CBDD0005A3B82 /* TDOAuth.m */,
-				0EB3200C194E384D005A3B82 /* Bar.h */,
-				0EB3200D194E384D005A3B82 /* Bar.m */,
-				0ECEAEE6194F69A000B92C40 /* YelpBar.h */,
-				0ECEAEE7194F69A000B92C40 /* YelpBar.m */,
-			);
-			name = Yelp;
 			sourceTree = "<group>";
 		};
 		B0782C2F194BB3700022E6E7 = {
@@ -293,19 +273,19 @@
 				B0782C4B194BB3700022E6E7 /* AppDelegate.m */,
 				B0782C4D194BB3700022E6E7 /* Main.storyboard */,
 				9BDBE55A194FA3FE0045C05B /* Search/Bar VCs */,
+				9BDBE504194F50200045C05B /* ListOfUsersTableViewCell.h */,
+				9BDBE505194F50200045C05B /* ListOfUsersTableViewCell.m */,
+				0EB32009194CBDD0005A3B82 /* TDOAuth.h */,
+				0EB3200A194CBDD0005A3B82 /* TDOAuth.m */,
 				9BDBE55C194FA44F0045C05B /* UserProfileVCs */,
 				9BDBE559194FA3D00045C05B /* ChatVCs */,
 				9BDBE55B194FA42C0045C05B /* MCManager */,
-<<<<<<< HEAD
 				0EB3200C194E384D005A3B82 /* Bar.h */,
 				0EB3200D194E384D005A3B82 /* Bar.m */,
 				0ECEAEE6194F69A000B92C40 /* YelpBar.h */,
 				0ECEAEE7194F69A000B92C40 /* YelpBar.m */,
 				0ECEAEF11950DD7F00B92C40 /* YelpRequest.h */,
 				0ECEAEF21950DD7F00B92C40 /* YelpRequest.m */,
-=======
-				9BDBE5A61950CDF30045C05B /* Yelp */,
->>>>>>> 93d7c81efa142827c817ccc77c3eae1880d89f76
 				B0782C53194BB3700022E6E7 /* Images.xcassets */,
 				B0782C42194BB3700022E6E7 /* Supporting Files */,
 			);
@@ -457,7 +437,6 @@
 				9BDBE500194F47380045C05B /* OPPViewController.m in Sources */,
 				9BDBE503194F47830045C05B /* ChatBoxViewController.m in Sources */,
 				9BDBE4FD194F3EB50045C05B /* MCManager.m in Sources */,
-				9BDBE5A91950D4150045C05B /* ChatObject.m in Sources */,
 				0EB32001194BC19E005A3B82 /* ChatViewController.m in Sources */,
 				0EB31FFB194BC158005A3B82 /* SearchViewController.m in Sources */,
 				0ECEAEE8194F69A000B92C40 /* YelpBar.m in Sources */,

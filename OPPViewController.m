@@ -8,7 +8,6 @@
 
 #import "OPPViewController.h"
 #import "AppDelegate.h"
-#import "ChatBoxViewController.h"
 
 @interface OPPViewController ()<MCBrowserViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
@@ -25,44 +24,6 @@
 
 @implementation OPPViewController
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    PFUser *currentUser = [PFUser currentUser];
-
-    self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [[self.appDelegate mcManager]setupPeerAndSessionWithDisplayName:[currentUser objectForKey:@"username"]];
-    [self.appDelegate.mcManager advertiseSelf:YES];
-
-    self.userNameLabel.text = [self.user objectForKey:@"username"];
-    self.userAgeLabel.text = [self.user objectForKey:@"age"];
-    if ([self.user[@"gender"] isEqual:@0])
-    {
-        self.sexLabel.text = @"F";
-    }
-    else if ([self.user[@"gender"] isEqual:@1])
-    {
-        self.sexLabel.text = @"M";
-    }
-    else if ([self.user [@"gender"] isEqual:@2])
-    {
-        self.sexLabel.text = @"Other";
-        [self.sexLabel sizeToFit];
-    }
-    else
-    {
-        self.sexLabel.text = @"";
-    }
-
-    self.connectedUserDevices = [NSMutableArray array];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(peerDidChangeStateWithNotification:) name:@"MCDidChangeStateNotification" object:nil];
-
-    self.chatArray = [NSMutableArray array];
-
-    NSLog(@"new chatArray made");
-}
-
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -77,6 +38,24 @@
         [self.searchForConnectionButton setEnabled:NO];
         [self.beginChattingButton setEnabled:YES];
     }
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    PFUser *currentUser = [PFUser currentUser];
+
+    self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [[self.appDelegate mcManager]setupPeerAndSessionWithDisplayName:[currentUser objectForKey:@"username"]];
+    [self.appDelegate.mcManager advertiseSelf:YES];
+
+    self.userNameLabel.text = [self.user objectForKey:@"username"];
+    self.userAgeLabel.text = [self.user objectForKey:@"age"];
+    self.sexLabel.text = [self.user objectForKey:@"gender"];
+
+    self.connectedUserDevices = [NSMutableArray array];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(peerDidChangeStateWithNotification:) name:@"MCDidChangeStateNotification" object:nil];
 }
 
 - (IBAction)onButtonPressedSearchForConnections:(id)sender
@@ -111,7 +90,6 @@
             [self.connectedUserDevices addObject:peerDisplayName];
             [self.beginChattingButton setEnabled:YES];
             [self.searchForConnectionButton setEnabled:NO];
-            self.beginChattingButton.tintColor = [UIColor blueColor];
         }
 
         else if (state == MCSessionStateNotConnected)
@@ -125,17 +103,11 @@
 
                 [self.beginChattingButton setEnabled:NO];
                 [self.searchForConnectionButton setEnabled:YES];
+
+                NSLog(@"%@", self.connectedUserDevices);
             }
         }
     }
-}
-
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    ChatBoxViewController *chatBoxVC = segue.destinationViewController;
-    chatBoxVC.chatArray = self.chatArray;
-
-    NSLog(@"%@", chatBoxVC.chatArray);
 }
 
 @end

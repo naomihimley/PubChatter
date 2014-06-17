@@ -22,13 +22,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-}
-
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-
     [self queryForUsers];
+    
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -45,6 +40,12 @@
 
     return cell;
 }
+//will need to work out a query that only pulls the users that are within the bar
+//-(void)queryForUsersInBar: (PFUser *)usersInLocation
+//{
+//    PFRelation *relation = [usersInLocation relationForKey:@"barUserIsIn"];
+//    PFQuery *query = [relation query];
+//}
 
 -(void)queryForUsers
 {
@@ -65,8 +66,6 @@
     NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
 
     destinationVC.user = [self.userArray objectAtIndex:indexPath.row];
-
-    NSLog(@"%@", [self.userArray objectAtIndex:indexPath.row]);
 
 }
 

@@ -8,13 +8,11 @@
 
 #import "ChatBoxViewController.h"
 #import "AppDelegate.h"
-#import "ChatObject.h"
 
 @interface ChatBoxViewController ()<UITextFieldDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *chatTextField;
 @property (weak, nonatomic) IBOutlet UITextView *chatTextView;
 @property AppDelegate *appDelegate;
-
 
 -(void)didReceiveDataWithNotification: (NSNotification *)notification;
 -(void)sendMyMessage;
@@ -37,19 +35,6 @@
     self.chatTextField.delegate = self;
 }
 
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-
-    if (self.chatArray.count > 0)
-    {
-        for (NSString *chat in self.chatArray)
-        {
-            self.chatTextView.text = chat;
-        }
-    }
-}
-
 - (IBAction)onButtonPressedCancelSendingChat:(id)sender
 {
     [self.chatTextField resignFirstResponder];
@@ -60,7 +45,7 @@
     [self sendMyMessage];
 }
 
-#pragma mark - TextField Delegate method
+#pragma mark - TextField Delegat method
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -93,13 +78,8 @@
 
     else
     {
-        NSString *chatString = [self.chatTextView.text stringByAppendingString:[NSString stringWithFormat:@"I wrote:\n%@\n\n", self.chatTextField.text]];
-        self.chatTextView.text = chatString;
-
-        [self.chatArray addObject:chatString];
-
+        [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:[NSString stringWithFormat:@"I wrote:\n%@\n\n", self.chatTextField.text]]];
         self.chatTextField.text = @"";
-        NSLog(@"sent:%@", self.chatArray);
     }
     
     [self.chatTextField resignFirstResponder];
@@ -113,11 +93,7 @@
     NSData *receivedData = [[notification userInfo] objectForKey:@"data"];
     NSString *receivedText = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
 
-    NSString *chatString = [NSString stringWithFormat:@"%@:\n%@\n\n", peerDisplayName, receivedText];
-
-    [self.chatTextView performSelectorOnMainThread:@selector(setText:) withObject:[self.chatTextView.text stringByAppendingString: chatString] waitUntilDone:NO];
-    [self.chatArray addObject:chatString];
-    NSLog(@"received:%@", self.chatArray);
+    [self.chatTextView performSelectorOnMainThread:@selector(setText:) withObject:[self.chatTextView.text stringByAppendingString:[NSString stringWithFormat:@"%@:\n%@\n\n", peerDisplayName, receivedText]] waitUntilDone:NO];
 }
 
 @end
