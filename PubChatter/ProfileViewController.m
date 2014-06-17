@@ -61,16 +61,15 @@
             [self setTextFields];
         }
     }
+}
 
+- (void)setTextFields
+{
     PFFile *file = [[PFUser currentUser]objectForKey:@"picture"];
     [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
      {
          self.profileImageView.image = [UIImage imageWithData:data];
      }];
-}
-
-- (void)setTextFields
-{
     PFQuery *query = [PFQuery queryWithClassName:@"_User"];
     [query whereKey:@"username" equalTo:[[PFUser currentUser] objectForKey:@"username"]];
     [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error)
@@ -92,7 +91,7 @@
              {
                  self.genderLabel.text = @"M";
              }
-             else if ([object [@"gender"] isEqual:@3])
+             else if ([object [@"gender"] isEqual:@2])
              {
                  self.genderLabel.text = @"Other";
                  [self.genderLabel sizeToFit];
@@ -100,6 +99,25 @@
              else
              {
                  self.genderLabel.text = @"";
+             }
+             if ([object[@"sexualOrientation"] isEqual:@0])
+             {
+                 self.sexualOrientationLabel.text = @"Interested in Men";
+                 [self.sexualOrientationLabel sizeToFit];
+             }
+             else if ([object[@"sexualOrientation"] isEqual:@1])
+             {
+                 self.sexualOrientationLabel.text = @"Interested in Women";
+                 [self.sexualOrientationLabel sizeToFit];
+             }
+             else if ([object [@"sexualOrientation"] isEqual:@2])
+             {
+                 self.sexualOrientationLabel.text = @"Bisexual";
+                 [self.sexualOrientationLabel sizeToFit];
+             }
+             else
+             {
+                 self.sexualOrientationLabel.text = @"";
              }
          } else {
              // Did not find any user for the current user

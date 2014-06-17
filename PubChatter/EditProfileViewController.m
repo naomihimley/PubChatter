@@ -71,7 +71,7 @@
              }
              else
              {
-                 self.bioTextView.text = @"Enter your 120 character bio here";
+                 self.bioTextView.text = @"";
              }
              if (object[@"age"]) {
                  self.ageLabel.text = object[@"age"];
@@ -156,13 +156,19 @@
      {
          if (!error)
          {
+             NSLog(@"the query is  happening on the done button");
              NSData *imgData = UIImagePNGRepresentation(self.profileImageTaken);
              PFFile *imgFile = [PFFile fileWithData:imgData];
-             object[@"username"] = self.nameTextField.text;
-             object[@"age"] = self.ageLabel.text;
-             object[@"bio"] = self.bioTextView.text;
+             if (self.ageLabel.text) {
+                 object[@"age"] = self.ageLabel.text;
+             }
+             if (self.bioTextView.text) {
+                 object[@"bio"] = self.bioTextView.text;
+             }
+             if (self.favoriteDrinkLabel.text) {
+                 object[@"favoriteDrink"]= self.favoriteDrinkLabel.text;
+             }
              object[@"picture"] = imgFile;
-             object[@"favoriteDrink"]= self.favoriteDrinkLabel.text;
              if ([self.femaleGenderButton isSelected]) {
                  object[@"gender"] = @0;
              }
@@ -185,15 +191,20 @@
              {
                  object[@"sexualOrientation"] = @2;
              }
-             [object saveInBackground];
+             [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                 [self.navigationController popToViewController: [self.navigationController.viewControllers objectAtIndex:0] animated:NO];
+             }];
          } else {
              // Did not find any user for the current user
              NSLog(@"Error in EditView: %@", error);
          }
-         [[PFUser currentUser] setUsername:self.nameTextField.text];
-         [[PFUser currentUser] saveInBackground];
-         [self dismissViewControllerAnimated:YES completion:nil];
+         if (self.nameTextField.text)
+         {
+             [[PFUser currentUser] setUsername:self.nameTextField.text];
+             [[PFUser currentUser] saveInBackground];
+         }
      }];
+
 }
 - (IBAction)onFemaleGenderButtonPressed:(id)sender
 {
