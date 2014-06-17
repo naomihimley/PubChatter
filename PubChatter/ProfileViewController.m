@@ -128,7 +128,6 @@
 
 - (void)createBeaconRegion
 {
-    NSLog(@"create beacon region");
     //all estimote iBeacons
     NSUUID *estimoteUUID = [[NSUUID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"];
     self.estimoteRegion = [[CLBeaconRegion alloc]initWithProximityUUID:estimoteUUID identifier:@"irrelevant"];
@@ -202,7 +201,6 @@
     {
         if ([beacon.minor isEqual: @2] && [beacon.major isEqual:@40358])
         {
-            NSLog(@"estimote ranged");
             PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
             [queryForBar whereKey:@"objectId" equalTo:@"cxmc5pwBsf"];
             [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -216,7 +214,6 @@
         }
         else if ([beacon.minor isEqual: @23023] && [beacon.major isEqual: @4921]) //rich's iPhone
         {
-            NSLog(@"rich's iPhone");
             PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
             [queryForBar whereKey:@"objectId" equalTo:@"UL0yMO2bGj"];
             [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
