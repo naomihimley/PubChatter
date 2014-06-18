@@ -22,8 +22,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+}
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     [self queryForUsers];
-    
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -35,8 +38,14 @@
 {
     ListOfUsersTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CellID"];
     PFUser *user = [self.userArray objectAtIndex:indexPath.row];
-
     cell.userNameLabel.text = [user objectForKey:@"username"];
+    if ([user objectForKey:@"age"]) {
+        cell.userAgeLabel.text = [NSString stringWithFormat:@"%@",[user objectForKey:@"age"]];
+    }
+    else
+    {
+        cell.userAgeLabel.text = @"";
+    }
 
     if ([user [@"gender"] isEqual:@0])
     {
@@ -62,23 +71,41 @@
     }];
     return cell;
 }
-//will need to work out a query that only pulls the users that are within the bar
-//-(void)queryForUsersInBar: (PFUser *)usersInLocation
-//{
-//    PFRelation *relation = [usersInLocation relationForKey:@"barUserIsIn"];
-//    PFQuery *query = [relation query];
-//}
 
 -(void)queryForUsers
 {
-    PFQuery *query = [PFQuery queryWithClassName:@"_User"];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error)
-        {
-            self.userArray = [[NSArray alloc]initWithArray:objects];
+// this gets all users of the app
+//    PFQuery *query = [PFQuery queryWithClassName:@"_User"];
+//    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+//        if (!error)
+//        {
+//            self.userArray = [[NSArray alloc]initWithArray:objects];
+//            [self.tableView reloadData];
+//        }
+//    }];
+
+    // this gets users in the current bar
+    if ([PFUser currentUser])
+    {
+        PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
+        [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
+        [queryForBar includeKey:@"usersInBar"];
+        [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            PFObject *bar = [objects firstObject];
+            if (bar) {
+                self.navigationItem.title = [bar objectForKey:@"barName"];
+                self.userArray = [[NSArray alloc]initWithArray:[bar objectForKey:@"usersInBar"]];
+            }
+            else
+            {
+                self.navigationItem.title = @"Not in a Bar";
+                self.userArray = [NSArray array];
+            }
+
             [self.tableView reloadData];
-        }
-    }];
+        }];
+    }
+
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

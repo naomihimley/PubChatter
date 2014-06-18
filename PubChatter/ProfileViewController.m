@@ -9,7 +9,6 @@
 #import "ProfileViewController.h"
 
 @interface ProfileViewController ()<CLLocationManagerDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate>
-@property (weak, nonatomic) IBOutlet UILabel *barNameLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *genderLabel;
@@ -77,7 +76,9 @@
     {
         self.ageLabel.text = @"";
     }
-     self.bioTextView.text = [[PFUser currentUser]objectForKey:@"bio"];
+    if ([[PFUser currentUser]objectForKey:@"bio"]) {
+        self.bioTextView.text = [[PFUser currentUser]objectForKey:@"bio"];
+    }
     if ([[PFUser currentUser]objectForKey:@"favoriteDrink"]) {
         self.favDrinkLabel.text = [[PFUser currentUser]objectForKey:@"favoriteDrink"];
         [self.favDrinkLabel sizeToFit];
@@ -200,27 +201,38 @@
     beacon = [beacons firstObject];
     if (self.inARegion == YES)
     {
-        if ([beacon.minor isEqual: @2] && [beacon.major isEqual:@40358])
+        if ([beacon.minor isEqual: @2] && [beacon.major isEqual:@40358]) //old town ale house
         {
             PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
             [queryForBar whereKey:@"objectId" equalTo:@"cxmc5pwBsf"];
+            [queryForBar includeKey:@"usersInBar"];
             [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 PFObject *bar = [objects firstObject];
-                [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
-                [bar saveInBackground];
+                NSArray *arrayOfUsers = [NSArray arrayWithArray:[bar objectForKey:@"usersInBar"]];
+                if (![arrayOfUsers containsObject:[PFUser currentUser]]) {
+                    [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
+                    [bar saveInBackground];
+                    NSLog(@"addingObject");
+                    self.inARegion = NO;
+                }
                 self.inARegion = NO;
                 self.navigationItem.title = [bar objectForKey:@"barName"];
             }];
         }
-        else if ([beacon.minor isEqual: @23023] && [beacon.major isEqual: @4921]) //rich's iPhone
+        else if ([beacon.minor isEqual: @23023] && [beacon.major isEqual: @4921]) //rich's iPhone MM
         {
             NSLog(@"rich's iPhone");
             PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
             [queryForBar whereKey:@"objectId" equalTo:@"UL0yMO2bGj"];
             [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 PFObject *bar = [objects firstObject];
-                [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
-                [bar saveInBackground];
+                NSArray *arrayOfUsers = [NSArray arrayWithArray:[bar objectForKey:@"usersInBar"]];
+                if (![arrayOfUsers containsObject:[PFUser currentUser]]) {
+                    [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
+                    [bar saveInBackground];
+                    NSLog(@"addingObject");
+                    self.inARegion = NO;
+                }
                 self.inARegion = NO;
                 self.navigationItem.title = [bar objectForKey:@"barName"];
             }];
@@ -246,6 +258,8 @@
     [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
     [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         PFObject *bar = [objects firstObject];
+        //remove the repeated line once the user stops being put in the parse array twice
+        [bar removeObject:[PFUser currentUser] forKey:@"usersInBar"];
         [bar removeObject:[PFUser currentUser] forKey:@"usersInBar"];
         [bar saveInBackground];
     }];
