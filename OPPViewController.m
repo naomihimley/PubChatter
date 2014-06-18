@@ -8,6 +8,7 @@
 
 #import "OPPViewController.h"
 #import "AppDelegate.h"
+#import "ChatBoxViewController.h"
 
 @interface OPPViewController ()<MCBrowserViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
@@ -18,6 +19,9 @@
 @property NSMutableArray *connectedUserDevices;
 @property (weak, nonatomic) IBOutlet UIButton *searchForConnectionButton;
 @property (weak, nonatomic) IBOutlet UILabel *sexLabel;
+@property (weak, nonatomic) IBOutlet UITextView *bioLabel;
+@property (weak, nonatomic) IBOutlet UILabel *sexualOrientationLabel;
+@property (weak, nonatomic) IBOutlet UILabel *favDrinkLabel;
 
 -(void)peerDidChangeStateWithNotification: (NSNotification *)notification;
 @end
@@ -51,11 +55,60 @@
 
     self.userNameLabel.text = [self.user objectForKey:@"username"];
     self.userAgeLabel.text = [self.user objectForKey:@"age"];
-    self.sexLabel.text = [self.user objectForKey:@"gender"];
+
+    if ([self.user [@"gender"] isEqual:@0])
+    {
+        self.sexLabel.text = @"F";
+    }
+    else if ([self.user[@"gender"] isEqual:@1])
+    {
+        self.sexLabel.text = @"M";
+    }
+    else if ([self.user [@"gender"] isEqual:@2])
+    {
+        self.sexLabel.text = @"Other";
+        [self.sexLabel sizeToFit];
+    }
+    else
+    {
+        self.sexLabel.text = @"";
+    }
+
+    if ([self.user [@"sexualOrientation"] isEqual:@0])
+    {
+        self.sexualOrientationLabel.text = @"Interested In Men";
+        [self.sexualOrientationLabel sizeToFit];
+    }
+    else if ([self.user[@"sexualOrientation"] isEqual:@1])
+    {
+        self.sexualOrientationLabel.text = @"Interested In Women";
+        [self.sexualOrientationLabel sizeToFit];
+    }
+    else if ([self.user [@"sexualOrientation"] isEqual:@2])
+    {
+        self.sexualOrientationLabel.text = @"Bisexual";
+        [self.sexualOrientationLabel sizeToFit];
+    }
+    else
+    {
+        self.sexualOrientationLabel.text = @"";
+    }
+
+    self.favDrinkLabel.text = [self.user objectForKey:@"favoriteDrink"];
+
+    PFFile *file = [self.user objectForKey:@"picture"];
+    [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+        self.imageView.image = [UIImage imageWithData:data];
+    }];
+
+    self.bioLabel.text = [self.user objectForKey:@"bio"];
+
 
     self.connectedUserDevices = [NSMutableArray array];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(peerDidChangeStateWithNotification:) name:@"MCDidChangeStateNotification" object:nil];
+
+    self.chatArray = [NSMutableArray array];
 }
 
 - (IBAction)onButtonPressedSearchForConnections:(id)sender
@@ -108,6 +161,14 @@
             }
         }
     }
+}
+
+#pragma mark - Prepare for Segue method
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    ChatBoxViewController *chatBoxVC = segue.destinationViewController;
+    chatBoxVC.chatArray = self.chatArray;
 }
 
 @end

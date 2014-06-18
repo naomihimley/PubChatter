@@ -10,4 +10,6 @@
 
 @interface ChatBoxViewController : UIViewController
 
+@property NSMutableArray *chatArray;
+
 @end

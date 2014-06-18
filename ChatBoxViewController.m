@@ -17,7 +17,6 @@
 -(void)didReceiveDataWithNotification: (NSNotification *)notification;
 -(void)sendMyMessage;
 
-
 @end
 
 @implementation ChatBoxViewController
@@ -33,6 +32,16 @@
                                                object:nil];
 
     self.chatTextField.delegate = self;
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    for (NSString *chat in self.chatArray)
+    {
+        self.chatTextView.text = chat;
+    }
 }
 
 - (IBAction)onButtonPressedCancelSendingChat:(id)sender
@@ -78,7 +87,9 @@
 
     else
     {
-        [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:[NSString stringWithFormat:@"I wrote:\n%@\n\n", self.chatTextField.text]]];
+        NSString *chatString = [NSString stringWithFormat:@"I wrote:\n%@\n\n", self.chatTextField.text];
+        [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:chatString]];
+        [self.chatArray addObject:chatString];
         self.chatTextField.text = @"";
     }
     
@@ -93,7 +104,12 @@
     NSData *receivedData = [[notification userInfo] objectForKey:@"data"];
     NSString *receivedText = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
 
-    [self.chatTextView performSelectorOnMainThread:@selector(setText:) withObject:[self.chatTextView.text stringByAppendingString:[NSString stringWithFormat:@"%@:\n%@\n\n", peerDisplayName, receivedText]] waitUntilDone:NO];
+    NSString *chatString = [NSString stringWithFormat:@"%@:\n%@\n\n", peerDisplayName, receivedText];
+    [self.chatTextView performSelectorOnMainThread:@selector(setText:) withObject:[self.chatTextView.text stringByAppendingString:chatString] waitUntilDone:NO];
+
+    [self.chatArray addObject:chatString];
+}
+- (IBAction)onButtonPressedEndSession:(id)sender {
 }
 
 @end
