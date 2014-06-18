@@ -10,9 +10,7 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import "BarDetailViewController.h"
 #import "TDOAuth.h"
-#import "Bar.h"
 #import "YelpBar.h"
-#import "YelpRequest.h"
 #import "SearchTableViewCell.h"
 
 @interface SearchViewController () <UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate, MKMapViewDelegate>
@@ -23,7 +21,7 @@
 @property NSString *userLocationString;
 @property NSString *queryString;
 @property NSArray *barLocations;
-@property Bar *selectedBar;
+@property YelpBar *selectedBar;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *toggleControlOutlet;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UIButton *searchButtonOutlet;
@@ -62,7 +60,7 @@
     [self.mapView removeAnnotations:self.mapView.annotations];
     self.queryString = self.searchBar.text;
     self.mapSpan = MKCoordinateSpanMake(0.15, 0.15);
-    [self findBarNear:self.userLocation inSpan:self.mapSpan];
+    [self getYelpJSONWithSearch:self.queryString andLongitude:self.userLocation.coordinate.longitude andLatitude:self.userLocation.coordinate.latitude];
     self.searchButtonOutlet.enabled = NO;
     [self.searchBar endEditing:YES];
     CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(self.userLocation.coordinate.latitude, self.userLocation.coordinate.longitude);
@@ -75,11 +73,13 @@
 {
     self.redrawAreaButtonOutlet.enabled = NO;
     [self.mapView removeAnnotations:self.mapView.annotations];
-    CLLocation *centerLocation = [[CLLocation alloc] initWithLatitude:self.mapView.centerCoordinate.latitude longitude:self.mapView.centerCoordinate.longitude];
+    CGFloat latitude = self.mapView.centerCoordinate.latitude;
+    CGFloat longitude = self.mapView.centerCoordinate.longitude;
+    CLLocation *centerLocation = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
     self.mapSpan = self.mapView.region.span;
     MKCoordinateRegion region = MKCoordinateRegionMake(centerLocation.coordinate, self.mapSpan);
     [self.mapView setRegion:region animated:YES];
-    [self findBarNear:centerLocation inSpan:self.mapSpan];
+    [self getYelpJSONWithSearch:self.queryString andLongitude:centerLocation.coordinate.longitude andLatitude:centerLocation.coordinate.latitude];
 }
 
 - (IBAction)onToggleMapListViewPressed:(id)sender
@@ -94,98 +94,83 @@
         if (location.verticalAccuracy < 1000 && location.horizontalAccuracy < 1000) {
             [self.locationManager stopUpdatingLocation];
             self.userLocation = location;
-            [self getUserLocationString];
+//            [self getUserLocationString];
             CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(self.userLocation.coordinate.latitude, self.userLocation.coordinate.longitude);
             MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, self.mapSpan);
             [self.mapView setRegion:region animated:YES];
-            [self findBarNear:self.userLocation inSpan:self.mapSpan];
-
-            YelpRequest *request = [[YelpRequest alloc] init];
-            [request getYelpJSONWithSearch:self.queryString andLongitude:self.userLocation.coordinate.longitude andLatitude:self.userLocation.coordinate.latitude];
-
+            [self getYelpJSONWithSearch:self.queryString andLongitude:self.userLocation.coordinate.longitude andLatitude:self.userLocation.coordinate.latitude];
             break;
         }
     }
 }
 
--(void)findBarNear:(CLLocation *)location inSpan:(MKCoordinateSpan)mapSpan
+// Gets JSON data from Yelp
+-(void)getYelpJSONWithSearch:(NSString *)query andLongitude:(CGFloat)longitude andLatitude:(CGFloat)latitude
 {
-    MKLocalSearchRequest *request = [[MKLocalSearchRequest alloc] init];
-    request.naturalLanguageQuery = self.queryString;
-    request.region = MKCoordinateRegionMake(location.coordinate, mapSpan);
-    MKLocalSearch *search = [[MKLocalSearch alloc] initWithRequest:request];
-    [search startWithCompletionHandler:^(MKLocalSearchResponse *response, NSError *error) {
+    id rq = [TDOAuth URLRequestForPath:@"/v2/search" GETParameters:@{@"term": query, @"ll": [NSString stringWithFormat:@"%f,%f", latitude, longitude], @"limit" : @"20", @"sort" : @"0", @"cll": [NSString stringWithFormat:@"%f,%f", latitude, longitude]}
+                                  host:@"api.yelp.com"
+                           consumerKey:@"LdaQSTTYqZuYXrta5vVAgw"
+                        consumerSecret:@"k6KpVPXHSykD8aQXSXqdi7GboMY"
+                           accessToken:@"PRBX3m8UH4Q2RmZ-HOTKmjFPLVzmz4UL"
+                           tokenSecret:@"ao0diFl7jAe8cDDXnc-O1N-vQm8"];
 
-        NSMutableArray *arrayOfBarLocationMapItems = [[NSMutableArray alloc]init];
+    [NSURLConnection sendAsynchronousRequest:rq queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
 
-        for (MKMapItem *barMapItem in response.mapItems) {
-            Bar *bar = [[Bar alloc] init];
-            bar.distanceFromUser = [self.userLocation distanceFromLocation:barMapItem.placemark.location];
-            bar.name = barMapItem.name;
-            if ([barMapItem.phoneNumber hasPrefix:@"+"]) {
-                bar.telephone = [barMapItem.phoneNumber substringFromIndex:1];
-            }
-            bar.address = ABCreateStringWithAddressDictionary(barMapItem.placemark.addressDictionary, NO);
-            bar.latitude = barMapItem.placemark.location.coordinate.latitude;
-            bar.longitude = barMapItem.placemark.location.coordinate.longitude;
-            bar.businessURL = barMapItem.url;
-            [arrayOfBarLocationMapItems addObject:bar];
+        NSDictionary *dictionary  = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&connectionError];
 
-            CLLocation *barLocation = [[CLLocation alloc] initWithLatitude:bar.latitude longitude:bar.longitude];
-            MKPointAnnotation *barAnnotation = [[MKPointAnnotation alloc] init];
-            barAnnotation.coordinate = barLocation.coordinate;
-            barAnnotation.title = bar.name;
-            barAnnotation.subtitle = [NSString stringWithFormat:@"%.02f miles", bar.distanceFromUser * 0.000621371];
-            [self.mapView addAnnotation:barAnnotation];
-                }
+        NSMutableArray *arrayOfYelpBarObjects = [[NSMutableArray alloc] init];
+        NSArray *yelpBars = [dictionary objectForKey:@"businesses"];
+
+        //    NSMutableArray *arrayOfYelpBarItems = [NSMutableArray new];
+
+        for (NSDictionary *dictionary in yelpBars) {
+            YelpBar *yelpBar = [[YelpBar alloc] init];
+            yelpBar.name = [dictionary objectForKey:@"name"];
+            NSArray *displayAddress = [[dictionary objectForKey:@"location"] objectForKey:@"display_address"];
+            yelpBar.address = [NSString stringWithFormat:@"%@ %@", [displayAddress objectAtIndex:0], [displayAddress objectAtIndex:2]];
+            yelpBar.distanceFromUser = [[dictionary objectForKey:@"distance"] floatValue];
+            yelpBar.telephone = [dictionary objectForKey:@"phone"];
+            yelpBar.businessMobileURL = [dictionary objectForKey:@"mobile_url"];
+            yelpBar.businessURL = [dictionary objectForKey:@"url"];
+            yelpBar.businessImageURL = [dictionary objectForKey:@"image_url"];
+            yelpBar.businessRatingImageURL = [dictionary objectForKey:@"rating_img_url_small"];
+            yelpBar.aboutBusiness = [dictionary objectForKey:@"snippet_text"];
+            [arrayOfYelpBarObjects addObject:yelpBar];
+        }
         NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"distanceFromUser" ascending:YES];
-        self.barLocations = [arrayOfBarLocationMapItems sortedArrayUsingDescriptors:@[descriptor]];
-        [self.tableView reloadData];
-        self.searchButtonOutlet.enabled = YES;
-        self.redrawAreaButtonOutlet.enabled = YES;
+        self.barLocations = [arrayOfYelpBarObjects sortedArrayUsingDescriptors:@[descriptor]];
+        [self getBarLatandLong:self.barLocations];
+
     }];
 }
 
-// Gets JSON data from Yelp
-//-(void)getYelpData
-//{
-//    NSString *urlString = @"";
-//    NSURL *url = [NSURL URLWithString:urlString];
-//    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-//
-//    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError)
-//     {
-//         NSDictionary *dictionary  = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&connectionError];
-//
-//         NSArray *yelpBars = [dictionary objectForKey:@"businesses"];
-//         NSMutableArray *arrayOfYelpBarItems = [NSMutableArray new];
-//
-//         for (NSDictionary *dictionary in yelpBars) {
-//             YelpBar *yelpBar = [[YelpBar alloc] init];
-//             yelpBar.distanceFromUser =
-//             yelpBar.name =
-//             yelpBar.address =
-//             yelpBar.latitude =
-//             yelpBar.longitude =
-//             yelpBar.businessImageURL =
-//             yelpBar.businessRatingImageURL =
-//             yelpBar.isClosed =
-//             [arrayOfYelpBarItems addObject:yelpBar];
-//
-//             CLLocation *yelpBarLocation = [[CLLocation alloc] initWithLatitude:yelpBar.latitude longitude:yelpBar.longitude];
-//             MKPointAnnotation *yelpBarAnnotation = [[MKPointAnnotation alloc] init];
-//             yelpBarAnnotation.coordinate = yelpBarLocation.coordinate;
-//             yelpBarAnnotation.title = yelpBar.name;
-//             yelpBarAnnotation.subtitle = [NSString stringWithFormat:@"%.02f miles", yelpBar.distanceFromUser * 0.000621371];
-//             [self.mapView addAnnotation:yelpBarAnnotation];
-//         }
-//         NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"distanceFromUser" ascending:YES];
-//         self.barLocations = [arrayOfYelpBarItems sortedArrayUsingDescriptors:@[descriptor]];
-//         [self.tableView reloadData];
-//         self.searchButtonOutlet.enabled = YES;
-//         self.redrawAreaButtonOutlet.enabled = YES;
-//    }];
-//}
+-(void)getBarLatandLong:(NSArray *)yelpBars
+{
+
+    for (YelpBar *yelpBar in yelpBars) {
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder geocodeAddressString:yelpBar.address
+                 completionHandler:^(NSArray* placemarks, NSError* error){
+                     for (CLPlacemark* placemark in placemarks)
+                     {
+                         yelpBar.latitude = placemark.location.coordinate.latitude;
+                         yelpBar.longitude = placemark.location.coordinate.longitude;
+                         NSLog(@"%f, %f", yelpBar.latitude, yelpBar.longitude);
+
+                         MKPointAnnotation *barAnnotation = [[MKPointAnnotation alloc] init];
+                         barAnnotation.coordinate = CLLocationCoordinate2DMake(yelpBar.latitude, yelpBar.longitude);
+                         barAnnotation.title = yelpBar.name;
+                         barAnnotation.subtitle = [NSString stringWithFormat:@"%.02f miles", yelpBar.distanceFromUser * 0.000621371];
+                         [self.mapView addAnnotation:barAnnotation];
+                         break;
+                     }
+            [self.tableView reloadData];
+            self.searchButtonOutlet.enabled = YES;
+            self.redrawAreaButtonOutlet.enabled = YES;
+        }];
+    }
+}
+
 
 // Finds an address string from the user's current location.
 
@@ -205,7 +190,7 @@ calloutAccessoryControlTapped:(UIControl *)control
 
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKPinAnnotationView *)view
 {
-    for (Bar *bar in self.barLocations)
+    for (YelpBar *bar in self.barLocations)
     {
         if ([view.annotation.title isEqualToString:bar.name]) {
             self.selectedBar = bar;
@@ -213,16 +198,16 @@ calloutAccessoryControlTapped:(UIControl *)control
     }
 }
 
-- (void)getUserLocationString
-{
-    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
-
-    [geocoder reverseGeocodeLocation:self.userLocation completionHandler:^(NSArray *placemarks, NSError *error) {
-        for (CLPlacemark *placemark in placemarks) {
-            self.userLocationString = ABCreateStringWithAddressDictionary(placemark.addressDictionary, NO);
-        }
-    }];
-}
+//- (void)getBarLatAndLong:(YelpBar *)yelpbar
+//{
+//    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+//
+//    [geocoder reverseGeocodeLocation:self.userLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+//        for (CLPlacemark *placemark in placemarks) {
+//            self.userLocationString = ABCreateStringWithAddressDictionary(placemark.addressDictionary, NO);
+//        }
+//    }];
+//}
 
 #pragma mark - Tableview methods
 
@@ -233,13 +218,13 @@ calloutAccessoryControlTapped:(UIControl *)control
 
 -(SearchTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Bar *bar = [self.barLocations objectAtIndex:indexPath.row];
+    YelpBar *yelpBar = [self.barLocations objectAtIndex:indexPath.row];
     SearchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    NSString *milesFromUser = [NSString stringWithFormat:@"%.02f miles", bar.distanceFromUser * 0.000621371];
+    NSString *milesFromUser = [NSString stringWithFormat:@"%.02f miles", yelpBar.distanceFromUser * 0.000621371];
 
-    cell.barNameLabel.text = bar.name;
+    cell.barNameLabel.text = yelpBar.name;
     cell.barDistanceLabel.text = milesFromUser;
-    cell.barAddressLabel.text = bar.address;
+    cell.barAddressLabel.text = yelpBar.address;
     return cell;
 }
 
@@ -272,31 +257,7 @@ calloutAccessoryControlTapped:(UIControl *)control
         }
 }
 
-#pragma mark - OAuth methods
 
-//-(void)getRequestToken
-//{
-//    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-//    [dict setObject:CALL_BACK_URL forKey:@"oauth_callback"];
-//
-//    //init request
-//    NSURLRequest *rq = [TDOAuth URLRequestForPath:@"/request_token" GETParameters:dict scheme:@"https" host:@"oauth.withings.com/account" consumerKey:WITHINGS_OAUTH_KEY consumerSecret:WITHINGS_OAUTH_SECRET accessToken:nil tokenSecret:nil];
-//
-//    //fire request
-//    NSURLResponse* response;
-//    NSError* error = nil;
-//    NSData* result = [NSURLConnection sendSynchronousRequest:rq  returningResponse:&response error:&error];
-//    NSString *s = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
-//    //parse result
-//    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-//    NSArray *split = [s componentsSeparatedByString:@"&"];
-//    for (NSString *str in split){
-//        NSArray *split2 = [str componentsSeparatedByString:@"="];
-//        [params setObject:split2[1] forKey:split2[0]];
-//    }
-//
-//    token = params[@"oauth_token"];
-//    tokenSecret = params[@"oauth_token_secret"];
-//}
+
 
 @end

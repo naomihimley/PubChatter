@@ -33,7 +33,7 @@
     NSString *milesFromUser = [NSString stringWithFormat:@"%.02f miles", self.barFromSourceVC.distanceFromUser * 0.000621371];
     self.distanceFromUserLabel.text = milesFromUser;
 
-    [self.telephoneOutlet setTitle:[NSString stringWithFormat:@"(%@) %@-%@", [self.barFromSourceVC.telephone substringWithRange:NSMakeRange(1, 3)], [self.barFromSourceVC.telephone substringWithRange:NSMakeRange(4, 3)], [self.barFromSourceVC.telephone substringWithRange:NSMakeRange(7, 4)]] forState:UIControlStateNormal];
+    [self.telephoneOutlet setTitle:[NSString stringWithFormat:@"(%@) %@-%@", [self.barFromSourceVC.telephone substringWithRange:NSMakeRange(0, 3)], [self.barFromSourceVC.telephone substringWithRange:NSMakeRange(3, 3)], [self.barFromSourceVC.telephone substringWithRange:NSMakeRange(6, 4)]] forState:UIControlStateNormal];
     [self.goToWebsiteButtonOutlet setTitle:[NSString stringWithFormat:@"Go to %@ website", self.barFromSourceVC.name] forState:UIControlStateNormal];
 }
 
