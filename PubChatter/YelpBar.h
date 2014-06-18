@@ -9,6 +9,7 @@
 
 @interface YelpBar : NSObject
 
+@property NSString *yelpID;
 @property NSString *name;
 @property NSString *address;
 @property NSString *telephone;

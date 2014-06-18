@@ -8,6 +8,7 @@
 
 #import "BarDetailViewController.h"
 #import "BarWebpageViewController.h"
+#import <Parse/Parse.h>
 
 @interface BarDetailViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *barNameLabel;
@@ -20,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *telephoneOutlet;
 @property (weak, nonatomic) IBOutlet UITextView *aboutBarTextView;
 @property (weak, nonatomic) IBOutlet UILabel *categoriesLabel;
+@property (weak, nonatomic) IBOutlet UILabel *pubChattersCountLabel;
 
 @end
 
@@ -47,6 +49,18 @@
     self.ratingImageView.image = [UIImage imageWithData:ratingImageData];
 
     self.categoriesLabel.text = [NSString stringWithFormat:@"Category: %@\nOffers: %@", [[self.barFromSourceVC.categories objectAtIndex:0] objectAtIndex:0], [[self.barFromSourceVC.categories objectAtIndex:1] objectAtIndex:0]];
+
+
+    PFQuery *query = [PFQuery queryWithClassName:@"Bar"];
+    [query whereKey:@"yelpID" equalTo:self.barFromSourceVC.yelpID];
+    [query includeKey:@"usersInBar"];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (objects) {
+            NSArray *array = [[objects firstObject] objectForKey:@"usersInBar"];
+            self.pubChattersCountLabel.text = [NSString stringWithFormat:@"%lu pubChatters in %@", (unsigned long)array.count, self.barFromSourceVC.name];
+            NSLog(@"%lu", (unsigned long)array.count);
+        }
+    }];
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
