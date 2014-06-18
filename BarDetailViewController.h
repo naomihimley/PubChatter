@@ -7,11 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Bar.h"
 #import "YelpBar.h"
 
 @interface BarDetailViewController : UIViewController
 
-@property Bar *barFromSourceVC;
+@property YelpBar *barFromSourceVC;
 
 @end
