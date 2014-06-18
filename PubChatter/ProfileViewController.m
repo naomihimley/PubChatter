@@ -144,7 +144,15 @@
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-
+- (IBAction)onLogOutButtonTapped:(id)sender
+{
+    [PFUser logOut];
+    [self.tabBarController setSelectedIndex:0];
+    [self.locationManager stopMonitoringForRegion:self.beaconRegion];
+    [self.locationManager stopMonitoringForRegion:self.estimoteRegion];
+    [self.locationManager stopRangingBeaconsInRegion:self.beaconRegion];
+    [self.locationManager stopRangingBeaconsInRegion:self.estimoteRegion];
+}
 #pragma mark - CLLocationManagerDelegate Methods
 
 -(void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region

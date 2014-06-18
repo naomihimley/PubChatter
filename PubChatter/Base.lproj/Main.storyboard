@@ -562,6 +562,11 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="oSW-J4-SVr">
+                        <barButtonItem key="leftBarButtonItem" title="Logout" id="BZA-ba-mdC">
+                            <connections>
+                                <action selector="onLogOutButtonTapped:" destination="TiO-qo-PR7" id="5CA-h6-jes"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="edit" id="N74-nf-soR">
                             <connections>
                                 <segue destination="TZQ-pU-qhq" kind="push" identifier="editSegue" id="D2R-hq-afK"/>
