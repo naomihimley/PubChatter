@@ -33,16 +33,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setTextFields];
     self.profileImageTaken = [[UIImage alloc]init];
-    PFFile *file = [[PFUser currentUser]objectForKey:@"picture"];
-    [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
-     {
-         self.pictureView.layer.cornerRadius = self.pictureView.bounds.size.width /2;
-         self.pictureView.layer.masksToBounds = YES;
-         self.pictureView.layer.borderWidth = 0;
-         self.pictureView.image = [UIImage imageWithData:data];
-     }];
     self.cameraController = [[UIImagePickerController alloc] init];
     self.cameraController.delegate = self;
     [self.cameraController setAllowsEditing:YES];
@@ -55,63 +46,47 @@
     }
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self setTextFields];
+}
 
 - (void)setTextFields
 {
-    PFQuery *query = [PFQuery queryWithClassName:@"_User"];
-    [query whereKey:@"username" equalTo:[[PFUser currentUser] objectForKey:@"username"]];
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error)
+    PFFile *file = [[PFUser currentUser]objectForKey:@"picture"];
+    [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
      {
-         if (!error)
-         {
-             self.nameTextField.text = object[@"username"];
-             if (object[@"bio"])
-             {
-                 self.bioTextView.text = object[@"bio"];
-             }
-             else
-             {
-                 self.bioTextView.text = @"";
-             }
-             if (object[@"age"]) {
-                 self.ageLabel.text = object[@"age"];
-             }
-             else
-             {
-                 self.ageLabel.text = @"enter age";
-             }
-             if (object[@"favoriteDrink"]) {
-                 self.favoriteDrinkLabel.text = object[@"favoriteDrink"];
-             }
-             else
-             {
-                 self.favoriteDrinkLabel.text = @"favorite drink";
-             }
-         }
-         else {
-             NSLog(@"Error in EditView: %@", error);
-         }
+         self.pictureView.layer.cornerRadius = self.pictureView.bounds.size.width /2;
+         self.pictureView.layer.masksToBounds = YES;
+         self.pictureView.layer.borderWidth = 0;
+         self.pictureView.image = [UIImage imageWithData:data];
      }];
+    self.nameTextField.text = [[PFUser currentUser]objectForKey:@"username"];
+    if ([[PFUser currentUser]objectForKey: @"bio"])
+    {
+        self.bioTextView.text = [[PFUser currentUser]objectForKey:@"bio"];
+    }
+    else
+    {
+        self.bioTextView.text = @"";
+    }
+    if ([[PFUser currentUser]objectForKey: @"age"]) {
+        self.ageLabel.text = [[PFUser currentUser]objectForKey: @"age"];
+    }
+    else
+    {
+        self.ageLabel.text = @"enter age";
+    }
+    if ([[PFUser currentUser]objectForKey: @"favoriteDrink"]) {
+        self.favoriteDrinkLabel.text = [[PFUser currentUser]objectForKey: @"favoriteDrink"];
+    }
+    else
+    {
+        self.favoriteDrinkLabel.text = @"favorite drink";
+    }
 }
--(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [self.view endEditing:YES];
-}
-
--(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
--(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    [picker dismissViewControllerAnimated:NO completion:^
-     {
-         self.profileImageTaken = [info valueForKey:UIImagePickerControllerOriginalImage];
-         [self setImage];
-     }];
-}
-- (void)setImage
+- (void)createUserProfileImage
 {
     CGSize scale = CGSizeMake(150, 150);
     UIGraphicsBeginImageContextWithOptions(scale, NO, 0.0);
@@ -132,8 +107,8 @@
              [user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
               {
                   if (!error) {
-
                       [self dismissViewControllerAnimated:YES completion:nil];
+                      [self setTextFields];
                   }
                   else{
                       NSLog(@"Error: %@ %@", error, [error userInfo]);
@@ -143,68 +118,75 @@
      }];
 }
 
+#pragma mark - UIImagePicker Delegate Methods
+-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self.view endEditing:YES];
+}
+
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    [picker dismissViewControllerAnimated:NO completion:^
+     {
+         self.profileImageTaken = [info valueForKey:UIImagePickerControllerOriginalImage];
+         [self createUserProfileImage];
+     }];
+}
+
+#pragma mark - IBAction Button Pressed Methods
 - (IBAction)onEditButtonPressed:(id)sender
 {
-    [self presentViewController:self.cameraController animated:NO completion:nil];
+    [self presentViewController:self.cameraController animated:NO completion:^{}];
 
 }
 - (IBAction)onDoneButtonPressed:(id)sender
 {
-    PFQuery *query = [PFQuery queryWithClassName:@"_User"];
-    [query whereKey:@"username" equalTo:[[PFUser currentUser] objectForKey:@"username"]];
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error)
-     {
-         if (!error)
-         {
-             NSLog(@"the query is  happening on the done button");
-             NSData *imgData = UIImagePNGRepresentation(self.profileImageTaken);
-             PFFile *imgFile = [PFFile fileWithData:imgData];
-             if (self.ageLabel.text) {
-                 object[@"age"] = self.ageLabel.text;
-             }
-             if (self.bioTextView.text) {
-                 object[@"bio"] = self.bioTextView.text;
-             }
-             if (self.favoriteDrinkLabel.text) {
-                 object[@"favoriteDrink"]= self.favoriteDrinkLabel.text;
-             }
-             object[@"picture"] = imgFile;
-             if ([self.femaleGenderButton isSelected]) {
-                 object[@"gender"] = @0;
-             }
-             else if ([self.maleGenderButton isSelected])
-             {
-                 object[@"gender"] = @1;
-             }
-             else if ([self.otherGenderButton isSelected])
-             {
-                 object[@"gender"] = @2;
-             }
-             if ([self.seekingMenButton isSelected]) {
-                 object[@"sexualOrientation"] = @0;
-             }
-             else if ([self.seekingWomenButton isSelected])
-             {
-                 object[@"sexualOrientation"] = @1;
-             }
-             else if ([self.seekingBothButton isSelected])
-             {
-                 object[@"sexualOrientation"] = @2;
-             }
-             [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                 [self.navigationController popToViewController: [self.navigationController.viewControllers objectAtIndex:0] animated:NO];
-             }];
-         } else {
-             // Did not find any user for the current user
-             NSLog(@"Error in EditView: %@", error);
-         }
-         if (self.nameTextField.text)
-         {
-             [[PFUser currentUser] setUsername:self.nameTextField.text];
-             [[PFUser currentUser] saveInBackground];
-         }
-     }];
+//    NSData *imgData = UIImagePNGRepresentation(self.profileImageTaken);
+//    PFFile *imgFile = [PFFile fileWithData:imgData];
+//    [[PFUser currentUser]setObject:imgFile forKey:@"picture"];
 
+    if (self.ageLabel.text != nil) {
+        [[PFUser currentUser]setObject:self.ageLabel.text forKey:@"age"];
+    }
+    if (self.bioTextView.text != nil) {
+        [[PFUser currentUser]setObject:self.bioTextView.text forKey:@"bio"];
+    }
+    if (self.favoriteDrinkLabel.text != nil) {
+        [[PFUser currentUser]setObject:self.favoriteDrinkLabel.text forKey:@"favoriteDrink"];
+    }
+    if ([self.femaleGenderButton isSelected]) {
+        [[PFUser currentUser]setObject:@0 forKey:@"gender"];
+    }
+    else if ([self.maleGenderButton isSelected])
+    {
+        [[PFUser currentUser]setObject:@1 forKey:@"gender"];
+    }
+    else if ([self.otherGenderButton isSelected])
+    {
+        [[PFUser currentUser]setObject:@2 forKey:@"gender"];
+    }
+    if ([self.seekingMenButton isSelected]) {
+        [[PFUser currentUser]setObject:@0 forKey:@"sexualOrientation"];
+    }
+    else if ([self.seekingWomenButton isSelected])
+    {
+        [[PFUser currentUser]setObject:@1 forKey:@"sexualOrientation"];
+    }
+    else if ([self.seekingBothButton isSelected])
+    {
+        [[PFUser currentUser]setObject:@2 forKey:@"sexualOrientation"];
+    }
+    if (![self.nameTextField.text isEqualToString:@""])
+    {
+        [[PFUser currentUser] setUsername:self.nameTextField.text];
+        [[PFUser currentUser] saveInBackground];
+    }
+    [self.navigationController popToRootViewControllerAnimated:NO];
 }
 - (IBAction)onFemaleGenderButtonPressed:(id)sender
 {

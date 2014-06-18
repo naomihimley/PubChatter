@@ -68,8 +68,10 @@
     PFFile *file = [[PFUser currentUser]objectForKey:@"picture"];
     [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
      {
+         NSLog(@"part where the image should be being set");
          self.profileImageView.image = [UIImage imageWithData:data];
      }];
+    //change all of this?
     PFQuery *query = [PFQuery queryWithClassName:@"_User"];
     [query whereKey:@"username" equalTo:[[PFUser currentUser] objectForKey:@"username"]];
     [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error)
@@ -80,7 +82,6 @@
              self.ageLabel.text = object[@"age"];
              self.genderLabel.text = [NSString stringWithFormat:@"%@", object[@"gender"]];
              self.bioTextView.text = object[@"bio"];
-             self.sexualOrientationLabel.text = [NSString stringWithFormat:@"%@", object[@"sexualOrientation"]];
              self.favDrinkLabel.text = object[@"favoriteDrink"];
              [self.favDrinkLabel sizeToFit];
              if ([object[@"gender"] isEqual:@0])
@@ -202,7 +203,6 @@
     {
         if ([beacon.minor isEqual: @2] && [beacon.major isEqual:@40358])
         {
-            NSLog(@"estimote ranged");
             PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
             [queryForBar whereKey:@"objectId" equalTo:@"cxmc5pwBsf"];
             [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -243,6 +243,7 @@
 {
     NSLog(@"did exit");
     [self.locationManager stopRangingBeaconsInRegion:self.beaconRegion];
+    [self.locationManager stopMonitoringForRegion:self.estimoteRegion];
     self.inARegion = NO;
     PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
     [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
