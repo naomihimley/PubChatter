@@ -48,7 +48,6 @@
         loginViewController.signUpController = signupViewController;
         [self presentViewController:loginViewController animated:YES completion:nil];
     }
-    [self.barNameLabel sizeToFit];
     self.inARegion = NO;
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
@@ -68,68 +67,54 @@
     PFFile *file = [[PFUser currentUser]objectForKey:@"picture"];
     [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
      {
-         NSLog(@"part where the image should be being set");
          self.profileImageView.image = [UIImage imageWithData:data];
      }];
-    //change all of this?
-    PFQuery *query = [PFQuery queryWithClassName:@"_User"];
-    [query whereKey:@"username" equalTo:[[PFUser currentUser] objectForKey:@"username"]];
-    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error)
+
+     self.nameLabel.text = [[[PFUser currentUser]objectForKey:@"username"] uppercaseString];
+     self.ageLabel.text = [[PFUser currentUser]objectForKey:@"age"];
+     self.bioTextView.text = [[PFUser currentUser]objectForKey:@"bio"];
+     self.favDrinkLabel.text = [[PFUser currentUser]objectForKey:@"favoriteDrink"];
+     [self.favDrinkLabel sizeToFit];
+     if ([[[PFUser currentUser]objectForKey:@"gender"] isEqual:@0])
      {
-         if (!error)
-         {
-             self.nameLabel.text = [object[@"username"] uppercaseString];
-             self.ageLabel.text = object[@"age"];
-             self.genderLabel.text = [NSString stringWithFormat:@"%@", object[@"gender"]];
-             self.bioTextView.text = object[@"bio"];
-             self.favDrinkLabel.text = object[@"favoriteDrink"];
-             [self.favDrinkLabel sizeToFit];
-             if ([object[@"gender"] isEqual:@0])
-             {
-                 self.genderLabel.text = @"F";
-             }
-             else if ([object[@"gender"] isEqual:@1])
-             {
-                 self.genderLabel.text = @"M";
-             }
-             else if ([object [@"gender"] isEqual:@2])
-             {
-                 self.genderLabel.text = @"Other";
-                 [self.genderLabel sizeToFit];
-             }
-             else
-             {
-                 self.genderLabel.text = @"";
-             }
-             if ([object[@"sexualOrientation"] isEqual:@0])
-             {
-                 self.sexualOrientationLabel.text = @"Interested in Men";
-                 [self.sexualOrientationLabel sizeToFit];
-             }
-             else if ([object[@"sexualOrientation"] isEqual:@1])
-             {
-                 self.sexualOrientationLabel.text = @"Interested in Women";
-                 [self.sexualOrientationLabel sizeToFit];
-             }
-             else if ([object [@"sexualOrientation"] isEqual:@2])
-             {
-                 self.sexualOrientationLabel.text = @"Bisexual";
-                 [self.sexualOrientationLabel sizeToFit];
-             }
-             else
-             {
-                 self.sexualOrientationLabel.text = @"";
-             }
-         } else {
-             // Did not find any user for the current user
-             NSLog(@"Error in ProfileViewController setTextFields: %@", error);
-         }
-     }];
+         self.genderLabel.text = @"F";
+     }
+     else if ([[[PFUser currentUser]objectForKey:@"gender"] isEqual:@1])
+     {
+         self.genderLabel.text = @"M";
+     }
+     else if ([[[PFUser currentUser]objectForKey:@"gender"] isEqual:@2])
+     {
+         self.genderLabel.text = @"Other";
+         [self.genderLabel sizeToFit];
+     }
+     else
+     {
+         self.genderLabel.text = @"";
+     }
+     if ([[[PFUser currentUser]objectForKey:@"sexualOrientation"] isEqual:@0])
+     {
+         self.sexualOrientationLabel.text = @"Interested in Men";
+         [self.sexualOrientationLabel sizeToFit];
+     }
+     else if ([[[PFUser currentUser]objectForKey:@"sexualOrientation"] isEqual:@1])
+     {
+         self.sexualOrientationLabel.text = @"Interested in Women";
+         [self.sexualOrientationLabel sizeToFit];
+     }
+     else if ([[[PFUser currentUser]objectForKey:@"sexualOrientation"] isEqual:@2])
+     {
+         self.sexualOrientationLabel.text = @"Bisexual";
+         [self.sexualOrientationLabel sizeToFit];
+     }
+     else
+     {
+         self.sexualOrientationLabel.text = @"";
+     }
 }
 
 - (void)createBeaconRegion
 {
-    NSLog(@"create beacon region");
     //all estimote iBeacons
     NSUUID *estimoteUUID = [[NSUUID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"];
     self.estimoteRegion = [[CLBeaconRegion alloc]initWithProximityUUID:estimoteUUID identifier:@"irrelevant"];
@@ -159,7 +144,15 @@
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-
+- (IBAction)onLogOutButtonTapped:(id)sender
+{
+    [PFUser logOut];
+    [self.tabBarController setSelectedIndex:0];
+    [self.locationManager stopMonitoringForRegion:self.beaconRegion];
+    [self.locationManager stopMonitoringForRegion:self.estimoteRegion];
+    [self.locationManager stopRangingBeaconsInRegion:self.beaconRegion];
+    [self.locationManager stopRangingBeaconsInRegion:self.estimoteRegion];
+}
 #pragma mark - CLLocationManagerDelegate Methods
 
 -(void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region
@@ -184,8 +177,7 @@
             [bar saveInBackground];
         }];
         self.inARegion = NO;
-        self.barNameLabel.text = @"PubChat";
-        [self.barNameLabel sizeToFit];
+        self.navigationItem.title= @"PubChatter";
     }
 }
 
@@ -210,8 +202,7 @@
                 [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                 [bar saveInBackground];
                 self.inARegion = NO;
-                self.barNameLabel.text = [bar objectForKey:@"barName"];
-                [self.barNameLabel sizeToFit];
+                self.navigationItem.title = [bar objectForKey:@"barName"];
             }];
         }
         else if ([beacon.minor isEqual: @23023] && [beacon.major isEqual: @4921]) //rich's iPhone
@@ -224,8 +215,7 @@
                 [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                 [bar saveInBackground];
                 self.inARegion = NO;
-                self.barNameLabel.text = [bar objectForKey:@"barName"];
-                [self.barNameLabel sizeToFit];
+                self.navigationItem.title = [bar objectForKey:@"barName"];
             }];
         }
     }

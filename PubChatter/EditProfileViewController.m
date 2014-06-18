@@ -9,7 +9,7 @@
 #import "EditProfileViewController.h"
 #import <Parse/Parse.h>
 
-@interface EditProfileViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface EditProfileViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *nameTextField;
 @property (nonatomic, strong) UIImagePickerController *cameraController;
 @property (weak, nonatomic) IBOutlet UITextField *ageLabel;
@@ -33,6 +33,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.bioTextView.delegate = self;
+    self.nameTextField.clearButtonMode = UITextFieldViewModeAlways;
+    self.ageLabel.clearButtonMode = UITextFieldViewModeAlways;
+    self.favoriteDrinkLabel.clearButtonMode = UITextFieldViewModeAlways;
     self.profileImageTaken = [[UIImage alloc]init];
     self.cameraController = [[UIImagePickerController alloc] init];
     self.cameraController.delegate = self;
@@ -118,6 +122,19 @@
      }];
 }
 
+#pragma mark - UITextView Delegate Methods
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+
+
+    if([text isEqualToString:@"\b"]){
+        return YES;
+    }else if([[textView text] length] - range.length + text.length > 120){
+
+        return NO;
+    }
+
+    return YES;
+}
 #pragma mark - UIImagePicker Delegate Methods
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {

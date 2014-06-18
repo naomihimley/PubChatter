@@ -6,13 +6,21 @@
 //  Copyright (c) 2014 Naomi Himley. All rights reserved.
 //
 
-#import "Bar.h"
 
-@interface YelpBar : Bar
+@interface YelpBar : NSObject
 
+@property NSString *name;
+@property NSString *address;
+@property NSURL *businessURL;
+@property NSString *telephone;
+@property CGFloat latitude;
+@property CGFloat longitude;
+@property BOOL isCurrentLocation;
+@property (nonatomic, assign) CGFloat distanceFromUser;
 @property NSString *businessImageURL;
 @property NSString *businessRatingImageURL;
 @property NSString *businessMobileURL;
-@property BOOL isClosed;
+@property NSString *aboutBusiness;
+
 
 @end

@@ -13,12 +13,10 @@
 		0EB32003194BC369005A3B82 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EB32002194BC369005A3B82 /* MapKit.framework */; };
 		0EB32005194BD2D4005A3B82 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EB32004194BD2D4005A3B82 /* Parse.framework */; };
 		0EB3200B194CBDD0005A3B82 /* TDOAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB3200A194CBDD0005A3B82 /* TDOAuth.m */; };
-		0EB3200E194E384D005A3B82 /* Bar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB3200D194E384D005A3B82 /* Bar.m */; };
 		0EB32011194E4AC3005A3B82 /* SearchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB32010194E4AC3005A3B82 /* SearchTableViewCell.m */; };
 		0ECEAEE8194F69A000B92C40 /* YelpBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAEE7194F69A000B92C40 /* YelpBar.m */; };
 		0ECEAEEB194F6FAC00B92C40 /* BarDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAEEA194F6FAC00B92C40 /* BarDetailViewController.m */; };
 		0ECEAEEE194F8AD200B92C40 /* BarWebpageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAEED194F8AD200B92C40 /* BarWebpageViewController.m */; };
-		0ECEAEF31950DD7F00B92C40 /* YelpRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAEF21950DD7F00B92C40 /* YelpRequest.m */; };
 		9BDBE4FD194F3EB50045C05B /* MCManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE4FC194F3EB50045C05B /* MCManager.m */; };
 		9BDBE500194F47380045C05B /* OPPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE4FF194F47380045C05B /* OPPViewController.m */; };
 		9BDBE503194F47830045C05B /* ChatBoxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE502194F47830045C05B /* ChatBoxViewController.m */; };
@@ -73,8 +71,6 @@
 		0EB32004194BD2D4005A3B82 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		0EB32009194CBDD0005A3B82 /* TDOAuth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TDOAuth.h; sourceTree = "<group>"; };
 		0EB3200A194CBDD0005A3B82 /* TDOAuth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDOAuth.m; sourceTree = "<group>"; };
-		0EB3200C194E384D005A3B82 /* Bar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bar.h; sourceTree = "<group>"; };
-		0EB3200D194E384D005A3B82 /* Bar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bar.m; sourceTree = "<group>"; };
 		0EB3200F194E4AC3005A3B82 /* SearchTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchTableViewCell.h; sourceTree = "<group>"; };
 		0EB32010194E4AC3005A3B82 /* SearchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchTableViewCell.m; sourceTree = "<group>"; };
 		0ECEAEE6194F69A000B92C40 /* YelpBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YelpBar.h; sourceTree = "<group>"; };
@@ -83,8 +79,6 @@
 		0ECEAEEA194F6FAC00B92C40 /* BarDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BarDetailViewController.m; path = ../BarDetailViewController.m; sourceTree = "<group>"; };
 		0ECEAEEC194F8AD200B92C40 /* BarWebpageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BarWebpageViewController.h; path = ../BarWebpageViewController.h; sourceTree = "<group>"; };
 		0ECEAEED194F8AD200B92C40 /* BarWebpageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BarWebpageViewController.m; path = ../BarWebpageViewController.m; sourceTree = "<group>"; };
-		0ECEAEF11950DD7F00B92C40 /* YelpRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YelpRequest.h; path = ../YelpRequest.h; sourceTree = "<group>"; };
-		0ECEAEF21950DD7F00B92C40 /* YelpRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = YelpRequest.m; path = ../YelpRequest.m; sourceTree = "<group>"; };
 		9BDBE4FB194F3EB50045C05B /* MCManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCManager.h; sourceTree = "<group>"; };
 		9BDBE4FC194F3EB50045C05B /* MCManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCManager.m; sourceTree = "<group>"; };
 		9BDBE4FE194F47380045C05B /* OPPViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OPPViewController.h; sourceTree = "<group>"; };
@@ -274,12 +268,8 @@
 				9BDBE55C194FA44F0045C05B /* UserProfileVCs */,
 				9BDBE559194FA3D00045C05B /* ChatVCs */,
 				9BDBE55B194FA42C0045C05B /* MCManager */,
-				0EB3200C194E384D005A3B82 /* Bar.h */,
-				0EB3200D194E384D005A3B82 /* Bar.m */,
 				0ECEAEE6194F69A000B92C40 /* YelpBar.h */,
 				0ECEAEE7194F69A000B92C40 /* YelpBar.m */,
-				0ECEAEF11950DD7F00B92C40 /* YelpRequest.h */,
-				0ECEAEF21950DD7F00B92C40 /* YelpRequest.m */,
 				0EB32009194CBDD0005A3B82 /* TDOAuth.h */,
 				0EB3200A194CBDD0005A3B82 /* TDOAuth.m */,
 				B0782C53194BB3700022E6E7 /* Images.xcassets */,
@@ -427,7 +417,6 @@
 				B0782C4C194BB3700022E6E7 /* AppDelegate.m in Sources */,
 				0EB32011194E4AC3005A3B82 /* SearchTableViewCell.m in Sources */,
 				B0782CD1194F850B0022E6E7 /* EditProfileViewController.m in Sources */,
-				0EB3200E194E384D005A3B82 /* Bar.m in Sources */,
 				0ECEAEEE194F8AD200B92C40 /* BarWebpageViewController.m in Sources */,
 				0EB3200B194CBDD0005A3B82 /* TDOAuth.m in Sources */,
 				9BDBE500194F47380045C05B /* OPPViewController.m in Sources */,
@@ -438,7 +427,6 @@
 				0ECEAEE8194F69A000B92C40 /* YelpBar.m in Sources */,
 				B0782C48194BB3700022E6E7 /* main.m in Sources */,
 				0EB31FFE194BC176005A3B82 /* ProfileViewController.m in Sources */,
-				0ECEAEF31950DD7F00B92C40 /* YelpRequest.m in Sources */,
 				9BDBE506194F50200045C05B /* ListOfUsersTableViewCell.m in Sources */,
 				0ECEAEEB194F6FAC00B92C40 /* BarDetailViewController.m in Sources */,
 			);
