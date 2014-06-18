@@ -8,6 +8,7 @@
 
 #import "OPPViewController.h"
 #import "AppDelegate.h"
+#import "ChatBoxViewController.h"
 
 @interface OPPViewController ()<MCBrowserViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
@@ -56,6 +57,8 @@
     self.connectedUserDevices = [NSMutableArray array];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(peerDidChangeStateWithNotification:) name:@"MCDidChangeStateNotification" object:nil];
+
+    self.chatArray = [NSMutableArray array];
 }
 
 - (IBAction)onButtonPressedSearchForConnections:(id)sender
@@ -108,6 +111,14 @@
             }
         }
     }
+}
+
+#pragma mark - Prepare for Segue method
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    ChatBoxViewController *chatBoxVC = segue.destinationViewController;
+    chatBoxVC.chatArray = self.chatArray;
 }
 
 @end
