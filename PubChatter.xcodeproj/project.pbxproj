@@ -79,8 +79,8 @@
 		0EB32010194E4AC3005A3B82 /* SearchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchTableViewCell.m; sourceTree = "<group>"; };
 		0ECEAEE6194F69A000B92C40 /* YelpBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YelpBar.h; sourceTree = "<group>"; };
 		0ECEAEE7194F69A000B92C40 /* YelpBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YelpBar.m; sourceTree = "<group>"; };
-		0ECEAEE9194F6FAC00B92C40 /* BarDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BarDetailViewController.h; sourceTree = "<group>"; };
-		0ECEAEEA194F6FAC00B92C40 /* BarDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BarDetailViewController.m; sourceTree = "<group>"; };
+		0ECEAEE9194F6FAC00B92C40 /* BarDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BarDetailViewController.h; path = ../BarDetailViewController.h; sourceTree = "<group>"; };
+		0ECEAEEA194F6FAC00B92C40 /* BarDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BarDetailViewController.m; path = ../BarDetailViewController.m; sourceTree = "<group>"; };
 		0ECEAEEC194F8AD200B92C40 /* BarWebpageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BarWebpageViewController.h; path = ../BarWebpageViewController.h; sourceTree = "<group>"; };
 		0ECEAEED194F8AD200B92C40 /* BarWebpageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BarWebpageViewController.m; path = ../BarWebpageViewController.m; sourceTree = "<group>"; };
 		0ECEAEF11950DD7F00B92C40 /* YelpRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YelpRequest.h; path = ../YelpRequest.h; sourceTree = "<group>"; };
@@ -185,6 +185,8 @@
 		9BDBE55A194FA3FE0045C05B /* Search/Bar VCs */ = {
 			isa = PBXGroup;
 			children = (
+				0ECEAEE9194F6FAC00B92C40 /* BarDetailViewController.h */,
+				0ECEAEEA194F6FAC00B92C40 /* BarDetailViewController.m */,
 				0ECEAEEC194F8AD200B92C40 /* BarWebpageViewController.h */,
 				0ECEAEED194F8AD200B92C40 /* BarWebpageViewController.m */,
 				0EB31FF9194BC158005A3B82 /* SearchViewController.h */,
@@ -210,8 +212,6 @@
 			children = (
 				B0782CCF194F850B0022E6E7 /* EditProfileViewController.h */,
 				B0782CD0194F850B0022E6E7 /* EditProfileViewController.m */,
-				0ECEAEE9194F6FAC00B92C40 /* BarDetailViewController.h */,
-				0ECEAEEA194F6FAC00B92C40 /* BarDetailViewController.m */,
 				0EB31FFC194BC176005A3B82 /* ProfileViewController.h */,
 				0EB31FFD194BC176005A3B82 /* ProfileViewController.m */,
 			);
