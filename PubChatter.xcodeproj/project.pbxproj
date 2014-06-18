@@ -187,6 +187,8 @@
 				0EB31FFA194BC158005A3B82 /* SearchViewController.m */,
 				0EB3200F194E4AC3005A3B82 /* SearchTableViewCell.h */,
 				0EB32010194E4AC3005A3B82 /* SearchTableViewCell.m */,
+				0ECEAEE9194F6FAC00B92C40 /* BarDetailViewController.h */,
+				0ECEAEEA194F6FAC00B92C40 /* BarDetailViewController.m */,
 			);
 			name = "Search/Bar VCs";
 			sourceTree = "<group>";

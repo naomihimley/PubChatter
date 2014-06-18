@@ -60,7 +60,7 @@
     [self.mapView removeAnnotations:self.mapView.annotations];
     self.queryString = self.searchBar.text;
     self.mapSpan = MKCoordinateSpanMake(0.15, 0.15);
-    [self getYelpJSONWithSearch:self.queryString andLongitude:self.userLocation.coordinate.longitude andLatitude:self.userLocation.coordinate.latitude];
+    [self getYelpJSONWithSearch:self.queryString andLongitude:self.userLocation.coordinate.longitude andLatitude:self.userLocation.coordinate.latitude andSortType:@"0" andNumResults:@"1"];
     self.searchButtonOutlet.enabled = NO;
     [self.searchBar endEditing:YES];
     CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(self.userLocation.coordinate.latitude, self.userLocation.coordinate.longitude);
@@ -79,7 +79,8 @@
     self.mapSpan = self.mapView.region.span;
     MKCoordinateRegion region = MKCoordinateRegionMake(centerLocation.coordinate, self.mapSpan);
     [self.mapView setRegion:region animated:YES];
-    [self getYelpJSONWithSearch:self.queryString andLongitude:centerLocation.coordinate.longitude andLatitude:centerLocation.coordinate.latitude];
+
+    [self getYelpJSONWithSearch:@"bar" andLongitude:centerLocation.coordinate.longitude andLatitude:centerLocation.coordinate.latitude andSortType:@"1" andNumResults:@"20"];
 }
 
 - (IBAction)onToggleMapListViewPressed:(id)sender
@@ -98,36 +99,39 @@
             CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(self.userLocation.coordinate.latitude, self.userLocation.coordinate.longitude);
             MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, self.mapSpan);
             [self.mapView setRegion:region animated:YES];
-            [self getYelpJSONWithSearch:self.queryString andLongitude:self.userLocation.coordinate.longitude andLatitude:self.userLocation.coordinate.latitude];
+            [self getYelpJSONWithSearch:self.queryString andLongitude:self.userLocation.coordinate.longitude andLatitude:self.userLocation.coordinate.latitude andSortType:@"1" andNumResults:@"20"];
             break;
         }
     }
 }
 
 // Gets JSON data from Yelp
--(void)getYelpJSONWithSearch:(NSString *)query andLongitude:(CGFloat)longitude andLatitude:(CGFloat)latitude
+-(void)getYelpJSONWithSearch:(NSString *)query andLongitude:(CGFloat)longitude andLatitude:(CGFloat)latitude andSortType:(NSString*)sortType andNumResults:(NSString *)numResults;
 {
-    id rq = [TDOAuth URLRequestForPath:@"/v2/search" GETParameters:@{@"term": query, @"ll": [NSString stringWithFormat:@"%f,%f", latitude, longitude], @"limit" : @"20", @"sort" : @"0", @"cll": [NSString stringWithFormat:@"%f,%f", latitude, longitude]}
+//    NSLog(@"%@", sortType);
+    id rq = [TDOAuth URLRequestForPath:@"/v2/search" GETParameters:@{@"term": query, @"ll": [NSString stringWithFormat:@"%f,%f", latitude, longitude], @"limit" : numResults, @"sort" : sortType}
                                   host:@"api.yelp.com"
                            consumerKey:@"LdaQSTTYqZuYXrta5vVAgw"
                         consumerSecret:@"k6KpVPXHSykD8aQXSXqdi7GboMY"
                            accessToken:@"PRBX3m8UH4Q2RmZ-HOTKmjFPLVzmz4UL"
                            tokenSecret:@"ao0diFl7jAe8cDDXnc-O1N-vQm8"];
+    NSLog(@"%@", rq);
 
     [NSURLConnection sendAsynchronousRequest:rq queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+
+        NSLog(@"Got the data");
 
         NSDictionary *dictionary  = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&connectionError];
 
         NSMutableArray *arrayOfYelpBarObjects = [[NSMutableArray alloc] init];
         NSArray *yelpBars = [dictionary objectForKey:@"businesses"];
 
-        //    NSMutableArray *arrayOfYelpBarItems = [NSMutableArray new];
-
         for (NSDictionary *dictionary in yelpBars) {
             YelpBar *yelpBar = [[YelpBar alloc] init];
             yelpBar.name = [dictionary objectForKey:@"name"];
-            NSArray *displayAddress = [[dictionary objectForKey:@"location"] objectForKey:@"display_address"];
-            yelpBar.address = [NSString stringWithFormat:@"%@ %@", [displayAddress objectAtIndex:0], [displayAddress objectAtIndex:2]];
+            yelpBar.address = [NSString stringWithFormat:@"%@ %@ %@ %@", [[[dictionary objectForKey:@"location"] objectForKey:@"address"] firstObject], [[dictionary objectForKey:@"location"] objectForKey:@"city"], [[dictionary objectForKey:@"location"] objectForKey:@"state_code"], [[dictionary objectForKey:@"location"] objectForKey:@"postal_code"]];
+            NSLog(@"%@", yelpBar.address);
+
             yelpBar.distanceFromUser = [[dictionary objectForKey:@"distance"] floatValue];
             yelpBar.telephone = [dictionary objectForKey:@"phone"];
             yelpBar.businessMobileURL = [dictionary objectForKey:@"mobile_url"];
@@ -135,12 +139,12 @@
             yelpBar.businessImageURL = [dictionary objectForKey:@"image_url"];
             yelpBar.businessRatingImageURL = [dictionary objectForKey:@"rating_img_url_small"];
             yelpBar.aboutBusiness = [dictionary objectForKey:@"snippet_text"];
+            yelpBar.categories = [dictionary objectForKey:@"categories"];
             [arrayOfYelpBarObjects addObject:yelpBar];
         }
         NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"distanceFromUser" ascending:YES];
         self.barLocations = [arrayOfYelpBarObjects sortedArrayUsingDescriptors:@[descriptor]];
         [self getBarLatandLong:self.barLocations];
-
     }];
 }
 
@@ -155,8 +159,6 @@
                      {
                          yelpBar.latitude = placemark.location.coordinate.latitude;
                          yelpBar.longitude = placemark.location.coordinate.longitude;
-                         NSLog(@"%f, %f", yelpBar.latitude, yelpBar.longitude);
-
                          MKPointAnnotation *barAnnotation = [[MKPointAnnotation alloc] init];
                          barAnnotation.coordinate = CLLocationCoordinate2DMake(yelpBar.latitude, yelpBar.longitude);
                          barAnnotation.title = yelpBar.name;
@@ -170,7 +172,6 @@
         }];
     }
 }
-
 
 // Finds an address string from the user's current location.
 
@@ -197,17 +198,6 @@ calloutAccessoryControlTapped:(UIControl *)control
         }
     }
 }
-
-//- (void)getBarLatAndLong:(YelpBar *)yelpbar
-//{
-//    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
-//
-//    [geocoder reverseGeocodeLocation:self.userLocation completionHandler:^(NSArray *placemarks, NSError *error) {
-//        for (CLPlacemark *placemark in placemarks) {
-//            self.userLocationString = ABCreateStringWithAddressDictionary(placemark.addressDictionary, NO);
-//        }
-//    }];
-//}
 
 #pragma mark - Tableview methods
 
