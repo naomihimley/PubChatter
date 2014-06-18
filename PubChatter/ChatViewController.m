@@ -38,6 +38,28 @@
 
     cell.userNameLabel.text = [user objectForKey:@"username"];
 
+    if ([user [@"gender"] isEqual:@0])
+    {
+        cell.genderLabel.text = @"F";
+    }
+    else if ([user[@"gender"] isEqual:@1])
+    {
+        cell.genderLabel.text = @"M";
+    }
+    else if ([user [@"gender"] isEqual:@2])
+    {
+        cell.genderLabel.text = @"Other";
+        [cell.genderLabel sizeToFit];
+    }
+    else
+    {
+        cell.genderLabel.text = @"";
+    }
+
+    PFFile *imageFile = [user objectForKey:@"picture"];
+    [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+        cell.userImage.image = [UIImage imageWithData:data];
+    }];
     return cell;
 }
 //will need to work out a query that only pulls the users that are within the bar

@@ -74,6 +74,36 @@
         self.sexLabel.text = @"";
     }
 
+    if ([self.user [@"sexualOrientation"] isEqual:@0])
+    {
+        self.sexualOrientationLabel.text = @"Interested In Men";
+        [self.sexualOrientationLabel sizeToFit];
+    }
+    else if ([self.user[@"sexualOrientation"] isEqual:@1])
+    {
+        self.sexualOrientationLabel.text = @"Interested In Women";
+        [self.sexualOrientationLabel sizeToFit];
+    }
+    else if ([self.user [@"sexualOrientation"] isEqual:@2])
+    {
+        self.sexualOrientationLabel.text = @"Bisexual";
+        [self.sexualOrientationLabel sizeToFit];
+    }
+    else
+    {
+        self.sexualOrientationLabel.text = @"";
+    }
+
+    self.favDrinkLabel.text = [self.user objectForKey:@"favoriteDrink"];
+
+    PFFile *file = [self.user objectForKey:@"picture"];
+    [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+        self.imageView.image = [UIImage imageWithData:data];
+    }];
+
+    self.bioLabel.text = [self.user objectForKey:@"bio"];
+
+
     self.connectedUserDevices = [NSMutableArray array];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(peerDidChangeStateWithNotification:) name:@"MCDidChangeStateNotification" object:nil];
