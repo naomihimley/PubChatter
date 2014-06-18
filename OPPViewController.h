@@ -13,4 +13,5 @@
 
 @property NSMutableArray *chatArray;
 @property PFUser *user;
+@property NSMutableArray *chatDictionaryArray;
 @end

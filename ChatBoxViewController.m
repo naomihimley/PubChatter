@@ -90,6 +90,13 @@
         NSString *chatString = [NSString stringWithFormat:@"I wrote:\n%@\n\n", self.chatTextField.text];
         [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:chatString]];
         [self.chatArray addObject:chatString];
+
+        NSDictionary *chatDictionary = @{@"peer1": self.chatArray};
+
+        [self.chatDictionaryArray addObject:chatDictionary];
+
+        NSLog(@"%@", self.chatDictionaryArray);
+
         self.chatTextField.text = @"";
     }
     

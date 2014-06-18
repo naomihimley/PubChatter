@@ -76,7 +76,7 @@
         self.bioTextView.text = @"";
     }
     if ([[PFUser currentUser]objectForKey: @"age"]) {
-        self.ageLabel.text = [[PFUser currentUser]objectForKey: @"age"];
+        self.ageLabel.text = [NSString stringWithFormat: @"%@",[[PFUser currentUser]objectForKey: @"age"]];
     }
     else
     {
@@ -168,7 +168,8 @@
 //    [[PFUser currentUser]setObject:imgFile forKey:@"picture"];
 
     if (self.ageLabel.text != nil) {
-        [[PFUser currentUser]setObject:self.ageLabel.text forKey:@"age"];
+        NSNumber  *ageNum = [NSNumber numberWithInteger: [self.ageLabel.text integerValue]];
+        [[PFUser currentUser]setObject:ageNum forKey:@"age"];
     }
     if (self.bioTextView.text != nil) {
         [[PFUser currentUser]setObject:self.bioTextView.text forKey:@"bio"];
