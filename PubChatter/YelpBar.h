@@ -11,16 +11,16 @@
 
 @property NSString *name;
 @property NSString *address;
-@property NSURL *businessURL;
 @property NSString *telephone;
 @property CGFloat latitude;
 @property CGFloat longitude;
-@property BOOL isCurrentLocation;
 @property (nonatomic, assign) CGFloat distanceFromUser;
+@property NSString *businessURL;
 @property NSString *businessImageURL;
 @property NSString *businessRatingImageURL;
 @property NSString *businessMobileURL;
 @property NSString *aboutBusiness;
+@property NSArray *categories;
 
 
 @end

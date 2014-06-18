@@ -10,7 +10,8 @@
 
 @interface BarWebpageViewController : UIViewController
 
-@property NSURL *urlFromSource;
+@property NSString *mobileURLFromSource;
+@property NSString *webURLFromSource;
 @property NSString *placeNameFromSource;
 
 @end
