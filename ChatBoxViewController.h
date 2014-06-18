@@ -11,5 +11,6 @@
 @interface ChatBoxViewController : UIViewController
 
 @property NSMutableArray *chatArray;
+@property NSMutableArray *chatDictionaryArray;
 
 @end

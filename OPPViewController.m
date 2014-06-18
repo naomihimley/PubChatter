@@ -55,7 +55,7 @@
     [self.appDelegate.mcManager advertiseSelf:YES];
 
     self.userNameLabel.text = [self.user objectForKey:@"username"];
-    self.userAgeLabel.text = [self.user objectForKey:@"age"];
+    self.userAgeLabel.text = [NSString stringWithFormat:@"%@",[self.user objectForKey:@"age"]];
 
     if ([self.user [@"gender"] isEqual:@0])
     {
@@ -104,12 +104,14 @@
 
     self.bioLabel.text = [self.user objectForKey:@"bio"];
 
-
-    self.connectedUserDevices = [NSMutableArray array];
-
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(peerDidChangeStateWithNotification:) name:@"MCDidChangeStateNotification" object:nil];
 
     self.chatArray = [NSMutableArray array];
+
+    self.connectedUserDevices = [NSMutableArray array];
+
+    self.chatDictionaryArray = [NSMutableArray array];
+
 }
 
 - (IBAction)onButtonPressedSearchForConnections:(id)sender
@@ -168,6 +170,7 @@
 {
     ChatBoxViewController *chatBoxVC = segue.destinationViewController;
     chatBoxVC.chatArray = self.chatArray;
+    chatBoxVC.chatDictionaryArray = self.chatDictionaryArray;
 }
 
 @end
