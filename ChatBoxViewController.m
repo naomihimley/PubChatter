@@ -17,7 +17,6 @@
 -(void)didReceiveDataWithNotification: (NSNotification *)notification;
 -(void)sendMyMessage;
 
-
 @end
 
 @implementation ChatBoxViewController
@@ -109,6 +108,8 @@
     [self.chatTextView performSelectorOnMainThread:@selector(setText:) withObject:[self.chatTextView.text stringByAppendingString:chatString] waitUntilDone:NO];
 
     [self.chatArray addObject:chatString];
+}
+- (IBAction)onButtonPressedEndSession:(id)sender {
 }
 
 @end

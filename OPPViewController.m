@@ -19,6 +19,9 @@
 @property NSMutableArray *connectedUserDevices;
 @property (weak, nonatomic) IBOutlet UIButton *searchForConnectionButton;
 @property (weak, nonatomic) IBOutlet UILabel *sexLabel;
+@property (weak, nonatomic) IBOutlet UITextView *bioLabel;
+@property (weak, nonatomic) IBOutlet UILabel *sexualOrientationLabel;
+@property (weak, nonatomic) IBOutlet UILabel *favDrinkLabel;
 
 -(void)peerDidChangeStateWithNotification: (NSNotification *)notification;
 @end
@@ -52,7 +55,24 @@
 
     self.userNameLabel.text = [self.user objectForKey:@"username"];
     self.userAgeLabel.text = [self.user objectForKey:@"age"];
-    self.sexLabel.text = [self.user objectForKey:@"gender"];
+
+    if ([self.user [@"gender"] isEqual:@0])
+    {
+        self.sexLabel.text = @"F";
+    }
+    else if ([self.user[@"gender"] isEqual:@1])
+    {
+        self.sexLabel.text = @"M";
+    }
+    else if ([self.user [@"gender"] isEqual:@2])
+    {
+        self.sexLabel.text = @"Other";
+        [self.sexLabel sizeToFit];
+    }
+    else
+    {
+        self.sexLabel.text = @"";
+    }
 
     self.connectedUserDevices = [NSMutableArray array];
 
