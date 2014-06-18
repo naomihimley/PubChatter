@@ -51,7 +51,6 @@
     self.inARegion = NO;
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
-    //possibly making the app keep updating in the background?
     if ([CLLocationManager isMonitoringAvailableForClass:[CLBeaconRegion class]]) {
         if ([PFUser currentUser])
         {
@@ -69,12 +68,20 @@
      {
          self.profileImageView.image = [UIImage imageWithData:data];
      }];
-
-     self.nameLabel.text = [[[PFUser currentUser]objectForKey:@"username"] uppercaseString];
-     self.ageLabel.text = [[PFUser currentUser]objectForKey:@"age"];
+    self.nameLabel.text = [[[PFUser currentUser]objectForKey:@"username"] uppercaseString];
+    if ([[PFUser currentUser]objectForKey:@"age"]) {
+        NSNumber *ageNumber = [[PFUser currentUser]objectForKey:@"age"];
+        self.ageLabel.text = [NSString stringWithFormat:@"%@", ageNumber];
+    }
+    else
+    {
+        self.ageLabel.text = @"";
+    }
      self.bioTextView.text = [[PFUser currentUser]objectForKey:@"bio"];
-     self.favDrinkLabel.text = [[PFUser currentUser]objectForKey:@"favoriteDrink"];
-     [self.favDrinkLabel sizeToFit];
+    if ([[PFUser currentUser]objectForKey:@"favoriteDrink"]) {
+        self.favDrinkLabel.text = [[PFUser currentUser]objectForKey:@"favoriteDrink"];
+        [self.favDrinkLabel sizeToFit];
+    }
      if ([[[PFUser currentUser]objectForKey:@"gender"] isEqual:@0])
      {
          self.genderLabel.text = @"F";
