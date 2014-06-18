@@ -15,15 +15,16 @@
 @property (weak, nonatomic) IBOutlet UILabel *userNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *userAgeLabel;
 @property (weak, nonatomic) IBOutlet UIButton *beginChattingButton;
-@property AppDelegate *appDelegate;
-@property NSMutableArray *connectedUserDevices;
 @property (weak, nonatomic) IBOutlet UIButton *searchForConnectionButton;
 @property (weak, nonatomic) IBOutlet UILabel *sexLabel;
 @property (weak, nonatomic) IBOutlet UITextView *bioLabel;
 @property (weak, nonatomic) IBOutlet UILabel *sexualOrientationLabel;
 @property (weak, nonatomic) IBOutlet UILabel *favDrinkLabel;
+@property NSMutableArray *connectedUserDevices;
+@property AppDelegate *appDelegate;
 
 -(void)peerDidChangeStateWithNotification: (NSNotification *)notification;
+
 @end
 
 @implementation OPPViewController
@@ -156,8 +157,6 @@
 
                 [self.beginChattingButton setEnabled:NO];
                 [self.searchForConnectionButton setEnabled:YES];
-
-                NSLog(@"%@", self.connectedUserDevices);
             }
         }
     }

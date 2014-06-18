@@ -179,6 +179,8 @@
 		9BDBE55A194FA3FE0045C05B /* Search/Bar VCs */ = {
 			isa = PBXGroup;
 			children = (
+				0ECEAEE9194F6FAC00B92C40 /* BarDetailViewController.h */,
+				0ECEAEEA194F6FAC00B92C40 /* BarDetailViewController.m */,
 				0ECEAEEC194F8AD200B92C40 /* BarWebpageViewController.h */,
 				0ECEAEED194F8AD200B92C40 /* BarWebpageViewController.m */,
 				0EB31FF9194BC158005A3B82 /* SearchViewController.h */,

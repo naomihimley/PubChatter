@@ -109,7 +109,12 @@
 
     [self.chatArray addObject:chatString];
 }
-- (IBAction)onButtonPressedEndSession:(id)sender {
+
+# pragma mark - Disconnect from session
+
+- (IBAction)onButtonPressedEndSession:(id)sender
+{
+    [self.appDelegate.mcManager.session disconnect];
 }
 
 @end
