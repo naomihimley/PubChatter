@@ -23,6 +23,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *categoriesLabel;
 @property (weak, nonatomic) IBOutlet UILabel *pubChattersCountLabel;
 @property (weak, nonatomic) IBOutlet UILabel *ratioLabel;
+@property (weak, nonatomic) IBOutlet UILabel *rateBarLabel;
+@property (weak, nonatomic) IBOutlet UISlider *sliderOutlet;
 
 @end
 
@@ -33,6 +35,8 @@
 {
     [super viewDidLoad];
 
+    self.rateBarLabel.hidden = YES;
+    self.sliderOutlet.hidden = YES;
     self.barNameLabel.text = self.barFromSourceVC.name;
     self.barAddressLabel.text = self.barFromSourceVC.address;
     self.aboutBarTextView.text = self.barFromSourceVC.aboutBusiness;
@@ -51,6 +55,7 @@
 
     self.categoriesLabel.text = [NSString stringWithFormat:@"Category: %@\nOffers: %@", [[self.barFromSourceVC.categories objectAtIndex:0] objectAtIndex:0], [[self.barFromSourceVC.categories objectAtIndex:1] objectAtIndex:0]];
 
+    [self checkIfUserisInBar];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -62,7 +67,7 @@
         if (objects) {
             NSArray *array = [[objects firstObject] objectForKey:@"usersInBar"];
             NSInteger pubChattersInBar = array.count;
-            self.pubChattersCountLabel.text = [NSString stringWithFormat:@"%lu pubChatters in %@", pubChattersInBar, self.barFromSourceVC.name];
+            self.pubChattersCountLabel.text = [NSString stringWithFormat:@"%lu pubChatters in %@", (long)pubChattersInBar, self.barFromSourceVC.name];
             NSMutableArray *menInBar = [[NSMutableArray alloc] init];
             for (PFObject *object in array) {
                 if ([[object objectForKey:@"gender"] isEqualToNumber:@1]) {
@@ -102,9 +107,28 @@
     [query whereKey:@"yelpID" equalTo:self.barFromSourceVC.yelpID];
     [query includeKey:@"usersInBar"];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (objects) {
+        if (![objects isEqual:nil]) {
             NSArray *array = [[objects firstObject] objectForKey:@"usersInBar"];
             self.pubChattersCountLabel.text = [NSString stringWithFormat:@"%lu pubChatters in %@", (unsigned long)array.count, self.barFromSourceVC.name];
+        }
+    }];
+}
+
+-(void)checkIfUserisInBar
+{
+    PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
+    [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
+    [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if ([objects isEqual:nil]) {
+            NSLog(@"%@", objects.firstObject);
+            self.rateBarLabel.text = [NSString stringWithFormat:@"Rate %@", self.barFromSourceVC.name];
+            self.rateBarLabel.hidden = NO;
+            self.sliderOutlet.hidden = NO;
+        }
+        else
+        {
+            self.rateBarLabel.hidden = YES;
+            self.sliderOutlet.hidden = YES;
         }
     }];
 }
