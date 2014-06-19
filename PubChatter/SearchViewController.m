@@ -12,6 +12,7 @@
 #import "TDOAuth.h"
 #import "YelpBar.h"
 #import "SearchTableViewCell.h"
+#import <Parse/Parse.h>
 
 @interface SearchViewController () <UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate, MKMapViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -48,7 +49,31 @@
     self.locationManager = [[CLLocationManager alloc] init];
     [self.locationManager startUpdatingLocation];
     self.locationManager.delegate = self;
-    self.navigationItem.title = @"PubChatter";
+}
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self isUserInBar];
+
+}
+
+- (void)isUserInBar
+{
+    PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
+    [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
+    [queryForBar includeKey:@"usersInBar"];
+    [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+    {
+        PFObject *bar = [objects firstObject];
+        if (bar)
+        {
+            self.navigationItem.title = [bar objectForKey:@"barName"];
+        }
+        else
+        {
+            self.navigationItem.title = @"PubChat";
+        }
+    }];
 }
 
 #pragma mark - IBActions
