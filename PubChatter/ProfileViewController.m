@@ -193,7 +193,6 @@
     {
         if ([region.identifier isEqualToString:@"richiPhone"])
         {
-            NSLog(@"CLRegionStateOutside of rich's phone");
             PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
             [queryForBar whereKey:@"objectId" equalTo:@"UL0yMO2bGj"];
             [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -204,7 +203,6 @@
         }
         if ([region.identifier isEqualToString:@"anyEstimoteBeacon"])
         {
-            NSLog(@"CLRegionStateOutside of estimote");
             PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
             [queryForBar whereKey:@"objectId" equalTo:@"UL0yMO2bGj"];
             [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -217,7 +215,6 @@
         //checks parse to see what bar the user was in and removes them.
 
         self.inARegion = NO;
-        self.navigationItem.title= @"PubChatter";
     }
 }
 
@@ -241,23 +238,26 @@
             [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 PFObject *bar = [objects firstObject];
                 NSArray *arrayOfUsers = [NSArray arrayWithArray:[bar objectForKey:@"usersInBar"]];
-                NSLog(@"arrayOfUsers: %@", arrayOfUsers);
-                for (PFUser *user in arrayOfUsers) {
-                    if (![[user objectForKey:@"username"] isEqual:[[PFUser currentUser]objectForKey:@"username"]]) {
+                if (arrayOfUsers.count < 1) {
+                    [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
+                    [bar saveInBackground];
+                    self.inARegion = NO;
+                }
+                NSEnumerator *enumerator = [arrayOfUsers objectEnumerator];
+                PFUser* user;
+                while (user = [enumerator nextObject]) {
+                    if (![[user objectForKey:@"username"]isEqual:[[PFUser currentUser]objectForKey:@"username"]]) {
                         [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                         [bar saveInBackground];
-                        NSLog(@"addingObject to old town");
                         self.inARegion = NO;
                     }
                 }
-
                 self.inARegion = NO;
                 self.navigationItem.title = [bar objectForKey:@"barName"];
             }];
         }
         else if ([beacon.minor isEqual: @23023] && [beacon.major isEqual: @4921]) //rich's iPhone MM
         {
-            NSLog(@"rich's iPhone");
             PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
             [queryForBar whereKey:@"objectId" equalTo:@"UL0yMO2bGj"];
             [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -305,6 +305,7 @@
         [bar removeObject:[PFUser currentUser] forKey:@"usersInBar"];
         [bar saveInBackground];
     }];
+    self.navigationItem.title= @"PubChatter";
 }
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations

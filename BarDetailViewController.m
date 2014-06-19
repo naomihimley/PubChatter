@@ -119,7 +119,7 @@
     PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
     [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
     [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if ([objects isEqual:nil]) {
+        if (![objects isEqual:nil]) {
             NSLog(@"%@", objects.firstObject);
             self.rateBarLabel.text = [NSString stringWithFormat:@"Rate %@", self.barFromSourceVC.name];
             self.rateBarLabel.hidden = NO;
