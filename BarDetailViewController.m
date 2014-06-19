@@ -8,6 +8,7 @@
 
 #import "BarDetailViewController.h"
 #import "BarWebpageViewController.h"
+#import <Parse/Parse.h>
 
 @interface BarDetailViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *barNameLabel;
@@ -20,6 +21,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *telephoneOutlet;
 @property (weak, nonatomic) IBOutlet UITextView *aboutBarTextView;
 @property (weak, nonatomic) IBOutlet UILabel *categoriesLabel;
+@property (weak, nonatomic) IBOutlet UILabel *pubChattersCountLabel;
+@property (weak, nonatomic) IBOutlet UILabel *ratioLabel;
 
 @end
 
@@ -47,6 +50,35 @@
     self.ratingImageView.image = [UIImage imageWithData:ratingImageData];
 
     self.categoriesLabel.text = [NSString stringWithFormat:@"Category: %@\nOffers: %@", [[self.barFromSourceVC.categories objectAtIndex:0] objectAtIndex:0], [[self.barFromSourceVC.categories objectAtIndex:1] objectAtIndex:0]];
+
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    PFQuery *query = [PFQuery queryWithClassName:@"Bar"];
+    [query whereKey:@"yelpID" equalTo:self.barFromSourceVC.yelpID];
+    [query includeKey:@"usersInBar"];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (objects) {
+            NSArray *array = [[objects firstObject] objectForKey:@"usersInBar"];
+            NSInteger pubChattersInBar = array.count;
+            self.pubChattersCountLabel.text = [NSString stringWithFormat:@"%lu pubChatters in %@", pubChattersInBar, self.barFromSourceVC.name];
+            NSMutableArray *menInBar = [[NSMutableArray alloc] init];
+            for (PFObject *object in array) {
+                if ([[object objectForKey:@"gender"] isEqualToNumber:@1]) {
+                    [menInBar addObject:object];
+                }
+            }
+            NSInteger malePubChattersInBar = menInBar.count;
+            NSInteger femalePubChattersInBar = pubChattersInBar - malePubChattersInBar;
+            if (pubChattersInBar > 0) {
+                CGFloat maleRatio = malePubChattersInBar/pubChattersInBar;
+                CGFloat femaleRatio = femalePubChattersInBar/pubChattersInBar;
+            self.ratioLabel.text = [NSString stringWithFormat:@"%.0f percent men  %.0f percent women", maleRatio *100, femaleRatio *100];
+            NSLog(@"%lu", (unsigned long)menInBar.count);
+            }
+        }
+    }];
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -63,6 +95,18 @@
 - (IBAction)onTelephoneButtonPressed:(id)sender
 {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@", self.barFromSourceVC.telephone]]];
+}
+- (IBAction)onRefreshButtonPushed:(id)sender
+{
+    PFQuery *query = [PFQuery queryWithClassName:@"Bar"];
+    [query whereKey:@"yelpID" equalTo:self.barFromSourceVC.yelpID];
+    [query includeKey:@"usersInBar"];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (objects) {
+            NSArray *array = [[objects firstObject] objectForKey:@"usersInBar"];
+            self.pubChattersCountLabel.text = [NSString stringWithFormat:@"%lu pubChatters in %@", (unsigned long)array.count, self.barFromSourceVC.name];
+        }
+    }];
 }
 
 @end

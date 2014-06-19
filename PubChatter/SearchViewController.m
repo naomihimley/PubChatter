@@ -130,8 +130,6 @@
             YelpBar *yelpBar = [[YelpBar alloc] init];
             yelpBar.name = [dictionary objectForKey:@"name"];
             yelpBar.address = [NSString stringWithFormat:@"%@ %@ %@ %@", [[[dictionary objectForKey:@"location"] objectForKey:@"address"] firstObject], [[dictionary objectForKey:@"location"] objectForKey:@"city"], [[dictionary objectForKey:@"location"] objectForKey:@"state_code"], [[dictionary objectForKey:@"location"] objectForKey:@"postal_code"]];
-            NSLog(@"%@", yelpBar.address);
-
             yelpBar.distanceFromUser = [[dictionary objectForKey:@"distance"] floatValue];
             yelpBar.telephone = [dictionary objectForKey:@"phone"];
             yelpBar.businessMobileURL = [dictionary objectForKey:@"mobile_url"];
@@ -140,6 +138,7 @@
             yelpBar.businessRatingImageURL = [dictionary objectForKey:@"rating_img_url_small"];
             yelpBar.aboutBusiness = [dictionary objectForKey:@"snippet_text"];
             yelpBar.categories = [dictionary objectForKey:@"categories"];
+            yelpBar.yelpID = [dictionary objectForKey:@"id"];
             [arrayOfYelpBarObjects addObject:yelpBar];
         }
         NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"distanceFromUser" ascending:YES];
