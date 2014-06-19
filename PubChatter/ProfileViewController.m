@@ -52,9 +52,9 @@
     if (![PFUser currentUser])
     {
         PFLogInViewController *loginViewController = [PFLogInViewController new];
-        loginViewController.fields = PFLogInFieldsUsernameAndPassword | PFLogInFieldsLogInButton;
+        loginViewController.fields = PFLogInFieldsUsernameAndPassword | PFLogInFieldsLogInButton | PFLogInFieldsTwitter | PFLogInFieldsFacebook;
         PFSignUpViewController *signupViewController = [PFSignUpViewController new];
-        signupViewController.fields = PFLogInFieldsUsernameAndPassword | PFLogInFieldsLogInButton;
+        signupViewController.fields = PFLogInFieldsUsernameAndPassword | PFLogInFieldsLogInButton | PFLogInFieldsTwitter | PFLogInFieldsFacebook;
         loginViewController.delegate = self;
         signupViewController.delegate = self;
         loginViewController.signUpController = signupViewController;
