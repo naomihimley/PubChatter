@@ -24,7 +24,8 @@
 @end
 
 @implementation ProfileViewController
-
+//pauses location
+//check if did
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -169,10 +170,13 @@
 {
     [PFUser logOut];
     [self.tabBarController setSelectedIndex:0];
-    [self.locationManager stopMonitoringForRegion:self.beaconRegion];
-    [self.locationManager stopMonitoringForRegion:self.estimoteRegion];
-    [self.locationManager stopRangingBeaconsInRegion:self.beaconRegion];
-    [self.locationManager stopRangingBeaconsInRegion:self.estimoteRegion];
+    if ([CLLocationManager isMonitoringAvailableForClass:[CLBeaconRegion class]])
+    {
+        [self.locationManager stopMonitoringForRegion:self.beaconRegion];
+        [self.locationManager stopMonitoringForRegion:self.estimoteRegion];
+        [self.locationManager stopRangingBeaconsInRegion:self.beaconRegion];
+        [self.locationManager stopRangingBeaconsInRegion:self.estimoteRegion];
+    }
 }
 #pragma mark - CLLocationManagerDelegate Methods
 

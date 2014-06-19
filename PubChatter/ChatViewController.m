@@ -84,7 +84,7 @@
             self.userArray = [[NSArray alloc]initWithArray:objects];
             for (PFUser *user in self.userArray)
             {
-                if (![[user objectId]isEqualToString:[[PFUser currentUser]objectId]])
+                if (![[user objectId]isEqualToString:[[PFUser currentUser]objectId]]&& ![[user objectId]isEqualToString:@"w7p8xjoee1"])
                 {
 
                     if (fabsf([[[PFUser currentUser] objectForKey:@"age"]floatValue] - [[user objectForKey:@"age"] floatValue]) <=  1){
