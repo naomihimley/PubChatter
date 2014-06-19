@@ -24,8 +24,6 @@
 @end
 
 @implementation ProfileViewController
-//pauses location
-//check if did
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -84,8 +82,7 @@
      }];
     self.nameLabel.text = [[[PFUser currentUser]objectForKey:@"username"] uppercaseString];
     if ([[PFUser currentUser]objectForKey:@"age"]) {
-        NSNumber *ageNumber = [[PFUser currentUser]objectForKey:@"age"];
-        self.ageLabel.text = [NSString stringWithFormat:@"%@", ageNumber];
+        self.ageLabel.text = [NSString stringWithFormat:@"%@", [[PFUser currentUser]objectForKey:@"age"]];
     }
     else
     {
@@ -93,6 +90,10 @@
     }
     if ([[PFUser currentUser]objectForKey:@"bio"]) {
         self.bioTextView.text = [[PFUser currentUser]objectForKey:@"bio"];
+    }
+    else
+    {
+        self.bioTextView.text = @"";
     }
     if ([[PFUser currentUser]objectForKey:@"favoriteDrink"]) {
         self.favDrinkLabel.text = [[PFUser currentUser]objectForKey:@"favoriteDrink"];
@@ -180,11 +181,12 @@
 }
 #pragma mark - CLLocationManagerDelegate Methods
 
+//this delegate method gets called whenever didEnterRegion, didExitRegion, requestStateForRegion, and whenever the user wakes up their device from sleep, Even with the app in background because notifyEntryStateOnDisplay is set to YES
+
 -(void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region
 {
     if (state == CLRegionStateInside)
     {
-        //this method is for when the user opens the app already inside of a region. DidEnterRegion will not get called because they wont cross the boundary, but this checks the CLRegionState and changes our bool.
         [manager startRangingBeaconsInRegion:self.richRegion];
         [manager startRangingBeaconsInRegion:self.estimoteRegion];
         self.inARegion = YES;
@@ -203,8 +205,9 @@
         }
         if ([region.identifier isEqualToString:@"anyEstimoteBeacon"])
         {
+            //this removes user from OldTown
             PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
-            [queryForBar whereKey:@"objectId" equalTo:@"UL0yMO2bGj"];
+            [queryForBar whereKey:@"objectId" equalTo:@"cxmc5pwBsf"];
             [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 PFObject *bar = [objects firstObject];
                 [bar removeObject:[PFUser currentUser] forKey:@"usersInBar"];
@@ -266,7 +269,6 @@
                 if (![arrayOfUsers containsObject:[[PFUser currentUser] objectId]]) {
                     [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                     [bar saveInBackground];
-                    NSLog(@"addingObject to rich's iphone");
                     self.inARegion = NO;
                 }
                 self.inARegion = NO;
@@ -287,24 +289,35 @@
         [self.locationManager startRangingBeaconsInRegion:self.richRegion];
     }
     self.inARegion = YES;
-    NSLog(@"did enter");
 }
 
 - (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
 {
-    NSLog(@"did exit");
-    [self.locationManager stopRangingBeaconsInRegion:self.richRegion];
-    [self.locationManager stopMonitoringForRegion:self.estimoteRegion];
-    self.inARegion = NO;
-    PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
-    [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
-    [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        PFObject *bar = [objects firstObject];
-        //remove the repeated line once the user stops being put in the parse array twice
-        [bar removeObject:[PFUser currentUser] forKey:@"usersInBar"];
-        [bar removeObject:[PFUser currentUser] forKey:@"usersInBar"];
-        [bar saveInBackground];
-    }];
+    if ([region.identifier isEqualToString:@"anyEstimoteBeacon"])
+    {
+        //removes User from OldTown
+        [self.locationManager stopMonitoringForRegion:self.estimoteRegion];
+        self.inARegion = NO;
+        PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
+        [queryForBar whereKey:@"objectId" equalTo:@"cxmc5pwBsf"];
+        [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            PFObject *bar = [objects firstObject];
+            [bar removeObject:[PFUser currentUser] forKey:@"usersInBar"];
+            [bar saveInBackground];
+        }];
+    }
+    if ([region.identifier isEqualToString:@"richiPhone"])
+    {
+        [self.locationManager stopMonitoringForRegion:self.richRegion];
+        self.inARegion = NO;
+        PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
+        [queryForBar whereKey:@"objectId" equalTo:@"UL0yMO2bGj"];
+        [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            PFObject *bar = [objects firstObject];
+            [bar removeObject:[PFUser currentUser] forKey:@"usersInBar"];
+            [bar saveInBackground];
+        }];
+    }
     self.navigationItem.title= @"PubChatter";
 }
 
