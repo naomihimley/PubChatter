@@ -35,9 +35,6 @@
 {
     [super viewDidLoad];
 
-    self.sliderOutlet.minimumValue = 0;
-    self.sliderOutlet.minimumValue = 10;
-    self.sliderOutlet.value = 5;
     self.sliderOutlet.hidden = YES;
     self.rateBarButtonOutlet.hidden = YES;
     self.barNameLabel.text = self.barFromSourceVC.name;
