@@ -43,7 +43,7 @@
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Unable To Monitor Location" message:@"Only works on iOS 5 and later" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
         [alert show];
     }
-    self.navigationItem.title= @"PubChatter";
+    self.navigationItem.title= @"PubChat";
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -320,7 +320,7 @@
             [bar saveInBackground];
         }];
     }
-    self.navigationItem.title= @"PubChatter";
+    self.navigationItem.title= @"PubChat";
 }
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations

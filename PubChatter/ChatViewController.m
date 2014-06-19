@@ -185,7 +185,7 @@
             }
             else
             {
-                self.navigationItem.title = @"Not in a Bar";
+                self.navigationItem.title = @"PubChat";
 //                self.userArray = [NSArray array];
             }
         }];
