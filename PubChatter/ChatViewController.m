@@ -84,9 +84,8 @@
             self.userArray = [[NSArray alloc]initWithArray:objects];
             for (PFUser *user in self.userArray)
             {
-                if (![[user objectId]isEqualToString:[[PFUser currentUser]objectId]]&& ![[user objectId]isEqualToString:@"w7p8xjoee1"])
+                if (![[user objectId]isEqualToString:[[PFUser currentUser]objectId]]&& ![[user objectId]isEqualToString:@"w7p8xjoee1"]) //keeping currentUser and admin out of chat box
                 {
-
                     if (fabsf([[[PFUser currentUser] objectForKey:@"age"]floatValue] - [[user objectForKey:@"age"] floatValue]) <=  1){
                         NSDictionary *dictionary = @{@"ageDif": @1, @"parseUser": user};
                         [arrayToSort addObject:dictionary];
@@ -124,32 +123,28 @@
             [self.tableView reloadData];
         }
     }];
-    // this gets users in the current bar
-//    if ([PFUser currentUser])
-//    {
-//        PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
-//        [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
-//        [queryForBar includeKey:@"usersInBar"];
-//        [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-//            PFObject *bar = [objects firstObject];
-//            if (bar) {
-//                self.navigationItem.title = [bar objectForKey:@"barName"];
+
+// this gets users in the current bar
+    if ([PFUser currentUser])
+    {
+        PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
+        [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
+        [queryForBar includeKey:@"usersInBar"];
+        [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            PFObject *bar = [objects firstObject];
+            if (bar)
+            {
+                self.navigationItem.title = [bar objectForKey:@"barName"];
 //                self.userArray = [[NSArray alloc]initWithArray:[bar objectForKey:@"usersInBar"]];
-////                NSArray*sortedArray;
-////                sortedArray = [self.userArray sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
-////                    NSDate *first = [[PFUser currentUser]objectForKey:@"age"];
-////                    NSDate *second = [(PFUser *)b objectForKey:@"age"];
-////                    return [first compare:second];
-////                }];
-//            }
-//            else
-//            {
-//                self.navigationItem.title = @"Not in a Bar";
+            }
+            else
+            {
+                self.navigationItem.title = @"Not in a Bar";
 //                self.userArray = [NSArray array];
-//            }
+            }
+        }];
 //            [self.tableView reloadData];
-//        }];
-//    }
+    }
 
 }
 
