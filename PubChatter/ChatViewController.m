@@ -106,6 +106,10 @@
                         NSDictionary *dictionary = @{@"ageDif": @10, @"parseUser": user};
                         [arrayToSort addObject:dictionary];
                     }
+                    else if(fabsf([[[PFUser currentUser] objectForKey:@"age"]floatValue] - [[user objectForKey:@"age"] floatValue]) < 15){
+                        NSDictionary *dictionary = @{@"ageDif": @15, @"parseUser": user};
+                        [arrayToSort addObject:dictionary];
+                    }
                     else{
                         NSDictionary *dictionary = @{@"ageDif": @100, @"parseUser": user};
                         [arrayToSort addObject:dictionary];
@@ -136,6 +140,48 @@
             {
                 self.navigationItem.title = [bar objectForKey:@"barName"];
 //                self.userArray = [[NSArray alloc]initWithArray:[bar objectForKey:@"usersInBar"]];
+//                for (PFUser *user in self.userArray)
+//                {
+//                    if (![[user objectId]isEqualToString:[[PFUser currentUser]objectId]]&& ![[user objectId]isEqualToString:@"w7p8xjoee1"]) //keeping currentUser and admin out of chat box
+//                    {
+//                        if (fabsf([[[PFUser currentUser] objectForKey:@"age"]floatValue] - [[user objectForKey:@"age"] floatValue]) <=  1){
+//                            NSDictionary *dictionary = @{@"ageDif": @1, @"parseUser": user};
+//                            [arrayToSort addObject:dictionary];
+//                        }
+//                        else if(fabsf([[[PFUser currentUser] objectForKey:@"age"]floatValue] - [[user objectForKey:@"age"] floatValue]) < 2){
+//                            NSDictionary *dictionary = @{@"ageDif": @2, @"parseUser": user};
+//                            [arrayToSort addObject:dictionary];
+//                        }
+//                        else if(fabsf([[[PFUser currentUser] objectForKey:@"age"]floatValue] - [[user objectForKey:@"age"] floatValue]) < 3){
+//                            NSDictionary *dictionary = @{@"ageDif": @3, @"parseUser": user};
+//                            [arrayToSort addObject:dictionary];
+//                        }
+//                        else if(fabsf([[[PFUser currentUser] objectForKey:@"age"]floatValue] - [[user objectForKey:@"age"] floatValue]) < 5){
+//                            NSDictionary *dictionary = @{@"ageDif": @5, @"parseUser": user};
+//                            [arrayToSort addObject:dictionary];
+//                        }
+//                        else if(fabsf([[[PFUser currentUser] objectForKey:@"age"]floatValue] - [[user objectForKey:@"age"] floatValue]) < 10){
+//                            NSDictionary *dictionary = @{@"ageDif": @10, @"parseUser": user};
+//                            [arrayToSort addObject:dictionary];
+//                        }
+//                        else if(fabsf([[[PFUser currentUser] objectForKey:@"age"]floatValue] - [[user objectForKey:@"age"] floatValue]) < 15){
+//                            NSDictionary *dictionary = @{@"ageDif": @15, @"parseUser": user};
+//                            [arrayToSort addObject:dictionary];
+//                        }
+//                        else{
+//                            NSDictionary *dictionary = @{@"ageDif": @100, @"parseUser": user};
+//                            [arrayToSort addObject:dictionary];
+//                        }
+//                    }
+//                }
+//                NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]initWithKey: @"ageDif" ascending: YES];
+//                NSArray *sortedArray = [arrayToSort sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+//                NSMutableArray *newArrayOfUsers = [NSMutableArray array];
+//                for (NSDictionary *dic in sortedArray) {
+//                    PFUser *user = [dic objectForKey:@"parseUser"];
+//                    [newArrayOfUsers addObject:user];
+//                }
+//                self.userArray = [NSArray arrayWithArray:newArrayOfUsers];
             }
             else
             {
