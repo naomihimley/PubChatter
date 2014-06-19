@@ -28,6 +28,17 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    if ([[UIApplication sharedApplication] backgroundRefreshStatus] == UIBackgroundRefreshStatusAvailable) {
+
+        NSLog(@"Background updates are available for the app.");
+    }else if([[UIApplication sharedApplication] backgroundRefreshStatus] == UIBackgroundRefreshStatusDenied)
+    {
+        NSLog(@"The user explicitly disabled background behavior for this app or for the whole system.");
+    }else if([[UIApplication sharedApplication] backgroundRefreshStatus] == UIBackgroundRefreshStatusRestricted)
+    {
+        NSLog(@"Background updates are unavailable and the user cannot enable them again. For example, this status can occur when parental controls are in effect for the current user.");
+    }
+
     if (![CLLocationManager isMonitoringAvailableForClass:[CLBeaconRegion class]])
     {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Unable To Monitor Location" message:@"Only works on iOS 5 and later" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
@@ -50,12 +61,14 @@
     self.inARegion = NO;
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
+    [self setTextFields];
     if ([CLLocationManager isMonitoringAvailableForClass:[CLBeaconRegion class]]) {
         if ([PFUser currentUser])
         {
             [self createBeaconRegion];
             [self.locationManager startUpdatingLocation];
-            [self setTextFields];
+            [self.locationManager requestStateForRegion:self.beaconRegion];
+            [self.locationManager requestStateForRegion:self.estimoteRegion];
         }
     }
 }

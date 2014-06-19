@@ -75,38 +75,85 @@
 -(void)queryForUsers
 {
 // this gets all users of the app
-//    PFQuery *query = [PFQuery queryWithClassName:@"_User"];
-//    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-//        if (!error)
-//        {
-//            self.userArray = [[NSArray alloc]initWithArray:objects];
-//            [self.tableView reloadData];
-//        }
-//    }];
-
-    // this gets users in the current bar
-    if ([PFUser currentUser])
+    NSMutableArray *arrayToSort = [[NSMutableArray alloc]init];
+    PFQuery *query = [PFQuery queryWithClassName:@"_User"];
+     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
     {
-        PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
-        [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
-        [queryForBar includeKey:@"usersInBar"];
-        [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            PFObject *bar = [objects firstObject];
-            if (bar) {
-                self.navigationItem.title = [bar objectForKey:@"barName"];
-                self.userArray = [[NSArray alloc]initWithArray:[bar objectForKey:@"usersInBar"]];
-            }
-            else
+        if (!error)
+        {
+            self.userArray = [[NSArray alloc]initWithArray:objects];
+            for (PFUser *user in self.userArray)
             {
-                self.navigationItem.title = @"Not in a Bar";
-                self.userArray = [NSArray array];
-            }
+                if (![[user objectId]isEqualToString:[[PFUser currentUser]objectId]])
+                {
 
+                    if (fabsf([[[PFUser currentUser] objectForKey:@"age"]floatValue] - [[user objectForKey:@"age"] floatValue]) <=  1){
+                        NSDictionary *dictionary = @{@"ageDif": @1, @"parseUser": user};
+                        [arrayToSort addObject:dictionary];
+                    }
+                    else if(fabsf([[[PFUser currentUser] objectForKey:@"age"]floatValue] - [[user objectForKey:@"age"] floatValue]) < 2){
+                        NSDictionary *dictionary = @{@"ageDif": @2, @"parseUser": user};
+                        [arrayToSort addObject:dictionary];
+                    }
+                    else if(fabsf([[[PFUser currentUser] objectForKey:@"age"]floatValue] - [[user objectForKey:@"age"] floatValue]) < 3){
+                        NSDictionary *dictionary = @{@"ageDif": @3, @"parseUser": user};
+                        [arrayToSort addObject:dictionary];
+                    }
+                    else if(fabsf([[[PFUser currentUser] objectForKey:@"age"]floatValue] - [[user objectForKey:@"age"] floatValue]) < 5){
+                        NSDictionary *dictionary = @{@"ageDif": @5, @"parseUser": user};
+                        [arrayToSort addObject:dictionary];
+                    }
+                    else if(fabsf([[[PFUser currentUser] objectForKey:@"age"]floatValue] - [[user objectForKey:@"age"] floatValue]) < 10){
+                        NSDictionary *dictionary = @{@"ageDif": @10, @"parseUser": user};
+                        [arrayToSort addObject:dictionary];
+                    }
+                    else{
+                        NSDictionary *dictionary = @{@"ageDif": @100, @"parseUser": user};
+                        [arrayToSort addObject:dictionary];
+                    }
+                }
+            }
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc]initWithKey: @"ageDif" ascending: YES];
+            NSArray *sortedArray = [arrayToSort sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+            NSMutableArray *newArrayOfUsers = [NSMutableArray array];
+            for (NSDictionary *dic in sortedArray) {
+                PFUser *user = [dic objectForKey:@"parseUser"];
+                [newArrayOfUsers addObject:user];
+            }
+            self.userArray = [NSArray arrayWithArray:newArrayOfUsers];
             [self.tableView reloadData];
-        }];
-    }
+        }
+    }];
+    // this gets users in the current bar
+//    if ([PFUser currentUser])
+//    {
+//        PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
+//        [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
+//        [queryForBar includeKey:@"usersInBar"];
+//        [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+//            PFObject *bar = [objects firstObject];
+//            if (bar) {
+//                self.navigationItem.title = [bar objectForKey:@"barName"];
+//                self.userArray = [[NSArray alloc]initWithArray:[bar objectForKey:@"usersInBar"]];
+////                NSArray*sortedArray;
+////                sortedArray = [self.userArray sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+////                    NSDate *first = [[PFUser currentUser]objectForKey:@"age"];
+////                    NSDate *second = [(PFUser *)b objectForKey:@"age"];
+////                    return [first compare:second];
+////                }];
+//            }
+//            else
+//            {
+//                self.navigationItem.title = @"Not in a Bar";
+//                self.userArray = [NSArray array];
+//            }
+//            [self.tableView reloadData];
+//        }];
+//    }
 
 }
+
+
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
