@@ -163,6 +163,7 @@
                          barAnnotation.title = yelpBar.name;
                          barAnnotation.subtitle = [NSString stringWithFormat:@"%.02f miles", yelpBar.distanceFromUser * 0.000621371];
                          [self.mapView addAnnotation:barAnnotation];
+                         NSLog(@"Got bar location");
                          break;
                      }
             [self.tableView reloadData];
@@ -213,7 +214,7 @@ calloutAccessoryControlTapped:(UIControl *)control
 
     cell.barNameLabel.text = yelpBar.name;
     cell.barDistanceLabel.text = milesFromUser;
-    cell.barAddressLabel.text = yelpBar.address;
+    cell.imageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:yelpBar.businessImageURL]]];
     return cell;
 }
 
