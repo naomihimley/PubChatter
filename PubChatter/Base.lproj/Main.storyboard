@@ -483,7 +483,7 @@
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="te4-2A-7fK">
-                                <rect key="frame" x="10" y="333" width="300" height="50"/>
+                                <rect key="frame" x="10" y="385" width="300" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="9"/>
@@ -515,15 +515,19 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="cnt-ne-Dph">
-                                <rect key="frame" x="20" y="348" width="281" height="31"/>
+                                <rect key="frame" x="20" y="400" width="281" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </slider>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="paQ-u5-jQn">
-                                <rect key="frame" x="99" y="391" width="123" height="21"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nIG-Pm-UWh">
+                                <rect key="frame" x="62" y="450" width="197" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                                <state key="normal" title="Button">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onRateButtonPressed:" destination="FmP-9A-1U9" eventType="touchUpInside" id="Qbt-pO-u9K"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -543,7 +547,7 @@
                         <outlet property="distanceFromUserLabel" destination="g4c-ne-jYB" id="piy-hu-CT9"/>
                         <outlet property="goToWebsiteButtonOutlet" destination="NqY-sw-dlb" id="VAY-62-ZiB"/>
                         <outlet property="pubChattersCountLabel" destination="mp4-Qp-W6M" id="1P4-8H-dxU"/>
-                        <outlet property="rateBarLabel" destination="paQ-u5-jQn" id="R4r-wU-w4Q"/>
+                        <outlet property="rateBarButtonOutlet" destination="nIG-Pm-UWh" id="ZeW-68-g73"/>
                         <outlet property="ratingImageView" destination="U5Z-M4-Ojn" id="dZ2-bT-V3h"/>
                         <outlet property="ratioLabel" destination="eLU-Rt-t6c" id="pXx-Jh-NTi"/>
                         <outlet property="sliderOutlet" destination="cnt-ne-Dph" id="B9R-Fr-KwY"/>
