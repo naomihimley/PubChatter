@@ -40,7 +40,7 @@
     [super viewDidLoad];
 
     self.queryString = @"bar";
-    self.mapSpan = MKCoordinateSpanMake(0.02, 0.02);
+    self.mapSpan = MKCoordinateSpanMake(0.01, 0.01);
     self.toggleControlOutlet.selectedSegmentIndex = 0;
     self.mapView.hidden = NO;
     self.redrawAreaButtonOutlet.hidden = NO;
@@ -84,7 +84,7 @@
 
     [self.mapView removeAnnotations:self.mapView.annotations];
     self.queryString = self.searchBar.text;
-    self.mapSpan = MKCoordinateSpanMake(0.15, 0.15);
+    self.mapSpan = MKCoordinateSpanMake(0.12, 0.12);
     [self getYelpJSONWithSearch:self.queryString andLongitude:self.userLocation.coordinate.longitude andLatitude:self.userLocation.coordinate.latitude andSortType:@"0" andNumResults:@"1"];
     self.searchButtonOutlet.enabled = NO;
     [self.searchBar endEditing:YES];
