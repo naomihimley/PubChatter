@@ -8,13 +8,13 @@
 
 #import "ChatViewController.h"
 #import "ListOfUsersTableViewCell.h"
-#import <Parse/Parse.h>
 #import "OPPViewController.h"
 #import "AppDelegate.h"
 
 @interface ChatViewController ()<UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property NSArray *userArray;
+@property NSMutableArray *parseUsersAdvertising;
 @property AppDelegate *appDelegate;
 
 -(void)peerStartedAdvertising;
@@ -26,6 +26,9 @@
 {
     [super viewDidLoad];
 
+    self.parseUsersAdvertising = [NSMutableArray array];
+    [self queryForUsers];
+
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
 
     [self.appDelegate.mcManager setupPeerAndSessionWithDisplayName:[[PFUser currentUser]objectForKey:@"username"]];
@@ -34,7 +37,7 @@
 
 //    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(peerDidChangeStateWithNotification) name:@"MCDidChangeStateNotification" object:nil];
 
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(peerStartedAdvertising) name:@"MCFoundAdvertisingPeer" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(queryForUsers) name:@"MCFoundAdvertisingPeer" object:nil];
 
 }
 - (void)viewWillAppear:(BOOL)animated
@@ -46,49 +49,50 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 //    return self.appDelegate.mcManager.advertisingUsersFromParse.count;
-    return self.appDelegate.mcManager.advertisingUsers.count;
+    return self.parseUsersAdvertising.count;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ListOfUsersTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CellID"];
-    MCPeerID *peerID = [self.appDelegate.mcManager.advertisingUsers objectAtIndex:indexPath.row];
+    NSDictionary *dictionary = [self.parseUsersAdvertising objectAtIndex:indexPath.row];
+    MCPeerID *peerID = [dictionary objectForKey:@"peerID"];
+    PFUser *user = [dictionary objectForKey:@"user"];
     cell.userNameLabel.text = peerID.displayName;
-//    PFUser *user = [self.appDelegate.mcManager.advertisingUsersFromParse objectAtIndex:indexPath.row];
-//    cell.userNameLabel.text = [[user objectForKey:@"user"]objectForKey:@"username"];
-//    if ([[user objectForKey:@"user"]objectForKey:@"age"]) {
-//        cell.userAgeLabel.text = [NSString stringWithFormat:@"%@",[[user objectForKey:@"user"]objectForKey:@"age"]];
-//    }
-//    else
-//    {
-//        cell.userAgeLabel.text = @"";
-//    }
 
-//    if ([user [@"gender"] isEqual:@0])
-//    {
-//        cell.genderLabel.text = @"F";
-//    }
-//    else if ([user[@"gender"] isEqual:@1])
-//    {
-//        cell.genderLabel.text = @"M";
-//    }
-//    else if ([user [@"gender"] isEqual:@2])
-//    {
-//        cell.genderLabel.text = @"Other";
-//        [cell.genderLabel sizeToFit];
-//    }
-//    else
-//    {
-//        cell.genderLabel.text = @"";
-//    }
-//
-//    PFFile *imageFile = [user objectForKey:@"picture"];
-//    [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-//        cell.userImage.image = [UIImage imageWithData:data];
-//    }];
+        if ([user objectForKey:@"age"]) {
+            cell.userAgeLabel.text = [NSString stringWithFormat:@"%@",[user objectForKey:@"age"]];
+        }
+        else
+        {
+            cell.userAgeLabel.text = @"";
+        }
+
+    if ([user [@"gender"] isEqual:@0])
+    {
+        cell.genderLabel.text = @"F";
+    }
+    else if ([user[@"gender"] isEqual:@1])
+    {
+        cell.genderLabel.text = @"M";
+    }
+    else if ([user [@"gender"] isEqual:@2])
+    {
+        cell.genderLabel.text = @"Other";
+        [cell.genderLabel sizeToFit];
+    }
+    else
+    {
+        cell.genderLabel.text = @"";
+    }
+
+    PFFile *imageFile = [user objectForKey:@"picture"];
+    [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+        cell.userImage.image = [UIImage imageWithData:data];
+    }];
     return cell;
 }
-//
+
 //-(void)queryForUsers
 //{
 //// this gets all users of the app
@@ -211,16 +215,58 @@
 //
 //}
 
+-(void)queryForUsers
+{
+// this gets all users of the app
+    PFQuery *query = [PFQuery queryWithClassName:@"_User"];
+     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+    {
+        if (!error)
+        {
+            self.userArray = [[NSArray alloc]initWithArray:objects];
 
+            for (MCPeerID *peerID in self.appDelegate.mcManager.advertisingUsers)
+            {
+                NSLog(@"peerID %@", peerID.displayName);
+                for (PFUser *user in self.userArray)
+                {
+                    if ([peerID.displayName isEqual:[user objectForKey:@"username"]])
+                    {
+//                        NSDictionary *dictionary = @{@"peerID": peerID,
+//                                                     @"imageFile": [user objectForKey:@"picture"],
+//                                                     @"gender": [user objectForKey:@"gender"],
+//                                                     @"age": [user objectForKey:@"age"],
+//                                                     @"bio": [user objectForKey:@"bio"],
+//                                                     @"favoriteDrink": [user objectForKey:@"favoriteDrink"],
+//                                                     @"sexualOrientation": [user objectForKey:@"sexualOrientation"]};
+                        NSDictionary *dictionary = @{@"peerID": peerID,
+                                                     @"user": user};
+                        [self.parseUsersAdvertising addObject:dictionary];
+
+                        NSLog(@"parseUsersAdvertising array %@", self.parseUsersAdvertising);
+                    }
+                }
+            }
+            [self.tableView reloadData];
+        }
+    }];
+}
 
 
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    if ([segue.identifier isEqual:@"OPPSegue"])
+    {
     OPPViewController *destinationVC = segue.destinationViewController;
-
     NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
 
+
+    }
+    else if ([segue.identifier isEqual: @"ChatBoxSegue"])
+    {
+        
+    }
 //    destinationVC.user = [self.userArray objectAtIndex:indexPath.row];
 }
 
@@ -231,6 +277,27 @@
 
 -(void)peerStartedAdvertising
 {
+//  for (MCPeerID *peerID in self.appDelegate.mcManager.advertisingUsers)
+//    {
+//        NSLog(@"peerID %@", peerID.displayName);
+//        for (PFUser *user in self.userArray)
+//        {
+//            NSLog(@"user %@", user);
+//            if ([peerID.displayName isEqual:[user objectForKey:@"username"]])
+//            {
+//                NSDictionary *dictionary = @{@"peerID": peerID,
+//                                             @"imageFile": [user objectForKey:@"picture"],
+//                                             @"gender": [user objectForKey:@"gender"],
+//                                             @"age": [user objectForKey:@"age"],
+//                                             @"bio": [user objectForKey:@"bio"],
+//                                             @"favoriteDrink": [user objectForKey:@"favoriteDrink"],
+//                                             @"sexualOrientation": [user objectForKey:@"sexualOrientation"]};
+//                [self.parseUsersAdvertising addObject:dictionary];
+//
+//                NSLog(@"parseUsersAdvertising array %@", self.parseUsersAdvertising);
+//            }
+//        }
+//    }
     [self.tableView reloadData];
 }
 

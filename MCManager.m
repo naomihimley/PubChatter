@@ -82,7 +82,6 @@
     [self.advertisingUsers addObject:peerID];
     NSLog(@"advertisingUsers %@", self.advertisingUsers);
 //    [self.advertisingUsersFromParse addObject:info];
-    NSLog(@"advertisingUsersFromParse %@", self.advertisingUsersFromParse);
     [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:nil];
     NSLog(@"found a peer");
 }
@@ -104,7 +103,6 @@
     self.peerID = [[MCPeerID alloc]initWithDisplayName:displayName];
     self.session = [[MCSession alloc]initWithPeer:self.peerID];
     self.session.delegate = self;
-    NSLog(@"session delegate %@", self.session.delegate);
 }
 
 -(void)setupMCBrowser
@@ -118,13 +116,12 @@
 {
     if (shouldAdvertise)
     {
-        PFUser *user = [PFUser currentUser];
+//        PFUser *user = [PFUser currentUser];
 //        NSDictionary *dictionary = @{@"age": [user objectForKey:@"age"],
 //                                     @"gender": [user objectForKey:@"gender"]};
         self.advertiser = [[MCNearbyServiceAdvertiser alloc]initWithPeer:self.peerID discoveryInfo:nil serviceType:@"pubchatservice"];
         self.advertiser.delegate = self;
         [self.advertiser startAdvertisingPeer];
-        NSLog(@"advertiser delegate %@", self.advertiser.delegate);
     }
 
     else

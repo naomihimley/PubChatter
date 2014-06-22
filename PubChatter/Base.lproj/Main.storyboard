@@ -36,7 +36,7 @@
                                                     </state>
                                                     <connections>
                                                         <action selector="onButtonTappedSendInvitation:" destination="Yan-7k-PuS" eventType="touchUpInside" id="RVd-B7-fC4"/>
-                                                        <segue destination="BIN-h3-l0M" kind="push" id="aVo-PF-pWZ"/>
+                                                        <segue destination="BIN-h3-l0M" kind="push" identifier="ChatBoxSegue" id="aVo-PF-pWZ"/>
                                                     </connections>
                                                 </button>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n2a-OP-5XV">
@@ -70,7 +70,7 @@
                                             <outlet property="userAgeLabel" destination="QkQ-3G-CGh" id="rwg-4u-sPW"/>
                                             <outlet property="userImage" destination="n2a-OP-5XV" id="FlN-ze-swe"/>
                                             <outlet property="userNameLabel" destination="9ne-pO-eOU" id="jW8-RB-g3h"/>
-                                            <segue destination="lwU-9d-CM2" kind="push" id="c2f-27-Cn8"/>
+                                            <segue destination="lwU-9d-CM2" kind="push" identifier="OPPSegue" id="c2f-27-Cn8"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
