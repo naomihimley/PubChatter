@@ -215,6 +215,17 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
+		9BDBE60A195674640045C05B /* Yelp API Files */ = {
+			isa = PBXGroup;
+			children = (
+				0ECEAEE6194F69A000B92C40 /* YelpBar.h */,
+				0ECEAEE7194F69A000B92C40 /* YelpBar.m */,
+				0EB32009194CBDD0005A3B82 /* TDOAuth.h */,
+				0EB3200A194CBDD0005A3B82 /* TDOAuth.m */,
+			);
+			name = "Yelp API Files";
+			sourceTree = "<group>";
+		};
 		B0782C2F194BB3700022E6E7 = {
 			isa = PBXGroup;
 			children = (
@@ -270,10 +281,7 @@
 				9BDBE55C194FA44F0045C05B /* UserProfileVCs */,
 				9BDBE559194FA3D00045C05B /* ChatVCs */,
 				9BDBE55B194FA42C0045C05B /* MCManager */,
-				0ECEAEE6194F69A000B92C40 /* YelpBar.h */,
-				0ECEAEE7194F69A000B92C40 /* YelpBar.m */,
-				0EB32009194CBDD0005A3B82 /* TDOAuth.h */,
-				0EB3200A194CBDD0005A3B82 /* TDOAuth.m */,
+				9BDBE60A195674640045C05B /* Yelp API Files */,
 				B0782C53194BB3700022E6E7 /* Images.xcassets */,
 				B0782C42194BB3700022E6E7 /* Supporting Files */,
 			);

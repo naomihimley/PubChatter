@@ -10,6 +10,7 @@
 #import "ListOfUsersTableViewCell.h"
 #import "OPPViewController.h"
 #import "AppDelegate.h"
+#import "ChatBoxViewController.h"
 
 @interface ChatViewController ()<UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -59,6 +60,7 @@
     MCPeerID *peerID = [dictionary objectForKey:@"peerID"];
     PFUser *user = [dictionary objectForKey:@"user"];
     cell.userNameLabel.text = peerID.displayName;
+    cell.chatButton.tag = indexPath.row;
 
         if ([user objectForKey:@"age"]) {
             cell.userAgeLabel.text = [NSString stringWithFormat:@"%@",[user objectForKey:@"age"]];
@@ -232,13 +234,6 @@
                 {
                     if ([peerID.displayName isEqual:[user objectForKey:@"username"]])
                     {
-//                        NSDictionary *dictionary = @{@"peerID": peerID,
-//                                                     @"imageFile": [user objectForKey:@"picture"],
-//                                                     @"gender": [user objectForKey:@"gender"],
-//                                                     @"age": [user objectForKey:@"age"],
-//                                                     @"bio": [user objectForKey:@"bio"],
-//                                                     @"favoriteDrink": [user objectForKey:@"favoriteDrink"],
-//                                                     @"sexualOrientation": [user objectForKey:@"sexualOrientation"]};
                         NSDictionary *dictionary = @{@"peerID": peerID,
                                                      @"user": user};
                         [self.parseUsersAdvertising addObject:dictionary];
@@ -258,48 +253,32 @@
 {
     if ([segue.identifier isEqual:@"OPPSegue"])
     {
-    OPPViewController *destinationVC = segue.destinationViewController;
-    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        OPPViewController *destinationVC = segue.destinationViewController;
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        NSDictionary *dictionary = [self.parseUsersAdvertising objectAtIndex:indexPath.row];
+        PFUser *user = [dictionary objectForKey:@"user"];
 
-
+        destinationVC.user = user;
     }
+    
     else if ([segue.identifier isEqual: @"ChatBoxSegue"])
     {
-        
+//        ChatBoxViewController *chatBoxVC = segue.destinationViewController;
+//        UIButton *button = (UIButton *)sender;
+//        UITableViewCell *cell = (UITableViewCell *)[button superview];
+//        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     }
-//    destinationVC.user = [self.userArray objectAtIndex:indexPath.row];
 }
 
 - (IBAction)onButtonTappedSendInvitation:(id)sender
 {
-    
-}
+    UIButton *button = (UIButton *)sender;
 
--(void)peerStartedAdvertising
-{
-//  for (MCPeerID *peerID in self.appDelegate.mcManager.advertisingUsers)
-//    {
-//        NSLog(@"peerID %@", peerID.displayName);
-//        for (PFUser *user in self.userArray)
-//        {
-//            NSLog(@"user %@", user);
-//            if ([peerID.displayName isEqual:[user objectForKey:@"username"]])
-//            {
-//                NSDictionary *dictionary = @{@"peerID": peerID,
-//                                             @"imageFile": [user objectForKey:@"picture"],
-//                                             @"gender": [user objectForKey:@"gender"],
-//                                             @"age": [user objectForKey:@"age"],
-//                                             @"bio": [user objectForKey:@"bio"],
-//                                             @"favoriteDrink": [user objectForKey:@"favoriteDrink"],
-//                                             @"sexualOrientation": [user objectForKey:@"sexualOrientation"]};
-//                [self.parseUsersAdvertising addObject:dictionary];
-//
-//                NSLog(@"parseUsersAdvertising array %@", self.parseUsersAdvertising);
-//            }
-//        }
-//    }
-    [self.tableView reloadData];
-}
+    button.titleLabel.text = @"Connect";
+    UITableViewCell *cell = (UITableViewCell *)[button superview];
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 
+
+}
 
 @end
