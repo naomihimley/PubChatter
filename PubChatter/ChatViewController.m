@@ -38,7 +38,7 @@
         [self.appDelegate.mcManager advertiseSelf:YES];
     }
 
-    //    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(peerDidChangeStateWithNotification) name:@"MCDidChangeStateNotification" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(peerDidChangeStateWithNotification:) name:@"MCDidChangeStateNotification" object:nil];
 
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(queryForUsers) name:@"MCFoundAdvertisingPeer" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(queryForUsers) name:@"MCPeerStopAdvertising" object:nil];
@@ -48,14 +48,12 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    //    [self queryForUsers];
 }
 
 #pragma mark - UITableViewDelegate/DataSource methods
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    //    return self.appDelegate.mcManager.advertisingUsersFromParse.count;
     return self.userArray.count;
 }
 
@@ -161,7 +159,6 @@
 {
     UIButton *button = (UIButton *)sender;
 
-    button.titleLabel.text = @"Connect";
     UITableViewCell *cell = (UITableViewCell *)[button superview];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 
@@ -175,6 +172,29 @@
 
 -(void)peerDidChangeStateWithNotification:(NSNotification *)notification
 {
+
+    MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
+    NSDictionary *userDictionary = [NSDictionary new];
+
+    for (NSDictionary *dictionary in self.userArray)
+    {
+        if ([[dictionary objectForKey:@"peerID"] isEqual:peerID])
+        {
+            userDictionary = dictionary;
+        }
+    }
+
+    int index = [self.userArray indexOfObject:userDictionary];
+    NSIndexPath *indexPath = [NSIndexPath indexPathWithIndex:index];
+    NSLog(@"index %i", index);
+    ListOfUsersTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+
+    cell.chatButton.titleLabel.text = @"Connected";
+
+    if ([[[notification userInfo]objectForKey:@"status"]intValue] == MCSessionStateConnecting)
+    {
+        cell.chatButton.titleLabel.text = @"Connecting";
+    }
 
 }
 
