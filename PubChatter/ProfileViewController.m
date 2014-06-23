@@ -36,17 +36,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (![PFUser currentUser])
-    {
-        PFLogInViewController *loginViewController = [PFLogInViewController new];
-        loginViewController.fields = PFLogInFieldsUsernameAndPassword | PFLogInFieldsLogInButton | PFLogInFieldsTwitter | PFLogInFieldsFacebook;
-        PFSignUpViewController *signupViewController = [PFSignUpViewController new];
-        signupViewController.fields = PFLogInFieldsUsernameAndPassword | PFLogInFieldsLogInButton | PFLogInFieldsTwitter | PFLogInFieldsFacebook;
-        loginViewController.delegate = self;
-        signupViewController.delegate = self;
-        loginViewController.signUpController = signupViewController;
-        [self presentViewController:loginViewController animated:YES completion:nil];
-    }
     [self setTextFields];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 }
