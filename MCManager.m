@@ -22,7 +22,6 @@
         self.browser = nil;
         self.advertiser = nil;
         self.advertisingUsers = [NSMutableArray array];
-        self.advertisingUsersFromParse = [NSMutableArray array];
 
     }
     return self;
@@ -33,6 +32,7 @@
     self.session.delegate = nil;
     self.browser.delegate = nil;
     self.advertiser.delegate = nil;
+    self.advertisingUsers = nil;
 }
 
 #pragma mark - MCSession Delegate Methods
@@ -72,6 +72,10 @@
 
 -(void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void (^)(BOOL, MCSession *))invitationHandler
 {
+    self.invitationHandlerArray = [NSMutableArray arrayWithObject:[invitationHandler copy]];
+
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"MCReceivedInvitation" object:nil userInfo:nil];
+    NSLog(@"Got invited yo");
 
 }
 
@@ -81,15 +85,13 @@
 {
     [self.advertisingUsers addObject:peerID];
     NSLog(@"advertisingUsers %@", self.advertisingUsers);
-//    [self.advertisingUsersFromParse addObject:info];
     [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:nil];
-    NSLog(@"found a peer");
 }
 
 -(void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID
 {
     [self.advertisingUsers removeObject:peerID];
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:nil];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"MCPeerStopAdvertising" object:nil userInfo:nil];
 }
 -(void)browser:(MCNearbyServiceBrowser *)browser didNotStartBrowsingForPeers:(NSError *)error
 {
@@ -105,30 +107,30 @@
     self.session.delegate = self;
 }
 
--(void)setupMCBrowser
-{
-    self.browser = [[MCNearbyServiceBrowser alloc]initWithPeer:self.peerID serviceType:@"pubchatservice"];
-    self.browser.delegate = self;
-    [self.browser startBrowsingForPeers];
-}
-
 -(void)advertiseSelf:(BOOL)shouldAdvertise
 {
     if (shouldAdvertise)
     {
-//        PFUser *user = [PFUser currentUser];
-//        NSDictionary *dictionary = @{@"age": [user objectForKey:@"age"],
-//                                     @"gender": [user objectForKey:@"gender"]};
         self.advertiser = [[MCNearbyServiceAdvertiser alloc]initWithPeer:self.peerID discoveryInfo:nil serviceType:@"pubchatservice"];
         self.advertiser.delegate = self;
         [self.advertiser startAdvertisingPeer];
+        NSLog(@"advertiser %@", self.advertiser);
+
+        self.browser = [[MCNearbyServiceBrowser alloc]initWithPeer:self.peerID serviceType:@"pubchatservice"];
+        self.browser.delegate = self;
+        [self.browser startBrowsingForPeers];
+        NSLog(@"browser %@", self.browser);
+
+        NSLog(@"should be looking for peers");
     }
 
     else
     {
-        self.advertiser.delegate = self;
         [self.advertiser stopAdvertisingPeer];
+        [self.browser stopBrowsingForPeers];
+        self.browser = nil;
         self.advertiser = nil;
     }
 }
+
 @end
