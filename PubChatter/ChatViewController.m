@@ -16,9 +16,11 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property NSMutableArray *userArray;
 @property AppDelegate *appDelegate;
+@property NSMutableArray *cellArray;
 
 -(void)peerDidChangeStateWithNotification:(NSNotification *)notification;
 -(void)receivedInvitationForConnection: (NSNotification *)notification;
+-(void)peerStoppedAdvertising: (NSNotification *)notificaion;
 @end
 
 @implementation ChatViewController
@@ -28,7 +30,7 @@
     [super viewDidLoad];
 
     self.userArray = [NSMutableArray array];
-    [self queryForUsers];
+    self.cellArray = [NSMutableArray array];
 
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
 
@@ -41,7 +43,7 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(peerDidChangeStateWithNotification:) name:@"MCDidChangeStateNotification" object:nil];
 
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(queryForUsers) name:@"MCFoundAdvertisingPeer" object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(queryForUsers) name:@"MCPeerStopAdvertising" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(peerStoppedAdvertising:) name:@"MCPeerStopAdvertising" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(receivedInvitationForConnection:) name:@"MCReceivedInvitation" object:nil];
 
 }
@@ -57,7 +59,7 @@
     return self.userArray.count;
 }
 
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+-(ListOfUsersTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ListOfUsersTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CellID"];
     NSDictionary *dictionary = [self.userArray objectAtIndex:indexPath.row];
@@ -65,6 +67,8 @@
     PFUser *user = [dictionary objectForKey:@"user"];
     cell.userNameLabel.text = peerID.displayName;
     cell.chatButton.tag = indexPath.row;
+    [self.cellArray addObject:cell];
+    cell.tag = [self.userArray indexOfObject:dictionary];
 
     if ([user objectForKey:@"age"]) {
         cell.userAgeLabel.text = [NSString stringWithFormat:@"%@",[user objectForKey:@"age"]];
@@ -103,14 +107,15 @@
 
 -(void)queryForUsers
 {
+    NSLog(@"meow? %@", self.appDelegate.mcManager.advertisingUsers);
     // this gets all users of the app
+    [self.userArray removeAllObjects];
     PFQuery *query = [PFQuery queryWithClassName:@"_User"];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
      {
          if (!error)
          {
              NSArray *users = [[NSArray alloc]initWithArray:objects];
-
              for (MCPeerID *peerID in self.appDelegate.mcManager.advertisingUsers)
              {
                  for (PFUser *user in users)
@@ -119,9 +124,11 @@
                      {
                          NSDictionary *dictionary = @{@"peerID": peerID,
                                                       @"user": user};
-                         [self.userArray addObject:dictionary];
-
-                         NSLog(@"parseUsersAdvertising array %@", self.userArray);
+                         if (self.userArray.count <= self.appDelegate.mcManager.advertisingUsers.count) {
+                             NSLog(@"adding users");
+                             [self.userArray addObject:dictionary];
+                         }
+                         NSLog(@"self.userarray %@", self.userArray);
                      }
                  }
              }
@@ -175,6 +182,7 @@
 
     MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
     NSDictionary *userDictionary = [NSDictionary new];
+    ListOfUsersTableViewCell *cell = [ListOfUsersTableViewCell new];
 
     for (NSDictionary *dictionary in self.userArray)
     {
@@ -185,15 +193,32 @@
     }
 
     int index = [self.userArray indexOfObject:userDictionary];
-    NSIndexPath *indexPath = [NSIndexPath indexPathWithIndex:index];
-    NSLog(@"index %i", index);
-    ListOfUsersTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
 
-    cell.chatButton.titleLabel.text = @"Connected";
-
-    if ([[[notification userInfo]objectForKey:@"status"]intValue] == MCSessionStateConnecting)
+    for (ListOfUsersTableViewCell *userCell in self.cellArray)
     {
-        cell.chatButton.titleLabel.text = @"Connecting";
+        if (userCell.tag == index)
+        {
+            cell = userCell;
+        }
+    }
+
+    if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnecting)
+    {
+        sleep(2);
+        [cell.chatButton setTitle:@"Connecting" forState:UIControlStateNormal];
+        NSLog(@"connecting");
+    }
+    if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
+    {
+        sleep(2);
+        [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
+        NSLog(@"connected");
+    }
+    if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
+    {
+        sleep(2);
+        [cell.chatButton setTitle:@"Not Connected" forState:UIControlStateNormal];
+        NSLog(@"not connected");
     }
 
 }
@@ -212,6 +237,23 @@
 
     void (^invitationHandler)(BOOL, MCSession *) = [self.appDelegate.mcManager.invitationHandlerArray objectAtIndex:0];
     invitationHandler(accept, self.appDelegate.mcManager.session);
+}
+
+-(void)peerStoppedAdvertising:(NSNotification *)notificaion
+{
+    MCPeerID *peerID = [[notificaion userInfo]objectForKey:@"peerID"];
+    NSDictionary *userDictionary = [NSDictionary new];
+
+    for (NSDictionary *dictionary in self.userArray)
+    {
+        if ([dictionary objectForKey:@"peerID"] == peerID)
+        {
+            userDictionary = dictionary;
+        }
+    }
+
+    [self.userArray removeObject:userDictionary];
+    [self.tableView reloadData];
 }
 
 
