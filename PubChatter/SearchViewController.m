@@ -166,7 +166,7 @@
                         consumerSecret:@"k6KpVPXHSykD8aQXSXqdi7GboMY"
                            accessToken:@"PRBX3m8UH4Q2RmZ-HOTKmjFPLVzmz4UL"
                            tokenSecret:@"ao0diFl7jAe8cDDXnc-O1N-vQm8"];
-    NSLog(@"%@", rq);
+//    NSLog(@"%@", rq);
 
     [NSURLConnection sendAsynchronousRequest:rq queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
 

@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 #import <Parse/Parse.h>
+#import "Rating.h"
+#import "Bar.h"
 
 @implementation AppDelegate
 
@@ -18,6 +20,8 @@
 
     self.mcManager = [[MCManager alloc]init];
     self.beaconRegionManager = [[BeaconRegionManager alloc]init];
+    [Rating registerSubclass];
+    [Bar registerSubclass];
 
     //should this be here?
     if (![CLLocationManager isMonitoringAvailableForClass:[CLBeaconRegion class]])
