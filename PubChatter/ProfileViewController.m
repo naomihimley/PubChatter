@@ -44,7 +44,6 @@
     }
     [self setTextFields];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    [[self.appDelegate beaconRegionManager]canUserUseApp];
 }
 
 - (void)setTextFields
