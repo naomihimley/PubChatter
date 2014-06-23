@@ -970,10 +970,13 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="ksf-Pb-FJM"/>
+                    <connections>
+                        <segue destination="vXZ-lx-hvc" kind="push" identifier="loginsegue" id="DNm-68-rDJ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S3n-S3-G8a" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-804" y="-738"/>
+            <point key="canvasLocation" x="558" y="-1456"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="UBQ-g4-tB7">
@@ -1040,5 +1043,6 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="aVo-PF-pWZ"/>
+        <segue reference="DNm-68-rDJ"/>
     </inferredMetricsTieBreakers>
 </document>
