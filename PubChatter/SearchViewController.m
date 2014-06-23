@@ -79,20 +79,6 @@
     [[self.appDelegate beaconRegionManager]canUserUseApp];
 }
 
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
-{
-    [self.mapView removeAnnotations:self.mapView.annotations];
-    self.queryString = self.searchBar.text;
-    self.mapSpan = MKCoordinateSpanMake(0.12, 0.12);
-    [self getYelpJSONWithSearch:self.queryString andLongitude:self.userLocation.coordinate.longitude andLatitude:self.userLocation.coordinate.latitude andSortType:@"0" andNumResults:@"1"];
-    self.searchButtonOutlet.enabled = NO;
-    [self.searchBar endEditing:YES];
-    CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(self.userLocation.coordinate.latitude, self.userLocation.coordinate.longitude);
-    MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, self.mapSpan);
-    [self.mapView setRegion:region animated:YES];
-    [self.searchBar resignFirstResponder];
-}
-
 -(void)didreceiveNotification:(NSNotification *)notification
 {
     NSLog(@"notification in search vc");
@@ -119,12 +105,12 @@
     }
 }
 
-#pragma mark - IBActions
-
-// Removes all annotations off mapView, sets querystring to searchbar text, creates a sufficiently large search area, and calls the findBarNear method. The search button is also disabled until a list of bars are returned to prevent bombarding with requests.
-- (IBAction)onSearchButtonPressed:(id)sender
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-
+    [self search];
+}
+- (void)search
+{
     [self.mapView removeAnnotations:self.mapView.annotations];
     self.queryString = self.searchBar.text;
     self.mapSpan = MKCoordinateSpanMake(0.12, 0.12);
@@ -134,6 +120,14 @@
     CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(self.userLocation.coordinate.latitude, self.userLocation.coordinate.longitude);
     MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, self.mapSpan);
     [self.mapView setRegion:region animated:YES];
+}
+
+#pragma mark - IBActions
+
+// Removes all annotations off mapView, sets querystring to searchbar text, creates a sufficiently large search area, and calls the findBarNear method. The search button is also disabled until a list of bars are returned to prevent bombarding with requests.
+- (IBAction)onSearchButtonPressed:(id)sender
+{
+    [self search];
 }
 
 // Removes all annotations off mapView, creates a new map region from the current mapView region, which is used to make another call to findBarNear. Disables button until results are returned.
