@@ -32,6 +32,7 @@
 @property CGFloat span;
 @property MKCoordinateSpan mapSpan;
 @property AppDelegate *appDelegate;
+-(void)didreceiveNotification:(NSNotification *)notification;
 
 @end
 
@@ -41,6 +42,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didreceiveNotification:)
+                                                 name:@"userEnteredBar"
+                                               object:nil];
 
     self.queryString = @"bar";
     self.mapSpan = MKCoordinateSpanMake(0.01, 0.01);
@@ -72,6 +77,10 @@
     [[self.appDelegate beaconRegionManager]canUserUseApp];
 }
 
+-(void)didreceiveNotification:(NSNotification *)notification
+{
+    self.navigationItem.title = [notification.userInfo objectForKey:@"barName"];
+}
 - (void)isUserInBar
 {
     if ([PFUser currentUser]) {

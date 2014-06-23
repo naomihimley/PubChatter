@@ -16,10 +16,9 @@
 @property MCNearbyServiceBrowser *browser;
 @property MCNearbyServiceAdvertiser *advertiser;
 @property NSMutableArray *advertisingUsers;
-@property NSMutableArray *advertisingUsersFromParse;
+@property NSMutableArray *invitationHandlerArray;
 
 -(void)setupPeerAndSessionWithDisplayName: (NSString *)displayName;
--(void)setupMCBrowser;
 -(void)advertiseSelf: (BOOL)shouldAdvertise;
 
 @end

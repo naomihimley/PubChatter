@@ -20,7 +20,6 @@
 @property BOOL inARegion;
 - (void)canUserUseApp;
 - (void)setupCLManager;
-- (void)createBeaconRegion;
 - (void)logout;
 
 @end
