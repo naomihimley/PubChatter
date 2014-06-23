@@ -14,7 +14,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *barNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *barAddressLabel;
 @property (weak, nonatomic) IBOutlet UILabel *distanceFromUserLabel;
-@property (weak, nonatomic) IBOutlet UILabel *telephoneLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *barImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *ratingImageView;
 @property (weak, nonatomic) IBOutlet UIButton *goToWebsiteButtonOutlet;

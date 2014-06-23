@@ -11,6 +11,7 @@
 #import "BarDetailViewController.h"
 #import "TDOAuth.h"
 #import "YelpBar.h"
+#import "SWRevealViewController.h"
 #import "SearchTableViewCell.h"
 #import <Parse/Parse.h>
 
@@ -49,12 +50,24 @@
     self.locationManager = [[CLLocationManager alloc] init];
     [self.locationManager startUpdatingLocation];
     self.locationManager.delegate = self;
+
+
+    // Change button color
+    self.rateBarButton.tintColor = [UIColor redColor];
+
+    // Set the side bar button action. When it's tapped, it'll show up the sidebar.
+    self.rateBarButton.target = self.revealViewController;
+    self.rateBarButton.action = @selector(rightRevealToggle:);
+
+    NSLog(@"%@", self.rateBarButton.target);
+
+    // Set the gesture
+    [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
 }
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self isUserInBar];
-
 }
 
 - (void)isUserInBar
@@ -190,7 +203,6 @@
                          barAnnotation.title = yelpBar.name;
                          barAnnotation.subtitle = [NSString stringWithFormat:@"%.02f miles", yelpBar.distanceFromUser * 0.000621371];
                          [self.mapView addAnnotation:barAnnotation];
-                         NSLog(@"Got bar location");
                          break;
                      }
             [self.tableView reloadData];
