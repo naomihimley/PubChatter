@@ -14,6 +14,7 @@
 #import "SWRevealViewController.h"
 #import "SearchTableViewCell.h"
 #import <Parse/Parse.h>
+#import "AppDelegate.h"
 
 @interface SearchViewController () <UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate, MKMapViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -30,6 +31,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *redrawAreaButtonOutlet;
 @property CGFloat span;
 @property MKCoordinateSpan mapSpan;
+@property AppDelegate *appDelegate;
 
 @end
 
@@ -66,6 +68,8 @@
 {
     [super viewWillAppear:animated];
     [self isUserInBar];
+    self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [[self.appDelegate beaconRegionManager]canUserUseApp];
 }
 
 - (void)isUserInBar
@@ -83,7 +87,7 @@
              }
              else
              {
-            self.navigationItem.title = @"PubChat";
+                 self.navigationItem.title = @"PubChat";
              }
          }];
     }

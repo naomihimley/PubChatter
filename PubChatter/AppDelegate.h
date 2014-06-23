@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "MCManager.h"
+#import "BeaconRegionManager.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property MCManager *mcManager;
+@property BeaconRegionManager *beaconRegionManager;
 
 @end
