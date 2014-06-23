@@ -204,22 +204,24 @@
 
     if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnecting)
     {
-        sleep(2);
         [cell.chatButton setTitle:@"Connecting" forState:UIControlStateNormal];
         NSLog(@"connecting");
     }
-    if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
+    else if ([[[notification userInfo]objectForKey:@"state"]intValue] != MCSessionStateConnecting)
     {
-        sleep(2);
-        [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
-        NSLog(@"connected");
+        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
+        {
+            [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
+            NSLog(@"connected");
+        }
+        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
+        {
+            [cell.chatButton setTitle:@"Reconnect" forState:UIControlStateNormal];
+            NSLog(@"reconnect");
+        }
+
     }
-    if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
-    {
-        sleep(2);
-        [cell.chatButton setTitle:@"Not Connected" forState:UIControlStateNormal];
-        NSLog(@"not connected");
-    }
+
 
 }
 
