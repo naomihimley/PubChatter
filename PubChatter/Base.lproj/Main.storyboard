@@ -28,6 +28,17 @@
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="63"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8OW-ZS-LGj">
+                                                    <rect key="frame" x="231" y="3" width="56" height="57"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <state key="normal" title="Button">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="onButtonTappedSendInvitation:" destination="Yan-7k-PuS" eventType="touchUpInside" id="RVd-B7-fC4"/>
+                                                        <segue destination="BIN-h3-l0M" kind="push" identifier="ChatBoxSegue" id="aVo-PF-pWZ"/>
+                                                    </connections>
+                                                </button>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n2a-OP-5XV">
                                                     <rect key="frame" x="6" y="0.0" width="74" height="63"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -54,11 +65,12 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="chatButton" destination="8OW-ZS-LGj" id="Jjy-w1-bxD"/>
                                             <outlet property="genderLabel" destination="PbL-No-rUd" id="MFP-1T-lFI"/>
                                             <outlet property="userAgeLabel" destination="QkQ-3G-CGh" id="rwg-4u-sPW"/>
                                             <outlet property="userImage" destination="n2a-OP-5XV" id="FlN-ze-swe"/>
                                             <outlet property="userNameLabel" destination="9ne-pO-eOU" id="jW8-RB-g3h"/>
-                                            <segue destination="lwU-9d-CM2" kind="push" id="c2f-27-Cn8"/>
+                                            <segue destination="lwU-9d-CM2" kind="push" identifier="OPPSegue" id="c2f-27-Cn8"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -92,31 +104,9 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T7p-c5-l9K">
-                                <rect key="frame" x="82" y="73" width="156" height="151"/>
+                                <rect key="frame" x="20" y="73" width="280" height="216"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1q5-7S-mok">
-                                <rect key="frame" x="46" y="238" width="228" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.90196079015731812" green="0.90196079015731812" blue="0.90196079015731812" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="Search for User Connection">
-                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="onButtonPressedSearchForConnections:" destination="lwU-9d-CM2" eventType="touchUpInside" id="rUM-9f-qSQ"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y7c-ki-2PZ">
-                                <rect key="frame" x="109" y="282" width="102" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.90196079015731812" green="0.90196079015731812" blue="0.90196079015731812" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="Begin Chatting">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <segue destination="BIN-h3-l0M" kind="push" id="WT0-C1-zPO"/>
-                                </connections>
-                            </button>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nOM-yj-M0l">
                                 <rect key="frame" x="7" y="320" width="306" height="191"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -171,11 +161,9 @@
                     </view>
                     <navigationItem key="navigationItem" id="mUX-1H-YNN"/>
                     <connections>
-                        <outlet property="beginChattingButton" destination="Y7c-ki-2PZ" id="Hc4-0T-eRe"/>
                         <outlet property="bioLabel" destination="II2-xx-viG" id="EtU-rP-8Kw"/>
                         <outlet property="favDrinkLabel" destination="aZ8-pr-Fs8" id="rjJ-DI-Kdg"/>
                         <outlet property="imageView" destination="T7p-c5-l9K" id="hAd-bS-4qp"/>
-                        <outlet property="searchForConnectionButton" destination="1q5-7S-mok" id="usS-jI-Nn8"/>
                         <outlet property="sexLabel" destination="9HZ-yj-T8t" id="DvJ-Hh-bVT"/>
                         <outlet property="sexualOrientationLabel" destination="oXu-dJ-cEn" id="BQp-oa-Vd1"/>
                         <outlet property="userAgeLabel" destination="tjP-mW-TI0" id="QDw-uS-NR9"/>
@@ -184,9 +172,9 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TKH-Qn-2Hg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="959" y="21"/>
+            <point key="canvasLocation" x="999" y="21"/>
         </scene>
-        <!--Chat Box View Controller-->
+        <!--Chat Box View Controller - Chat-->
         <scene sceneID="Fek-hV-Cfv">
             <objects>
                 <viewController id="BIN-h3-l0M" customClass="ChatBoxViewController" sceneMemberID="viewController">
@@ -232,9 +220,9 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gMY-OG-1WS">
-                                <rect key="frame" x="104" y="472" width="112" height="30"/>
+                                <rect key="frame" x="127" y="472" width="66" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Quit Connection">
+                                <state key="normal" title="Quit Chat">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -244,6 +232,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Chat" id="5AM-e4-BMJ"/>
                     <navigationItem key="navigationItem" id="mKX-Di-BUn"/>
                     <connections>
                         <outlet property="chatTextField" destination="o83-7g-8hF" id="7Et-GK-ozE"/>
@@ -252,7 +241,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u5u-hH-8DW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1393" y="21"/>
+            <point key="canvasLocation" x="164" y="1441"/>
         </scene>
         <!--Reveal View Controller-->
         <scene sceneID="Miv-5f-fCY">
@@ -485,7 +474,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="460" y="-706"/>
+            <point key="canvasLocation" x="558" y="-694"/>
         </scene>
         <!--Bar Detail View Controller-->
         <scene sceneID="8OW-Vq-bJZ">
@@ -763,7 +752,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RvN-IO-uyv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="690" y="718"/>
+            <point key="canvasLocation" x="558" y="718"/>
         </scene>
         <!--Edit Profile View Controller-->
         <scene sceneID="DNW-Bg-lI2">
@@ -929,7 +918,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sFg-Wv-DEK" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="aRE-1Z-NQe" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1109" y="719"/>
+            <point key="canvasLocation" x="999" y="718"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="1Xb-9t-3l3">
@@ -945,11 +934,12 @@
                         <segue destination="cxc-Hy-A8F" kind="relationship" relationship="viewControllers" id="GDU-6u-vCc"/>
                         <segue destination="spU-qM-IJb" kind="relationship" relationship="viewControllers" id="kJf-bq-JdP"/>
                         <segue destination="BsO-qZ-Xte" kind="relationship" relationship="viewControllers" id="kjr-NX-Mml"/>
+                        <segue destination="BIN-h3-l0M" kind="relationship" relationship="viewControllers" id="Pce-gb-n12"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wle-4I-wUJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-408" y="21"/>
+            <point key="canvasLocation" x="-436" y="437"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="UBQ-g4-tB7">
@@ -968,7 +958,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pgY-5d-bc4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="53" y="-706"/>
+            <point key="canvasLocation" x="164" y="-706"/>
         </scene>
         <!--Navigation Controller - Chat-->
         <scene sceneID="1cc-Cv-tly">
@@ -1014,4 +1004,7 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="aVo-PF-pWZ"/>
+    </inferredMetricsTieBreakers>
 </document>
