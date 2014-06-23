@@ -7,6 +7,7 @@
 //
 
 #import "MCManager.h"
+#import <Parse/Parse.h>
 
 @implementation MCManager
 
@@ -20,9 +21,21 @@
         self.session = nil;
         self.browser = nil;
         self.advertiser = nil;
+        self.advertisingUsers = [NSMutableArray array];
+        self.advertisingUsersFromParse = [NSMutableArray array];
+
     }
     return self;
 }
+
+-(void)dealloc
+{
+    self.session.delegate = nil;
+    self.browser.delegate = nil;
+    self.advertiser.delegate = nil;
+}
+
+#pragma mark - MCSession Delegate Methods
 
 -(void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state
 {
@@ -54,6 +67,37 @@
 -(void)session:(MCSession *)session didReceiveStream:(NSInputStream *)stream withName:(NSString *)streamName fromPeer:(MCPeerID *)peerID
 {
 }
+
+#pragma mark - MCNearbyServiceAdvertiser Delegate methods
+
+-(void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void (^)(BOOL, MCSession *))invitationHandler
+{
+
+}
+
+#pragma mark - MCNearbyServiceBrowser Delegate Methods
+
+-(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
+{
+    [self.advertisingUsers addObject:peerID];
+    NSLog(@"advertisingUsers %@", self.advertisingUsers);
+//    [self.advertisingUsersFromParse addObject:info];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:nil];
+    NSLog(@"found a peer");
+}
+
+-(void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID
+{
+    [self.advertisingUsers removeObject:peerID];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:nil];
+}
+-(void)browser:(MCNearbyServiceBrowser *)browser didNotStartBrowsingForPeers:(NSError *)error
+{
+    NSLog(@"error %@", error);
+}
+
+# pragma mark - Public Methods
+
 -(void)setupPeerAndSessionWithDisplayName:(NSString *)displayName
 {
     self.peerID = [[MCPeerID alloc]initWithDisplayName:displayName];
@@ -63,19 +107,27 @@
 
 -(void)setupMCBrowser
 {
-    self.browser = [[MCBrowserViewController alloc]initWithServiceType:@"chat-files" session:self.session];
+    self.browser = [[MCNearbyServiceBrowser alloc]initWithPeer:self.peerID serviceType:@"pubchatservice"];
+    self.browser.delegate = self;
+    [self.browser startBrowsingForPeers];
 }
 
 -(void)advertiseSelf:(BOOL)shouldAdvertise
 {
-    if (shouldAdvertise) {
-        self.advertiser = [[MCAdvertiserAssistant alloc]initWithServiceType:@"chat-files" discoveryInfo:nil session:self.session];
-        [self.advertiser start];
+    if (shouldAdvertise)
+    {
+//        PFUser *user = [PFUser currentUser];
+//        NSDictionary *dictionary = @{@"age": [user objectForKey:@"age"],
+//                                     @"gender": [user objectForKey:@"gender"]};
+        self.advertiser = [[MCNearbyServiceAdvertiser alloc]initWithPeer:self.peerID discoveryInfo:nil serviceType:@"pubchatservice"];
+        self.advertiser.delegate = self;
+        [self.advertiser startAdvertisingPeer];
     }
 
     else
     {
-        [self.advertiser stop];
+        self.advertiser.delegate = self;
+        [self.advertiser stopAdvertisingPeer];
         self.advertiser = nil;
     }
 }

@@ -11,6 +11,7 @@
 #import "BarDetailViewController.h"
 #import "TDOAuth.h"
 #import "YelpBar.h"
+#import "SWRevealViewController.h"
 #import "SearchTableViewCell.h"
 #import <Parse/Parse.h>
 #import "AppDelegate.h"
@@ -42,7 +43,7 @@
     [super viewDidLoad];
 
     self.queryString = @"bar";
-    self.mapSpan = MKCoordinateSpanMake(0.02, 0.02);
+    self.mapSpan = MKCoordinateSpanMake(0.01, 0.01);
     self.toggleControlOutlet.selectedSegmentIndex = 0;
     self.mapView.hidden = NO;
     self.redrawAreaButtonOutlet.hidden = NO;
@@ -51,6 +52,19 @@
     self.locationManager = [[CLLocationManager alloc] init];
     [self.locationManager startUpdatingLocation];
     self.locationManager.delegate = self;
+
+
+    // Change button color
+    self.rateBarButton.tintColor = [UIColor redColor];
+
+    // Set the side bar button action. When it's tapped, it'll show up the sidebar.
+    self.rateBarButton.target = self.revealViewController;
+    self.rateBarButton.action = @selector(rightRevealToggle:);
+
+    NSLog(@"%@", self.rateBarButton.target);
+
+    // Set the gesture
+    [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
 }
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -89,7 +103,7 @@
 
     [self.mapView removeAnnotations:self.mapView.annotations];
     self.queryString = self.searchBar.text;
-    self.mapSpan = MKCoordinateSpanMake(0.15, 0.15);
+    self.mapSpan = MKCoordinateSpanMake(0.12, 0.12);
     [self getYelpJSONWithSearch:self.queryString andLongitude:self.userLocation.coordinate.longitude andLatitude:self.userLocation.coordinate.latitude andSortType:@"0" andNumResults:@"1"];
     self.searchButtonOutlet.enabled = NO;
     [self.searchBar endEditing:YES];
@@ -243,7 +257,7 @@ calloutAccessoryControlTapped:(UIControl *)control
 
     cell.barNameLabel.text = yelpBar.name;
     cell.barDistanceLabel.text = milesFromUser;
-    cell.barAddressLabel.text = yelpBar.address;
+    cell.imageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:yelpBar.businessImageURL]]];
     return cell;
 }
 

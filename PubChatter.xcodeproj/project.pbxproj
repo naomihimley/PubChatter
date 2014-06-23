@@ -17,6 +17,9 @@
 		0ECEAEE8194F69A000B92C40 /* YelpBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAEE7194F69A000B92C40 /* YelpBar.m */; };
 		0ECEAEEB194F6FAC00B92C40 /* BarDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAEEA194F6FAC00B92C40 /* BarDetailViewController.m */; };
 		0ECEAEEE194F8AD200B92C40 /* BarWebpageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAEED194F8AD200B92C40 /* BarWebpageViewController.m */; };
+		0ECEAF0719560FCA00B92C40 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAF0619560FCA00B92C40 /* SWRevealViewController.m */; };
+		0ECEAF0A1956103B00B92C40 /* LeftSlideoutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAF091956103B00B92C40 /* LeftSlideoutViewController.m */; };
+		0ECEAF0D19586FA800B92C40 /* RightSlideoutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAF0C19586FA800B92C40 /* RightSlideoutViewController.m */; };
 		9BDBE4FD194F3EB50045C05B /* MCManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE4FC194F3EB50045C05B /* MCManager.m */; };
 		9BDBE500194F47380045C05B /* OPPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE4FF194F47380045C05B /* OPPViewController.m */; };
 		9BDBE503194F47830045C05B /* ChatBoxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE502194F47830045C05B /* ChatBoxViewController.m */; };
@@ -80,6 +83,12 @@
 		0ECEAEEA194F6FAC00B92C40 /* BarDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BarDetailViewController.m; path = ../BarDetailViewController.m; sourceTree = "<group>"; };
 		0ECEAEEC194F8AD200B92C40 /* BarWebpageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BarWebpageViewController.h; path = ../BarWebpageViewController.h; sourceTree = "<group>"; };
 		0ECEAEED194F8AD200B92C40 /* BarWebpageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BarWebpageViewController.m; path = ../BarWebpageViewController.m; sourceTree = "<group>"; };
+		0ECEAF0519560FCA00B92C40 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
+		0ECEAF0619560FCA00B92C40 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
+		0ECEAF081956103B00B92C40 /* LeftSlideoutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftSlideoutViewController.h; sourceTree = "<group>"; };
+		0ECEAF091956103B00B92C40 /* LeftSlideoutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftSlideoutViewController.m; sourceTree = "<group>"; };
+		0ECEAF0B19586FA800B92C40 /* RightSlideoutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightSlideoutViewController.h; sourceTree = "<group>"; };
+		0ECEAF0C19586FA800B92C40 /* RightSlideoutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightSlideoutViewController.m; sourceTree = "<group>"; };
 		9BDBE4FB194F3EB50045C05B /* MCManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCManager.h; sourceTree = "<group>"; };
 		9BDBE4FC194F3EB50045C05B /* MCManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCManager.m; sourceTree = "<group>"; };
 		9BDBE4FE194F47380045C05B /* OPPViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OPPViewController.h; sourceTree = "<group>"; };
@@ -163,6 +172,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0ECEAF0419560F9A00B92C40 /* Slideout Drawer VCs */ = {
+			isa = PBXGroup;
+			children = (
+				0ECEAF081956103B00B92C40 /* LeftSlideoutViewController.h */,
+				0ECEAF091956103B00B92C40 /* LeftSlideoutViewController.m */,
+				0ECEAF0B19586FA800B92C40 /* RightSlideoutViewController.h */,
+				0ECEAF0C19586FA800B92C40 /* RightSlideoutViewController.m */,
+				0ECEAF0519560FCA00B92C40 /* SWRevealViewController.h */,
+				0ECEAF0619560FCA00B92C40 /* SWRevealViewController.m */,
+			);
+			name = "Slideout Drawer VCs";
+			sourceTree = "<group>";
+		};
 		9BDBE559194FA3D00045C05B /* ChatVCs */ = {
 			isa = PBXGroup;
 			children = (
@@ -218,6 +240,17 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
+		9BDBE60A195674640045C05B /* Yelp API Files */ = {
+			isa = PBXGroup;
+			children = (
+				0ECEAEE6194F69A000B92C40 /* YelpBar.h */,
+				0ECEAEE7194F69A000B92C40 /* YelpBar.m */,
+				0EB32009194CBDD0005A3B82 /* TDOAuth.h */,
+				0EB3200A194CBDD0005A3B82 /* TDOAuth.m */,
+			);
+			name = "Yelp API Files";
+			sourceTree = "<group>";
+		};
 		B0782C2F194BB3700022E6E7 = {
 			isa = PBXGroup;
 			children = (
@@ -269,6 +302,7 @@
 				B0782C4A194BB3700022E6E7 /* AppDelegate.h */,
 				B0782C4B194BB3700022E6E7 /* AppDelegate.m */,
 				B0782C4D194BB3700022E6E7 /* Main.storyboard */,
+				0ECEAF0419560F9A00B92C40 /* Slideout Drawer VCs */,
 				9BDBE55A194FA3FE0045C05B /* Search/Bar VCs */,
 				9BDBE55C194FA44F0045C05B /* UserProfileVCs */,
 				9BDBE559194FA3D00045C05B /* ChatVCs */,
@@ -433,9 +467,11 @@
 				0EB32001194BC19E005A3B82 /* ChatViewController.m in Sources */,
 				0EB31FFB194BC158005A3B82 /* SearchViewController.m in Sources */,
 				0ECEAEE8194F69A000B92C40 /* YelpBar.m in Sources */,
+				0ECEAF0719560FCA00B92C40 /* SWRevealViewController.m in Sources */,
 				B0782C48194BB3700022E6E7 /* main.m in Sources */,
 				0EB31FFE194BC176005A3B82 /* ProfileViewController.m in Sources */,
 				9BDBE506194F50200045C05B /* ListOfUsersTableViewCell.m in Sources */,
+				0ECEAF0D19586FA800B92C40 /* RightSlideoutViewController.m in Sources */,
 				0ECEAEEB194F6FAC00B92C40 /* BarDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
