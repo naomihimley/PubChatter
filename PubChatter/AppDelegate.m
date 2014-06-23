@@ -20,6 +20,7 @@
 
     self.mcManager = [[MCManager alloc]init];
     self.beaconRegionManager = [[BeaconRegionManager alloc]init];
+    [self.beaconRegionManager setupCLManager];
     [Rating registerSubclass];
     [Bar registerSubclass];
 

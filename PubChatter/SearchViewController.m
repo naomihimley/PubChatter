@@ -16,7 +16,7 @@
 #import <Parse/Parse.h>
 #import "AppDelegate.h"
 
-@interface SearchViewController () <UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate, MKMapViewDelegate>
+@interface SearchViewController () <UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate, MKMapViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property CLLocationManager *locationManager;
@@ -57,6 +57,7 @@
     self.locationManager = [[CLLocationManager alloc] init];
     [self.locationManager startUpdatingLocation];
     self.locationManager.delegate = self;
+    self.searchBar.delegate = self;
 
 
     // Change button color
@@ -68,6 +69,7 @@
 
     // Set the gesture
     [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+    [self.view resignFirstResponder];
 }
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -77,8 +79,23 @@
     [[self.appDelegate beaconRegionManager]canUserUseApp];
 }
 
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    [self.mapView removeAnnotations:self.mapView.annotations];
+    self.queryString = self.searchBar.text;
+    self.mapSpan = MKCoordinateSpanMake(0.12, 0.12);
+    [self getYelpJSONWithSearch:self.queryString andLongitude:self.userLocation.coordinate.longitude andLatitude:self.userLocation.coordinate.latitude andSortType:@"0" andNumResults:@"1"];
+    self.searchButtonOutlet.enabled = NO;
+    [self.searchBar endEditing:YES];
+    CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(self.userLocation.coordinate.latitude, self.userLocation.coordinate.longitude);
+    MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, self.mapSpan);
+    [self.mapView setRegion:region animated:YES];
+    [self.searchBar resignFirstResponder];
+}
+
 -(void)didreceiveNotification:(NSNotification *)notification
 {
+    NSLog(@"notification in search vc");
     self.navigationItem.title = [notification.userInfo objectForKey:@"barName"];
 }
 - (void)isUserInBar
