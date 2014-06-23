@@ -8,6 +8,7 @@
 
 #import "RightSlideoutViewController.h"
 #import <Parse/Parse.h>
+#import "Rating.h"
 
 @interface RightSlideoutViewController ()
 
