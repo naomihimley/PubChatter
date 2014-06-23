@@ -59,8 +59,6 @@
     self.rateBarButton.target = self.revealViewController;
     self.rateBarButton.action = @selector(rightRevealToggle:);
 
-    NSLog(@"%@", self.rateBarButton.target);
-
     // Set the gesture
     [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
 }

@@ -22,8 +22,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *categoriesLabel;
 @property (weak, nonatomic) IBOutlet UILabel *pubChattersCountLabel;
 @property (weak, nonatomic) IBOutlet UILabel *ratioLabel;
-@property (weak, nonatomic) IBOutlet UISlider *sliderOutlet;
-@property (weak, nonatomic) IBOutlet UIButton *rateBarButtonOutlet;
+
 
 @end
 
@@ -34,8 +33,6 @@
 {
     [super viewDidLoad];
 
-    self.sliderOutlet.hidden = YES;
-    self.rateBarButtonOutlet.hidden = YES;
     self.barNameLabel.text = self.barFromSourceVC.name;
     self.barAddressLabel.text = self.barFromSourceVC.address;
     self.aboutBarTextView.text = self.barFromSourceVC.aboutBusiness;
@@ -53,8 +50,6 @@
     self.ratingImageView.image = [UIImage imageWithData:ratingImageData];
 
     self.categoriesLabel.text = [NSString stringWithFormat:@"Category: %@\nOffers: %@", [[self.barFromSourceVC.categories objectAtIndex:0] objectAtIndex:0], [[self.barFromSourceVC.categories objectAtIndex:1] objectAtIndex:0]];
-
-    [self checkIfUserisInBar];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -112,29 +107,7 @@
         }
     }];
 }
-- (IBAction)onRateButtonPressed:(id)sender
-{
-    NSInteger rating = self.sliderOutlet.value;
-    NSLog(@"%ld", (long)rating);
-}
 
--(void)checkIfUserisInBar
-{
-    PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
-    [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
-    [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (![objects isEqual:nil]) {
-            NSLog(@"%@", objects.firstObject);
-            [self.rateBarButtonOutlet setTitle:[NSString stringWithFormat:@"Rate %@", self.barFromSourceVC.name] forState:UIControlStateNormal];
-            self.rateBarButtonOutlet.hidden = NO;
-            self.sliderOutlet.hidden = NO;
-        }
-        else
-        {
-            self.rateBarButtonOutlet.hidden = YES;
-            self.sliderOutlet.hidden = YES;
-        }
-    }];
-}
+
 
 @end

@@ -7,43 +7,60 @@
 //
 
 #import "RightSlideoutViewController.h"
+#import <Parse/Parse.h>
 
 @interface RightSlideoutViewController ()
+
+@property (weak, nonatomic) IBOutlet UISlider *sliderOutlet;
+@property (weak, nonatomic) IBOutlet UIButton *rateBarButtonOutlet;
 
 @end
 
 @implementation RightSlideoutViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    self.sliderOutlet.minimumValue = 0;
+    self.sliderOutlet.maximumValue = 5;
+    self.sliderOutlet.value = 0;
 }
 
-- (void)didReceiveMemoryWarning
+-(void) viewDidAppear:(BOOL)animated
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [super viewDidAppear:animated];
+    self.rateBarButtonOutlet.enabled = NO;
+    self.sliderOutlet.enabled = NO;
+    [self checkIfUserisInBar];
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+-(void)checkIfUserisInBar
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
+    [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
+    [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if ([objects firstObject]) {
+            NSLog(@"A");
+            [self.rateBarButtonOutlet setTitle:[NSString stringWithFormat:@"Rate %@", [[objects firstObject] valueForKey:@"barName"]] forState:UIControlStateNormal];
+            self.rateBarButtonOutlet.enabled = YES;
+            self.sliderOutlet.enabled = YES;
+        }
+        else
+        {
+            NSLog(@"B");
+            [self.rateBarButtonOutlet setTitle:@"Rate" forState:UIControlStateNormal];
+            self.sliderOutlet.enabled = NO;
+            self.rateBarButtonOutlet.enabled = NO;
+        }
+    }];
 }
-*/
+
+- (IBAction)onRateButtonPressed:(id)sender
+{
+    NSInteger rating = self.sliderOutlet.value;
+    NSLog(@"%ld", (long)rating);
+}
+
 
 @end
