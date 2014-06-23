@@ -9,11 +9,13 @@
 #import "RightSlideoutViewController.h"
 #import <Parse/Parse.h>
 #import "Rating.h"
+#import "Bar.h"
 
 @interface RightSlideoutViewController ()
 
 @property (weak, nonatomic) IBOutlet UISlider *sliderOutlet;
 @property (weak, nonatomic) IBOutlet UIButton *rateBarButtonOutlet;
+@property Bar *bar;
 
 @end
 
@@ -43,7 +45,8 @@
     [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if ([objects firstObject]) {
             NSLog(@"A");
-            [self.rateBarButtonOutlet setTitle:[NSString stringWithFormat:@"Rate %@", [[objects firstObject] valueForKey:@"barName"]] forState:UIControlStateNormal];
+            self.bar = [objects firstObject];
+            [self.rateBarButtonOutlet setTitle:[NSString stringWithFormat:@"Rate %@", [self.bar valueForKey:@"barName"]] forState:UIControlStateNormal];
             self.rateBarButtonOutlet.enabled = YES;
             self.sliderOutlet.enabled = YES;
         }
@@ -59,8 +62,18 @@
 
 - (IBAction)onRateButtonPressed:(id)sender
 {
-    NSInteger rating = self.sliderOutlet.value;
+    NSNumber *rating = @(self.sliderOutlet.value);
+
+    Rating *barRating = [Rating objectWithClassName:@"Rating"];
+    [barRating setObject:[PFUser currentUser] forKey:@"user"];
+    [barRating setObject:rating forKey:@"rating"];
+    [barRating setObject:self.bar forKey:@"bar"];
+
+    [barRating saveInBackground];
+
     NSLog(@"%ld", (long)rating);
+    NSLog(@"%@", self.bar);
+
 }
 
 
