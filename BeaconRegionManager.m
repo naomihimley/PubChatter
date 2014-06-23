@@ -9,11 +9,9 @@
 #import "BeaconRegionManager.h"
 
 @interface BeaconRegionManager () <CLLocationManagerDelegate>
-
 @end
 
 @implementation BeaconRegionManager
-
 -(void)setupCLManager
 {
     self.beaconRegionManager = [[CLLocationManager alloc] init];
@@ -24,7 +22,6 @@
 {
     if ([[UIApplication sharedApplication] backgroundRefreshStatus] == UIBackgroundRefreshStatusAvailable)
     {
-        [self setupCLManager];
         self.beaconRegionManager = [[CLLocationManager alloc] init];
         self.beaconRegionManager.delegate = self;
         [self.beaconRegionManager startUpdatingLocation];
@@ -92,20 +89,21 @@
         if ([region.identifier isEqualToString:@"richiPhone"])
         {
             [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"PubChat"}];
-            PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
-            [queryForBar whereKey:@"objectId" equalTo:@"UL0yMO2bGj"];
-            [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-                PFObject *bar = [objects firstObject];
-                [bar removeObject:[PFUser currentUser] forKey:@"usersInBar"];
-                [bar saveInBackground];
-            }];
+            if ([PFUser currentUser]) {
+                PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
+                [queryForBar whereKey:@"objectId" equalTo:@"UL0yMO2bGj"];
+                [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                    PFObject *bar = [objects firstObject];
+                    [bar removeObject:[PFUser currentUser] forKey:@"usersInBar"];
+                    [bar saveInBackground];
+                }];
+            }
         }
         if ([region.identifier isEqualToString:@"anyEstimoteBeacon"])
         {
             //this removes user from all bars
             [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"PubChat"}];
             PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
-//            [queryForBar whereKey:@"objectId" equalTo:@"cxmc5pwBsf"];
             [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 for (PFObject *bar in objects) {
                     [bar removeObject:[PFUser currentUser] forKey:@"usersInBar"];

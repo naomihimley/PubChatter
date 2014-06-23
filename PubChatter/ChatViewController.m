@@ -31,7 +31,6 @@
     [self queryForUsers];
 
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-
     [self.appDelegate.mcManager setupPeerAndSessionWithDisplayName:[[PFUser currentUser]objectForKey:@"username"]];
     [self.appDelegate.mcManager advertiseSelf:YES];
     [self.appDelegate.mcManager setupMCBrowser];
