@@ -14,6 +14,7 @@
 #import "SWRevealViewController.h"
 #import "SearchTableViewCell.h"
 #import <Parse/Parse.h>
+#import "LoginViewController.h"
 #import "AppDelegate.h"
 
 @interface SearchViewController () <UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate, MKMapViewDelegate>
@@ -42,11 +43,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    if (![PFUser currentUser]) {
+        [self performSegueWithIdentifier:@"loginsegue" sender:self];
+    }
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didreceiveNotification:)
                                                  name:@"userEnteredBar"
                                                object:nil];
-
     self.queryString = @"bar";
     self.mapSpan = MKCoordinateSpanMake(0.01, 0.01);
     self.toggleControlOutlet.selectedSegmentIndex = 0;
@@ -278,8 +283,13 @@ calloutAccessoryControlTapped:(UIControl *)control
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    if ([segue.identifier  isEqual: @"loginsegue"])
+    {}
+    else
+    {
     BarDetailViewController *detailViewController = segue.destinationViewController;
     detailViewController.barFromSourceVC = self.selectedBar;
+    }
 }
 
 - (void)segmentChanged:(id)sender
