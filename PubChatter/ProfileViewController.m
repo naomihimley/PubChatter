@@ -51,6 +51,8 @@
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
+
+
 - (void)setTextFields
 {
     PFFile *file = [[PFUser currentUser]objectForKey:@"picture"];
