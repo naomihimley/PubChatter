@@ -8,6 +8,8 @@
 
 #import "BarDetailViewController.h"
 #import "BarWebpageViewController.h"
+#import "Bar.h"
+#import "Rating.h"
 #import <Parse/Parse.h>
 
 @interface BarDetailViewController ()
@@ -22,6 +24,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *categoriesLabel;
 @property (weak, nonatomic) IBOutlet UILabel *pubChattersCountLabel;
 @property (weak, nonatomic) IBOutlet UILabel *ratioLabel;
+@property (weak, nonatomic) IBOutlet UILabel *barRatingLabel;
+@property Bar *bar;
 
 
 @end
@@ -78,18 +82,18 @@
             }
         }
     }];
+
+    PFQuery *query2 = [PFQuery queryWithClassName:@"Bar"];
+    [query2 whereKey:@"yelpID" equalTo:self.barFromSourceVC.yelpID];
+    [query2 findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (objects) {
+            self.bar = [objects firstObject];
+            NSLog(@"%@", self.bar);
+            [self getRating];
+        }
+    }];
 }
 
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    NSString *mobileURLString = self.barFromSourceVC.businessMobileURL;
-    NSString *businessURLString = self.barFromSourceVC.businessURL;
-    NSString *name = self.barFromSourceVC.name;
-    BarWebpageViewController *detailViewController = segue.destinationViewController;
-    detailViewController.webURLFromSource = businessURLString;
-    detailViewController.mobileURLFromSource = mobileURLString;
-    detailViewController.placeNameFromSource = name;
-}
 
 - (IBAction)onTelephoneButtonPressed:(id)sender
 {
@@ -108,6 +112,34 @@
     }];
 }
 
+-(void)getRating
+{
+    PFQuery *query = [PFQuery queryWithClassName:@"Rating"];
+    [query includeKey:@"bar"];
+    [query whereKey:@"bar" equalTo:self.bar];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
 
+        NSInteger count = objects.count;
+        NSInteger total = 0;
+        for (PFObject *object in objects) {
+            NSInteger number =  [[object valueForKey:@"rating"] intValue];
+            total += number;
+        }
+            if (count > 0) {
+                self.barRatingLabel.text = [NSString stringWithFormat:@"%ld", total/count];
+            }
+    }];
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSString *mobileURLString = self.barFromSourceVC.businessMobileURL;
+    NSString *businessURLString = self.barFromSourceVC.businessURL;
+    NSString *name = self.barFromSourceVC.name;
+    BarWebpageViewController *detailViewController = segue.destinationViewController;
+    detailViewController.webURLFromSource = businessURLString;
+    detailViewController.mobileURLFromSource = mobileURLString;
+    detailViewController.placeNameFromSource = name;
+}
 
 @end
