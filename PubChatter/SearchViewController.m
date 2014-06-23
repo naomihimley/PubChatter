@@ -13,6 +13,7 @@
 #import "YelpBar.h"
 #import "SearchTableViewCell.h"
 #import <Parse/Parse.h>
+#import "AppDelegate.h"
 
 @interface SearchViewController () <UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate, MKMapViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -29,6 +30,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *redrawAreaButtonOutlet;
 @property CGFloat span;
 @property MKCoordinateSpan mapSpan;
+@property AppDelegate *appDelegate;
 
 @end
 
@@ -54,26 +56,29 @@
 {
     [super viewWillAppear:animated];
     [self isUserInBar];
-
+    self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [[self.appDelegate beaconRegionManager]canUserUseApp];
 }
 
 - (void)isUserInBar
 {
-    PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
-    [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
-    [queryForBar includeKey:@"usersInBar"];
-    [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
-    {
-        PFObject *bar = [objects firstObject];
-        if (bar)
-        {
-            self.navigationItem.title = [bar objectForKey:@"barName"];
-        }
-        else
-        {
-            self.navigationItem.title = @"PubChat";
-        }
-    }];
+    if ([PFUser currentUser]) {
+        PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
+        [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
+        [queryForBar includeKey:@"usersInBar"];
+        [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+         {
+             PFObject *bar = [objects firstObject];
+             if (bar)
+             {
+                 self.navigationItem.title = [bar objectForKey:@"barName"];
+             }
+             else
+             {
+                 self.navigationItem.title = @"PubChat";
+             }
+         }];
+    }
 }
 
 #pragma mark - IBActions

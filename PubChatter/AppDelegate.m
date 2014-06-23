@@ -17,8 +17,16 @@
                   clientKey:@"v9ld8HOcNGdn3xIzeFZ9WS9KofND8Y4rsEzH6mwU"];
 
     self.mcManager = [[MCManager alloc]init];
+    self.beaconRegionManager = [[BeaconRegionManager alloc]init];
 
+    //should this be here?
+    if (![CLLocationManager isMonitoringAvailableForClass:[CLBeaconRegion class]])
+    {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Unable To Monitor Location" message:@"Only works on iOS 5 and later" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+    }
     return YES;
+
 }
 
 //- (BOOL)application:(UIApplication *)application
@@ -55,6 +63,14 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
+    [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        for (PFObject *bar in objects) {
+            [bar removeObject:[PFUser currentUser] forKey:@"usersInBar"];
+            [bar saveInBackground];
+        }
+    }];
+
 }
 
 @end
