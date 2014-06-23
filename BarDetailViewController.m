@@ -94,7 +94,6 @@
     }];
 }
 
-
 - (IBAction)onTelephoneButtonPressed:(id)sender
 {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@", self.barFromSourceVC.telephone]]];
