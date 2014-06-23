@@ -31,9 +31,12 @@
     [self queryForUsers];
 
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-    [self.appDelegate.mcManager setupPeerAndSessionWithDisplayName:[[PFUser currentUser]objectForKey:@"username"]];
-    [self.appDelegate.mcManager advertiseSelf:YES];
-    [self.appDelegate.mcManager setupMCBrowser];
+
+    if ([PFUser currentUser])
+    {
+        [self.appDelegate.mcManager setupPeerAndSessionWithDisplayName:[[PFUser currentUser]objectForKey:@"username"]];
+        [self.appDelegate.mcManager advertiseSelf:YES];
+    }
 
     //    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(peerDidChangeStateWithNotification) name:@"MCDidChangeStateNotification" object:nil];
 

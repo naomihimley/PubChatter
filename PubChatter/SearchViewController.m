@@ -79,6 +79,7 @@
 
 -(void)didreceiveNotification:(NSNotification *)notification
 {
+    NSLog(@"notification in search vc");
     self.navigationItem.title = [notification.userInfo objectForKey:@"barName"];
 }
 - (void)isUserInBar

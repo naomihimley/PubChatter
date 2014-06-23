@@ -130,20 +130,20 @@
     beacon = [beacons firstObject];
     if (self.inARegion == YES)
     {
-        if ([beacon.minor isEqual: @12505] && [beacon.major isEqual:@52834]) //old town ale house
+        if ([beacon.minor isEqual: @52834] && [beacon.major isEqual:@12505]) //old town ale house
         {
             [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"Old Town Ale House"}];
-            NSLog(@"didrangebeacons in new class, adding to parse");
             PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
             [queryForBar whereKey:@"objectId" equalTo:@"cxmc5pwBsf"];
             [queryForBar includeKey:@"usersInBar"];
             [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 PFObject *bar = [objects firstObject];
                 NSArray *arrayOfUsers = [NSArray arrayWithArray:[bar objectForKey:@"usersInBar"]];
-                if (arrayOfUsers.count < 1) {
+                if (arrayOfUsers.count <= 0) {
                     [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                     [bar saveInBackground];
                     self.inARegion = NO;
+                    NSLog(@"adding to parse");
                 }
                 NSEnumerator *enumerator = [arrayOfUsers objectEnumerator];
                 PFUser* user;
