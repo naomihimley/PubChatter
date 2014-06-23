@@ -12,13 +12,13 @@
 #import "AppDelegate.h"
 #import "ChatBoxViewController.h"
 
-@interface ChatViewController ()<UITableViewDataSource, UITableViewDelegate>
+@interface ChatViewController ()<UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property NSArray *userArray;
-@property NSMutableArray *parseUsersAdvertising;
+@property NSMutableArray *userArray;
 @property AppDelegate *appDelegate;
 
--(void)peerStartedAdvertising;
+-(void)peerDidChangeStateWithNotification:(NSNotification *)notification;
+-(void)receivedInvitationForConnection: (NSNotification *)notification;
 @end
 
 @implementation ChatViewController
@@ -27,7 +27,7 @@
 {
     [super viewDidLoad];
 
-    self.parseUsersAdvertising = [NSMutableArray array];
+    self.userArray = [NSMutableArray array];
     [self queryForUsers];
 
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
@@ -35,39 +35,43 @@
     [self.appDelegate.mcManager advertiseSelf:YES];
     [self.appDelegate.mcManager setupMCBrowser];
 
-//    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(peerDidChangeStateWithNotification) name:@"MCDidChangeStateNotification" object:nil];
+    //    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(peerDidChangeStateWithNotification) name:@"MCDidChangeStateNotification" object:nil];
 
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(queryForUsers) name:@"MCFoundAdvertisingPeer" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(queryForUsers) name:@"MCPeerStopAdvertising" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(receivedInvitationForConnection:) name:@"MCReceivedInvitation" object:nil];
 
 }
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-//    [self queryForUsers];
+    //    [self queryForUsers];
 }
+
+#pragma mark - UITableViewDelegate/DataSource methods
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-//    return self.appDelegate.mcManager.advertisingUsersFromParse.count;
-    return self.parseUsersAdvertising.count;
+    //    return self.appDelegate.mcManager.advertisingUsersFromParse.count;
+    return self.userArray.count;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ListOfUsersTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CellID"];
-    NSDictionary *dictionary = [self.parseUsersAdvertising objectAtIndex:indexPath.row];
+    NSDictionary *dictionary = [self.userArray objectAtIndex:indexPath.row];
     MCPeerID *peerID = [dictionary objectForKey:@"peerID"];
     PFUser *user = [dictionary objectForKey:@"user"];
     cell.userNameLabel.text = peerID.displayName;
     cell.chatButton.tag = indexPath.row;
 
-        if ([user objectForKey:@"age"]) {
-            cell.userAgeLabel.text = [NSString stringWithFormat:@"%@",[user objectForKey:@"age"]];
-        }
-        else
-        {
-            cell.userAgeLabel.text = @"";
-        }
+    if ([user objectForKey:@"age"]) {
+        cell.userAgeLabel.text = [NSString stringWithFormat:@"%@",[user objectForKey:@"age"]];
+    }
+    else
+    {
+        cell.userAgeLabel.text = @"";
+    }
 
     if ([user [@"gender"] isEqual:@0])
     {
@@ -93,6 +97,100 @@
     }];
     return cell;
 }
+
+#pragma mark - Query for users and Creation of array of advertising users
+
+-(void)queryForUsers
+{
+    // this gets all users of the app
+    PFQuery *query = [PFQuery queryWithClassName:@"_User"];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+     {
+         if (!error)
+         {
+             NSArray *users = [[NSArray alloc]initWithArray:objects];
+
+             for (MCPeerID *peerID in self.appDelegate.mcManager.advertisingUsers)
+             {
+                 for (PFUser *user in users)
+                 {
+                     if ([peerID.displayName isEqual:[user objectForKey:@"username"]])
+                     {
+                         NSDictionary *dictionary = @{@"peerID": peerID,
+                                                      @"user": user};
+                         [self.userArray addObject:dictionary];
+
+                         NSLog(@"parseUsersAdvertising array %@", self.userArray);
+                     }
+                 }
+             }
+             [self.tableView reloadData];
+         }
+     }];
+}
+
+#pragma mark - Segue
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqual:@"OPPSegue"])
+    {
+        OPPViewController *destinationVC = segue.destinationViewController;
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        NSDictionary *dictionary = [self.userArray objectAtIndex:indexPath.row];
+        PFUser *user = [dictionary objectForKey:@"user"];
+
+        destinationVC.user = user;
+    }
+
+    //    else if ([segue.identifier isEqual: @"ChatBoxSegue"])
+    //    {
+    //        ChatBoxViewController *chatBoxVC = segue.destinationViewController;
+    //        UIButton *button = (UIButton *)sender;
+    //        UITableViewCell *cell = (UITableViewCell *)[button superview];
+    //        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    //    }
+}
+
+#pragma mark - Action for Button sending invitation
+
+- (IBAction)onButtonTappedSendInvitation:(id)sender
+{
+    UIButton *button = (UIButton *)sender;
+
+    button.titleLabel.text = @"Connect";
+    UITableViewCell *cell = (UITableViewCell *)[button superview];
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+
+    NSDictionary *dictionary = [self.userArray objectAtIndex:indexPath.row];
+    MCPeerID *peerID = [dictionary objectForKey:@"peerID"];
+
+    [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30];
+}
+
+#pragma mark - Private method for handling the changing of peer's state
+
+-(void)peerDidChangeStateWithNotification:(NSNotification *)notification
+{
+
+}
+
+#pragma mark - Private method for handling receiving an invitation
+
+-(void)receivedInvitationForConnection:(NSNotification *)notification
+{
+    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"You have been invited to connect" message:nil delegate:self cancelButtonTitle:@"Decline" otherButtonTitles:@"Accept", nil];
+    [alertView show];
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    BOOL accept = (buttonIndex != alertView.cancelButtonIndex);
+
+    void (^invitationHandler)(BOOL, MCSession *) = [self.appDelegate.mcManager.invitationHandlerArray objectAtIndex:0];
+    invitationHandler(accept, self.appDelegate.mcManager.session);
+}
+
 
 //-(void)queryForUsers
 //{
@@ -215,69 +313,5 @@
 //    }
 //
 //}
-
--(void)queryForUsers
-{
-// this gets all users of the app
-    PFQuery *query = [PFQuery queryWithClassName:@"_User"];
-     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
-    {
-        if (!error)
-        {
-            self.userArray = [[NSArray alloc]initWithArray:objects];
-
-            for (MCPeerID *peerID in self.appDelegate.mcManager.advertisingUsers)
-            {
-                NSLog(@"peerID %@", peerID.displayName);
-                for (PFUser *user in self.userArray)
-                {
-                    if ([peerID.displayName isEqual:[user objectForKey:@"username"]])
-                    {
-                        NSDictionary *dictionary = @{@"peerID": peerID,
-                                                     @"user": user};
-                        [self.parseUsersAdvertising addObject:dictionary];
-
-                        NSLog(@"parseUsersAdvertising array %@", self.parseUsersAdvertising);
-                    }
-                }
-            }
-            [self.tableView reloadData];
-        }
-    }];
-}
-
-
-
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if ([segue.identifier isEqual:@"OPPSegue"])
-    {
-        OPPViewController *destinationVC = segue.destinationViewController;
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        NSDictionary *dictionary = [self.parseUsersAdvertising objectAtIndex:indexPath.row];
-        PFUser *user = [dictionary objectForKey:@"user"];
-
-        destinationVC.user = user;
-    }
-    
-    else if ([segue.identifier isEqual: @"ChatBoxSegue"])
-    {
-//        ChatBoxViewController *chatBoxVC = segue.destinationViewController;
-//        UIButton *button = (UIButton *)sender;
-//        UITableViewCell *cell = (UITableViewCell *)[button superview];
-//        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    }
-}
-
-- (IBAction)onButtonTappedSendInvitation:(id)sender
-{
-    UIButton *button = (UIButton *)sender;
-
-    button.titleLabel.text = @"Connect";
-    UITableViewCell *cell = (UITableViewCell *)[button superview];
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-
-
-}
 
 @end

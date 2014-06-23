@@ -91,12 +91,6 @@
         [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:chatString]];
         [self.chatArray addObject:chatString];
 
-        NSDictionary *chatDictionary = @{@"peer1": self.chatArray};
-
-        [self.chatDictionaryArray addObject:chatDictionary];
-
-        NSLog(@"%@", self.chatDictionaryArray);
-
         self.chatTextField.text = @"";
     }
     
