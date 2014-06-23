@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *sexualOrientationLabel;
 @property (weak, nonatomic) IBOutlet UILabel *favDrinkLabel;
 @property AppDelegate *appDelegate;
+-(void)didreceiveNotification:(NSNotification *)notification;
 
 @end
 
@@ -25,6 +26,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didreceiveNotification:)
+                                                 name:@"userEnteredBar"
+                                               object:nil];
     self.navigationItem.title= @"PubChat";
 }
 
@@ -140,7 +145,12 @@
 {
 
 }
-
+#pragma mark - NSNotification Center
+-(void)didreceiveNotification:(NSNotification *)notification
+{
+    NSLog(@"notification in profile vc %@",[notification.userInfo objectForKey:@"barName"]);
+    self.navigationItem.title = [notification.userInfo objectForKey:@"barName"];
+}
 
 
 
