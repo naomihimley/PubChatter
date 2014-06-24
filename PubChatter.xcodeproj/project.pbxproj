@@ -34,8 +34,8 @@
 		B03F23251954DBE400DB67F8 /* BeaconRegionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B03F23241954DBE400DB67F8 /* BeaconRegionManager.m */; };
 		B0623BEC1958FDE600A9AFD6 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0623BEB1958FDE600A9AFD6 /* CoreData.framework */; };
 		B0623C391958FF1500A9AFD6 /* PubChatter.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B0623C371958FF1500A9AFD6 /* PubChatter.xcdatamodeld */; };
-		B0623C481959B9B700A9AFD6 /* Peer.m in Sources */ = {isa = PBXBuildFile; fileRef = B0623C471959B9B700A9AFD6 /* Peer.m */; };
-		B0623C4B1959B9B700A9AFD6 /* Conversation.m in Sources */ = {isa = PBXBuildFile; fileRef = B0623C4A1959B9B700A9AFD6 /* Conversation.m */; };
+		B0623C561959D21300A9AFD6 /* Conversation.m in Sources */ = {isa = PBXBuildFile; fileRef = B0623C551959D21300A9AFD6 /* Conversation.m */; };
+		B0623C591959D21400A9AFD6 /* Peer.m in Sources */ = {isa = PBXBuildFile; fileRef = B0623C581959D21400A9AFD6 /* Peer.m */; };
 		B0782C3C194BB3700022E6E7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C3B194BB3700022E6E7 /* Foundation.framework */; };
 		B0782C3E194BB3700022E6E7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C3D194BB3700022E6E7 /* CoreGraphics.framework */; };
 		B0782C40194BB3700022E6E7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C3F194BB3700022E6E7 /* UIKit.framework */; };
@@ -117,14 +117,14 @@
 		9BDBE507194F8A400045C05B /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
 		9BDBE6101959B98A0045C05B /* SlideOutTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SlideOutTableViewController.h; path = ../SlideOutTableViewController.h; sourceTree = "<group>"; };
 		9BDBE6111959B98A0045C05B /* SlideOutTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SlideOutTableViewController.m; path = ../SlideOutTableViewController.m; sourceTree = "<group>"; };
-		B03F23231954DBE400DB67F8 /* BeaconRegionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BeaconRegionManager.h; path = ../BeaconRegionManager.h; sourceTree = "<group>"; };
-		B03F23241954DBE400DB67F8 /* BeaconRegionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BeaconRegionManager.m; path = ../BeaconRegionManager.m; sourceTree = "<group>"; };
+		B03F23231954DBE400DB67F8 /* BeaconRegionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeaconRegionManager.h; sourceTree = "<group>"; };
+		B03F23241954DBE400DB67F8 /* BeaconRegionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconRegionManager.m; sourceTree = "<group>"; };
 		B0623BEB1958FDE600A9AFD6 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		B0623C381958FF1500A9AFD6 /* PubChatter.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PubChatter.xcdatamodel; sourceTree = "<group>"; };
-		B0623C461959B9B700A9AFD6 /* Peer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Peer.h; sourceTree = "<group>"; };
-		B0623C471959B9B700A9AFD6 /* Peer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Peer.m; sourceTree = "<group>"; };
-		B0623C491959B9B700A9AFD6 /* Conversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Conversation.h; sourceTree = "<group>"; };
-		B0623C4A1959B9B700A9AFD6 /* Conversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Conversation.m; sourceTree = "<group>"; };
+		B0623C541959D21300A9AFD6 /* Conversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Conversation.h; sourceTree = "<group>"; };
+		B0623C551959D21300A9AFD6 /* Conversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Conversation.m; sourceTree = "<group>"; };
+		B0623C571959D21400A9AFD6 /* Peer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Peer.h; sourceTree = "<group>"; };
+		B0623C581959D21400A9AFD6 /* Peer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Peer.m; sourceTree = "<group>"; };
 		B0782C38194BB3700022E6E7 /* PubChatter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PubChatter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0782C3B194BB3700022E6E7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B0782C3D194BB3700022E6E7 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -271,6 +271,28 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
+		B0623C4C1959C0E100A9AFD6 /* BeaconManager */ = {
+			isa = PBXGroup;
+			children = (
+				B03F23231954DBE400DB67F8 /* BeaconRegionManager.h */,
+				B03F23241954DBE400DB67F8 /* BeaconRegionManager.m */,
+			);
+			name = BeaconManager;
+			path = ..;
+			sourceTree = "<group>";
+		};
+		B0623C531959D09E00A9AFD6 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				B0623C371958FF1500A9AFD6 /* PubChatter.xcdatamodeld */,
+				B0623C571959D21400A9AFD6 /* Peer.h */,
+				B0623C581959D21400A9AFD6 /* Peer.m */,
+				B0623C541959D21300A9AFD6 /* Conversation.h */,
+				B0623C551959D21300A9AFD6 /* Conversation.m */,
+			);
+			name = CoreData;
+			sourceTree = "<group>";
+		};
 		B0782C2F194BB3700022E6E7 = {
 			isa = PBXGroup;
 			children = (
@@ -323,21 +345,16 @@
 		B0782C41194BB3700022E6E7 /* PubChatter */ = {
 			isa = PBXGroup;
 			children = (
+				B0623C531959D09E00A9AFD6 /* CoreData */,
+				B0623C4C1959C0E100A9AFD6 /* BeaconManager */,
 				B0782C4A194BB3700022E6E7 /* AppDelegate.h */,
 				B0782C4B194BB3700022E6E7 /* AppDelegate.m */,
-				B0623C491959B9B700A9AFD6 /* Conversation.h */,
-				B0623C4A1959B9B700A9AFD6 /* Conversation.m */,
-				B0623C461959B9B700A9AFD6 /* Peer.h */,
-				B0623C471959B9B700A9AFD6 /* Peer.m */,
-				B0623C371958FF1500A9AFD6 /* PubChatter.xcdatamodeld */,
 				B0782C4D194BB3700022E6E7 /* Main.storyboard */,
 				0ECEAF0419560F9A00B92C40 /* Slideout Drawer VCs */,
 				9BDBE55A194FA3FE0045C05B /* Search/Bar VCs */,
 				9BDBE55C194FA44F0045C05B /* UserProfileVCs */,
 				9BDBE559194FA3D00045C05B /* ChatVCs */,
 				9BDBE55B194FA42C0045C05B /* MCManager */,
-				B03F23231954DBE400DB67F8 /* BeaconRegionManager.h */,
-				B03F23241954DBE400DB67F8 /* BeaconRegionManager.m */,
 				0ECEAEE6194F69A000B92C40 /* YelpBar.h */,
 				0ECEAEE7194F69A000B92C40 /* YelpBar.m */,
 				0EB32009194CBDD0005A3B82 /* TDOAuth.h */,
@@ -503,12 +520,13 @@
 				0ECEAF181958BDEA00B92C40 /* LoginViewController.m in Sources */,
 				0EB31FFB194BC158005A3B82 /* SearchViewController.m in Sources */,
 				0ECEAEE8194F69A000B92C40 /* YelpBar.m in Sources */,
-				B0623C481959B9B700A9AFD6 /* Peer.m in Sources */,
+				B0623C591959D21400A9AFD6 /* Peer.m in Sources */,
 				0ECEAF0719560FCA00B92C40 /* SWRevealViewController.m in Sources */,
 				B0782C48194BB3700022E6E7 /* main.m in Sources */,
 				0EB31FFE194BC176005A3B82 /* ProfileViewController.m in Sources */,
 				9BDBE506194F50200045C05B /* ListOfUsersTableViewCell.m in Sources */,
-				B0623C4B1959B9B700A9AFD6 /* Conversation.m in Sources */,
+				B0623C561959D21300A9AFD6 /* Conversation.m in Sources */,
+				9BDBE6121959B98A0045C05B /* SlideOutTableViewController.m in Sources */,
 				0ECEAF13195884E100B92C40 /* Bar.m in Sources */,
 				0ECEAF0D19586FA800B92C40 /* RightSlideoutViewController.m in Sources */,
 				0ECEAEEB194F6FAC00B92C40 /* BarDetailViewController.m in Sources */,

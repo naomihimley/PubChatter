@@ -26,6 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.managedObjectContext = moc;
     self.fetchedResultsController.delegate = self;
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 
@@ -98,7 +99,6 @@
         [self.managedObjectContext save:nil];
         [self.chatArray addObject:chatString];
         self.chatTextField.text = @"";
-        NSLog(@"managed object context %lu", (unsigned long)self.managedObjectContext.registeredObjects.count);
     }
     [self.chatTextField resignFirstResponder];
 }
@@ -114,12 +114,42 @@
     NSString *chatString = [NSString stringWithFormat:@"%@:\n%@\n\n", peerDisplayName, receivedText];
     [self.chatTextView performSelectorOnMainThread:@selector(setText:) withObject:[self.chatTextView.text stringByAppendingString:chatString] waitUntilDone:NO];
     [self.chatArray addObject:chatString];
-    Peer *peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext:self.managedObjectContext];
-    Conversation *conversation = [NSEntityDescription insertNewObjectForEntityForName:@"Conversation" inManagedObjectContext:self.managedObjectContext];
-    conversation.message = chatString;
-    [peer addConversationObject:conversation];
-    [self.managedObjectContext save:nil];
-    NSLog(@"%lu", (unsigned long)self.managedObjectContext.registeredObjects.count);
+
+    if ([self doesConversationExist:peerID] == NO) {
+        Peer *peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext:self.managedObjectContext];
+        Conversation *conversation = [NSEntityDescription insertNewObjectForEntityForName:@"Conversation" inManagedObjectContext:self.managedObjectContext];
+        conversation.message = chatString;
+        [peer addConversationObject:conversation];
+        [self.managedObjectContext save:nil];
+    }
+    else
+    {
+        NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", peerID];
+        request.predicate = predicate;
+        self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
+        [self.fetchedResultsController performFetch:nil];
+        NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
+        Peer *peer = [array firstObject];
+        Conversation *convo = [peer.conversation anyObject];
+        convo.message = [convo.message stringByAppendingString:chatString];
+        [self.managedObjectContext save:nil];
+    }
+}
+- (BOOL)doesConversationExist :(MCPeerID *)peerID
+{
+    NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", peerID];
+    request.predicate = predicate;
+    self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
+    [self.fetchedResultsController performFetch:nil];
+    NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
+    if (array.count < 1)
+    {
+        return NO;
+    }
+    return YES;
+
 }
 
 # pragma mark - Disconnect from session
