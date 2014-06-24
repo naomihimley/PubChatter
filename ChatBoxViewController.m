@@ -82,7 +82,6 @@
                                                  cancelButtonTitle:@"OK"
                                                  otherButtonTitles:nil, nil];
         [alertView show];
-        NSLog(@"%@", [error localizedDescription]);
     }
 
     else
