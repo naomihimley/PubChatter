@@ -24,16 +24,19 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    PFLogInViewController *loginViewController = [PFLogInViewController new];
-    loginViewController.fields =  PFLogInFieldsFacebook | PFLogInFieldsTwitter | PFLogInFieldsUsernameAndPassword | PFLogInFieldsSignUpButton | PFLogInFieldsLogInButton;
-    loginViewController.delegate = self;
-    [loginViewController setFacebookPermissions:[NSArray arrayWithObjects:@"public_profile", @"user_about_me", @"user_birthday", nil]];
 
+    // Instantiate login and signup viewcontrollers.
+    PFLogInViewController *loginViewController = [PFLogInViewController new];
+    loginViewController.fields =  PFLogInFieldsFacebook | PFLogInFieldsUsernameAndPassword | PFLogInFieldsSignUpButton | PFLogInFieldsLogInButton;
+    loginViewController.delegate = self;
 
     PFSignUpViewController *signUpViewController = [PFSignUpViewController new];
     signUpViewController.delegate = self;
     loginViewController.signUpController = signUpViewController;
     [self presentViewController:loginViewController animated:YES completion:nil];
+
+    // Specifies necessary app permissions from Facebook.
+    [loginViewController setFacebookPermissions:[NSArray arrayWithObjects:@"public_profile", @"user_about_me", @"user_birthday", @"user_relationship_details", nil]];
 }
 
 // Sent to the delegate to determine whether the log in request should be submitted to the server.
@@ -44,7 +47,7 @@
     }
 
     [[[UIAlertView alloc] initWithTitle:@"Missing Information"
-                                message:@"Make sure to complete all of the information!"
+                                message:@"Be sure to complete all of the information!"
                                delegate:nil
                       cancelButtonTitle:@"OK"
                       otherButtonTitles:nil] show];
@@ -67,9 +70,9 @@
     // Display an alert if a field wasn't completed
     if (!informationComplete) {
         [[[UIAlertView alloc] initWithTitle:@"Missing Information"
-                                    message:@"Make sure you fill out all of the information!"
+                                    message:@"Be sure to complete all of the information!"
                                    delegate:nil
-                          cancelButtonTitle:@"ok"
+                          cancelButtonTitle:@"OK"
                           otherButtonTitles:nil] show];
     }
 
@@ -97,14 +100,18 @@
 // Sent to the delegate when the log in screen is dismissed.
 - (void)logInViewControllerDidCancelLogIn:(PFLogInViewController *)logInController
 {
+    // Instantiate login and signup viewcontrollers.
     PFLogInViewController *loginViewController = [PFLogInViewController new];
-    loginViewController.fields = PFLogInFieldsUsernameAndPassword | PFLogInFieldsLogInButton | PFLogInFieldsTwitter | PFLogInFieldsFacebook;
-    PFSignUpViewController *signupViewController = [PFSignUpViewController new];
-    signupViewController.fields = PFLogInFieldsUsernameAndPassword | PFLogInFieldsLogInButton | PFLogInFieldsTwitter | PFLogInFieldsFacebook;
+    loginViewController.fields =  PFLogInFieldsFacebook | PFLogInFieldsUsernameAndPassword | PFLogInFieldsSignUpButton | PFLogInFieldsLogInButton;
     loginViewController.delegate = self;
-    signupViewController.delegate = self;
-    loginViewController.signUpController = signupViewController;
+
+    PFSignUpViewController *signUpViewController = [PFSignUpViewController new];
+    signUpViewController.delegate = self;
+    loginViewController.signUpController = signUpViewController;
     [self presentViewController:loginViewController animated:YES completion:nil];
+
+    // Specifies necessary app permissions from Facebook.
+    [loginViewController setFacebookPermissions:[NSArray arrayWithObjects:@"public_profile", @"user_about_me", @"user_birthday", @"user_relationship_details", nil]];
 }
 
 

@@ -93,11 +93,34 @@
     {
         NSString *chatString = [NSString stringWithFormat:@"I wrote:\n%@\n\n", self.chatTextField.text];
         [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:chatString]];
-        Peer *peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext:self.managedObjectContext];
-        Conversation *conversation = [NSEntityDescription insertNewObjectForEntityForName:@"Conversation" inManagedObjectContext:self.managedObjectContext];
-        conversation.message = chatString;
-        [peer addConversationObject:conversation];
-        [self.managedObjectContext save:nil];
+        MCPeerID *peerID = [self.userDictionary objectForKey:@"peerID"];
+        NSLog(@"peer id from userdictionary %@", peerID);
+        if ([self doesConversationExist:peerID] == NO)
+        {
+            Peer *peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext:self.managedObjectContext];
+            Conversation *conversation = [NSEntityDescription insertNewObjectForEntityForName:@"Conversation" inManagedObjectContext:self.managedObjectContext];
+            conversation.message = chatString;
+            [peer addConversationObject:conversation];
+            [self.managedObjectContext save:nil];
+            NSLog(@"creating new convo in sendMyMessage");
+        }
+        else
+        {
+            NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
+            request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", peerID];
+            request.predicate = predicate;
+            self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
+            [self.fetchedResultsController performFetch:nil];
+            NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
+            Peer *peer = [array firstObject];
+            Conversation *convo = [peer.conversation anyObject];
+            convo.message = [convo.message stringByAppendingString:chatString];
+            [self.managedObjectContext save:nil];
+            //this seems to be working
+            NSLog(@"adding conversation object: %@ in sendMyMessage", convo.message);
+        }
+
         [self.chatArray addObject:chatString];
         self.chatTextField.text = @"";
     }
@@ -122,6 +145,7 @@
         conversation.message = chatString;
         [peer addConversationObject:conversation];
         [self.managedObjectContext save:nil];
+        NSLog(@"RECEIVE making new conversation w message: %@", conversation.message);
     }
     else
     {
@@ -136,6 +160,7 @@
         Conversation *convo = [peer.conversation anyObject];
         convo.message = [convo.message stringByAppendingString:chatString];
         [self.managedObjectContext save:nil];
+        NSLog(@"RECEIVE adding conversation object: %@", convo.message);
     }
 }
 - (BOOL)doesConversationExist :(MCPeerID *)peerID
@@ -151,8 +176,11 @@
     if (array.count < 1)
     {
         return NO;
+        NSLog(@"not returning any fetched results");
     }
     return YES;
+    NSLog(@"returning a result");
+
 
 }
 

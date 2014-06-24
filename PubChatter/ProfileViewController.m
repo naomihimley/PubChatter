@@ -40,8 +40,6 @@
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
-
-
 - (void)getFacebookData
 {
     // Create request for user's Facebook data
@@ -51,24 +49,29 @@
         [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
             if (!error) {
                     NSDictionary *userData = (NSDictionary *)result;
+
+                // Set name label from Facebook
                     self.nameLabel.text = userData[@"name"];
 
+                // Set gender label from Facebook
                 if ([userData[@"gender"] isEqualToString:@"male"]) {
                     self.genderLabel.text = @"M";
                         }
-                else if ([userData[@"gender"] isEqualToString:@"female"])
-                         {
+                else if ([userData[@"gender"] isEqualToString:@"female"]) {
                              self.genderLabel.text = @"F";
                          }
-                 else
-                         {
+                 else {
                              self.genderLabel.text = @"";
                          }
 
+                // Set profile picture from Facebook
                 NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", userData[@"id"]]];
                 self.profileImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
-                self.bioTextView.text = userData[@"user_about_me"];
 
+                // Set "about me" from Facebook
+                self.bioTextView.text = userData[@"bio"];
+
+                // Set age label from Facebook.
                 NSString *birthday = userData[@"birthday"];
                 NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
                 [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
@@ -86,18 +89,28 @@
 
                 self.ageLabel.text = [NSString stringWithFormat:@"%ld", (long)components.year];
 
-//                        NSString *facebookID = userData[@"id"];
-//                        NSString *location = userData[@"location"][@"name"];
-//                        NSString *gender = userData[@"gender"];
-//                        NSString *birthday = userData[@"birthday"];
-//                        NSString *relationship = userData[@"relationship_status"];
+                // Get "interested in" from Facebook
+                NSString *interests = @"Interested in ";
+                for (NSString *object in userData[@"interested_in"]) {
+                    if ([object isEqual:@"female"]) {
+                        interests = [interests stringByAppendingString: @"women"];
+                    }
+                    else if ([object isEqual:@"male"]) {
+                        interests = [interests stringByAppendingString: @"men"];
+                    }
+                    else {
+                        interests = @"bisexual";
+                    }
+                }
+                self.sexualOrientationLabel.text = interests;
             }
-
         }];
     }
+    
     else
     {
         [self getParseData];
+        NSLog(@"Get Parse");
     }
 }
 
