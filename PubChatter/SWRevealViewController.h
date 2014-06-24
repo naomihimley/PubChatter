@@ -150,7 +150,6 @@ typedef enum
 
 
 @interface SWRevealViewController : UIViewController
-
 // Object instance init and rear view setting
 - (id)initWithRearViewController:(UIViewController *)rearViewController frontViewController:(UIViewController *)frontViewController;
 

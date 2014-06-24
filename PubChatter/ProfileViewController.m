@@ -55,7 +55,7 @@
 
                 if ([userData[@"gender"] isEqualToString:@"male"]) {
                     self.genderLabel.text = @"M";
-                }
+                        }
                 else if ([userData[@"gender"] isEqualToString:@"female"])
                          {
                              self.genderLabel.text = @"F";
@@ -66,14 +66,26 @@
                          }
 
                 NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", userData[@"id"]]];
-                
                 self.profileImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
-
-
-
-
-                NSLog(@"%@", userData[@"last_name"]);
                 self.bioTextView.text = userData[@"user_about_me"];
+
+                NSString *birthday = userData[@"birthday"];
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+                [formatter setLocale:[NSLocale systemLocale]];
+                [formatter setDateFormat:@"MM/dd/yyyy"];
+
+                NSDate *formatted = [formatter dateFromString:birthday];
+                NSDate *currentDate = [NSDate date];
+
+                NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+                NSDateComponents *components = [gregorianCalendar components:NSYearCalendarUnit
+                                                                    fromDate:formatted
+                                                                      toDate:currentDate
+                                                                     options:0];
+
+                self.ageLabel.text = [NSString stringWithFormat:@"%ld", (long)components.year];
+
 //                        NSString *facebookID = userData[@"id"];
 //                        NSString *location = userData[@"location"][@"name"];
 //                        NSString *gender = userData[@"gender"];
