@@ -11,6 +11,7 @@
 #import <Parse/Parse.h>
 #import "Rating.h"
 #import "Bar.h"
+#import "LoginViewController.h"
 
 @implementation AppDelegate
 @synthesize managedObjectContext = _managedObjectContext;
@@ -27,6 +28,7 @@
     [self.beaconRegionManager setupCLManager];
     [Rating registerSubclass];
     [Bar registerSubclass];
+    [PFFacebookUtils initializeFacebook];
 
     //should this be here?
     if (![CLLocationManager isMonitoringAvailableForClass:[CLBeaconRegion class]])
@@ -81,6 +83,7 @@
         }
     }];
 
+    [[PFFacebookUtils session] close];
 }
 
 - (void)saveContext

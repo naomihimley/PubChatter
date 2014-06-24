@@ -23,11 +23,14 @@
 		0ECEAF13195884E100B92C40 /* Bar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAF12195884E100B92C40 /* Bar.m */; };
 		0ECEAF151958BAC800B92C40 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0ECEAF141958BAC800B92C40 /* FacebookSDK.framework */; };
 		0ECEAF181958BDEA00B92C40 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAF171958BDEA00B92C40 /* LoginViewController.m */; };
+		0ECEAF1A1958F98400B92C40 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0ECEAF191958F98400B92C40 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		0ECEAF1C1958F9AF00B92C40 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0ECEAF1B1958F9AF00B92C40 /* libsqlite3.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
 		9BDBE4FD194F3EB50045C05B /* MCManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE4FC194F3EB50045C05B /* MCManager.m */; };
 		9BDBE500194F47380045C05B /* OPPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE4FF194F47380045C05B /* OPPViewController.m */; };
 		9BDBE503194F47830045C05B /* ChatBoxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE502194F47830045C05B /* ChatBoxViewController.m */; };
 		9BDBE506194F50200045C05B /* ListOfUsersTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE505194F50200045C05B /* ListOfUsersTableViewCell.m */; };
 		9BDBE508194F8A400045C05B /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BDBE507194F8A400045C05B /* MultipeerConnectivity.framework */; };
+		9BDBE60F1958F3F20045C05B /* LeftSlideOutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE60E1958F3F20045C05B /* LeftSlideOutViewController.m */; };
 		B03F23251954DBE400DB67F8 /* BeaconRegionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B03F23241954DBE400DB67F8 /* BeaconRegionManager.m */; };
 		B0623BEC1958FDE600A9AFD6 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0623BEB1958FDE600A9AFD6 /* CoreData.framework */; };
 		B0623C391958FF1500A9AFD6 /* AyyCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B0623C371958FF1500A9AFD6 /* AyyCoreData.xcdatamodeld */; };
@@ -92,8 +95,6 @@
 		0ECEAEED194F8AD200B92C40 /* BarWebpageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BarWebpageViewController.m; path = ../BarWebpageViewController.m; sourceTree = "<group>"; };
 		0ECEAF0519560FCA00B92C40 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		0ECEAF0619560FCA00B92C40 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
-		0ECEAF081956103B00B92C40 /* LeftSlideoutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftSlideoutViewController.h; sourceTree = "<group>"; };
-		0ECEAF091956103B00B92C40 /* LeftSlideoutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftSlideoutViewController.m; sourceTree = "<group>"; };
 		0ECEAF0B19586FA800B92C40 /* RightSlideoutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightSlideoutViewController.h; sourceTree = "<group>"; };
 		0ECEAF0C19586FA800B92C40 /* RightSlideoutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightSlideoutViewController.m; sourceTree = "<group>"; };
 		0ECEAF0E19587F4E00B92C40 /* Rating.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rating.h; path = ../Rating.h; sourceTree = "<group>"; };
@@ -103,6 +104,8 @@
 		0ECEAF141958BAC800B92C40 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		0ECEAF161958BDEA00B92C40 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginViewController.h; path = PubChatter/LoginViewController.h; sourceTree = "<group>"; };
 		0ECEAF171958BDEA00B92C40 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = PubChatter/LoginViewController.m; sourceTree = "<group>"; };
+		0ECEAF191958F98400B92C40 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		0ECEAF1B1958F9AF00B92C40 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		9BDBE4FB194F3EB50045C05B /* MCManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCManager.h; sourceTree = "<group>"; };
 		9BDBE4FC194F3EB50045C05B /* MCManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCManager.m; sourceTree = "<group>"; };
 		9BDBE4FE194F47380045C05B /* OPPViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OPPViewController.h; sourceTree = "<group>"; };
@@ -112,6 +115,8 @@
 		9BDBE504194F50200045C05B /* ListOfUsersTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListOfUsersTableViewCell.h; sourceTree = "<group>"; };
 		9BDBE505194F50200045C05B /* ListOfUsersTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListOfUsersTableViewCell.m; sourceTree = "<group>"; };
 		9BDBE507194F8A400045C05B /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
+		9BDBE60D1958F3F20045C05B /* LeftSlideOutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LeftSlideOutViewController.h; path = ../LeftSlideOutViewController.h; sourceTree = "<group>"; };
+		9BDBE60E1958F3F20045C05B /* LeftSlideOutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LeftSlideOutViewController.m; path = ../LeftSlideOutViewController.m; sourceTree = "<group>"; };
 		B03F23231954DBE400DB67F8 /* BeaconRegionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BeaconRegionManager.h; path = ../BeaconRegionManager.h; sourceTree = "<group>"; };
 		B03F23241954DBE400DB67F8 /* BeaconRegionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BeaconRegionManager.m; path = ../BeaconRegionManager.m; sourceTree = "<group>"; };
 		B0623BEB1958FDE600A9AFD6 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -159,6 +164,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0623BEC1958FDE600A9AFD6 /* CoreData.framework in Frameworks */,
+				0ECEAF1C1958F9AF00B92C40 /* libsqlite3.dylib in Frameworks */,
+				0ECEAF1A1958F98400B92C40 /* AdSupport.framework in Frameworks */,
 				9BDBE508194F8A400045C05B /* MultipeerConnectivity.framework in Frameworks */,
 				0ECEAF151958BAC800B92C40 /* FacebookSDK.framework in Frameworks */,
 				B0782CCE194E0D560022E6E7 /* CoreBluetooth.framework in Frameworks */,
@@ -197,8 +204,8 @@
 		0ECEAF0419560F9A00B92C40 /* Slideout Drawer VCs */ = {
 			isa = PBXGroup;
 			children = (
-				0ECEAF081956103B00B92C40 /* LeftSlideoutViewController.h */,
-				0ECEAF091956103B00B92C40 /* LeftSlideoutViewController.m */,
+				9BDBE60D1958F3F20045C05B /* LeftSlideOutViewController.h */,
+				9BDBE60E1958F3F20045C05B /* LeftSlideOutViewController.m */,
 				0ECEAF0B19586FA800B92C40 /* RightSlideoutViewController.h */,
 				0ECEAF0C19586FA800B92C40 /* RightSlideoutViewController.m */,
 				0ECEAF0519560FCA00B92C40 /* SWRevealViewController.h */,
@@ -287,6 +294,8 @@
 			isa = PBXGroup;
 			children = (
 				B0623BEB1958FDE600A9AFD6 /* CoreData.framework */,
+				0ECEAF1B1958F9AF00B92C40 /* libsqlite3.dylib */,
+				0ECEAF191958F98400B92C40 /* AdSupport.framework */,
 				0ECEAF141958BAC800B92C40 /* FacebookSDK.framework */,
 				9BDBE507194F8A400045C05B /* MultipeerConnectivity.framework */,
 				B0782C7E194BB4170022E6E7 /* AudioToolbox.framework */,
@@ -502,6 +511,7 @@
 				9BDBE506194F50200045C05B /* ListOfUsersTableViewCell.m in Sources */,
 				0ECEAF13195884E100B92C40 /* Bar.m in Sources */,
 				0ECEAF0D19586FA800B92C40 /* RightSlideoutViewController.m in Sources */,
+				9BDBE60F1958F3F20045C05B /* LeftSlideOutViewController.m in Sources */,
 				0ECEAEEB194F6FAC00B92C40 /* BarDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
