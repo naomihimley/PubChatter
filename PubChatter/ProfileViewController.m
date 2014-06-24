@@ -36,13 +36,40 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self setTextFields];
+    [self getFacebookData];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
 
 
-- (void)setTextFields
+- (void)getFacebookData
+{
+    // Create request for user's Facebook data
+    FBRequest *request = [FBRequest requestForMe];
+    if (request) {
+        // Send request to Facebook
+        [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+            if (!error) {
+                        NSDictionary *userData = (NSDictionary *)result;
+                        self.nameLabel.text = userData[@"name"];
+                        self.genderLabel.text = userData[@"gender"];
+
+//                        NSString *facebookID = userData[@"id"];
+//                        NSString *location = userData[@"location"][@"name"];
+//                        NSString *gender = userData[@"gender"];
+//                        NSString *birthday = userData[@"birthday"];
+//                        NSString *relationship = userData[@"relationship_status"];
+            }
+
+        }];
+    }
+    else
+    {
+        [self getParseData];
+    }
+}
+
+-(void)getParseData
 {
     PFFile *file = [[PFUser currentUser]objectForKey:@"picture"];
     [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
@@ -104,28 +131,6 @@
      {
          self.sexualOrientationLabel.text = @"";
      }
-}
-
-
-#pragma mark - Parse Login Methods
-
-- (void)logInViewController:(PFLogInViewController *)controller
-               didLogInUser:(PFUser *)user {
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)signUpViewController:(PFSignUpViewController *)signUpController didSignUpUser:(PFUser *)user
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-- (IBAction)onLogOutButtonTapped:(id)sender
-{
-    [PFUser logOut];
-    [self.tabBarController setSelectedIndex:0];
-    if ([CLLocationManager isMonitoringAvailableForClass:[CLBeaconRegion class]])
-    {
-        [[self.appDelegate beaconRegionManager]logout];
-    }
 }
 
 #pragma mark - Segue Methods
