@@ -76,16 +76,17 @@
     self.invitationHandlerArray = [NSMutableArray arrayWithObject:[invitationHandler copy]];
 
     [[NSNotificationCenter defaultCenter]postNotificationName:@"MCReceivedInvitation" object:nil userInfo:nil];
-
-    NSLog(@"Invited so accept... or don't, I don't care");
-
 }
 
 #pragma mark - MCNearbyServiceBrowser Delegate Methods
 
 -(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
 {
-    [self.advertisingUsers addObject:peerID];
+    if (![self.advertisingUsers containsObject:peerID])
+    {
+         [self.advertisingUsers addObject:peerID];
+    }
+    NSLog(@"advertisingUsers from MCManager %@", self.advertisingUsers);
 
     [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:nil];
 }

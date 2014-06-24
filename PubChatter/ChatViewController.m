@@ -116,7 +116,9 @@
     // this gets all users of the app
     [self.userArray removeAllObjects];
 
-//    NSLog(@"advertising users array %@", self.appDelegate.mcManager.advertisingUsers);
+    NSLog(@"self.userArray should be empty here %@", self.userArray);
+
+    NSLog(@"advertising users array %@", self.appDelegate.mcManager.advertisingUsers);
     PFQuery *query = [PFQuery queryWithClassName:@"_User"];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
      {
@@ -138,7 +140,7 @@
                      }
                  }
              }
-//             NSLog(@"self.userArray %@", self.userArray);
+             NSLog(@"self.userArray to be shown %@", self.userArray);
              [self.tableView reloadData];
          }
      }];
