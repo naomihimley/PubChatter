@@ -8,6 +8,7 @@
 
 #import "SlideOutTableViewController.h"
 #import "ChatViewController.h"
+#import "ChatBoxViewController.h"
 #import "AppDelegate.h"
 #import <Parse/Parse.h>
 
@@ -90,6 +91,13 @@
              }
          }
      }];
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    ChatBoxViewController *chatBoxVC = segue.destinationViewController;
+
+
 }
 
 @end
