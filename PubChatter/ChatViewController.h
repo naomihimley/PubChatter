@@ -11,5 +11,6 @@
 
 @interface ChatViewController : UIViewController
 @property PFUser *selectedUser;
+@property NSMutableArray *userArray;
 
 @end

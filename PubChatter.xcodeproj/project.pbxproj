@@ -30,6 +30,7 @@
 		9BDBE503194F47830045C05B /* ChatBoxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE502194F47830045C05B /* ChatBoxViewController.m */; };
 		9BDBE506194F50200045C05B /* ListOfUsersTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE505194F50200045C05B /* ListOfUsersTableViewCell.m */; };
 		9BDBE508194F8A400045C05B /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BDBE507194F8A400045C05B /* MultipeerConnectivity.framework */; };
+		9BDBE60F1958F3F20045C05B /* LeftSlideOutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE60E1958F3F20045C05B /* LeftSlideOutViewController.m */; };
 		B03F23251954DBE400DB67F8 /* BeaconRegionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B03F23241954DBE400DB67F8 /* BeaconRegionManager.m */; };
 		B0782C3C194BB3700022E6E7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C3B194BB3700022E6E7 /* Foundation.framework */; };
 		B0782C3E194BB3700022E6E7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C3D194BB3700022E6E7 /* CoreGraphics.framework */; };
@@ -90,8 +91,6 @@
 		0ECEAEED194F8AD200B92C40 /* BarWebpageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BarWebpageViewController.m; path = ../BarWebpageViewController.m; sourceTree = "<group>"; };
 		0ECEAF0519560FCA00B92C40 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		0ECEAF0619560FCA00B92C40 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
-		0ECEAF081956103B00B92C40 /* LeftSlideoutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftSlideoutViewController.h; sourceTree = "<group>"; };
-		0ECEAF091956103B00B92C40 /* LeftSlideoutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftSlideoutViewController.m; sourceTree = "<group>"; };
 		0ECEAF0B19586FA800B92C40 /* RightSlideoutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightSlideoutViewController.h; sourceTree = "<group>"; };
 		0ECEAF0C19586FA800B92C40 /* RightSlideoutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightSlideoutViewController.m; sourceTree = "<group>"; };
 		0ECEAF0E19587F4E00B92C40 /* Rating.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rating.h; path = ../Rating.h; sourceTree = "<group>"; };
@@ -112,6 +111,8 @@
 		9BDBE504194F50200045C05B /* ListOfUsersTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListOfUsersTableViewCell.h; sourceTree = "<group>"; };
 		9BDBE505194F50200045C05B /* ListOfUsersTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListOfUsersTableViewCell.m; sourceTree = "<group>"; };
 		9BDBE507194F8A400045C05B /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
+		9BDBE60D1958F3F20045C05B /* LeftSlideOutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LeftSlideOutViewController.h; path = ../LeftSlideOutViewController.h; sourceTree = "<group>"; };
+		9BDBE60E1958F3F20045C05B /* LeftSlideOutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LeftSlideOutViewController.m; path = ../LeftSlideOutViewController.m; sourceTree = "<group>"; };
 		B03F23231954DBE400DB67F8 /* BeaconRegionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BeaconRegionManager.h; path = ../BeaconRegionManager.h; sourceTree = "<group>"; };
 		B03F23241954DBE400DB67F8 /* BeaconRegionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BeaconRegionManager.m; path = ../BeaconRegionManager.m; sourceTree = "<group>"; };
 		B0782C38194BB3700022E6E7 /* PubChatter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PubChatter.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -192,8 +193,8 @@
 		0ECEAF0419560F9A00B92C40 /* Slideout Drawer VCs */ = {
 			isa = PBXGroup;
 			children = (
-				0ECEAF081956103B00B92C40 /* LeftSlideoutViewController.h */,
-				0ECEAF091956103B00B92C40 /* LeftSlideoutViewController.m */,
+				9BDBE60D1958F3F20045C05B /* LeftSlideOutViewController.h */,
+				9BDBE60E1958F3F20045C05B /* LeftSlideOutViewController.m */,
 				0ECEAF0B19586FA800B92C40 /* RightSlideoutViewController.h */,
 				0ECEAF0C19586FA800B92C40 /* RightSlideoutViewController.m */,
 				0ECEAF0519560FCA00B92C40 /* SWRevealViewController.h */,
@@ -490,6 +491,7 @@
 				9BDBE506194F50200045C05B /* ListOfUsersTableViewCell.m in Sources */,
 				0ECEAF13195884E100B92C40 /* Bar.m in Sources */,
 				0ECEAF0D19586FA800B92C40 /* RightSlideoutViewController.m in Sources */,
+				9BDBE60F1958F3F20045C05B /* LeftSlideOutViewController.m in Sources */,
 				0ECEAEEB194F6FAC00B92C40 /* BarDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

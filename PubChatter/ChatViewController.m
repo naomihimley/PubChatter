@@ -14,7 +14,6 @@
 
 @interface ChatViewController ()<UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property NSMutableArray *userArray;
 @property AppDelegate *appDelegate;
 @property NSMutableArray *cellArray;
 
