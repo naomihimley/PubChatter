@@ -26,7 +26,6 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIGestureRecognizerSubclass.h>
-
 #import "SWRevealViewController.h"
 
 #pragma mark - SWDirectionPanGestureRecognizer

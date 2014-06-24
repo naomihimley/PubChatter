@@ -44,6 +44,8 @@
                                                         object:nil
                                                       userInfo:dictionary];
 
+    NSLog(@"Chaged state, to another state, so yea it's different");
+
 }
 
 -(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID
@@ -74,6 +76,8 @@
     self.invitationHandlerArray = [NSMutableArray arrayWithObject:[invitationHandler copy]];
 
     [[NSNotificationCenter defaultCenter]postNotificationName:@"MCReceivedInvitation" object:nil userInfo:nil];
+
+    NSLog(@"Invited so accept... or don't, I don't care");
 
 }
 

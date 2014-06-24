@@ -151,28 +151,36 @@
         destinationVC.user = user;
     }
 
-    //    else if ([segue.identifier isEqual: @"ChatBoxSegue"])
-    //    {
-    //        ChatBoxViewController *chatBoxVC = segue.destinationViewController;
-    //        UIButton *button = (UIButton *)sender;
-    //        UITableViewCell *cell = (UITableViewCell *)[button superview];
-    //        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    //    }
+//   else
+//   {
+//       ChatBoxViewController *chatBoxVC = segue.destinationViewController;
+//
+//   }
 }
 
 #pragma mark - Action for Button sending invitation
 
 - (IBAction)onButtonTappedSendInvitation:(id)sender
 {
-    UIButton *button = (UIButton *)sender;
+//    UIButton *button = (UIButton *)sender;
 
-    UITableViewCell *cell = (UITableViewCell *)[button superview];
+    UITableViewCell *cell = (UITableViewCell *)[[sender superview]superview];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 
     NSDictionary *dictionary = [self.userArray objectAtIndex:indexPath.row];
+
+    NSLog(@"user to send data too %@", dictionary);
     MCPeerID *peerID = [dictionary objectForKey:@"peerID"];
 
     [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30];
+
+//    if ([button.titleLabel.text isEqual:@"Chat"])
+//    {
+//        ChatBoxViewController *chatBoxVC = [[ChatBoxViewController alloc]init];
+//        chatBoxVC.userDictionary = dictionary;
+//
+//        [self presentViewController:chatBoxVC animated:YES completion:nil];
+//    }
 }
 
 #pragma mark - Private method for handling the changing of peer's state
@@ -211,13 +219,12 @@
         if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
         {
             [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
-            [[NSNotificationCenter defaultCenter]postNotificationName:@"ConnectedToAUser" object:nil userInfo:nil];
+
         }
         if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
         {
-            [cell.chatButton setTitle:@"Reconnect" forState:UIControlStateNormal];
+            [cell.chatButton setTitle:@"Connect" forState:UIControlStateNormal];
         }
-
     }
 }
 
@@ -226,6 +233,7 @@
 -(void)receivedInvitationForConnection:(NSNotification *)notification
 {
     MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
+    NSLog(@"peerID.displayName of sender %@", peerID.displayName);
     NSString *alertViewTitle = [NSString stringWithFormat:@"%@ wants to connect and chat with you", peerID.displayName];
     UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:alertViewTitle message:nil delegate:self cancelButtonTitle:@"Decline" otherButtonTitles:@"Accept", nil];
     [alertView show];

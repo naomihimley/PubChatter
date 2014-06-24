@@ -7,12 +7,12 @@
 //
 
 #import "AppDelegate.h"
-#import <CoreData/CoreData.h>
 #import <Parse/Parse.h>
 #import "Rating.h"
 #import "Bar.h"
 #import "LoginViewController.h"
-#import "SWRevealViewController.h"
+
+NSManagedObjectContext *moc;
 
 @implementation AppDelegate
 @synthesize managedObjectContext = _managedObjectContext;
@@ -38,9 +38,7 @@
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Unable To Monitor Location" message:@"Only works on iOS 5 and later" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
         [alert show];
     }
-//    UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
-//    SWRevealViewController *controller = (SWRevealViewController *)navigationController.topViewController;
-//    controller.managedObjectContext = self.managedObjectContext;
+    moc = self.managedObjectContext;
     return YES;
 
 }
