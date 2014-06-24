@@ -22,6 +22,7 @@
         self.browser = nil;
         self.advertiser = nil;
         self.advertisingUsers = [NSMutableArray array];
+        self.foundPeersArray = [NSMutableArray array];
     }
     return self;
 }
@@ -82,10 +83,28 @@
 
 -(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
 {
-    if (![self.advertisingUsers containsObject:peerID])
+    NSLog(@"This dude is advertising %@", peerID.displayName);
+    [self.foundPeersArray addObject:peerID];
+
+    if (self.foundPeersArray.count > 1)
     {
-         [self.advertisingUsers addObject:peerID];
+        for (MCPeerID *peer in self.foundPeersArray)
+        {
+            NSLog(@"for loop happening and shit");
+            if (peer.displayName != peerID.displayName)
+            {
+                NSLog(@"peerID %@", peerID);
+                NSLog(@"peer %@", peer);
+                [self.advertisingUsers addObject:peerID];
+            }
+        }
     }
+    else
+    {
+        [self.advertisingUsers addObject:peerID];
+    }
+
+
     NSLog(@"advertisingUsers from MCManager %@", self.advertisingUsers);
 
     [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:nil];
@@ -94,6 +113,9 @@
 -(void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID
 {
     [self.advertisingUsers removeObject:peerID];
+
+    NSLog(@"should remove %@", peerID);
+    NSLog(@"after removing array is %@", self.advertisingUsers);
 
     NSDictionary *dictionary = @{@"peerID": peerID};
     [[NSNotificationCenter defaultCenter]postNotificationName:@"MCPeerStopAdvertising" object:nil userInfo:dictionary];

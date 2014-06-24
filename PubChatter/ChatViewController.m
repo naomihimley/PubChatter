@@ -113,10 +113,7 @@
 
 -(void)queryForUsers
 {
-    // this gets all users of the app
-    [self.userArray removeAllObjects];
-
-    NSLog(@"self.userArray should be empty here %@", self.userArray);
+    // this gets all users of the ap
 
     NSLog(@"advertising users array %@", self.appDelegate.mcManager.advertisingUsers);
     PFQuery *query = [PFQuery queryWithClassName:@"_User"];
@@ -124,6 +121,9 @@
      {
          if (!error)
          {
+            [self.userArray removeAllObjects];
+            NSLog(@"self.userArray should be empty here %@", self.userArray);
+
              NSArray *users = [[NSArray alloc]initWithArray:objects];
              for (MCPeerID *peerID in self.appDelegate.mcManager.advertisingUsers)
              {
