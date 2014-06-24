@@ -11,6 +11,7 @@
 #import "OPPViewController.h"
 #import "AppDelegate.h"
 #import "ChatBoxViewController.h"
+#import "SWRevealViewController.h"
 
 @interface ChatViewController ()<UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -44,6 +45,9 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(queryForUsers) name:@"MCFoundAdvertisingPeer" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(peerStoppedAdvertising:) name:@"MCPeerStopAdvertising" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(receivedInvitationForConnection:) name:@"MCReceivedInvitation" object:nil];
+
+    [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+    [self.view resignFirstResponder];
 
 }
 - (void)viewWillAppear:(BOOL)animated
@@ -106,7 +110,6 @@
 
 -(void)queryForUsers
 {
-    NSLog(@"meow? %@", self.appDelegate.mcManager.advertisingUsers);
     // this gets all users of the app
     [self.userArray removeAllObjects];
     PFQuery *query = [PFQuery queryWithClassName:@"_User"];
@@ -124,10 +127,8 @@
                          NSDictionary *dictionary = @{@"peerID": peerID,
                                                       @"user": user};
                          if (self.userArray.count <= self.appDelegate.mcManager.advertisingUsers.count) {
-                             NSLog(@"adding users");
                              [self.userArray addObject:dictionary];
                          }
-                         NSLog(@"self.userarray %@", self.userArray);
                      }
                  }
              }
@@ -204,31 +205,29 @@
     if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnecting)
     {
         [cell.chatButton setTitle:@"Connecting" forState:UIControlStateNormal];
-        NSLog(@"connecting");
     }
     else if ([[[notification userInfo]objectForKey:@"state"]intValue] != MCSessionStateConnecting)
     {
         if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
         {
             [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
-            NSLog(@"connected");
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"ConnectedToAUser" object:nil userInfo:nil];
         }
         if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
         {
             [cell.chatButton setTitle:@"Reconnect" forState:UIControlStateNormal];
-            NSLog(@"reconnect");
         }
 
     }
-
-
 }
 
 #pragma mark - Private method for handling receiving an invitation
 
 -(void)receivedInvitationForConnection:(NSNotification *)notification
 {
-    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"You have been invited to connect" message:nil delegate:self cancelButtonTitle:@"Decline" otherButtonTitles:@"Accept", nil];
+    MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
+    NSString *alertViewTitle = [NSString stringWithFormat:@"%@ wants to connect and chat with you", peerID.displayName];
+    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:alertViewTitle message:nil delegate:self cancelButtonTitle:@"Decline" otherButtonTitles:@"Accept", nil];
     [alertView show];
 }
 

@@ -1,23 +1,24 @@
 //
-//  LeftSlideOutViewController.m
+//  SlideOutTableViewController.m
 //  PubChatter
 //
-//  Created by Richard Fellure on 6/23/14.
+//  Created by Richard Fellure on 6/24/14.
 //  Copyright (c) 2014 Naomi Himley. All rights reserved.
 //
 
-#import "LeftSlideOutViewController.h"
+#import "SlideOutTableViewController.h"
 #import "ChatViewController.h"
+#import "ChatBoxViewController.h"
 #import "AppDelegate.h"
 #import <Parse/Parse.h>
 
-
-@interface LeftSlideOutViewController ()
-
+@interface SlideOutTableViewController ()
 @property AppDelegate *appDelegate;
+@property NSArray *users;
+
 @end
 
-@implementation LeftSlideOutViewController
+@implementation SlideOutTableViewController
 
 - (void)viewDidLoad
 {
@@ -84,12 +85,19 @@
                      }
                  }
                  self.users = [NSArray arrayWithArray:array];
-                 
+
                  NSLog(@"self.users: %@", self.users);
                  [self.tableView reloadData];
              }
          }
      }];
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    ChatBoxViewController *chatBoxVC = segue.destinationViewController;
+
+
 }
 
 @end
