@@ -44,6 +44,7 @@
 {
     [super viewDidLoad];
 
+    // Check if user is logged in and, if not, send to login page.
     if (![PFUser currentUser]) {
         [self performSegueWithIdentifier:@"loginsegue" sender:self];
     }
@@ -52,6 +53,8 @@
                                              selector:@selector(didreceiveNotification:)
                                                  name:@"userEnteredBar"
                                                object:nil];
+
+    // Do set up work, set querystring, mapspan, and begin looking for user location.
     self.queryString = @"bar";
     self.mapSpan = MKCoordinateSpanMake(0.01, 0.01);
     self.toggleControlOutlet.selectedSegmentIndex = 0;
@@ -64,18 +67,14 @@
     self.locationManager.delegate = self;
     self.searchBar.delegate = self;
 
-
-    // Change button color
-    self.rateBarButton.tintColor = [UIColor redColor];
-
-    // Set the side bar button action. When it's tapped, it'll show up the sidebar.
+    // Set drawerview actions
+    self.rateBarButton.tintColor = [UIColor blueColor];
     self.rateBarButton.target = self.revealViewController;
     self.rateBarButton.action = @selector(rightRevealToggle:);
-
-    // Set the gesture
     [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     [self.view resignFirstResponder];
 }
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -89,6 +88,8 @@
     NSLog(@"notification in search vc");
     self.navigationItem.title = [notification.userInfo objectForKey:@"barName"];
 }
+
+// Check if the user is listed as being in a "Bar" in the Parse backend.
 - (void)isUserInBar
 {
     if ([PFUser currentUser]) {
@@ -110,18 +111,26 @@
     }
 }
 
+// Search Yelp API using textfield input.
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     [self search];
 }
+
 - (void)search
 {
     [self.mapView removeAnnotations:self.mapView.annotations];
     self.queryString = self.searchBar.text;
-    self.mapSpan = MKCoordinateSpanMake(0.12, 0.12);
+
+    // Finds the single best result based on querystring input and user's current location.
     [self getYelpJSONWithSearch:self.queryString andLongitude:self.userLocation.coordinate.longitude andLatitude:self.userLocation.coordinate.latitude andSortType:@"0" andNumResults:@"1"];
+
+    // Disables search button until results are returned and dismissed keyboard.
     self.searchButtonOutlet.enabled = NO;
     [self.searchBar endEditing:YES];
+
+    // Sets  the mapView to a relatively large area around the user's location.
+    self.mapSpan = MKCoordinateSpanMake(0.12, 0.12);
     CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(self.userLocation.coordinate.latitude, self.userLocation.coordinate.longitude);
     MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, self.mapSpan);
     [self.mapView setRegion:region animated:YES];
@@ -129,13 +138,12 @@
 
 #pragma mark - IBActions
 
-// Removes all annotations off mapView, sets querystring to searchbar text, creates a sufficiently large search area, and calls the findBarNear method. The search button is also disabled until a list of bars are returned to prevent bombarding with requests.
 - (IBAction)onSearchButtonPressed:(id)sender
 {
     [self search];
 }
 
-// Removes all annotations off mapView, creates a new map region from the current mapView region, which is used to make another call to findBarNear. Disables button until results are returned.
+// Removes all annotations from mapView, creates a new map region from the current mapView region, which is used to make another call to Yelp API. Disables button until results are returned.
 - (IBAction)onRedrawRegionButtonPressed:(id)sender
 {
     self.redrawAreaButtonOutlet.enabled = NO;

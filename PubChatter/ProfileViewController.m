@@ -50,8 +50,6 @@
             if (!error) {
                     NSDictionary *userData = (NSDictionary *)result;
 
-                NSLog(@"%@", userData);
-
                 // Set name label from Facebook
                     self.nameLabel.text = userData[@"name"];
 
@@ -112,6 +110,7 @@
     else
     {
         [self getParseData];
+        NSLog(@"Get Parse");
     }
 }
 
