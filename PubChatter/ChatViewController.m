@@ -38,6 +38,7 @@
     {
         [self.appDelegate.mcManager setupPeerAndSessionWithDisplayName:[[PFUser currentUser]objectForKey:@"username"]];
         [self.appDelegate.mcManager advertiseSelf:YES];
+        NSLog(@"username %@", [[PFUser currentUser]objectForKey:@"username"]);
     }
 
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(peerDidChangeStateWithNotification:) name:@"MCDidChangeStateNotification" object:nil];
@@ -72,6 +73,8 @@
     cell.chatButton.tag = indexPath.row;
     [self.cellArray addObject:cell];
     cell.tag = [self.userArray indexOfObject:dictionary];
+
+//    [cell.chatButton addTarget:self action:@selector(onButtonTappedSendInvitation:event:) forControlEvents:UIControlEventTouchUpOutside];
 
     if ([user objectForKey:@"age"]) {
         cell.userAgeLabel.text = [NSString stringWithFormat:@"%@",[user objectForKey:@"age"]];
@@ -112,6 +115,8 @@
 {
     // this gets all users of the app
     [self.userArray removeAllObjects];
+
+//    NSLog(@"advertising users array %@", self.appDelegate.mcManager.advertisingUsers);
     PFQuery *query = [PFQuery queryWithClassName:@"_User"];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
      {
@@ -126,12 +131,14 @@
                      {
                          NSDictionary *dictionary = @{@"peerID": peerID,
                                                       @"user": user};
+//                         NSLog(@"userDictionaryItem %@", dictionary);
                          if (self.userArray.count <= self.appDelegate.mcManager.advertisingUsers.count) {
                              [self.userArray addObject:dictionary];
                          }
                      }
                  }
              }
+//             NSLog(@"self.userArray %@", self.userArray);
              [self.tableView reloadData];
          }
      }];
@@ -164,8 +171,11 @@
 {
 //    UIButton *button = (UIButton *)sender;
 
-    UITableViewCell *cell = (UITableViewCell *)[[sender superview]superview];
+    UITableViewCell *cell = (UITableViewCell *)[[[sender superview]superview]superview];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    //    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:[[[event touchesForView:sender]anyObject]locationInView:self.tableView]];
+//    CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
+//    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
 
     NSDictionary *dictionary = [self.userArray objectAtIndex:indexPath.row];
 
@@ -259,8 +269,8 @@
             userDictionary = dictionary;
         }
     }
-
     [self.userArray removeObject:userDictionary];
+    NSLog(@"need to remove %@", userDictionary);
     [self.tableView reloadData];
 }
 
