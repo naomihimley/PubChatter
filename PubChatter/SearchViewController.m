@@ -49,8 +49,6 @@
         [self performSegueWithIdentifier:@"loginsegue" sender:self];
     }
 
-    [self updateFacebookData];
-
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didreceiveNotification:)
                                                  name:@"userEnteredBar"
@@ -328,76 +326,7 @@ calloutAccessoryControlTapped:(UIControl *)control
         }
 }
 
-// Retrieves Facebook data and populates the Parse database accordingly.
-- (void)updateFacebookData
-{
-    if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
-        // Create request for user's Facebook data
-        FBRequest *request = [FBRequest requestForMe];
-        // Send request to Facebook
-        [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
-            if (!error) {
-                NSDictionary *userData = (NSDictionary *)result;
-                NSLog(@"%@", userData);
 
-                // Set name field in Parse from Facebook.
-                [[PFUser currentUser]setObject:userData[@"name"] forKey:@"username"];
-
-                // Set gender field in Parse from Facebook.
-                if ([userData[@"gender"] isEqualToString:@"male"]) {
-                    [[PFUser currentUser]setObject:@1 forKey:@"gender"];
-                }
-                else if ([userData[@"gender"] isEqualToString:@"female"]) {
-                    [[PFUser currentUser]setObject:@0 forKey:@"gender"];
-                }
-                else {
-                    [[PFUser currentUser]setObject:@2 forKey:@"gender"];
-                }
-
-                // Save profile picture to Parse backend from Facebook.
-                NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", userData[@"id"]]];
-                PFFile *imageFile = [PFFile fileWithData:[NSData dataWithContentsOfURL:pictureURL]];
-                [[PFUser currentUser] setObject:imageFile forKey:@"picture"];
-
-                // Set bio from Facebook and set it in the Parse backend.
-                [[PFUser currentUser]setObject:userData[@"bio"] forKey:@"bio"];
-
-                // Set age label from Facebook and set age in Parse backend.
-                NSString *birthday = userData[@"birthday"];
-                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-                [formatter setLocale:[NSLocale systemLocale]];
-                [formatter setDateFormat:@"MM/dd/yyyy"];
-
-                NSDate *formatted = [formatter dateFromString:birthday];
-                NSDate *currentDate = [NSDate date];
-
-                NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-                NSDateComponents *components = [gregorianCalendar components:NSYearCalendarUnit
-                                                                    fromDate:formatted
-                                                                      toDate:currentDate
-                                                                     options:0];
-
-                NSNumber *age = @(components.year);
-                [[PFUser currentUser]setObject:age forKey:@"age"];
-
-                // Get "interested in" from Facebook and set in Parse backend
-                for (NSString *object in userData[@"interested_in"]) {
-                    if ([object isEqual:@"female"]) {
-                        [[PFUser currentUser]setObject:@1 forKey:@"sexualOrientation"];
-                    }
-                    else if ([object isEqual:@"male"]) {
-                        [[PFUser currentUser]setObject:@0 forKey:@"sexualOrientation"];
-                    }
-                    else {
-                        [[PFUser currentUser]setObject:@2 forKey:@"sexualOrientation"];
-                    }
-                }
-            }
-            [[PFUser currentUser] saveInBackground];
-        }];
-    }
-}
 
 
 
