@@ -7,10 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
 
-@interface ChatBoxViewController : UIViewController
-
+@interface ChatBoxViewController : UIViewController <NSFetchedResultsControllerDelegate>
+@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property NSMutableArray *chatArray;
 @property NSMutableArray *chatDictionaryArray;
+@property NSDictionary *userDictionary;
 
 @end

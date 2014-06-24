@@ -110,6 +110,7 @@
 
 -(void)queryForUsers
 {
+    // this gets all users of the app
     [self.userArray removeAllObjects];
     PFQuery *query = [PFQuery queryWithClassName:@"_User"];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)

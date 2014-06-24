@@ -8,6 +8,8 @@
 
 #import "ChatBoxViewController.h"
 #import "AppDelegate.h"
+#import "Peer.h"
+#import "Conversation.h"
 
 @interface ChatBoxViewController ()<UITextFieldDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *chatTextField;
@@ -24,6 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.fetchedResultsController.delegate = self;
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -88,11 +91,15 @@
     {
         NSString *chatString = [NSString stringWithFormat:@"I wrote:\n%@\n\n", self.chatTextField.text];
         [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:chatString]];
+        Peer *peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext:self.managedObjectContext];
+        Conversation *conversation = [NSEntityDescription insertNewObjectForEntityForName:@"Conversation" inManagedObjectContext:self.managedObjectContext];
+        conversation.message = chatString;
+        [peer addConversationObject:conversation];
+        [self.managedObjectContext save:nil];
         [self.chatArray addObject:chatString];
-
         self.chatTextField.text = @"";
+        NSLog(@"managed object context %lu", (unsigned long)self.managedObjectContext.registeredObjects.count);
     }
-    
     [self.chatTextField resignFirstResponder];
 }
 
@@ -106,8 +113,13 @@
 
     NSString *chatString = [NSString stringWithFormat:@"%@:\n%@\n\n", peerDisplayName, receivedText];
     [self.chatTextView performSelectorOnMainThread:@selector(setText:) withObject:[self.chatTextView.text stringByAppendingString:chatString] waitUntilDone:NO];
-
     [self.chatArray addObject:chatString];
+    Peer *peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext:self.managedObjectContext];
+    Conversation *conversation = [NSEntityDescription insertNewObjectForEntityForName:@"Conversation" inManagedObjectContext:self.managedObjectContext];
+    conversation.message = chatString;
+    [peer addConversationObject:conversation];
+    [self.managedObjectContext save:nil];
+    NSLog(@"%lu", (unsigned long)self.managedObjectContext.registeredObjects.count);
 }
 
 # pragma mark - Disconnect from session

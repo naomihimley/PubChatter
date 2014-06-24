@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13D65" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Conversation" representedClassName="Conversation" syncable="YES">
+        <attribute name="message" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="peer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Peer" inverseName="conversation" inverseEntity="Peer" syncable="YES"/>
+    </entity>
+    <entity name="Peer" representedClassName="Peer" syncable="YES">
+        <attribute name="peerID" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="conversation" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Conversation" inverseName="peer" inverseEntity="Conversation" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Peer" positionX="-63" positionY="-18" width="128" height="73"/>
+        <element name="Conversation" positionX="124" positionY="125" width="128" height="73"/>
+    </elements>
+</model>
