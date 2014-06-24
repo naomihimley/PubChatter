@@ -42,9 +42,10 @@
 
 - (void)getFacebookData
 {
-    // Create request for user's Facebook data
-    FBRequest *request = [FBRequest requestForMe];
-    if (request) {
+
+    if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+        // Create request for user's Facebook data
+        FBRequest *request = [FBRequest requestForMe];
         // Send request to Facebook
         [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
             if (!error) {
