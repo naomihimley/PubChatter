@@ -30,7 +30,7 @@
 		9BDBE503194F47830045C05B /* ChatBoxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE502194F47830045C05B /* ChatBoxViewController.m */; };
 		9BDBE506194F50200045C05B /* ListOfUsersTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE505194F50200045C05B /* ListOfUsersTableViewCell.m */; };
 		9BDBE508194F8A400045C05B /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BDBE507194F8A400045C05B /* MultipeerConnectivity.framework */; };
-		9BDBE6121959B98A0045C05B /* SlideOutTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE6111959B98A0045C05B /* SlideOutTableViewController.m */; };
+		9BDBE6151959CB120045C05B /* LeftSideSlideOutTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE6141959CB120045C05B /* LeftSideSlideOutTableViewController.m */; };
 		B03F23251954DBE400DB67F8 /* BeaconRegionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B03F23241954DBE400DB67F8 /* BeaconRegionManager.m */; };
 		B0623BEC1958FDE600A9AFD6 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0623BEB1958FDE600A9AFD6 /* CoreData.framework */; };
 		B0623C391958FF1500A9AFD6 /* PubChatter.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B0623C371958FF1500A9AFD6 /* PubChatter.xcdatamodeld */; };
@@ -115,8 +115,8 @@
 		9BDBE504194F50200045C05B /* ListOfUsersTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListOfUsersTableViewCell.h; sourceTree = "<group>"; };
 		9BDBE505194F50200045C05B /* ListOfUsersTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListOfUsersTableViewCell.m; sourceTree = "<group>"; };
 		9BDBE507194F8A400045C05B /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
-		9BDBE6101959B98A0045C05B /* SlideOutTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SlideOutTableViewController.h; path = ../SlideOutTableViewController.h; sourceTree = "<group>"; };
-		9BDBE6111959B98A0045C05B /* SlideOutTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SlideOutTableViewController.m; path = ../SlideOutTableViewController.m; sourceTree = "<group>"; };
+		9BDBE6131959CB120045C05B /* LeftSideSlideOutTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LeftSideSlideOutTableViewController.h; path = ../LeftSideSlideOutTableViewController.h; sourceTree = "<group>"; };
+		9BDBE6141959CB120045C05B /* LeftSideSlideOutTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LeftSideSlideOutTableViewController.m; path = ../LeftSideSlideOutTableViewController.m; sourceTree = "<group>"; };
 		B03F23231954DBE400DB67F8 /* BeaconRegionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BeaconRegionManager.h; path = ../BeaconRegionManager.h; sourceTree = "<group>"; };
 		B03F23241954DBE400DB67F8 /* BeaconRegionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BeaconRegionManager.m; path = ../BeaconRegionManager.m; sourceTree = "<group>"; };
 		B0623BEB1958FDE600A9AFD6 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -204,8 +204,8 @@
 		0ECEAF0419560F9A00B92C40 /* Slideout Drawer VCs */ = {
 			isa = PBXGroup;
 			children = (
-				9BDBE6101959B98A0045C05B /* SlideOutTableViewController.h */,
-				9BDBE6111959B98A0045C05B /* SlideOutTableViewController.m */,
+				9BDBE6131959CB120045C05B /* LeftSideSlideOutTableViewController.h */,
+				9BDBE6141959CB120045C05B /* LeftSideSlideOutTableViewController.m */,
 				0ECEAF0B19586FA800B92C40 /* RightSlideoutViewController.h */,
 				0ECEAF0C19586FA800B92C40 /* RightSlideoutViewController.m */,
 				0ECEAF0519560FCA00B92C40 /* SWRevealViewController.h */,
@@ -505,6 +505,7 @@
 				0ECEAEE8194F69A000B92C40 /* YelpBar.m in Sources */,
 				B0623C481959B9B700A9AFD6 /* Peer.m in Sources */,
 				0ECEAF0719560FCA00B92C40 /* SWRevealViewController.m in Sources */,
+				9BDBE6151959CB120045C05B /* LeftSideSlideOutTableViewController.m in Sources */,
 				B0782C48194BB3700022E6E7 /* main.m in Sources */,
 				0EB31FFE194BC176005A3B82 /* ProfileViewController.m in Sources */,
 				9BDBE506194F50200045C05B /* ListOfUsersTableViewCell.m in Sources */,

@@ -1,24 +1,25 @@
 //
-//  SlideOutTableViewController.m
+//  LeftSideSlideOutTableViewController.m
 //  PubChatter
 //
 //  Created by Richard Fellure on 6/24/14.
 //  Copyright (c) 2014 Naomi Himley. All rights reserved.
 //
 
-#import "SlideOutTableViewController.h"
+#import "LeftSideSlideOutTableViewController.h"
 #import "ChatViewController.h"
 #import "ChatBoxViewController.h"
 #import "AppDelegate.h"
 #import <Parse/Parse.h>
 
-@interface SlideOutTableViewController ()
+@interface LeftSideSlideOutTableViewController ()
+
 @property AppDelegate *appDelegate;
 @property NSArray *users;
 
 @end
 
-@implementation SlideOutTableViewController
+@implementation LeftSideSlideOutTableViewController
 
 - (void)viewDidLoad
 {
