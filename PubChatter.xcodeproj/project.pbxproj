@@ -23,6 +23,8 @@
 		0ECEAF13195884E100B92C40 /* Bar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAF12195884E100B92C40 /* Bar.m */; };
 		0ECEAF151958BAC800B92C40 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0ECEAF141958BAC800B92C40 /* FacebookSDK.framework */; };
 		0ECEAF181958BDEA00B92C40 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAF171958BDEA00B92C40 /* LoginViewController.m */; };
+		0ECEAF1A1958F98400B92C40 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0ECEAF191958F98400B92C40 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		0ECEAF1C1958F9AF00B92C40 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0ECEAF1B1958F9AF00B92C40 /* libsqlite3.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
 		9BDBE4FD194F3EB50045C05B /* MCManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE4FC194F3EB50045C05B /* MCManager.m */; };
 		9BDBE500194F47380045C05B /* OPPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE4FF194F47380045C05B /* OPPViewController.m */; };
 		9BDBE503194F47830045C05B /* ChatBoxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE502194F47830045C05B /* ChatBoxViewController.m */; };
@@ -99,6 +101,8 @@
 		0ECEAF141958BAC800B92C40 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		0ECEAF161958BDEA00B92C40 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginViewController.h; path = PubChatter/LoginViewController.h; sourceTree = "<group>"; };
 		0ECEAF171958BDEA00B92C40 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = PubChatter/LoginViewController.m; sourceTree = "<group>"; };
+		0ECEAF191958F98400B92C40 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		0ECEAF1B1958F9AF00B92C40 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		9BDBE4FB194F3EB50045C05B /* MCManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCManager.h; sourceTree = "<group>"; };
 		9BDBE4FC194F3EB50045C05B /* MCManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCManager.m; sourceTree = "<group>"; };
 		9BDBE4FE194F47380045C05B /* OPPViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OPPViewController.h; sourceTree = "<group>"; };
@@ -148,6 +152,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0ECEAF1C1958F9AF00B92C40 /* libsqlite3.dylib in Frameworks */,
+				0ECEAF1A1958F98400B92C40 /* AdSupport.framework in Frameworks */,
 				9BDBE508194F8A400045C05B /* MultipeerConnectivity.framework in Frameworks */,
 				0ECEAF151958BAC800B92C40 /* FacebookSDK.framework in Frameworks */,
 				B0782CCE194E0D560022E6E7 /* CoreBluetooth.framework in Frameworks */,
@@ -275,6 +281,8 @@
 		B0782C3A194BB3700022E6E7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0ECEAF1B1958F9AF00B92C40 /* libsqlite3.dylib */,
+				0ECEAF191958F98400B92C40 /* AdSupport.framework */,
 				0ECEAF141958BAC800B92C40 /* FacebookSDK.framework */,
 				9BDBE507194F8A400045C05B /* MultipeerConnectivity.framework */,
 				B0782C7E194BB4170022E6E7 /* AudioToolbox.framework */,
