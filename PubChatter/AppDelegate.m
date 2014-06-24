@@ -29,6 +29,7 @@ NSManagedObjectContext *moc;
     [self.beaconRegionManager setupCLManager];
     [Rating registerSubclass];
     [Bar registerSubclass];
+
     [PFFacebookUtils initializeFacebook];
 
     //should this be here?
