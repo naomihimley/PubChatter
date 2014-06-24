@@ -28,6 +28,7 @@
     [super viewDidLoad];
     self.managedObjectContext = moc;
     self.fetchedResultsController.delegate = self;
+    self.fetchedResultsController = [[NSFetchedResultsController alloc]init];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -125,9 +126,10 @@
     else
     {
         NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
+        request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", peerID];
         request.predicate = predicate;
-        self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
+        self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
         [self.fetchedResultsController performFetch:nil];
         NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
         Peer *peer = [array firstObject];
@@ -139,9 +141,11 @@
 - (BOOL)doesConversationExist :(MCPeerID *)peerID
 {
     NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
+    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", peerID];
     request.predicate = predicate;
-    self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
+
+    self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
     [self.fetchedResultsController performFetch:nil];
     NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
     if (array.count < 1)
