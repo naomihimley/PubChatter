@@ -85,24 +85,28 @@
 {
     NSLog(@"This dude is advertising %@", peerID.displayName);
     [self.foundPeersArray addObject:peerID];
-
-    if (self.foundPeersArray.count > 1)
-    {
-        for (MCPeerID *peer in self.foundPeersArray)
-        {
-            NSLog(@"for loop happening and shit");
-            if (peer.displayName != peerID.displayName)
-            {
-                NSLog(@"peerID %@", peerID);
-                NSLog(@"peer %@", peer);
-                [self.advertisingUsers addObject:peerID];
-            }
-        }
-    }
-    else
+    if (![self.advertisingUsers containsObject:peerID])
     {
         [self.advertisingUsers addObject:peerID];
     }
+
+//    if (self.foundPeersArray.count > 1)
+//    {
+//        for (MCPeerID *peer in self.foundPeersArray)
+//        {
+//            NSLog(@"for loop happening and shit");
+//            if (peerID != peer)
+//            {
+//                NSLog(@"peerID %@", peerID);
+//                NSLog(@"peer %@", peer);
+//                [self.advertisingUsers addObject:peerID];
+//            }
+//        }
+//    }
+//    else
+//    {
+//        [self.advertisingUsers addObject:peerID];
+//    }
 
 
     NSLog(@"advertisingUsers from MCManager %@", self.advertisingUsers);
