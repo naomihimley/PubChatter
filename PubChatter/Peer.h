@@ -2,7 +2,7 @@
 //  Peer.h
 //  PubChatter
 //
-//  Created by Yeah Right on 6/23/14.
+//  Created by Yeah Right on 6/24/14.
 //  Copyright (c) 2014 Naomi Himley. All rights reserved.
 //
 
@@ -13,6 +13,15 @@
 
 @interface Peer : NSManagedObject
 
-@property (nonatomic, retain) Conversation *conversation;
+@property (nonatomic, retain) NSString * peerID;
+@property (nonatomic, retain) NSSet *conversation;
+@end
+
+@interface Peer (CoreDataGeneratedAccessors)
+
+- (void)addConversationObject:(Conversation *)value;
+- (void)removeConversationObject:(Conversation *)value;
+- (void)addConversation:(NSSet *)values;
+- (void)removeConversation:(NSSet *)values;
 
 @end

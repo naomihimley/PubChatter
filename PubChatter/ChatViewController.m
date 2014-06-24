@@ -106,7 +106,6 @@
 
 -(void)queryForUsers
 {
-    NSLog(@"meow? %@", self.appDelegate.mcManager.advertisingUsers);
     // this gets all users of the app
     [self.userArray removeAllObjects];
     PFQuery *query = [PFQuery queryWithClassName:@"_User"];
@@ -124,10 +123,8 @@
                          NSDictionary *dictionary = @{@"peerID": peerID,
                                                       @"user": user};
                          if (self.userArray.count <= self.appDelegate.mcManager.advertisingUsers.count) {
-                             NSLog(@"adding users");
                              [self.userArray addObject:dictionary];
                          }
-                         NSLog(@"self.userarray %@", self.userArray);
                      }
                  }
              }

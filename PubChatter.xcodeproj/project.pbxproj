@@ -33,9 +33,9 @@
 		9BDBE60F1958F3F20045C05B /* LeftSlideOutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE60E1958F3F20045C05B /* LeftSlideOutViewController.m */; };
 		B03F23251954DBE400DB67F8 /* BeaconRegionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B03F23241954DBE400DB67F8 /* BeaconRegionManager.m */; };
 		B0623BEC1958FDE600A9AFD6 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0623BEB1958FDE600A9AFD6 /* CoreData.framework */; };
-		B0623C391958FF1500A9AFD6 /* AyyCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B0623C371958FF1500A9AFD6 /* AyyCoreData.xcdatamodeld */; };
-		B0623C3C1959041100A9AFD6 /* Conversation.m in Sources */ = {isa = PBXBuildFile; fileRef = B0623C3B1959041100A9AFD6 /* Conversation.m */; };
-		B0623C3F1959041200A9AFD6 /* Peer.m in Sources */ = {isa = PBXBuildFile; fileRef = B0623C3E1959041200A9AFD6 /* Peer.m */; };
+		B0623C391958FF1500A9AFD6 /* PubChatter.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B0623C371958FF1500A9AFD6 /* PubChatter.xcdatamodeld */; };
+		B0623C481959B9B700A9AFD6 /* Peer.m in Sources */ = {isa = PBXBuildFile; fileRef = B0623C471959B9B700A9AFD6 /* Peer.m */; };
+		B0623C4B1959B9B700A9AFD6 /* Conversation.m in Sources */ = {isa = PBXBuildFile; fileRef = B0623C4A1959B9B700A9AFD6 /* Conversation.m */; };
 		B0782C3C194BB3700022E6E7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C3B194BB3700022E6E7 /* Foundation.framework */; };
 		B0782C3E194BB3700022E6E7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C3D194BB3700022E6E7 /* CoreGraphics.framework */; };
 		B0782C40194BB3700022E6E7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C3F194BB3700022E6E7 /* UIKit.framework */; };
@@ -120,11 +120,11 @@
 		B03F23231954DBE400DB67F8 /* BeaconRegionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BeaconRegionManager.h; path = ../BeaconRegionManager.h; sourceTree = "<group>"; };
 		B03F23241954DBE400DB67F8 /* BeaconRegionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BeaconRegionManager.m; path = ../BeaconRegionManager.m; sourceTree = "<group>"; };
 		B0623BEB1958FDE600A9AFD6 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		B0623C381958FF1500A9AFD6 /* AyyCoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AyyCoreData.xcdatamodel; sourceTree = "<group>"; };
-		B0623C3A1959041100A9AFD6 /* Conversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Conversation.h; sourceTree = "<group>"; };
-		B0623C3B1959041100A9AFD6 /* Conversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Conversation.m; sourceTree = "<group>"; };
-		B0623C3D1959041200A9AFD6 /* Peer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Peer.h; sourceTree = "<group>"; };
-		B0623C3E1959041200A9AFD6 /* Peer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Peer.m; sourceTree = "<group>"; };
+		B0623C381958FF1500A9AFD6 /* PubChatter.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PubChatter.xcdatamodel; sourceTree = "<group>"; };
+		B0623C461959B9B700A9AFD6 /* Peer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Peer.h; sourceTree = "<group>"; };
+		B0623C471959B9B700A9AFD6 /* Peer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Peer.m; sourceTree = "<group>"; };
+		B0623C491959B9B700A9AFD6 /* Conversation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Conversation.h; sourceTree = "<group>"; };
+		B0623C4A1959B9B700A9AFD6 /* Conversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Conversation.m; sourceTree = "<group>"; };
 		B0782C38194BB3700022E6E7 /* PubChatter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PubChatter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0782C3B194BB3700022E6E7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B0782C3D194BB3700022E6E7 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -325,11 +325,11 @@
 			children = (
 				B0782C4A194BB3700022E6E7 /* AppDelegate.h */,
 				B0782C4B194BB3700022E6E7 /* AppDelegate.m */,
-				B0623C371958FF1500A9AFD6 /* AyyCoreData.xcdatamodeld */,
-				B0623C3D1959041200A9AFD6 /* Peer.h */,
-				B0623C3E1959041200A9AFD6 /* Peer.m */,
-				B0623C3A1959041100A9AFD6 /* Conversation.h */,
-				B0623C3B1959041100A9AFD6 /* Conversation.m */,
+				B0623C491959B9B700A9AFD6 /* Conversation.h */,
+				B0623C4A1959B9B700A9AFD6 /* Conversation.m */,
+				B0623C461959B9B700A9AFD6 /* Peer.h */,
+				B0623C471959B9B700A9AFD6 /* Peer.m */,
+				B0623C371958FF1500A9AFD6 /* PubChatter.xcdatamodeld */,
 				B0782C4D194BB3700022E6E7 /* Main.storyboard */,
 				0ECEAF0419560F9A00B92C40 /* Slideout Drawer VCs */,
 				9BDBE55A194FA3FE0045C05B /* Search/Bar VCs */,
@@ -493,22 +493,22 @@
 				B0782CD1194F850B0022E6E7 /* EditProfileViewController.m in Sources */,
 				0ECEAEEE194F8AD200B92C40 /* BarWebpageViewController.m in Sources */,
 				0EB3200B194CBDD0005A3B82 /* TDOAuth.m in Sources */,
-				B0623C3F1959041200A9AFD6 /* Peer.m in Sources */,
 				9BDBE500194F47380045C05B /* OPPViewController.m in Sources */,
-				B0623C3C1959041100A9AFD6 /* Conversation.m in Sources */,
 				9BDBE503194F47830045C05B /* ChatBoxViewController.m in Sources */,
 				0ECEAF1019587F4E00B92C40 /* Rating.m in Sources */,
 				B03F23251954DBE400DB67F8 /* BeaconRegionManager.m in Sources */,
-				B0623C391958FF1500A9AFD6 /* AyyCoreData.xcdatamodeld in Sources */,
+				B0623C391958FF1500A9AFD6 /* PubChatter.xcdatamodeld in Sources */,
 				9BDBE4FD194F3EB50045C05B /* MCManager.m in Sources */,
 				0EB32001194BC19E005A3B82 /* ChatViewController.m in Sources */,
 				0ECEAF181958BDEA00B92C40 /* LoginViewController.m in Sources */,
 				0EB31FFB194BC158005A3B82 /* SearchViewController.m in Sources */,
 				0ECEAEE8194F69A000B92C40 /* YelpBar.m in Sources */,
+				B0623C481959B9B700A9AFD6 /* Peer.m in Sources */,
 				0ECEAF0719560FCA00B92C40 /* SWRevealViewController.m in Sources */,
 				B0782C48194BB3700022E6E7 /* main.m in Sources */,
 				0EB31FFE194BC176005A3B82 /* ProfileViewController.m in Sources */,
 				9BDBE506194F50200045C05B /* ListOfUsersTableViewCell.m in Sources */,
+				B0623C4B1959B9B700A9AFD6 /* Conversation.m in Sources */,
 				0ECEAF13195884E100B92C40 /* Bar.m in Sources */,
 				0ECEAF0D19586FA800B92C40 /* RightSlideoutViewController.m in Sources */,
 				9BDBE60F1958F3F20045C05B /* LeftSlideOutViewController.m in Sources */,
@@ -743,13 +743,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		B0623C371958FF1500A9AFD6 /* AyyCoreData.xcdatamodeld */ = {
+		B0623C371958FF1500A9AFD6 /* PubChatter.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				B0623C381958FF1500A9AFD6 /* AyyCoreData.xcdatamodel */,
+				B0623C381958FF1500A9AFD6 /* PubChatter.xcdatamodel */,
 			);
-			currentVersion = B0623C381958FF1500A9AFD6 /* AyyCoreData.xcdatamodel */;
-			path = AyyCoreData.xcdatamodeld;
+			currentVersion = B0623C381958FF1500A9AFD6 /* PubChatter.xcdatamodel */;
+			path = PubChatter.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
