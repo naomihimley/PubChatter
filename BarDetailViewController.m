@@ -39,7 +39,7 @@
 
     self.barNameLabel.text = self.barFromSourceVC.name;
     self.barAddressLabel.text = self.barFromSourceVC.address;
-    self.aboutBarTextView.text = self.barFromSourceVC.aboutBusiness;
+    self.aboutBarTextView.text = [NSString stringWithFormat:@"Yelp reviewers say...%@", self.barFromSourceVC.aboutBusiness];
     self.aboutBarTextView.editable = NO;
     NSString *milesFromUser = [NSString stringWithFormat:@"%.02f miles", self.barFromSourceVC.distanceFromUser * 0.000621371];
     self.distanceFromUserLabel.text = milesFromUser;
@@ -54,6 +54,8 @@
     self.ratingImageView.image = [UIImage imageWithData:ratingImageData];
 
     self.categoriesLabel.text = [NSString stringWithFormat:@"Category: %@\nOffers: %@", [[self.barFromSourceVC.categories objectAtIndex:0] objectAtIndex:0], [[self.barFromSourceVC.categories objectAtIndex:1] objectAtIndex:0]];
+
+    self.barRatingLabel.text = [NSString stringWithFormat:@"%@ has not been rated", self.barFromSourceVC.name];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -65,7 +67,7 @@
         if (objects) {
             NSArray *array = [[objects firstObject] objectForKey:@"usersInBar"];
             NSInteger pubChattersInBar = array.count;
-            self.pubChattersCountLabel.text = [NSString stringWithFormat:@"%lu pubChatters in %@", (long)pubChattersInBar, self.barFromSourceVC.name];
+            self.pubChattersCountLabel.text = [NSString stringWithFormat:@"%lu PubChatters at %@", (long)pubChattersInBar, self.barFromSourceVC.name];
             NSMutableArray *menInBar = [[NSMutableArray alloc] init];
             for (PFObject *object in array) {
                 if ([[object objectForKey:@"gender"] isEqualToNumber:@1]) {
@@ -78,7 +80,6 @@
                 CGFloat maleRatio = malePubChattersInBar/pubChattersInBar;
                 CGFloat femaleRatio = femalePubChattersInBar/pubChattersInBar;
             self.ratioLabel.text = [NSString stringWithFormat:@"%.0f percent men  %.0f percent women", maleRatio *100, femaleRatio *100];
-            NSLog(@"%lu", (unsigned long)menInBar.count);
             }
         }
     }];
@@ -86,9 +87,9 @@
     PFQuery *query2 = [PFQuery queryWithClassName:@"Bar"];
     [query2 whereKey:@"yelpID" equalTo:self.barFromSourceVC.yelpID];
     [query2 findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (objects) {
+        if ([objects firstObject]) {
             self.bar = [objects firstObject];
-            NSLog(@"%@", self.bar);
+            NSLog(@"bar : %@", self.bar);
             [self getRating];
         }
     }];
@@ -125,7 +126,10 @@
             total += number;
         }
             if (count > 0) {
-                self.barRatingLabel.text = [NSString stringWithFormat:@"%ld", total/count];
+                self.barRatingLabel.text = [NSString stringWithFormat:@"Pubchatter rating: %ld", total/count];
+            }
+            else {
+                self.barRatingLabel.text = [NSString stringWithFormat:@"%@ has not been rated", self.barFromSourceVC.name];
             }
     }];
 }

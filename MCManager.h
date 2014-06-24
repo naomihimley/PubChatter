@@ -17,6 +17,7 @@
 @property MCNearbyServiceAdvertiser *advertiser;
 @property NSMutableArray *advertisingUsers;
 @property NSMutableArray *invitationHandlerArray;
+@property NSMutableArray *foundPeersArray;
 
 -(void)setupPeerAndSessionWithDisplayName: (NSString *)displayName;
 -(void)advertiseSelf: (BOOL)shouldAdvertise;
