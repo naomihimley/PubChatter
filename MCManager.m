@@ -82,8 +82,10 @@
 
 -(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
 {
-    [self.advertisingUsers addObject:peerID];
-
+    if (![self.advertisingUsers containsObject:peerID])
+    {
+         [self.advertisingUsers addObject:peerID];
+    }
     NSLog(@"advertisingUsers from MCManager %@", self.advertisingUsers);
 
     [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:nil];
