@@ -27,7 +27,7 @@
     PFLogInViewController *loginViewController = [PFLogInViewController new];
     loginViewController.fields =  PFLogInFieldsFacebook | PFLogInFieldsTwitter | PFLogInFieldsUsernameAndPassword | PFLogInFieldsSignUpButton | PFLogInFieldsLogInButton;
     loginViewController.delegate = self;
-    [loginViewController setFacebookPermissions:[NSArray arrayWithObjects:@"user_about_me", @"public_profile", @"user_birthday", nil]];
+    [loginViewController setFacebookPermissions:[NSArray arrayWithObjects:@"public_profile", nil]];
 
 
     PFSignUpViewController *signUpViewController = [PFSignUpViewController new];
