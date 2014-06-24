@@ -7,8 +7,11 @@
 //
 
 #import "BeaconRegionManager.h"
+#import "AppDelegate.h"
 
 @interface BeaconRegionManager () <CLLocationManagerDelegate>
+
+@property AppDelegate *appDelegate;
 @end
 
 @implementation BeaconRegionManager
@@ -44,7 +47,6 @@
 
 - (void)createBeaconRegion
 {
-    NSLog(@"create beacon region in the custom class being called");
     //all estimote iBeacons
     NSUUID *estimoteUUID = [[NSUUID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"];
     self.estimoteRegion = [[CLBeaconRegion alloc]initWithProximityUUID:estimoteUUID identifier:@"anyEstimoteBeacon"];
@@ -77,15 +79,18 @@
 
 -(void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region
 {
+    self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     if (state == CLRegionStateInside)
     {
-        NSLog(@"Inside");
         self.inARegion = YES;
         [manager startRangingBeaconsInRegion:self.richRegion];
         [manager startRangingBeaconsInRegion:self.estimoteRegion];
+//        [self.appDelegate.mcManager advertiseSelf:YES];
+
     }
     else if (state == CLRegionStateOutside)
     {
+//        [self.appDelegate.mcManager advertiseSelf:NO];
         if ([region.identifier isEqualToString:@"richiPhone"])
         {
             [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"PubChat"}];
@@ -108,7 +113,6 @@
                 for (PFObject *bar in objects) {
                     [bar removeObject:[PFUser currentUser] forKey:@"usersInBar"];
                     [bar saveEventually];
-                    NSLog(@"For Loop removing user from all bars");
                 }
 
             }];
@@ -143,8 +147,8 @@
                     [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                     [bar saveInBackground];
                     self.inARegion = NO;
-                    NSLog(@"adding to parse");
                 }
+
                 NSEnumerator *enumerator = [arrayOfUsers objectEnumerator];
                 PFUser* user;
                 while (user = [enumerator nextObject]) {
@@ -210,8 +214,6 @@
 
 - (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
 {
-    NSLog(@"didenterregion in new class");
-
     if ([region.identifier isEqualToString:@"anyEstimoteBeacon"])
     {
         [self.beaconRegionManager startRangingBeaconsInRegion:self.estimoteRegion];
@@ -236,7 +238,6 @@
             for (PFObject *bar in objects) {
                 [bar removeObject:[PFUser currentUser] forKey:@"usersInBar"];
                 [bar saveInBackground];
-                NSLog(@"For Loop in didExitRegion");
             }
         }];
     }

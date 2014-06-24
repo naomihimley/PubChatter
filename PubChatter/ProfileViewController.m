@@ -50,10 +50,30 @@
         // Send request to Facebook
         [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
             if (!error) {
-                        NSDictionary *userData = (NSDictionary *)result;
-                        self.nameLabel.text = userData[@"name"];
-                        self.genderLabel.text = userData[@"gender"];
+                    NSDictionary *userData = (NSDictionary *)result;
+                    self.nameLabel.text = userData[@"name"];
 
+                if ([userData[@"gender"] isEqualToString:@"male"]) {
+                    self.genderLabel.text = @"M";
+                }
+                else if ([userData[@"gender"] isEqualToString:@"female"])
+                         {
+                             self.genderLabel.text = @"F";
+                         }
+                 else
+                         {
+                             self.genderLabel.text = @"";
+                         }
+
+                NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", userData[@"id"]]];
+                
+                self.profileImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:pictureURL]];
+
+
+
+
+                NSLog(@"%@", userData[@"last_name"]);
+                self.bioTextView.text = userData[@"user_about_me"];
 //                        NSString *facebookID = userData[@"id"];
 //                        NSString *location = userData[@"location"][@"name"];
 //                        NSString *gender = userData[@"gender"];

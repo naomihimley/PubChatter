@@ -201,31 +201,29 @@
     if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnecting)
     {
         [cell.chatButton setTitle:@"Connecting" forState:UIControlStateNormal];
-        NSLog(@"connecting");
     }
     else if ([[[notification userInfo]objectForKey:@"state"]intValue] != MCSessionStateConnecting)
     {
         if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
         {
             [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
-            NSLog(@"connected");
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"ConnectedToAUser" object:nil userInfo:nil];
         }
         if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
         {
             [cell.chatButton setTitle:@"Reconnect" forState:UIControlStateNormal];
-            NSLog(@"reconnect");
         }
 
     }
-
-
 }
 
 #pragma mark - Private method for handling receiving an invitation
 
 -(void)receivedInvitationForConnection:(NSNotification *)notification
 {
-    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"You have been invited to connect" message:nil delegate:self cancelButtonTitle:@"Decline" otherButtonTitles:@"Accept", nil];
+    MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
+    NSString *alertViewTitle = [NSString stringWithFormat:@"%@ wants to connect and chat with you", peerID.displayName];
+    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:alertViewTitle message:nil delegate:self cancelButtonTitle:@"Decline" otherButtonTitles:@"Accept", nil];
     [alertView show];
 }
 

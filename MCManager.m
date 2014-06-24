@@ -22,7 +22,6 @@
         self.browser = nil;
         self.advertiser = nil;
         self.advertisingUsers = [NSMutableArray array];
-
     }
     return self;
 }
@@ -75,7 +74,6 @@
     self.invitationHandlerArray = [NSMutableArray arrayWithObject:[invitationHandler copy]];
 
     [[NSNotificationCenter defaultCenter]postNotificationName:@"MCReceivedInvitation" object:nil userInfo:nil];
-    NSLog(@"Got invited yo");
 
 }
 
@@ -116,14 +114,10 @@
         self.advertiser = [[MCNearbyServiceAdvertiser alloc]initWithPeer:self.peerID discoveryInfo:nil serviceType:@"pubchatservice"];
         self.advertiser.delegate = self;
         [self.advertiser startAdvertisingPeer];
-        NSLog(@"advertiser %@", self.advertiser);
 
         self.browser = [[MCNearbyServiceBrowser alloc]initWithPeer:self.peerID serviceType:@"pubchatservice"];
         self.browser.delegate = self;
         [self.browser startBrowsingForPeers];
-        NSLog(@"browser %@", self.browser);
-
-        NSLog(@"should be looking for peers");
     }
 
     else
