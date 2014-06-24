@@ -10,7 +10,7 @@
 #import "AppDelegate.h"
 #import "ChatBoxViewController.h"
 
-@interface OPPViewController ()
+@interface OPPViewController ()<UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *userNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *userAgeLabel;
@@ -18,6 +18,9 @@
 @property (weak, nonatomic) IBOutlet UITextView *bioLabel;
 @property (weak, nonatomic) IBOutlet UILabel *sexualOrientationLabel;
 @property (weak, nonatomic) IBOutlet UILabel *favDrinkLabel;
+@property AppDelegate *appDelegate;
+
+-(void)receivedInvitationForConnection: (NSNotification *)notification;
 
 
 @end
@@ -27,14 +30,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-//    PFUser *currentUser = [PFUser currentUser];
-
-//    self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-//    [[self.appDelegate mcManager]setupPeerAndSessionWithDisplayName:[currentUser objectForKey:@"username"]];
-//    [self.appDelegate.mcManager advertiseSelf:YES];
 
     self.userNameLabel.text = [self.user objectForKey:@"username"];
     self.userAgeLabel.text = [NSString stringWithFormat:@"%@",[self.user objectForKey:@"age"]];
+
+    self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(receivedInvitationForConnection:) name:@"MCReceivedInvitation" object:nil];
 
     if ([self.user [@"gender"] isEqual:@0])
     {
@@ -83,62 +85,27 @@
 
     self.bioLabel.text = [self.user objectForKey:@"bio"];
 
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(peerDidChangeStateWithNotification:) name:@"MCDidChangeStateNotification" object:nil];
-
     self.chatArray = [NSMutableArray array];
 
     self.chatDictionaryArray = [NSMutableArray array];
-
 }
 
-//- (IBAction)onButtonPressedSearchForConnections:(id)sender
-//{
-//    [[self.appDelegate mcManager]setupMCBrowser];
-//    self.appDelegate.mcManager.browser.delegate = self;
-//    [self presentViewController:self.appDelegate.mcManager.browser animated:YES completion:nil];
-//}
+#pragma mark - Alert Showing Invitation to join Session
 
-#pragma mark - MCBrowserDelegate methods
+-(void)receivedInvitationForConnection:(NSNotification *)notification
+{
+    MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
+    NSString *alertViewString = [NSString stringWithFormat:@"%@ wants to connect and chat with you", peerID.displayName];
+    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:alertViewString message:nil delegate:self cancelButtonTitle:@"Decline" otherButtonTitles:@"Accept", nil];
+    [alertView show];
+}
 
-//-(void)browserViewControllerDidFinish:(MCBrowserViewController *)browserViewController
-//{
-//    [self.appDelegate.mcManager.browser dismissViewControllerAnimated:YES completion:nil];
-//}
-//
-//-(void)browserViewControllerWasCancelled:(MCBrowserViewController *)browserViewController
-//{
-//    [self.appDelegate.mcManager.browser dismissViewControllerAnimated:YES completion:nil];
-//}
-//
-//-(void)peerDidChangeStateWithNotification:(NSNotification *)notification
-//{
-//    MCPeerID *peerID = [[notification userInfo] objectForKey:@"peerID"];
-//    NSString *peerDisplayName = peerID.displayName;
-//    MCSessionState state = [[[notification userInfo] objectForKey:@"state"]intValue];
-//
-//    if (state != MCSessionStateConnecting)
-//    {
-//        if (state == MCSessionStateConnected)
-//        {
-//            [self.connectedUserDevices addObject:peerDisplayName];
-//            [self.beginChattingButton setEnabled:YES];
-//            [self.searchForConnectionButton setEnabled:NO];
-//        }
-//
-//        else if (state == MCSessionStateNotConnected)
-//        {
-//            if (self.connectedUserDevices.count > 0)
-//            {
-//                UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Connection to User Lost" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-//                [alertView show];
-//
-//                [self.connectedUserDevices removeObjectAtIndex:[self.connectedUserDevices indexOfObject:peerDisplayName]];
-//
-//                [self.beginChattingButton setEnabled:NO];
-//                [self.searchForConnectionButton setEnabled:YES];
-//            }
-//        }
-//    }
-//}
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    BOOL accept = (buttonIndex != alertView.cancelButtonIndex);
+
+    void (^invitationHandler)(BOOL, MCSession *) = [self.appDelegate.mcManager.invitationHandlerArray objectAtIndex:0];
+    invitationHandler(accept, self.appDelegate.mcManager.session);
+}
 
 @end

@@ -305,10 +305,10 @@
             </objects>
             <point key="canvasLocation" x="-804" y="781"/>
         </scene>
-        <!--Left Slideout View Controller-->
+        <!--Slide Out Table View Controller-->
         <scene sceneID="w0X-wg-H8c">
             <objects>
-                <tableViewController id="2zl-ft-bxb" customClass="LeftSlideoutViewController" sceneMemberID="viewController">
+                <tableViewController id="2zl-ft-bxb" customClass="SlideOutTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="uXa-3K-Zdj">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
