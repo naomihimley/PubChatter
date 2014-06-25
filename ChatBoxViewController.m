@@ -65,6 +65,7 @@
 #pragma mark - Notification Methods
 - (void)didReceiveDataWithNotification:(NSNotification *)notification
 {
+    self.chattingUserPeerID = [[notification userInfo] objectForKey:@"peerID"];
     NSString *peerDisplayName = [self.chatingUser objectForKey:@"name"];
     NSData *receivedData = [[notification userInfo] objectForKey:@"data"];
     NSString *receivedText = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
@@ -75,7 +76,6 @@
 
 - (void)didReceivePeerToChatWithNotification: (NSNotification *)notification
 {
-    NSLog(@"peer to chat with notification :)");
     self.chattingUserPeerID = [[notification userInfo]objectForKey:@"peerID"];
     self.chatingUser = [[notification userInfo]objectForKey:@"user"];
     NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
@@ -97,6 +97,7 @@
 {
     NSString *chatWithNewLine = [NSString stringWithFormat:@"\n %@", self.chatTextField.text];
     NSData *dataToSend = [chatWithNewLine dataUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"Chatting User Peer ID? %@", self.chattingUserPeerID);
     NSArray *peerToSendTo = @[self.chattingUserPeerID];
     NSError *error;
     [self.appDelegate.mcManager.session sendData:dataToSend
