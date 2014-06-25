@@ -47,11 +47,6 @@
     {
         self.chatTextView.text = chat;
     }
-    NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
-    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
-    self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:nil];
-    [self.fetchedResultsController performFetch:nil];
-    NSLog(@"should be all users \n\n\n\n %@", [self.fetchedResultsController fetchedObjects]);
 }
 
 - (IBAction)onButtonPressedCancelSendingChat:(id)sender
@@ -107,7 +102,7 @@
             peer.peerID = peerID.displayName;
             [peer addConversationObject:conversation];
             [self.managedObjectContext save:nil];
-            NSLog(@"creating new convo in sendMyMessage");
+//            NSLog(@"creating new convo in sendMyMessage");
         }
         else
         {
@@ -123,7 +118,7 @@
             Conversation *convo = [peer.conversation anyObject];
             convo.message = [convo.message stringByAppendingString:chatString];
             [self.managedObjectContext save:nil];
-            NSLog(@"SENT adding message object: %@", convo.message);
+//            NSLog(@"SENT adding message object: %@", convo.message);
         }
 
         [self.chatArray addObject:chatString];
@@ -151,7 +146,7 @@
         peer.peerID = peerID.displayName;
         [peer addConversationObject:conversation];
         [self.managedObjectContext save:nil];
-        NSLog(@"RECEIVE making new convo w message: %@", conversation.message);
+//        NSLog(@"RECEIVE making new convo w message: %@", conversation.message);
     }
     else
     {
@@ -167,13 +162,13 @@
         Conversation *convo = [peer.conversation anyObject];
         convo.message = [convo.message stringByAppendingString:chatString];
         [self.managedObjectContext save:nil];
-        NSLog(@"RECEIVE adding message: %@", convo.message);
+//        NSLog(@"RECEIVE adding message: %@", convo.message);
     }
 }
 
 - (BOOL)doesConversationExist :(MCPeerID *)peerID
 {
-    NSLog(@"the passed in peer id %@", peerID.displayName);
+//    NSLog(@"the passed in peer id %@", peerID.displayName);
     if (peerID)
     {
         NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
@@ -186,15 +181,15 @@
         NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
         if (array.count < 1)
         {
-            NSLog(@"not returning any fetched results");
+//            NSLog(@"not returning any fetched results");
             return NO;
         }
-        NSLog(@"the fetch returned something");
+//        NSLog(@"the fetch returned something");
         return YES;
     }
     else
     {
-        NSLog(@"the peer id was null");
+//        NSLog(@"the peer id was null");
         return NO;
     }
 
