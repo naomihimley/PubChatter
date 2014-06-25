@@ -133,7 +133,6 @@
                      {
                          NSDictionary *dictionary = @{@"peerID": peerID,
                                                       @"user": user};
-//                         NSLog(@"userDictionaryItem %@", dictionary);
                          if (self.userArray.count <= self.appDelegate.mcManager.advertisingUsers.count) {
                              [self.userArray addObject:dictionary];
                          }
@@ -171,7 +170,7 @@
 
 - (IBAction)onButtonTappedSendInvitation:(id)sender
 {
-//    UIButton *button = (UIButton *)sender;
+    UIButton *button = (UIButton *)sender;
 
     UITableViewCell *cell = (UITableViewCell *)[[[sender superview]superview]superview];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
@@ -186,13 +185,13 @@
 
     [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30];
 
-//    if ([button.titleLabel.text isEqual:@"Chat"])
-//    {
-//        ChatBoxViewController *chatBoxVC = [[ChatBoxViewController alloc]init];
-//        chatBoxVC.userDictionary = dictionary;
-//
-//        [self presentViewController:chatBoxVC animated:YES completion:nil];
-//    }
+    if ([button.titleLabel.text isEqual:@"Chat"])
+    {
+        ChatBoxViewController *chatBoxVC = [[ChatBoxViewController alloc]init];
+        chatBoxVC.userDictionary = dictionary;
+
+        [self presentViewController:chatBoxVC animated:YES completion:nil];
+    }
 }
 
 #pragma mark - Private method for handling the changing of peer's state
@@ -201,43 +200,55 @@
 {
 
     MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
-    NSDictionary *userDictionary = [NSDictionary new];
-    ListOfUsersTableViewCell *cell = [ListOfUsersTableViewCell new];
+    NSLog(@"Changing state with notification 1");
 
     for (NSDictionary *dictionary in self.userArray)
     {
         if ([[dictionary objectForKey:@"peerID"] isEqual:peerID])
         {
-            userDictionary = dictionary;
+            int index = [self.userArray indexOfObject:dictionary];
+
+            for (ListOfUsersTableViewCell *userCell in self.cellArray)
+            {
+                if (userCell.tag == index)
+                {
+                    if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
+                    {
+                        [userCell.chatButton setHighlighted:YES];
+                    }
+                }
+            }
+
         }
     }
 
-    int index = [self.userArray indexOfObject:userDictionary];
 
-    for (ListOfUsersTableViewCell *userCell in self.cellArray)
-    {
-        if (userCell.tag == index)
-        {
-            cell = userCell;
-        }
-    }
 
-    if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnecting)
-    {
-        [cell.chatButton setTitle:@"Connecting" forState:UIControlStateNormal];
-    }
-    else if ([[[notification userInfo]objectForKey:@"state"]intValue] != MCSessionStateConnecting)
-    {
-        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
-        {
-            [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
+//    NSLog(@"Changing state With notification 2");
+//
+//    for (ListOfUsersTableViewCell *cell in self.tableView.subviews) {
+//
+//    }
 
-        }
-        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
-        {
-            [cell.chatButton setTitle:@"Connect" forState:UIControlStateNormal];
-        }
-    }
+//    if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnecting)
+//    {
+//        [cell.chatButton setTitle:@"Connecting" forState:UIControlStateNormal];
+//        NSLog(@"CONNECTING");
+//    }
+//    else if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
+//    {
+//        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
+//        {
+//        [cell.chatButton setHighlighted:YES];
+//
+//        NSLog(@"changing state with Notification connected");
+//        [self.tableView reloadRowsAtIndexPaths:@[[self.tableView indexPathForCell:cell]] withRowAnimation:UITableViewRowAnimationNone];
+//        }
+//        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
+//        {
+//            [cell.chatButton setTitle:@"Connect" forState:UIControlStateNormal];
+//        }
+//    }
 }
 
 #pragma mark - Private method for handling receiving an invitation
