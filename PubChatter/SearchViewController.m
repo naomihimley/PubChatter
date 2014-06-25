@@ -342,9 +342,4 @@ calloutAccessoryControlTapped:(UIControl *)control
         }
 }
 
-
-
-
-
-
 @end

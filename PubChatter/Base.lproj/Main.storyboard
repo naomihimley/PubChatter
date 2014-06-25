@@ -459,7 +459,7 @@
                         <outlet property="tableView" destination="yRl-4U-zPV" id="37b-6B-isQ"/>
                         <outlet property="toggleControlOutlet" destination="qoU-W5-RLD" id="wDG-cE-i3P"/>
                         <segue destination="FmP-9A-1U9" kind="push" identifier="segue" id="rCl-3c-IE9"/>
-                        <segue destination="lwo-3E-38s" kind="push" identifier="loginsegue" id="uoy-ab-Xxx"/>
+                        <segue destination="lwo-3E-38s" kind="modal" identifier="loginsegue" id="uoy-ab-Xxx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
@@ -925,12 +925,12 @@
                     </view>
                     <navigationItem key="navigationItem" id="ksf-Pb-FJM"/>
                     <connections>
-                        <segue destination="vXZ-lx-hvc" kind="push" identifier="loginsegue" id="DNm-68-rDJ"/>
+                        <segue destination="vXZ-lx-hvc" kind="modal" identifier="loginsegue" id="CFu-vT-SZi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S3n-S3-G8a" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="538" y="-1594"/>
+            <point key="canvasLocation" x="1084" y="-1478"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="UBQ-g4-tB7">
@@ -1014,6 +1014,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="DNm-68-rDJ"/>
+        <segue reference="CFu-vT-SZi"/>
     </inferredMetricsTieBreakers>
 </document>
