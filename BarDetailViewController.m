@@ -53,7 +53,7 @@
     NSData *ratingImageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:self.barFromSourceVC.businessRatingImageURL]];
     self.ratingImageView.image = [UIImage imageWithData:ratingImageData];
 
-    self.categoriesLabel.text = [NSString stringWithFormat:@"Category: %@\nOffers: %@", [[self.barFromSourceVC.categories objectAtIndex:0] objectAtIndex:0], [[self.barFromSourceVC.categories objectAtIndex:1] objectAtIndex:0]];
+    self.categoriesLabel.text = [NSString stringWithFormat:@"Category: %@\nOffers: %@", self.barFromSourceVC.categories, self.barFromSourceVC.offers];
 
     self.barRatingLabel.text = [NSString stringWithFormat:@"%@ has not been rated", self.barFromSourceVC.name];
 }
