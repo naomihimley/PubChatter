@@ -99,7 +99,6 @@
         [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:chatString]];
         //passed peerID from left drawer
         MCPeerID *peerID = [self.userDictionary objectForKey:@"peerID"];
-        NSLog(@"this is probably nil %@", peerID);
         if ([self doesConversationExist:peerID] == NO)
         {
             Peer *peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext:self.managedObjectContext];
@@ -174,22 +173,31 @@
 
 - (BOOL)doesConversationExist :(MCPeerID *)peerID
 {
-    NSLog(@"%@", peerID.displayName);
-    NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
-    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", peerID.displayName];
-    request.predicate = predicate;
-
-    self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
-    [self.fetchedResultsController performFetch:nil];
-    NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
-    if (array.count < 1)
+    NSLog(@"the passed in peer id %@", peerID.displayName);
+    if (peerID)
     {
-        NSLog(@"not returning any fetched results");
+        NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
+        request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", peerID.displayName];
+        request.predicate = predicate;
+
+        self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
+        [self.fetchedResultsController performFetch:nil];
+        NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
+        if (array.count < 1)
+        {
+            NSLog(@"not returning any fetched results");
+            return NO;
+        }
+        NSLog(@"the fetch returned something");
+        return YES;
+    }
+    else
+    {
+        NSLog(@"the peer id was null");
         return NO;
     }
-    NSLog(@"the fetch returned something");
-    return YES;
+
 }
 
 # pragma mark - Disconnect from session
