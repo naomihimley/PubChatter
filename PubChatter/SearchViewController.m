@@ -212,7 +212,23 @@
             yelpBar.businessImageURL = [dictionary objectForKey:@"image_url"];
             yelpBar.businessRatingImageURL = [dictionary objectForKey:@"rating_img_url_small"];
             yelpBar.aboutBusiness = [dictionary objectForKey:@"snippet_text"];
-            yelpBar.categories = [dictionary objectForKey:@"categories"];
+
+            if ([[dictionary objectForKey:@"categories"] count] == 3) {
+                yelpBar.categories = [[[dictionary objectForKey:@"categories"] objectAtIndex:0] objectAtIndex:0];
+                yelpBar.offers = [NSString stringWithFormat:@"%@, %@", [[[dictionary objectForKey:@"categories"] objectAtIndex:1] objectAtIndex:0], [[[dictionary objectForKey:@"categories"] objectAtIndex:2] objectAtIndex:0]];
+            }
+            else if ([[dictionary objectForKey:@"categories"] count] == 2) {
+                yelpBar.categories = [[[dictionary objectForKey:@"categories"] objectAtIndex:0] objectAtIndex:0];
+                yelpBar.offers = [NSString stringWithFormat:@"%@", [[[dictionary objectForKey:@"categories"] objectAtIndex:1] objectAtIndex:0]];
+            }
+            else if ([[dictionary objectForKey:@"categories"] count] == 1) {
+                yelpBar.categories = [[[dictionary objectForKey:@"categories"] objectAtIndex:0] objectAtIndex:0];
+                yelpBar.offers = @"n/a";
+            }
+            else {
+                yelpBar.categories = @"n/a";
+                yelpBar.offers = @"n/a";
+            }
             yelpBar.yelpID = [dictionary objectForKey:@"id"];
             [arrayOfYelpBarObjects addObject:yelpBar];
         }

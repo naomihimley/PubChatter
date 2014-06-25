@@ -117,10 +117,6 @@
 		9BDBE507194F8A400045C05B /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
 		9BDBE6131959CB120045C05B /* LeftSideSlideOutTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LeftSideSlideOutTableViewController.h; path = ../LeftSideSlideOutTableViewController.h; sourceTree = "<group>"; };
 		9BDBE6141959CB120045C05B /* LeftSideSlideOutTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LeftSideSlideOutTableViewController.m; path = ../LeftSideSlideOutTableViewController.m; sourceTree = "<group>"; };
-		B03F23231954DBE400DB67F8 /* BeaconRegionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BeaconRegionManager.h; path = ../BeaconRegionManager.h; sourceTree = "<group>"; };
-		B03F23241954DBE400DB67F8 /* BeaconRegionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BeaconRegionManager.m; path = ../BeaconRegionManager.m; sourceTree = "<group>"; };
-		9BDBE6101959B98A0045C05B /* SlideOutTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SlideOutTableViewController.h; path = ../SlideOutTableViewController.h; sourceTree = "<group>"; };
-		9BDBE6111959B98A0045C05B /* SlideOutTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SlideOutTableViewController.m; path = ../SlideOutTableViewController.m; sourceTree = "<group>"; };
 		B03F23231954DBE400DB67F8 /* BeaconRegionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeaconRegionManager.h; sourceTree = "<group>"; };
 		B03F23241954DBE400DB67F8 /* BeaconRegionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconRegionManager.m; sourceTree = "<group>"; };
 		B0623BEB1958FDE600A9AFD6 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -450,6 +446,7 @@
 				ORGANIZATIONNAME = "Naomi Himley";
 				TargetAttributes = {
 					B0782C37194BB3700022E6E7 = {
+						DevelopmentTeam = 6SW4QY498T;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -531,7 +528,6 @@
 				0EB31FFE194BC176005A3B82 /* ProfileViewController.m in Sources */,
 				9BDBE506194F50200045C05B /* ListOfUsersTableViewCell.m in Sources */,
 				B0623C561959D21300A9AFD6 /* Conversation.m in Sources */,
-				9BDBE6121959B98A0045C05B /* SlideOutTableViewController.m in Sources */,
 				0ECEAF13195884E100B92C40 /* Bar.m in Sources */,
 				0ECEAF0D19586FA800B92C40 /* RightSlideoutViewController.m in Sources */,
 				0ECEAEEB194F6FAC00B92C40 /* BarDetailViewController.m in Sources */,
@@ -659,6 +655,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/yeahright/Desktop,
@@ -669,6 +667,7 @@
 				GCC_PREFIX_HEADER = "PubChatter/PubChatter-Prefix.pch";
 				INFOPLIST_FILE = "PubChatter/PubChatter-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "5466B779-43A8-4BD1-952D-B75CDECD3A8B";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -678,6 +677,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/yeahright/Desktop,
@@ -688,6 +689,7 @@
 				GCC_PREFIX_HEADER = "PubChatter/PubChatter-Prefix.pch";
 				INFOPLIST_FILE = "PubChatter/PubChatter-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "5466B779-43A8-4BD1-952D-B75CDECD3A8B";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
