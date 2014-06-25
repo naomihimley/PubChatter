@@ -661,7 +661,7 @@
 				GCC_PREFIX_HEADER = "PubChatter/PubChatter-Prefix.pch";
 				INFOPLIST_FILE = "PubChatter/PubChatter-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "7E431316-632D-4C3C-A74A-E1E7D6C727A4";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -671,8 +671,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/yeahright/Desktop,
@@ -683,7 +683,7 @@
 				GCC_PREFIX_HEADER = "PubChatter/PubChatter-Prefix.pch";
 				INFOPLIST_FILE = "PubChatter/PubChatter-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "7E431316-632D-4C3C-A74A-E1E7D6C727A4";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

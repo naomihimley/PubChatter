@@ -13,7 +13,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *genderLabel;
-@property (weak, nonatomic) IBOutlet UILabel *ageLabel;
 @property (weak, nonatomic) IBOutlet UITextView *bioTextView;
 @property (weak, nonatomic) IBOutlet UILabel *sexualOrientationLabel;
 @property (weak, nonatomic) IBOutlet UILabel *favDrinkLabel;
@@ -47,13 +46,12 @@
      {
          self.profileImageView.image = [UIImage imageWithData:data];
      }];
-    self.nameLabel.text = [[PFUser currentUser]objectForKey:@"name"];
+
     if ([[PFUser currentUser]objectForKey:@"age"]) {
-        self.ageLabel.text = [NSString stringWithFormat:@"%@", [[PFUser currentUser]objectForKey:@"age"]];
+        self.nameLabel.text = [NSString stringWithFormat:@"%@, %@", [[PFUser currentUser]objectForKey:@"name"], [[PFUser currentUser]objectForKey:@"age"]];
     }
-    else
-    {
-        self.ageLabel.text = @"";
+    else{
+        self.nameLabel.text = [NSString stringWithFormat:@"%@", [[PFUser currentUser]objectForKey:@"name"]];
     }
     if ([[PFUser currentUser]objectForKey:@"bio"]) {
         self.bioTextView.text = [[PFUser currentUser]objectForKey:@"bio"];
