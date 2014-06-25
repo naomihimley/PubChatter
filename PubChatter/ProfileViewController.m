@@ -45,6 +45,8 @@
     [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
      {
          self.profileImageView.image = [UIImage imageWithData:data];
+//         self.profileImageView.layer.cornerRadius = 10.0f;
+//         self.profileImageView.clipsToBounds = YES;
      }];
 
     if ([[PFUser currentUser]objectForKey:@"age"]) {
@@ -53,13 +55,20 @@
     else{
         self.nameLabel.text = [NSString stringWithFormat:@"%@", [[PFUser currentUser]objectForKey:@"name"]];
     }
+
     if ([[PFUser currentUser]objectForKey:@"bio"]) {
-        self.bioTextView.text = [[PFUser currentUser]objectForKey:@"bio"];
+
+        NSString *name = [[PFUser currentUser]objectForKey:@"name"];
+        UIFont *boldFont = [UIFont boldSystemFontOfSize:12.0];
+        NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"About %@\n%@", name, [[PFUser currentUser]objectForKey:@"bio"]]];
+        [attrString addAttribute: NSFontAttributeName value: boldFont range: NSMakeRange(0, 6 + name.length)];
+        self.bioTextView.attributedText = attrString;
     }
     else
     {
         self.bioTextView.text = @"";
     }
+
     if ([[PFUser currentUser]objectForKey:@"favoriteDrink"]) {
         self.favDrinkLabel.text = [[PFUser currentUser]objectForKey:@"favoriteDrink"];
         [self.favDrinkLabel sizeToFit];
@@ -83,12 +92,12 @@
      }
      if ([[[PFUser currentUser]objectForKey:@"sexualOrientation"] isEqual:@0])
      {
-         self.sexualOrientationLabel.text = @"Interested in Men";
+         self.sexualOrientationLabel.text = @"Interested in: Men";
          [self.sexualOrientationLabel sizeToFit];
      }
      else if ([[[PFUser currentUser]objectForKey:@"sexualOrientation"] isEqual:@1])
      {
-         self.sexualOrientationLabel.text = @"Interested in Women";
+         self.sexualOrientationLabel.text = @"Interested in: Women";
          [self.sexualOrientationLabel sizeToFit];
      }
      else if ([[[PFUser currentUser]objectForKey:@"sexualOrientation"] isEqual:@2])
