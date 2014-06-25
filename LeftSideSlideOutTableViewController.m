@@ -7,7 +7,6 @@
 //
 
 #import "LeftSideSlideOutTableViewController.h"
-#import "ChatViewController.h"
 #import "ChatBoxViewController.h"
 #import "AppDelegate.h"
 #import "ListOfUsersTableViewCell.h"
@@ -175,6 +174,7 @@
     {
         if ([[dictionary objectForKey:@"peerID"] isEqual:peerID])
         {
+            NSLog(@"got the dictionary");
             int index = [self.users indexOfObject:dictionary];
 
             for (ListOfUsersTableViewCell *userCell in self.cellArray)
