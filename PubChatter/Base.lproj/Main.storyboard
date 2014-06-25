@@ -322,7 +322,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="BIN-h3-l0M" kind="push" id="ZEQ-St-O7Y"/>
+                                    <segue destination="BIN-h3-l0M" kind="modal" id="rPP-Ny-egJ"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -1032,7 +1032,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="ZEQ-St-O7Y"/>
+        <segue reference="rPP-Ny-egJ"/>
         <segue reference="DNm-68-rDJ"/>
     </inferredMetricsTieBreakers>
 </document>
