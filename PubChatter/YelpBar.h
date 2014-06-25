@@ -21,7 +21,9 @@
 @property NSString *businessRatingImageURL;
 @property NSString *businessMobileURL;
 @property NSString *aboutBusiness;
-@property NSArray *categories;
+@property NSString *categories;
+@property NSString *offers;
+
 
 
 @end

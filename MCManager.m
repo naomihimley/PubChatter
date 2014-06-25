@@ -41,11 +41,13 @@
 {
     NSDictionary *dictionary = @{@"peerID": peerID,
                                  @"state": [NSNumber numberWithInt:state]};
+    NSLog(@"STATE: %i", state);
+
     [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidChangeStateNotification"
                                                         object:nil
                                                       userInfo:dictionary];
 
-    NSLog(@"Chaged state, to another state, so yea it's different");
+
 
 }
 
@@ -85,25 +87,11 @@
 {
     NSLog(@"This dude is advertising %@", peerID.displayName);
     [self.foundPeersArray addObject:peerID];
-
-    if (self.foundPeersArray.count > 1)
-    {
-        for (MCPeerID *peer in self.foundPeersArray)
-        {
-            NSLog(@"for loop happening and shit");
-            if (peer.displayName != peerID.displayName)
-            {
-                NSLog(@"peerID %@", peerID);
-                NSLog(@"peer %@", peer);
-                [self.advertisingUsers addObject:peerID];
-            }
-        }
-    }
-    else
+    NSArray *array = [NSArray arrayWithArray:self.advertisingUsers];
+    if (![array containsObject:peerID])
     {
         [self.advertisingUsers addObject:peerID];
     }
-
 
     NSLog(@"advertisingUsers from MCManager %@", self.advertisingUsers);
 
