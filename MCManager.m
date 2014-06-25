@@ -8,6 +8,8 @@
 
 #import "MCManager.h"
 #import <Parse/Parse.h>
+#import "Peer.h"
+#import "Conversation.h"
 
 @implementation MCManager
 
@@ -23,6 +25,7 @@
         self.advertiser = nil;
         self.advertisingUsers = [NSMutableArray array];
         self.foundPeersArray = [NSMutableArray array];
+        self.fetchedResultsController = [[NSFetchedResultsController alloc]init];
     }
     return self;
 }
@@ -55,9 +58,62 @@
 {
     NSDictionary *dictionary = @{@"data": data,
                                  @"peerID": peerID};
+    NSString *receivedText = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidReceiveDataNotification"
                                                         object:nil
                                                       userInfo:dictionary];
+    if (![self doesConversationExist:peerID])
+    {
+        Peer *peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext:moc];
+        Conversation *conversation = [NSEntityDescription insertNewObjectForEntityForName:@"Conversation" inManagedObjectContext:moc];
+        conversation.message = receivedText;
+        peer.peerID = peerID.displayName;
+        [peer addConversationObject:conversation];
+        [moc save:nil];
+        NSLog(@"creating new convo in mcmanager");
+    }
+    else if ([self doesConversationExist:peerID])
+    {
+        NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
+        request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", peerID.displayName];
+        request.predicate = predicate;
+        self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
+        [self.fetchedResultsController performFetch:nil];
+        //got the Peer who sent you the message
+        NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
+        Peer *peer = [array firstObject];
+        Conversation *convo = [peer.conversation anyObject];
+        convo.message = [convo.message stringByAppendingString:receivedText];
+        [moc save:nil];
+        NSLog(@"adding received message to MOC");
+    }
+}
+- (BOOL)doesConversationExist :(MCPeerID *)peerID
+{
+    if (peerID)
+    {
+        NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
+        request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", peerID.displayName];
+        request.predicate = predicate;
+
+        self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
+        [self.fetchedResultsController performFetch:nil];
+        NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
+        if (array.count < 1)
+        {
+            NSLog(@"not returning any fetched results");
+            return NO;
+        }
+        NSLog(@"the fetch returned something");
+        return YES;
+    }
+    else
+    {
+        NSLog(@"the peer id was null");
+        return NO;
+    }
 }
 
 -(void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error
