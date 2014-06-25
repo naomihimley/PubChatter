@@ -31,7 +31,7 @@
 
     NSLog(@"self.users in viewDidLoad %@", self.users);
     self.cellArray = [NSMutableArray array];
-    
+
     if ([PFUser currentUser])
     {
         [self.appDelegate.mcManager setupPeerAndSessionWithDisplayName:[[PFUser currentUser]objectForKey:@"username"]];
@@ -78,7 +78,7 @@
 
     PFUser *user = [dictionary objectForKey:@"user"];
 
-    cell.userNameLabel.text = [user objectForKey:@"username"];
+    cell.userNameLabel.text = [user objectForKey:@"name"];
     cell.chatButton.tag = indexPath.row;
     [self.cellArray addObject:cell];
     cell.tag = [self.users indexOfObject:dictionary];
@@ -144,7 +144,6 @@
                      }
                  }
                  [self.tableView reloadData];
-                 NSLog(@"self.users when querying %@", self.users);
              }
          }
      }];
@@ -157,6 +156,7 @@
     UIButton *button = (UIButton *)sender;
 
     [button setTitle:@"Connecting" forState:UIControlStateNormal];
+    [button setEnabled:NO];
 
     UITableViewCell *cell = (UITableViewCell *)[[[sender superview]superview]superview];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
@@ -170,8 +170,6 @@
     {
         [[NSNotificationCenter defaultCenter]postNotificationName:@"PeerToChatWith" object:nil userInfo:dictionary];
     }
-
-    NSLog(@"users array when sending %@", self.users);
 }
 
 #pragma mark - Private method for handling the changing of peer's state
@@ -179,25 +177,27 @@
 -(void)peerDidChangeStateWithNotification:(NSNotification *)notification
 {
     MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
-    NSLog(@"Changing state with notification 1");
+    NSLog(@"peerID from notification %@", peerID);
 
-    NSLog(@"users array: %@", self.users);
     for (NSDictionary *dictionary in self.users)
     {
-        if ([[dictionary objectForKey:@"peerID"] isEqual:peerID])
+        MCPeerID *peer = [dictionary objectForKey:@"peerID"];
+        if (peerID == peer)
         {
             int index = [self.users indexOfObject:dictionary];
-            NSLog(@"%i", index);
+            NSLog(@"index %i", index);
 
             for (ListOfUsersTableViewCell *userCell in self.cellArray)
             {
                 if (userCell.tag == index)
-                    NSLog(@"usercell %@", userCell);
+                    NSLog(@"userCell.tag %i", userCell.tag);
                 {
                     if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
                     {
-                        NSLog(@"should change this button at some point.... Today?... Yes?... NO?... OK");
-                        [userCell.chatButton setHighlighted:YES];
+                        NSLog(@"Dictionary %@", dictionary);
+//                        [userCell.chatButton setHighlighted:YES];
+                        [userCell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
+                        [userCell.chatButton setEnabled:YES];
                     }
                 }
             }
@@ -228,9 +228,22 @@
 -(void)receivedInvitationForConnection:(NSNotification *)notification
 {
     MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
-    NSString *peerIDString = peerID.displayName;
-    NSLog(@"peerID.displayName of sender %@", peerIDString);
-    NSString *alertViewTitle = [NSString stringWithFormat:@"%@ wants to connect and chat with you", peerIDString];
+
+    NSLog(@"peerID from notification before going into dictionary %@", peerID);
+    NSDictionary *user = [NSDictionary new];
+
+    for (NSDictionary *dictionary in self.users)
+    {
+        MCPeerID *peer = [dictionary objectForKey:@"peerID"];
+        if (peerID == peer)
+        {
+            user = dictionary;
+        }
+    }
+
+    NSString *peerName = [[user objectForKey:@"user"]objectForKey:@"name"];
+    NSLog(@"peerID.displayName of sender %@", peerName);
+    NSString *alertViewTitle = [NSString stringWithFormat:@"%@ wants to connect and chat with you", peerName];
     UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:alertViewTitle message:nil delegate:self cancelButtonTitle:@"Decline" otherButtonTitles:@"Accept", nil];
     [alertView show];
 }

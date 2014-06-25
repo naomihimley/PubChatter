@@ -18,6 +18,7 @@
 @property NSMutableArray *advertisingUsers;
 @property NSMutableArray *invitationHandlerArray;
 @property NSMutableArray *foundPeersArray;
+@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 
 -(void)setupPeerAndSessionWithDisplayName: (NSString *)displayName;
 -(void)advertiseSelf: (BOOL)shouldAdvertise;
