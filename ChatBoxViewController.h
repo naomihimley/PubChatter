@@ -12,6 +12,5 @@
 @interface ChatBoxViewController : UIViewController <NSFetchedResultsControllerDelegate>
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
-@property NSDictionary *userDictionary;
 
 @end

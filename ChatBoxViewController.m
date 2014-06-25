@@ -15,6 +15,8 @@
 @interface ChatBoxViewController ()<UITextFieldDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *chatTextField;
 @property (weak, nonatomic) IBOutlet UITextView *chatTextView;
+@property PFUser *chatingUser;
+@property MCPeerID *chattingUserPeerID;
 @property AppDelegate *appDelegate;
 
 -(void)didReceiveDataWithNotification: (NSNotification *)notification;
@@ -37,7 +39,10 @@
                                              selector:@selector(didReceiveDataWithNotification:)
                                                  name:@"MCDidReceiveDataNotification"
                                                object:nil];
-
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didReceivePeerToChatWithNotification:)
+                                                 name:@"PeerToChatWith"
+                                               object:nil];
     self.chatTextField.delegate = self;
     [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     [self.view resignFirstResponder];
@@ -60,9 +65,7 @@
 #pragma mark - Notification Methods
 - (void)didReceiveDataWithNotification:(NSNotification *)notification
 {
-    MCPeerID *peerID = [[notification userInfo] objectForKey:@"peerID"];
-    NSString *peerDisplayName = peerID.displayName;
-
+    NSString *peerDisplayName = [self.chatingUser objectForKey:@"name"];
     NSData *receivedData = [[notification userInfo] objectForKey:@"data"];
     NSString *receivedText = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
 
@@ -70,13 +73,14 @@
     [self.chatTextView performSelectorOnMainThread:@selector(setText:) withObject:[self.chatTextView.text stringByAppendingString:chatString] waitUntilDone:NO];
 }
 
-#pragma mark - Helper method implementations
-- (void)populateChat
+- (void)didReceivePeerToChatWithNotification: (NSNotification *)notification
 {
-    MCPeerID *peerID = [self.userDictionary objectForKey:@"peerID"];
+    NSLog(@"peer to chat with notification :)");
+    self.chattingUserPeerID = [[notification userInfo]objectForKey:@"peerID"];
+    self.chatingUser = [[notification userInfo]objectForKey:@"user"];
     NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", peerID.displayName];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", self.chattingUserPeerID.displayName];
     request.predicate = predicate;
     self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
     [self.fetchedResultsController performFetch:nil];
@@ -86,11 +90,14 @@
     self.chatTextView.text = convo.message;
 }
 
+#pragma mark - Helper method implementations
+
+
 - (void)sendMyMessage
 {
-    NSData *dataToSend = [self.chatTextField.text dataUsingEncoding:NSUTF8StringEncoding];
-    //need to send to the correct user here instead of all
-    NSArray *peerToSendTo = self.appDelegate.mcManager.session.connectedPeers;
+    NSString *chatWithNewLine = [NSString stringWithFormat:@"\n %@", self.chatTextField.text];
+    NSData *dataToSend = [chatWithNewLine dataUsingEncoding:NSUTF8StringEncoding];
+    NSArray *peerToSendTo = @[self.chattingUserPeerID];
     NSError *error;
     [self.appDelegate.mcManager.session sendData:dataToSend
                                          toPeers:peerToSendTo
@@ -111,31 +118,31 @@
         NSString *chatString = [NSString stringWithFormat:@"I wrote:\n%@\n\n", self.chatTextField.text];
         [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:chatString]];
         //passed peerID from left drawer
-        MCPeerID *peerID = [self.userDictionary objectForKey:@"peerID"];
-        if ([self doesConversationExist:peerID] == NO)
+        if ([self doesConversationExist:self.chattingUserPeerID] == NO)
         {
             Peer *peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext:self.managedObjectContext];
             Conversation *conversation = [NSEntityDescription insertNewObjectForEntityForName:@"Conversation" inManagedObjectContext:self.managedObjectContext];
             conversation.message = chatString;
-            peer.peerID = peerID.displayName;
+            peer.peerID = self.chattingUserPeerID.displayName;
             [peer addConversationObject:conversation];
             [self.managedObjectContext save:nil];
-//            NSLog(@"creating new convo in sendMyMessage");
+            NSLog(@"CHATBOX creating new convo in sendMyMessage");
         }
         else
         {
             NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
             request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", peerID.displayName];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", self.chattingUserPeerID.displayName];
             request.predicate = predicate;
             self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
             [self.fetchedResultsController performFetch:nil];
             NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
             Peer *peer = [array firstObject];
             Conversation *convo = [peer.conversation anyObject];
-            convo.message = [convo.message stringByAppendingString:chatString];
+            NSString *chatWithNewLine = [NSString stringWithFormat: @"\n %@ \n", chatString];
+            convo.message = [convo.message stringByAppendingString:chatWithNewLine];
             [self.managedObjectContext save:nil];
-//            NSLog(@"SENT adding message object: %@", convo.message);
+            NSLog(@"CHATBOX SENT adding message object: %@", convo.message);
         }
 
         self.chatTextField.text = @"";

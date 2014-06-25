@@ -132,9 +132,10 @@
 
 -(void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void (^)(BOOL, MCSession *))invitationHandler
 {
+    NSDictionary *dictionary = @{@"peerID":peerID};
     self.invitationHandlerArray = [NSMutableArray arrayWithObject:[invitationHandler copy]];
 
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"MCReceivedInvitation" object:nil userInfo:nil];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"MCReceivedInvitation" object:nil userInfo:dictionary];
 }
 
 #pragma mark - MCNearbyServiceBrowser Delegate Methods
