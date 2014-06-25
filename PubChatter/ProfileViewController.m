@@ -117,6 +117,4 @@
     self.navigationItem.title = [notification.userInfo objectForKey:@"barName"];
 }
 
-
-
 @end

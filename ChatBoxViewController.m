@@ -74,7 +74,6 @@
     NSData *dataToSend = [self.chatTextField.text dataUsingEncoding:NSUTF8StringEncoding];
     NSArray *peerToSendTo = self.appDelegate.mcManager.session.connectedPeers;
     NSError *error;
-
     [self.appDelegate.mcManager.session sendData:dataToSend
                                          toPeers:peerToSendTo
                                         withMode:MCSessionSendDataReliable
@@ -93,32 +92,33 @@
     {
         NSString *chatString = [NSString stringWithFormat:@"I wrote:\n%@\n\n", self.chatTextField.text];
         [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:chatString]];
+        //passed peerID from left drawer
         MCPeerID *peerID = [self.userDictionary objectForKey:@"peerID"];
-        NSLog(@"peer id from userdictionary %@", peerID);
         if ([self doesConversationExist:peerID] == NO)
         {
             Peer *peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext:self.managedObjectContext];
             Conversation *conversation = [NSEntityDescription insertNewObjectForEntityForName:@"Conversation" inManagedObjectContext:self.managedObjectContext];
             conversation.message = chatString;
+            peer.peerID = peerID.displayName;
             [peer addConversationObject:conversation];
             [self.managedObjectContext save:nil];
-            NSLog(@"creating new convo in sendMyMessage");
+//            NSLog(@"creating new convo in sendMyMessage");
         }
         else
         {
             NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
             request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", peerID];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", peerID.displayName];
             request.predicate = predicate;
             self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
             [self.fetchedResultsController performFetch:nil];
             NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
             Peer *peer = [array firstObject];
+            peer.peerID = peerID.displayName;
             Conversation *convo = [peer.conversation anyObject];
             convo.message = [convo.message stringByAppendingString:chatString];
             [self.managedObjectContext save:nil];
-            //this seems to be working
-            NSLog(@"adding conversation object: %@ in sendMyMessage", convo.message);
+//            NSLog(@"SENT adding message object: %@", convo.message);
         }
 
         [self.chatArray addObject:chatString];
@@ -143,44 +143,55 @@
         Peer *peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext:self.managedObjectContext];
         Conversation *conversation = [NSEntityDescription insertNewObjectForEntityForName:@"Conversation" inManagedObjectContext:self.managedObjectContext];
         conversation.message = chatString;
+        peer.peerID = peerID.displayName;
         [peer addConversationObject:conversation];
         [self.managedObjectContext save:nil];
-        NSLog(@"RECEIVE making new conversation w message: %@", conversation.message);
+//        NSLog(@"RECEIVE making new convo w message: %@", conversation.message);
     }
     else
     {
         NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
         request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", peerID];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", peerID.displayName];
         request.predicate = predicate;
         self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
         [self.fetchedResultsController performFetch:nil];
         NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
         Peer *peer = [array firstObject];
+        peer.peerID = peerID.displayName;
         Conversation *convo = [peer.conversation anyObject];
         convo.message = [convo.message stringByAppendingString:chatString];
         [self.managedObjectContext save:nil];
-        NSLog(@"RECEIVE adding conversation object: %@", convo.message);
+//        NSLog(@"RECEIVE adding message: %@", convo.message);
     }
 }
+
 - (BOOL)doesConversationExist :(MCPeerID *)peerID
 {
-    NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
-    request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", peerID];
-    request.predicate = predicate;
-
-    self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
-    [self.fetchedResultsController performFetch:nil];
-    NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
-    if (array.count < 1)
+//    NSLog(@"the passed in peer id %@", peerID.displayName);
+    if (peerID)
     {
-        return NO;
-        NSLog(@"not returning any fetched results");
-    }
-    return YES;
-    NSLog(@"returning a result");
+        NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
+        request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", peerID.displayName];
+        request.predicate = predicate;
 
+        self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
+        [self.fetchedResultsController performFetch:nil];
+        NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
+        if (array.count < 1)
+        {
+//            NSLog(@"not returning any fetched results");
+            return NO;
+        }
+//        NSLog(@"the fetch returned something");
+        return YES;
+    }
+    else
+    {
+//        NSLog(@"the peer id was null");
+        return NO;
+    }
 
 }
 
