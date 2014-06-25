@@ -28,11 +28,10 @@
     [super viewDidLoad];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     self.users = [NSMutableArray array];
+
+    NSLog(@"self.users in viewDidLoad %@", self.users);
     self.cellArray = [NSMutableArray array];
-    [[NSNotificationCenter defaultCenter]addObserver:self
-                                            selector:@selector(queryForUsers)
-                                                name:@"MCDidChangeStateNotification"
-                                              object:nil];
+    
     if ([PFUser currentUser])
     {
         [self.appDelegate.mcManager setupPeerAndSessionWithDisplayName:[[PFUser currentUser]objectForKey:@"username"]];
@@ -40,11 +39,23 @@
         NSLog(@"username %@", [[PFUser currentUser]objectForKey:@"username"]);
     }
 
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(peerDidChangeStateWithNotification:) name:@"MCDidChangeStateNotification" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self
+                                            selector:@selector(peerDidChangeStateWithNotification:) name:@"MCDidChangeStateNotification"
+                                              object:nil];
 
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(queryForUsers) name:@"MCFoundAdvertisingPeer" object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(peerStoppedAdvertising:) name:@"MCPeerStopAdvertising" object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(receivedInvitationForConnection:) name:@"MCReceivedInvitation" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self
+                                            selector:@selector(queryForUsers)
+                                                name:@"MCFoundAdvertisingPeer"
+                                              object:nil];
+
+    [[NSNotificationCenter defaultCenter]addObserver:self
+                                            selector:@selector(peerStoppedAdvertising:)
+                                                name:@"MCPeerStopAdvertising"
+                                              object:nil];
+
+    [[NSNotificationCenter defaultCenter]addObserver:self
+                                            selector:@selector(receivedInvitationForConnection:) name:@"MCReceivedInvitation"
+                                              object:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -72,7 +83,8 @@
     [self.cellArray addObject:cell];
     cell.tag = [self.users indexOfObject:dictionary];
 
-    if ([user objectForKey:@"age"]) {
+    if ([user objectForKey:@"age"])
+    {
         cell.userAgeLabel.text = [NSString stringWithFormat:@"%@",[user objectForKey:@"age"]];
     }
     else
@@ -116,10 +128,10 @@
      {
          if (!error)
          {
-             NSArray *users = [[NSArray alloc]initWithArray:objects];
+             NSArray *usersArray = [[NSArray alloc]initWithArray:objects];
              for (MCPeerID *peerID in self.appDelegate.mcManager.advertisingUsers)
              {
-                 for (PFUser *user in users)
+                 for (PFUser *user in usersArray)
                  {
                      if ([peerID.displayName isEqual:[user objectForKey:@"username"]])
                      {
@@ -132,6 +144,7 @@
                      }
                  }
                  [self.tableView reloadData];
+                 NSLog(@"self.users when querying %@", self.users);
              }
          }
      }];
@@ -141,39 +154,45 @@
 
 - (IBAction)onButtonTappedSendInvitation:(id)sender
 {
-//    UIButton *button = (UIButton *)sender;
+    UIButton *button = (UIButton *)sender;
+
+    [button setTitle:@"Connecting" forState:UIControlStateNormal];
 
     UITableViewCell *cell = (UITableViewCell *)[[[sender superview]superview]superview];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 
     NSDictionary *dictionary = [self.users objectAtIndex:indexPath.row];
-
-    NSLog(@"user to send data too %@", dictionary);
     MCPeerID *peerID = [dictionary objectForKey:@"peerID"];
 
     [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30];
+
+    if ([button.titleLabel.text isEqual:@"Chat"])
+    {
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"PeerToChatWith" object:nil userInfo:dictionary];
+    }
+
+    NSLog(@"users array when sending %@", self.users);
 }
 
 #pragma mark - Private method for handling the changing of peer's state
 
 -(void)peerDidChangeStateWithNotification:(NSNotification *)notification
 {
-
     MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
     NSLog(@"Changing state with notification 1");
 
+    NSLog(@"users array: %@", self.users);
     for (NSDictionary *dictionary in self.users)
     {
-        NSLog(@"dictionary %@", dictionary);
         if ([[dictionary objectForKey:@"peerID"] isEqual:peerID])
         {
-            NSLog(@"got the dictionary");
             int index = [self.users indexOfObject:dictionary];
+            NSLog(@"%i", index);
 
             for (ListOfUsersTableViewCell *userCell in self.cellArray)
             {
                 if (userCell.tag == index)
-                    NSLog(@"found my cell YO");
+                    NSLog(@"usercell %@", userCell);
                 {
                     if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
                     {
@@ -182,7 +201,6 @@
                     }
                 }
             }
-            
         }
     }
 }
@@ -202,7 +220,6 @@
         }
     }
     [self.users removeObject:userDictionary];
-    NSLog(@"need to remove %@", userDictionary);
     [self.tableView reloadData];
 }
 
@@ -211,8 +228,9 @@
 -(void)receivedInvitationForConnection:(NSNotification *)notification
 {
     MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
-    NSLog(@"peerID.displayName of sender %@", peerID.displayName);
-    NSString *alertViewTitle = [NSString stringWithFormat:@"%@ wants to connect and chat with you", peerID.displayName];
+    NSString *peerIDString = peerID.displayName;
+    NSLog(@"peerID.displayName of sender %@", peerIDString);
+    NSString *alertViewTitle = [NSString stringWithFormat:@"%@ wants to connect and chat with you", peerIDString];
     UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:alertViewTitle message:nil delegate:self cancelButtonTitle:@"Decline" otherButtonTitles:@"Accept", nil];
     [alertView show];
 }
