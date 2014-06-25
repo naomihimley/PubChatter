@@ -11,40 +11,27 @@
 
 @interface LoginViewController () <PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate>
 
-@property PFLogInView *loginView;
-
 @end
 
 @implementation LoginViewController
 
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    self.facebookPermissions = @[@"public_profile", @"user_about_me", @"user_birthday", @"user_relationship_details"];
+    self.fields = PFLogInFieldsFacebook | PFLogInFieldsSignUpButton | PFLogInFieldsDefault;
+    self.logInView.dismissButton.alpha = 0.0;
+    self.delegate = self;
+    self.logInView.backgroundColor = [UIColor orangeColor];
+
+    return self;
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.logInView setBackgroundColor:[UIColor blueColor]];
-    self.fields = PFLogInFieldsFacebook | PFLogInFieldsTwitter;
-    self.delegate = self;
-
-
-//    PFSignUpViewController *signUpViewController = [PFSignUpViewController new];
-//    signUpViewController.delegate = self;
-//    self.signUpController = signUpViewController;
-
-//    self.logInView.facebookButton.bounds = CGRectMake(self.view.frame.size.width/2, self.view.frame.size.height + 50, 100, 50);
-
-//    [self.logInView setLogo:[[UILabel alloc] initw
-
-
-
-
-
-    // Specifies necessary app permissions from Facebook.
-    [self setFacebookPermissions:[NSArray arrayWithObjects:@"public_profile", @"user_about_me", @"user_birthday", @"user_relationship_details", nil]];
-}
-
--(void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
+    PFSignUpViewController *signUpViewController = [PFSignUpViewController new];
+    signUpViewController.delegate = self;
+    self.signUpController = signUpViewController;
 }
 
 // Sent to the delegate to determine whether the log in request should be submitted to the server.
@@ -110,7 +97,7 @@
 // Sent to the delegate when the log in screen is dismissed.
 - (void)logInViewControllerDidCancelLogIn:(PFLogInViewController *)logInController
 {
-    [self.logInView setBackgroundColor:[UIColor grayColor]];
+    [self.logInView setBackgroundColor:[UIColor blackColor]];
     self.fields =  PFLogInFieldsFacebook | PFLogInFieldsUsernameAndPassword | PFLogInFieldsSignUpButton | PFLogInFieldsLogInButton;
     PFSignUpViewController *signUpViewController = [PFSignUpViewController new];
     signUpViewController.delegate = self;
