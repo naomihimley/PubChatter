@@ -29,7 +29,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.chatTextView.userInteractionEnabled = NO;
+    self.chatTextView.editable = NO;
     self.managedObjectContext = moc;
     self.fetchedResultsController.delegate = self;
     self.fetchedResultsController = [[NSFetchedResultsController alloc]init];
@@ -63,6 +63,7 @@
 }
 
 #pragma mark - Notification Methods
+//notification for receiving a text
 - (void)didReceiveDataWithNotification:(NSNotification *)notification
 {
     self.chattingUserPeerID = [[notification userInfo] objectForKey:@"peerID"];
@@ -74,6 +75,7 @@
     [self.chatTextView performSelectorOnMainThread:@selector(setText:) withObject:[self.chatTextView.text stringByAppendingString:chatString] waitUntilDone:NO];
 }
 
+//notification from when you click the "CHAT" button in the drawer
 - (void)didReceivePeerToChatWithNotification: (NSNotification *)notification
 {
     self.chattingUserPeerID = [[notification userInfo]objectForKey:@"peerID"];
@@ -95,9 +97,10 @@
 
 - (void)sendMyMessage
 {
+    if(self.chattingUserPeerID)
+    {
     NSString *chatWithNewLine = [NSString stringWithFormat:@"\n %@", self.chatTextField.text];
     NSData *dataToSend = [chatWithNewLine dataUsingEncoding:NSUTF8StringEncoding];
-    NSLog(@"Chatting User Peer ID? %@", self.chattingUserPeerID);
     NSArray *peerToSendTo = @[self.chattingUserPeerID];
     NSError *error;
     [self.appDelegate.mcManager.session sendData:dataToSend
@@ -116,7 +119,7 @@
 
     else
     {
-        NSString *chatString = [NSString stringWithFormat:@"I wrote:\n%@\n\n", self.chatTextField.text];
+        NSString *chatString = [NSString stringWithFormat:@"\n I wrote:\n%@\n\n", self.chatTextField.text];
         [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:chatString]];
         //passed peerID from left drawer
         if ([self doesConversationExist:self.chattingUserPeerID] == NO)
@@ -149,6 +152,7 @@
         self.chatTextField.text = @"";
     }
     [self.chatTextField resignFirstResponder];
+    }
 }
 
 

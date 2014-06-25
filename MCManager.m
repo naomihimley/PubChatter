@@ -62,15 +62,18 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidReceiveDataNotification"
                                                         object:nil
                                                       userInfo:dictionary];
+    MCPeerID *tempID = [dictionary objectForKey:@"peerID"];
+    NSString *display = tempID.displayName;
+    NSString *chatString = [NSString stringWithFormat:@"%@:\n%@\n\n", display, receivedText];
+
     if (![self doesConversationExist:peerID])
     {
         Peer *peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext:moc];
         Conversation *conversation = [NSEntityDescription insertNewObjectForEntityForName:@"Conversation" inManagedObjectContext:moc];
-        conversation.message = receivedText;
+        conversation.message = chatString;
         peer.peerID = peerID.displayName;
         [peer addConversationObject:conversation];
         [moc save:nil];
-        NSLog(@"creating new convo in mcmanager");
     }
     else if ([self doesConversationExist:peerID])
     {
@@ -83,8 +86,10 @@
         //got the Peer who sent you the message
         NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
         Peer *peer = [array firstObject];
+        //the peer has a conversation NSSet which only has one Conversation in it
         Conversation *convo = [peer.conversation anyObject];
-        convo.message = [convo.message stringByAppendingString:receivedText];
+        //update the message associated with that convo and save
+        convo.message = [convo.message stringByAppendingString:chatString];
         [moc save:nil];
         NSLog(@"adding received message to MOC");
     }
