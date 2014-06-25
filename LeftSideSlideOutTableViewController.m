@@ -141,7 +141,7 @@
 
 - (IBAction)onButtonTappedSendInvitation:(id)sender
 {
-    UIButton *button = (UIButton *)sender;
+//    UIButton *button = (UIButton *)sender;
 
     UITableViewCell *cell = (UITableViewCell *)[[[sender superview]superview]superview];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
@@ -152,14 +152,6 @@
     MCPeerID *peerID = [dictionary objectForKey:@"peerID"];
 
     [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30];
-
-    if ([button.titleLabel.text isEqual:@"Chat"])
-    {
-        ChatBoxViewController *chatBoxVC = [[ChatBoxViewController alloc]init];
-        chatBoxVC.userDictionary = dictionary;
-
-        [self presentViewController:chatBoxVC animated:YES completion:nil];
-    }
 }
 
 #pragma mark - Private method for handling the changing of peer's state
@@ -172,6 +164,7 @@
 
     for (NSDictionary *dictionary in self.users)
     {
+        NSLog(@"dictionary %@", dictionary);
         if ([[dictionary objectForKey:@"peerID"] isEqual:peerID])
         {
             NSLog(@"got the dictionary");
@@ -180,9 +173,11 @@
             for (ListOfUsersTableViewCell *userCell in self.cellArray)
             {
                 if (userCell.tag == index)
+                    NSLog(@"found my cell YO");
                 {
                     if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
                     {
+                        NSLog(@"should change this button at some point.... Today?... Yes?... NO?... OK");
                         [userCell.chatButton setHighlighted:YES];
                     }
                 }
