@@ -31,7 +31,7 @@
 {
     [super viewDidLoad];
 
-    self.userNameLabel.text = [self.user objectForKey:@"username"];
+    self.userNameLabel.text = [self.user objectForKey:@"name"];
     self.userAgeLabel.text = [NSString stringWithFormat:@"%@",[self.user objectForKey:@"age"]];
 
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
@@ -108,7 +108,9 @@
     invitationHandler(accept, self.appDelegate.mcManager.session);
 }
 
-- (IBAction)onButtonPressedDismissVC:(id)sender {
+- (IBAction)onButtonPressedDismissVC:(id)sender
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
