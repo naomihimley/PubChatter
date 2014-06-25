@@ -446,7 +446,7 @@
 				ORGANIZATIONNAME = "Naomi Himley";
 				TargetAttributes = {
 					B0782C37194BB3700022E6E7 = {
-						DevelopmentTeam = 6SW4QY498T;
+						DevelopmentTeam = CF4F3Y3JFY;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -667,7 +667,7 @@
 				GCC_PREFIX_HEADER = "PubChatter/PubChatter-Prefix.pch";
 				INFOPLIST_FILE = "PubChatter/PubChatter-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "5466B779-43A8-4BD1-952D-B75CDECD3A8B";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -677,8 +677,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/yeahright/Desktop,
@@ -689,7 +689,7 @@
 				GCC_PREFIX_HEADER = "PubChatter/PubChatter-Prefix.pch";
 				INFOPLIST_FILE = "PubChatter/PubChatter-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "5466B779-43A8-4BD1-952D-B75CDECD3A8B";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

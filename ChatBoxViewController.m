@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "Peer.h"
 #import "Conversation.h"
+#import "SWRevealViewController.h"
 
 @interface ChatBoxViewController ()<UITextFieldDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *chatTextField;
@@ -37,6 +38,8 @@
                                                object:nil];
 
     self.chatTextField.delegate = self;
+    [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+    [self.view resignFirstResponder];
 }
 
 -(void)viewWillAppear:(BOOL)animated

@@ -43,12 +43,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    // Check if user is logged in and, if not, send to login page.
-    if (![PFUser currentUser]) {
-        [self performSegueWithIdentifier:@"loginsegue" sender:self];
-    }
-
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didreceiveNotification:)
                                                  name:@"userEnteredBar"
@@ -68,6 +62,7 @@
     self.searchBar.delegate = self;
 
     // Set drawerview actions
+    self.rateBarButton.customView.hidden = YES;
     self.rateBarButton.tintColor = [UIColor blueColor];
     self.rateBarButton.target = self.revealViewController;
     self.rateBarButton.action = @selector(rightRevealToggle:);
@@ -78,6 +73,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    // Check if user is logged in and, if not, send to login page.
+    if (![PFUser currentUser]) {
+        [self performSegueWithIdentifier:@"loginsegue" sender:self];
+    }
     [self isUserInBar];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [[self.appDelegate beaconRegionManager]canUserUseApp];
@@ -101,6 +100,7 @@
              PFObject *bar = [objects firstObject];
              if (bar)
              {
+                 self.rateBarButton.customView.hidden = NO;
                  self.navigationItem.title = [bar objectForKey:@"barName"];
              }
              else

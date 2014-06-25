@@ -47,7 +47,7 @@
      {
          self.profileImageView.image = [UIImage imageWithData:data];
      }];
-    self.nameLabel.text = [[[PFUser currentUser]objectForKey:@"username"] uppercaseString];
+    self.nameLabel.text = [[PFUser currentUser]objectForKey:@"name"];
     if ([[PFUser currentUser]objectForKey:@"age"]) {
         self.ageLabel.text = [NSString stringWithFormat:@"%@", [[PFUser currentUser]objectForKey:@"age"]];
     }
@@ -117,4 +117,9 @@
     self.navigationItem.title = [notification.userInfo objectForKey:@"barName"];
 }
 
+- (IBAction)onLogOutButtonTapped:(id)sender
+{
+    [PFUser logOut];
+    [self.tabBarController setSelectedIndex:0];
+}
 @end
