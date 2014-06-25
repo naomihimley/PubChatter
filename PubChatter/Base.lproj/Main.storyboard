@@ -69,6 +69,17 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.81705192500000001" green="1" blue="0.94286444920000001" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5d4-3y-Fvj">
+                                <rect key="frame" x="25" y="20" width="54" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.40000000596046448" green="1" blue="0.80000001192092896" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Dismiss">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onButtonPressedDismissVC:" destination="lwU-9d-CM2" eventType="touchUpInside" id="Rft-5T-3pa"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -275,7 +286,7 @@
                                     <outlet property="userAgeLabel" destination="kNe-GZ-5T4" id="1al-BR-QAF"/>
                                     <outlet property="userImage" destination="H4n-xq-CAP" id="4qk-HO-AwL"/>
                                     <outlet property="userNameLabel" destination="x4X-g2-UBl" id="YUj-Du-A3v"/>
-                                    <segue destination="lwU-9d-CM2" kind="push" id="9oq-tG-wq8"/>
+                                    <segue destination="lwU-9d-CM2" kind="modal" id="ti9-r2-4E5"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>

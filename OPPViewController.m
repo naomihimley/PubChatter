@@ -108,4 +108,8 @@
     invitationHandler(accept, self.appDelegate.mcManager.session);
 }
 
+- (IBAction)onButtonPressedDismissVC:(id)sender {
+}
+
+
 @end
