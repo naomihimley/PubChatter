@@ -47,8 +47,6 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(peerStoppedAdvertising:) name:@"MCPeerStopAdvertising" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(receivedInvitationForConnection:) name:@"MCReceivedInvitation" object:nil];
 
-    [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
-    [self.view resignFirstResponder];
 
 }
 - (void)viewWillAppear:(BOOL)animated
