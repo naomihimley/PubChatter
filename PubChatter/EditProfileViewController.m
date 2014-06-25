@@ -66,7 +66,7 @@
          self.pictureView.layer.borderWidth = 0;
          self.pictureView.image = [UIImage imageWithData:data];
      }];
-    self.nameTextField.text = [[PFUser currentUser]objectForKey:@"username"];
+    self.nameTextField.text = [[PFUser currentUser]objectForKey:@"name"];
     if ([[PFUser currentUser]objectForKey: @"bio"])
     {
         self.bioTextView.text = [[PFUser currentUser]objectForKey:@"bio"];
@@ -167,6 +167,10 @@
 //    PFFile *imgFile = [PFFile fileWithData:imgData];
 //    [[PFUser currentUser]setObject:imgFile forKey:@"picture"];
 
+    if (![self.nameTextField.text isEqualToString:@""])
+    {
+        [[PFUser currentUser] setObject:self.nameTextField.text forKey:@"name"];
+    }
     if (self.ageLabel.text != nil) {
         NSNumber  *ageNum = [NSNumber numberWithInteger: [self.ageLabel.text integerValue]];
         [[PFUser currentUser]setObject:ageNum forKey:@"age"];
@@ -199,11 +203,7 @@
     {
         [[PFUser currentUser]setObject:@2 forKey:@"sexualOrientation"];
     }
-    if (![self.nameTextField.text isEqualToString:@""])
-    {
-        [[PFUser currentUser] setUsername:self.nameTextField.text];
-        [[PFUser currentUser] saveInBackground];
-    }
+    [[PFUser currentUser] saveInBackground];
     [self.navigationController popToRootViewControllerAnimated:NO];
 }
 - (IBAction)onFemaleGenderButtonPressed:(id)sender
