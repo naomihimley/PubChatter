@@ -66,7 +66,7 @@
     self.rateBarButton.tintColor = [UIColor blueColor];
     self.rateBarButton.target = self.revealViewController;
     self.rateBarButton.action = @selector(rightRevealToggle:);
-    [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+//    [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     [self.view resignFirstResponder];
 }
 
@@ -341,10 +341,5 @@ calloutAccessoryControlTapped:(UIControl *)control
             self.redrawAreaButtonOutlet.hidden = YES;
         }
 }
-
-
-
-
-
 
 @end

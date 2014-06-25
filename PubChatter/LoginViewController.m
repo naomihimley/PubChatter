@@ -15,28 +15,23 @@
 
 @implementation LoginViewController
 
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    self.facebookPermissions = @[@"public_profile", @"user_about_me", @"user_birthday", @"user_relationship_details"];
+    self.fields = PFLogInFieldsFacebook | PFLogInFieldsSignUpButton | PFLogInFieldsDefault;
+    self.logInView.dismissButton.alpha = 0.0;
+    self.delegate = self;
+    self.logInView.backgroundColor = [UIColor orangeColor];
+
+    return self;
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-}
-
--(void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-
-    // Instantiate login and signup viewcontrollers.
-    PFLogInViewController *loginViewController = [PFLogInViewController new];
-    loginViewController.fields =  PFLogInFieldsFacebook | PFLogInFieldsUsernameAndPassword | PFLogInFieldsSignUpButton | PFLogInFieldsLogInButton;
-    loginViewController.delegate = self;
-
     PFSignUpViewController *signUpViewController = [PFSignUpViewController new];
     signUpViewController.delegate = self;
-    loginViewController.signUpController = signUpViewController;
-    [self presentViewController:loginViewController animated:YES completion:nil];
-
-    // Specifies necessary app permissions from Facebook.
-    [loginViewController setFacebookPermissions:[NSArray arrayWithObjects:@"public_profile", @"user_about_me", @"user_birthday", @"user_relationship_details", nil]];
+    self.signUpController = signUpViewController;
 }
 
 // Sent to the delegate to determine whether the log in request should be submitted to the server.
@@ -102,18 +97,13 @@
 // Sent to the delegate when the log in screen is dismissed.
 - (void)logInViewControllerDidCancelLogIn:(PFLogInViewController *)logInController
 {
-    // Instantiate login and signup viewcontrollers.
-    PFLogInViewController *loginViewController = [PFLogInViewController new];
-    loginViewController.fields =  PFLogInFieldsFacebook | PFLogInFieldsUsernameAndPassword | PFLogInFieldsSignUpButton | PFLogInFieldsLogInButton;
-    loginViewController.delegate = self;
-
+    [self.logInView setBackgroundColor:[UIColor blackColor]];
+    self.fields =  PFLogInFieldsFacebook | PFLogInFieldsUsernameAndPassword | PFLogInFieldsSignUpButton | PFLogInFieldsLogInButton;
     PFSignUpViewController *signUpViewController = [PFSignUpViewController new];
     signUpViewController.delegate = self;
-    loginViewController.signUpController = signUpViewController;
-    [self presentViewController:loginViewController animated:YES completion:nil];
-
-    // Specifies necessary app permissions from Facebook.
-    [loginViewController setFacebookPermissions:[NSArray arrayWithObjects:@"public_profile", @"user_about_me", @"user_birthday", @"user_relationship_details", nil]];
+    self.signUpController = signUpViewController;
+    self.delegate = self;
+    [self setFacebookPermissions:[NSArray arrayWithObjects:@"public_profile", @"user_about_me", @"user_birthday", @"user_relationship_details", nil]];
 }
 
 // Retrieves Facebook data and populates the Parse database accordingly.
@@ -129,7 +119,7 @@
                 NSLog(@"%@", userData);
 
                 // Set name field in Parse from Facebook.
-                [[PFUser currentUser]setObject:userData[@"name"] forKey:@"username"];
+                [[PFUser currentUser]setObject:userData[@"first_name"] forKey:@"name"];
 
                 // Set gender field in Parse from Facebook.
                 if ([userData[@"gender"] isEqualToString:@"male"]) {
