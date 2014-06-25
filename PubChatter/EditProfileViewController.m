@@ -9,7 +9,7 @@
 #import "EditProfileViewController.h"
 #import <Parse/Parse.h>
 
-@interface EditProfileViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate>
+@interface EditProfileViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, UIPickerViewDataSource,UIPickerViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *nameTextField;
 @property (nonatomic, strong) UIImagePickerController *cameraController;
 @property (weak, nonatomic) IBOutlet UITextField *ageLabel;
@@ -23,7 +23,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *seekingMenButton;
 @property (weak, nonatomic) IBOutlet UIButton *seekingWomenButton;
 @property (weak, nonatomic) IBOutlet UIButton *seekingBothButton;
-
+@property (weak, nonatomic) IBOutlet UIPickerView *genderPicker;
+@property (weak, nonatomic) IBOutlet UILabel *genderLabel;
+@property NSArray *genderArray;
 
 @end
 
@@ -33,6 +35,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.genderArray = [[NSArray alloc] initWithObjects:@"Man", @"Woman", @"Other", nil];
     self.bioTextView.delegate = self;
     self.nameTextField.clearButtonMode = UITextFieldViewModeAlways;
     self.ageLabel.clearButtonMode = UITextFieldViewModeAlways;
@@ -48,6 +51,7 @@
     {
         self.cameraController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     }
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -89,6 +93,35 @@
     {
         self.favoriteDrinkLabel.text = @"favorite drink";
     }
+
+    if ([[[PFUser currentUser]objectForKey: @"gender"] isEqualToNumber:@1] && [[[PFUser currentUser]objectForKey: @"sexualOrientation"] isEqualToNumber:@1]) {
+        self.genderLabel.text = @"I am a man interested in women";
+    }
+    else if ([[[PFUser currentUser]objectForKey: @"gender"] isEqualToNumber:@0] && [[[PFUser currentUser]objectForKey: @"sexualOrientation"] isEqualToNumber:@0]) {
+        self.genderLabel.text = @"I am a woman interested in men";
+    }
+    else if ([[[PFUser currentUser]objectForKey: @"gender"] isEqualToNumber:@1] && [[[PFUser currentUser]objectForKey: @"sexualOrientation"] isEqualToNumber:@0]) {
+        self.genderLabel.text = @"I am a man interested in men";
+    }
+    else if ([[[PFUser currentUser]objectForKey: @"gender"] isEqualToNumber:@0] && [[[PFUser currentUser]objectForKey: @"sexualOrientation"] isEqualToNumber:@1]) {
+        self.genderLabel.text = @"I am a woman interested in women";
+    }
+    else if ([[[PFUser currentUser]objectForKey: @"gender"] isEqualToNumber:@0] && [[[PFUser currentUser]objectForKey: @"sexualOrientation"] isEqualToNumber:@2]) {
+        self.genderLabel.text = @"I am a woman interested in other";
+    }
+    else if ([[[PFUser currentUser]objectForKey: @"gender"] isEqualToNumber:@1] && [[[PFUser currentUser]objectForKey: @"sexualOrientation"] isEqualToNumber:@2]) {
+        self.genderLabel.text = @"I am a man interested in other";
+    }
+    else if ([[[PFUser currentUser]objectForKey: @"gender"] isEqualToNumber:@2] && [[[PFUser currentUser]objectForKey: @"sexualOrientation"] isEqualToNumber:@2]) {
+        self.genderLabel.text = @"I am other interested in other";
+    }
+    else if ([[[PFUser currentUser]objectForKey: @"gender"] isEqualToNumber:@2] && [[[PFUser currentUser]objectForKey: @"sexualOrientation"] isEqualToNumber:@0]) {
+        self.genderLabel.text = @"I am other interested in men";
+    }
+    else if ([[[PFUser currentUser]objectForKey: @"gender"] isEqualToNumber:@2] && [[[PFUser currentUser]objectForKey: @"sexualOrientation"] isEqualToNumber:@1]) {
+        self.genderLabel.text = @"I am other interested in women";
+    }
+
 }
 - (void)createUserProfileImage
 {
@@ -244,5 +277,41 @@
     [self.seekingBothButton setSelected:YES
      ];
 }
+
+// returns the number of 'columns' to display.
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 2;
+}
+
+// returns the # of rows in each component..
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent: (NSInteger)component
+{
+    return self.genderArray.count;
+}
+
+-(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row   forComponent:(NSInteger)component
+{
+    return [self.genderArray objectAtIndex:row];
+}
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row   inComponent:(NSInteger)component
+{
+    
+    NSLog(@"Selected Row %ld", (long)row);
+    switch(row)
+    {
+        case 0:
+            self.genderLabel.text = [self.genderArray objectAtIndex:0];
+            break;
+        case 1:
+            self.genderLabel.text = [self.genderArray objectAtIndex:1];
+            break;
+        case 2:
+            self.genderLabel.text = [self.genderArray objectAtIndex:1];
+            break;
+    }
+}
+
+
 
 @end

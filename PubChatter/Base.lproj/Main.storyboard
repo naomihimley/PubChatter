@@ -776,7 +776,7 @@
                                 <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ukb-IM-q0g">
-                                <rect key="frame" x="29" y="234" width="263" height="99"/>
+                                <rect key="frame" x="29" y="234" width="263" height="38"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.81705192500000001" green="1" blue="0.94286444920000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -803,80 +803,6 @@
                                     <action selector="onEditButtonPressed:" destination="TZQ-pU-qhq" eventType="touchUpInside" id="7v6-Mr-CmX"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z1W-oi-JDh">
-                                <rect key="frame" x="23" y="380" width="52" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Woman">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="onFemaleGenderButtonPressed:" destination="TZQ-pU-qhq" eventType="touchUpInside" id="3bE-HY-Y3j"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FQk-sD-DyG">
-                                <rect key="frame" x="142" y="380" width="30" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Man">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="onMaleGenderButtonPressed:" destination="TZQ-pU-qhq" eventType="touchUpInside" id="BNX-I0-nke"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oic-6y-GCe">
-                                <rect key="frame" x="258" y="380" width="39" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Other">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="onOtherGenderButtonPressed:" destination="TZQ-pU-qhq" eventType="touchUpInside" id="YOa-il-8CF"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="I am a:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zwp-K4-Xc7">
-                                <rect key="frame" x="136" y="351" width="42" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="interested in:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a7d-mq-fXZ">
-                                <rect key="frame" x="120" y="418" width="78" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wkR-2G-Hjm">
-                                <rect key="frame" x="23" y="452" width="30" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Men">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="onSeekingMenButtonPressed:" destination="TZQ-pU-qhq" eventType="touchUpInside" id="VH6-Eb-THv"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9k3-9z-BLJ">
-                                <rect key="frame" x="131" y="452" width="52" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Women">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="onSeekingWomenButtonPressed:" destination="TZQ-pU-qhq" eventType="touchUpInside" id="XPH-aD-BSP"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mlb-97-8XX">
-                                <rect key="frame" x="257" y="452" width="33" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Both">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="onSeekingBothButtonPressed:" destination="TZQ-pU-qhq" eventType="touchUpInside" id="qsX-kX-nJM"/>
-                                </connections>
-                            </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sEc-px-6MR">
                                 <rect key="frame" x="13" y="83" width="156" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -887,6 +813,20 @@
                                 <rect key="frame" x="33" y="205" width="42" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H8C-dH-a2c">
+                                <rect key="frame" x="29" y="288" width="263" height="162"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="TZQ-pU-qhq" id="5xC-tL-NIa"/>
+                                    <outlet property="delegate" destination="TZQ-pU-qhq" id="OjP-QJ-xPX"/>
+                                </connections>
+                            </pickerView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yU4-6t-sGP">
+                                <rect key="frame" x="20" y="284" width="288" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -908,14 +848,10 @@
                         <outlet property="ageLabel" destination="0VN-Do-nYD" id="3MV-Pl-g8H"/>
                         <outlet property="bioTextView" destination="Ukb-IM-q0g" id="1mo-ee-tQJ"/>
                         <outlet property="favoriteDrinkLabel" destination="87D-rv-00Z" id="Cmq-pE-UMo"/>
-                        <outlet property="femaleGenderButton" destination="z1W-oi-JDh" id="VbT-1i-9XT"/>
-                        <outlet property="maleGenderButton" destination="FQk-sD-DyG" id="G5B-Si-e2I"/>
+                        <outlet property="genderLabel" destination="yU4-6t-sGP" id="3kY-Ea-O57"/>
+                        <outlet property="genderPicker" destination="H8C-dH-a2c" id="MBl-F4-hf5"/>
                         <outlet property="nameTextField" destination="sEc-px-6MR" id="eii-HO-Goh"/>
-                        <outlet property="otherGenderButton" destination="Oic-6y-GCe" id="0Zu-5y-QGM"/>
                         <outlet property="pictureView" destination="rGn-hW-EJF" id="fQd-XC-FlQ"/>
-                        <outlet property="seekingBothButton" destination="mlb-97-8XX" id="rag-Pd-x6A"/>
-                        <outlet property="seekingMenButton" destination="wkR-2G-Hjm" id="S04-Hp-dAk"/>
-                        <outlet property="seekingWomenButton" destination="9k3-9z-BLJ" id="sD1-b0-ha6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sFg-Wv-DEK" userLabel="First Responder" sceneMemberID="firstResponder"/>
