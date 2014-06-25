@@ -203,12 +203,12 @@
 			children = (
 				9BDBE6131959CB120045C05B /* LeftSideSlideOutTableViewController.h */,
 				9BDBE6141959CB120045C05B /* LeftSideSlideOutTableViewController.m */,
-				9BDBE504194F50200045C05B /* ListOfUsersTableViewCell.h */,
-				9BDBE505194F50200045C05B /* ListOfUsersTableViewCell.m */,
 				0ECEAF0B19586FA800B92C40 /* RightSlideoutViewController.h */,
 				0ECEAF0C19586FA800B92C40 /* RightSlideoutViewController.m */,
 				0ECEAF0519560FCA00B92C40 /* SWRevealViewController.h */,
 				0ECEAF0619560FCA00B92C40 /* SWRevealViewController.m */,
+				9BDBE504194F50200045C05B /* ListOfUsersTableViewCell.h */,
+				9BDBE505194F50200045C05B /* ListOfUsersTableViewCell.m */,
 			);
 			name = "Slideout Drawer VCs";
 			sourceTree = "<group>";
@@ -441,7 +441,7 @@
 				ORGANIZATIONNAME = "Naomi Himley";
 				TargetAttributes = {
 					B0782C37194BB3700022E6E7 = {
-						DevelopmentTeam = CF4F3Y3JFY;
+						DevelopmentTeam = S38456XTSR;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
