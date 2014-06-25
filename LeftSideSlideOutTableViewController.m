@@ -56,6 +56,8 @@
     [[NSNotificationCenter defaultCenter]addObserver:self
                                             selector:@selector(receivedInvitationForConnection:) name:@"MCReceivedInvitation"
                                               object:nil];
+
+    self.tableView.backgroundColor = [UIColor grayColor];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -78,10 +80,17 @@
 
     PFUser *user = [dictionary objectForKey:@"user"];
 
+    cell.userNameLabel.textColor = [UIColor blueColor];
+    cell.userAgeLabel.textColor = [UIColor blueColor];
+    cell.genderLabel.textColor = [UIColor blueColor];
+    cell.backgroundColor = [UIColor grayColor];
+
     cell.userNameLabel.text = [user objectForKey:@"name"];
     cell.chatButton.tag = indexPath.row;
     [self.cellArray addObject:cell];
     cell.tag = [self.users indexOfObject:dictionary];
+
+    NSLog(@"cell.tag %i",cell.tag);
 
     if ([user objectForKey:@"age"])
     {
@@ -179,13 +188,48 @@
     MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
     NSLog(@"peerID from notification %@", peerID);
 
+    NSDictionary *userDictionary = [NSDictionary new];
+    ListOfUsersTableViewCell *cell = [ListOfUsersTableViewCell new];
+
+//    for (NSDictionary *dictionary in self.users)
+//    {
+//        if ([[dictionary objectForKey:@"peerID"] isEqual:peerID])
+//        {
+//            userDictionary = dictionary;
+//        }
+//    }
+//
+//    int index = [self.users indexOfObject:userDictionary];
+//
+//    for (ListOfUsersTableViewCell *userCell in self.cellArray)
+//    {
+//        if (userCell.tag == index)
+//        {
+//            cell = userCell;
+//        }
+//    }
+//
+//    if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnecting)
+//    {
+//        [cell.chatButton setTitle:@"Connecting" forState:UIControlStateNormal];
+//    }
+//    else if ([[[notification userInfo]objectForKey:@"state"]intValue] != MCSessionStateConnecting)
+//    {
+//        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
+//        {
+//            [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
+//
+//        }
+//        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
+//        {
+//            [cell.chatButton setTitle:@"Connect" forState:UIControlStateNormal];
+//        }
+//    }
     for (NSDictionary *dictionary in self.users)
     {
-        MCPeerID *peer = [dictionary objectForKey:@"peerID"];
-        if (peerID == peer)
+        if ([[dictionary objectForKey:@"peerID"] isEqual: peerID])
         {
             int index = [self.users indexOfObject:dictionary];
-            NSLog(@"index %i", index);
 
             for (ListOfUsersTableViewCell *userCell in self.cellArray)
             {
@@ -235,11 +279,16 @@
     for (NSDictionary *dictionary in self.users)
     {
         MCPeerID *peer = [dictionary objectForKey:@"peerID"];
-        if (peerID == peer)
+
+        NSLog(@"peerID in loop %@", peer);
+        if (peer == peerID)
         {
             user = dictionary;
+            NSLog(@"dictionary = user %@", dictionary);
         }
     }
+
+    NSLog(@"user.name %@", user);
 
     NSString *peerName = [[user objectForKey:@"user"]objectForKey:@"name"];
     NSLog(@"peerID.displayName of sender %@", peerName);
