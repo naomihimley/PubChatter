@@ -30,64 +30,64 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.chatArray = [NSMutableArray array];
+    self.chatDictionaryArray = [NSMutableArray array];
 
-    self.userNameLabel.text = [self.user objectForKey:@"name"];
-    self.userAgeLabel.text = [NSString stringWithFormat:@"%@",[self.user objectForKey:@"age"]];
+    // Set name and age label.
+    self.userNameLabel.text = [NSString stringWithFormat:@"%@, %@", [self.user objectForKey:@"name"],[self.user objectForKey:@"age"]];
 
-    self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(receivedInvitationForConnection:) name:@"MCReceivedInvitation" object:nil];
-
-    if ([self.user [@"gender"] isEqual:@0])
-    {
+    // Set gender label.
+    if ([self.user [@"gender"] isEqual:@0]) {
         self.sexLabel.text = @"F";
     }
-    else if ([self.user[@"gender"] isEqual:@1])
-    {
+    else if ([self.user[@"gender"] isEqual:@1]) {
         self.sexLabel.text = @"M";
     }
-    else if ([self.user [@"gender"] isEqual:@2])
-    {
+    else if ([self.user [@"gender"] isEqual:@2]) {
         self.sexLabel.text = @"Other";
-        [self.sexLabel sizeToFit];
     }
-    else
-    {
+    else {
         self.sexLabel.text = @"";
     }
 
-    if ([self.user [@"sexualOrientation"] isEqual:@0])
-    {
-        self.sexualOrientationLabel.text = @"Interested In Men";
+    // Set about me.
+    if ([self.user objectForKey:@"bio"]) {
+        NSString *name = [self.user objectForKey:@"name"];
+        UIFont *boldFont = [UIFont boldSystemFontOfSize:12.0];
+        NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"About %@\n%@", name, [self.user objectForKey:@"bio"]]];
+        [attrString addAttribute: NSFontAttributeName value: boldFont range: NSMakeRange(0, 6 + name.length)];
+        self.bioLabel.attributedText = attrString;
+    }
+    else {
+        self.bioLabel.text = @"";
+    }
+
+    // Set sexual orientation label.
+    if ([self.user [@"sexualOrientation"] isEqual:@0]) {
+        self.sexualOrientationLabel.text = @"Interested in: Men";
         [self.sexualOrientationLabel sizeToFit];
     }
-    else if ([self.user[@"sexualOrientation"] isEqual:@1])
-    {
-        self.sexualOrientationLabel.text = @"Interested In Women";
+    else if ([self.user[@"sexualOrientation"] isEqual:@1]) {
+        self.sexualOrientationLabel.text = @"Interested in: Women";
         [self.sexualOrientationLabel sizeToFit];
     }
-    else if ([self.user [@"sexualOrientation"] isEqual:@2])
-    {
+    else if ([self.user [@"sexualOrientation"] isEqual:@2]) {
         self.sexualOrientationLabel.text = @"Bisexual";
         [self.sexualOrientationLabel sizeToFit];
     }
-    else
-    {
+    else {
         self.sexualOrientationLabel.text = @"";
     }
 
-    self.favDrinkLabel.text = [self.user objectForKey:@"favoriteDrink"];
-
+    // Set profile image.
     PFFile *file = [self.user objectForKey:@"picture"];
     [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
         self.imageView.image = [UIImage imageWithData:data];
     }];
 
-    self.bioLabel.text = [self.user objectForKey:@"bio"];
+    self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
 
-    self.chatArray = [NSMutableArray array];
-
-    self.chatDictionaryArray = [NSMutableArray array];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(receivedInvitationForConnection:) name:@"MCReceivedInvitation" object:nil];
 }
 
 #pragma mark - Alert Showing Invitation to join Session

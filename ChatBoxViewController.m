@@ -65,9 +65,9 @@
 //notification for receiving a text
 - (void)didReceiveDataWithNotification:(NSNotification *)notification
 {
-    MCPeerID *peerIDFromNotification = [[notification userInfo]objectForKey:@"peerID"];
+    NSString *notificationDisplayName =[[[notification userInfo]objectForKey:@"peerID"] displayName];
     //if the data is coming from the person you're chatting with then add it to the text view
-    if ([self.chattingUserPeerID isEqual:peerIDFromNotification]) {
+    if ([self.chattingUserPeerID.displayName isEqual:notificationDisplayName]) {
         NSData *receivedData = [[notification userInfo] objectForKey:@"data"];
         NSString *receivedText = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
         NSString *chatString = [NSString stringWithFormat:@"%@:\n%@\n\n", [self.chatingUser objectForKey:@"name"], receivedText];

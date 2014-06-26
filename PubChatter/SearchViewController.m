@@ -195,46 +195,52 @@
     [NSURLConnection sendAsynchronousRequest:rq queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
 
         NSLog(@"Got the data");
-
-        NSDictionary *dictionary  = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&connectionError];
-
-        NSMutableArray *arrayOfYelpBarObjects = [[NSMutableArray alloc] init];
-        NSArray *yelpBars = [dictionary objectForKey:@"businesses"];
-
-        for (NSDictionary *dictionary in yelpBars) {
-            YelpBar *yelpBar = [[YelpBar alloc] init];
-            yelpBar.name = [dictionary objectForKey:@"name"];
-            yelpBar.address = [NSString stringWithFormat:@"%@ %@ %@ %@", [[[dictionary objectForKey:@"location"] objectForKey:@"address"] firstObject], [[dictionary objectForKey:@"location"] objectForKey:@"city"], [[dictionary objectForKey:@"location"] objectForKey:@"state_code"], [[dictionary objectForKey:@"location"] objectForKey:@"postal_code"]];
-            yelpBar.distanceFromUser = [[dictionary objectForKey:@"distance"] floatValue];
-            yelpBar.telephone = [dictionary objectForKey:@"phone"];
-            yelpBar.businessMobileURL = [dictionary objectForKey:@"mobile_url"];
-            yelpBar.businessURL = [dictionary objectForKey:@"url"];
-            yelpBar.businessImageURL = [dictionary objectForKey:@"image_url"];
-            yelpBar.businessRatingImageURL = [dictionary objectForKey:@"rating_img_url_small"];
-            yelpBar.aboutBusiness = [dictionary objectForKey:@"snippet_text"];
-
-            if ([[dictionary objectForKey:@"categories"] count] == 3) {
-                yelpBar.categories = [[[dictionary objectForKey:@"categories"] objectAtIndex:0] objectAtIndex:0];
-                yelpBar.offers = [NSString stringWithFormat:@"%@, %@", [[[dictionary objectForKey:@"categories"] objectAtIndex:1] objectAtIndex:0], [[[dictionary objectForKey:@"categories"] objectAtIndex:2] objectAtIndex:0]];
-            }
-            else if ([[dictionary objectForKey:@"categories"] count] == 2) {
-                yelpBar.categories = [[[dictionary objectForKey:@"categories"] objectAtIndex:0] objectAtIndex:0];
-                yelpBar.offers = [NSString stringWithFormat:@"%@", [[[dictionary objectForKey:@"categories"] objectAtIndex:1] objectAtIndex:0]];
-            }
-            else if ([[dictionary objectForKey:@"categories"] count] == 1) {
-                yelpBar.categories = [[[dictionary objectForKey:@"categories"] objectAtIndex:0] objectAtIndex:0];
-                yelpBar.offers = @"n/a";
-            }
-            else {
-                yelpBar.categories = @"n/a";
-                yelpBar.offers = @"n/a";
-            }
-            yelpBar.yelpID = [dictionary objectForKey:@"id"];
-            [arrayOfYelpBarObjects addObject:yelpBar];
+        if (connectionError) {
+            NSLog(@"connection error %@", connectionError);
         }
-        NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"distanceFromUser" ascending:YES];
-        self.barLocations = [arrayOfYelpBarObjects sortedArrayUsingDescriptors:@[descriptor]];
-        [self getBarLatandLong:self.barLocations];
+        else
+        {
+            NSDictionary *dictionary  = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&connectionError];
+
+            NSMutableArray *arrayOfYelpBarObjects = [[NSMutableArray alloc] init];
+            NSArray *yelpBars = [dictionary objectForKey:@"businesses"];
+
+            for (NSDictionary *dictionary in yelpBars)
+            {
+                YelpBar *yelpBar = [[YelpBar alloc] init];
+                yelpBar.name = [dictionary objectForKey:@"name"];
+                yelpBar.address = [NSString stringWithFormat:@"%@ %@ %@ %@", [[[dictionary objectForKey:@"location"] objectForKey:@"address"] firstObject], [[dictionary objectForKey:@"location"] objectForKey:@"city"], [[dictionary objectForKey:@"location"] objectForKey:@"state_code"], [[dictionary objectForKey:@"location"] objectForKey:@"postal_code"]];
+                yelpBar.distanceFromUser = [[dictionary objectForKey:@"distance"] floatValue];
+                yelpBar.telephone = [dictionary objectForKey:@"phone"];
+                yelpBar.businessMobileURL = [dictionary objectForKey:@"mobile_url"];
+                yelpBar.businessURL = [dictionary objectForKey:@"url"];
+                yelpBar.businessImageURL = [dictionary objectForKey:@"image_url"];
+                yelpBar.businessRatingImageURL = [dictionary objectForKey:@"rating_img_url_small"];
+                yelpBar.aboutBusiness = [dictionary objectForKey:@"snippet_text"];
+
+                if ([[dictionary objectForKey:@"categories"] count] == 3) {
+                    yelpBar.categories = [[[dictionary objectForKey:@"categories"] objectAtIndex:0] objectAtIndex:0];
+                    yelpBar.offers = [NSString stringWithFormat:@"%@, %@", [[[dictionary objectForKey:@"categories"] objectAtIndex:1] objectAtIndex:0], [[[dictionary objectForKey:@"categories"] objectAtIndex:2] objectAtIndex:0]];
+                }
+                else if ([[dictionary objectForKey:@"categories"] count] == 2) {
+                    yelpBar.categories = [[[dictionary objectForKey:@"categories"] objectAtIndex:0] objectAtIndex:0];
+                    yelpBar.offers = [NSString stringWithFormat:@"%@", [[[dictionary objectForKey:@"categories"] objectAtIndex:1] objectAtIndex:0]];
+                }
+                else if ([[dictionary objectForKey:@"categories"] count] == 1) {
+                    yelpBar.categories = [[[dictionary objectForKey:@"categories"] objectAtIndex:0] objectAtIndex:0];
+                    yelpBar.offers = @"n/a";
+                }
+                else {
+                    yelpBar.categories = @"n/a";
+                    yelpBar.offers = @"n/a";
+                }
+                yelpBar.yelpID = [dictionary objectForKey:@"id"];
+                [arrayOfYelpBarObjects addObject:yelpBar];
+            }
+            NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"distanceFromUser" ascending:YES];
+            self.barLocations = [arrayOfYelpBarObjects sortedArrayUsingDescriptors:@[descriptor]];
+            [self getBarLatandLong:self.barLocations];
+        }
     }];
 }
 
