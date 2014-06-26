@@ -19,6 +19,7 @@
 @property NSMutableArray *cellArray;
 @property NSMutableArray *users;
 @property NSArray *parseUsers;
+@property NSDictionary *userSendingInvitation;
 
 @end
 
@@ -299,6 +300,8 @@
 {
     MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
 
+    ListOfUsersTableViewCell *cell = [ListOfUsersTableViewCell new];
+
     NSLog(@"peerID from notification before going into dictionary %@", peerID);
     NSDictionary *user = [NSDictionary new];
 
@@ -306,12 +309,11 @@
     { 
         if ([[dictionary objectForKey:@"peerID"] isEqual:peerID])
         {
-            user = dictionary;
+            self.userSendingInvitation = dictionary;
         }
     }
 
     NSString *peerName = [[user objectForKey:@"user"]objectForKey:@"name"];
-    NSLog(@"peerID.displayName of sender %@", peerName);
     NSString *alertViewTitle = [NSString stringWithFormat:@"%@ wants to connect and chat with you", peerName];
     UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:alertViewTitle message:nil delegate:self cancelButtonTitle:@"Decline" otherButtonTitles:@"Accept", nil];
     [alertView show];
@@ -320,6 +322,21 @@
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     BOOL accept = (buttonIndex != alertView.cancelButtonIndex);
+
+    ListOfUsersTableViewCell *cell = [ListOfUsersTableViewCell new];
+
+    int index = [self.users indexOfObject:self.userSendingInvitation];
+
+    for (ListOfUsersTableViewCell *userCell in self.cellArray)
+    {
+        if (userCell.tag == index)
+        {
+            cell = userCell;
+        }
+    }
+
+    [cell.chatButton setTitle:@"Connecting" forState:UIControlStateNormal];
+    [cell.chatButton setEnabled:NO];
 
     void (^invitationHandler)(BOOL, MCSession *) = [self.appDelegate.mcManager.invitationHandlerArray objectAtIndex:0];
     invitationHandler(accept, self.appDelegate.mcManager.session);
