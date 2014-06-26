@@ -18,6 +18,7 @@
 @property AppDelegate *appDelegate;
 @property NSMutableArray *cellArray;
 @property NSMutableArray *users;
+@property NSArray *parseUsers;
 
 @end
 
@@ -25,9 +26,13 @@
 
 - (void)viewDidLoad
 {
+
+    [self queryForUsers];
+
     [super viewDidLoad];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     self.users = [NSMutableArray array];
+
 
     NSLog(@"self.users in viewDidLoad %@", self.users);
     self.cellArray = [NSMutableArray array];
@@ -44,7 +49,7 @@
                                               object:nil];
 
     [[NSNotificationCenter defaultCenter]addObserver:self
-                                            selector:@selector(queryForUsers)
+                                            selector:@selector(receivedNotificationOfUserAdvertising:)
                                                 name:@"MCFoundAdvertisingPeer"
                                               object:nil];
 
@@ -130,35 +135,61 @@
 
 -(void)queryForUsers
 {
-    [self.users removeAllObjects];
+    NSArray *blockerArray = [NSArray arrayWithArray:self.users];
+//    [self.users removeAllObjects];
+    NSLog(@"blockerArray in query %@", blockerArray);
 
     PFQuery *query = [PFQuery queryWithClassName:@"_User"];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
      {
          if (!error)
          {
-             NSArray *usersArray = [[NSArray alloc]initWithArray:objects];
-             for (MCPeerID *peerID in self.appDelegate.mcManager.advertisingUsers)
-             {
-                 for (PFUser *user in usersArray)
-                 {
-                     if ([peerID.displayName isEqual:[user objectForKey:@"username"]])
-                     {
-                         NSLog(@"peerID.displayname in query %@", peerID.displayName);
-                         NSDictionary *dictionary = @{@"peerID": peerID,
-                                                      @"user": user};
-                         if (self.users.count <= self.appDelegate.mcManager.advertisingUsers.count)
-                         {
-                             NSLog(@"dictionary items getting added to users array from query %@", dictionary);
-                             [self.users addObject:dictionary];
-                         }
-                     }
-                 }
-                 NSLog(@"self.users array in query %@", self.users);
-                 [self.tableView reloadData];
-             }
+             self.parseUsers = [NSArray arrayWithArray:objects];
+             NSLog(@"self.parseUsers %@", self.parseUsers);
+//             for (MCPeerID *peerID in self.appDelegate.mcManager.advertisingUsers)
+//             {
+//                 for (PFUser *user in objects)
+//                 {
+//                     if ([peerID.displayName isEqual:[user objectForKey:@"username"]])
+//                     {
+//                         NSDictionary *dictionary = @{@"peerID": peerID,
+//                                                      @"user": user};
+////                         if (self.users.count <= self.appDelegate.mcManager.advertisingUsers.count)
+//                         if (![blockerArray containsObject:dictionary])
+//                         {
+//                             NSLog(@"dictionary items getting added to users array from query %@", dictionary);
+//                             [self.users addObject:dictionary];
+//                         }
+//                     }
+//                 }
+//                 [self.tableView reloadData];
+//             }
          }
      }];
+}
+
+#pragma mark - Hadling new advertising user
+
+-(void)receivedNotificationOfUserAdvertising:(NSNotification *)notification
+{
+    MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
+    NSLog(@"peerID showing from notification %@", peerID);
+
+    for (NSDictionary *dictionary in self.parseUsers)
+    {
+        if ([[dictionary objectForKey:@"username"] isEqual:peerID.displayName])
+        {
+            NSLog(@"dictionary making the advertising peerID %@", dictionary);
+            if (self.users.count < self.appDelegate.mcManager.advertisingUsers.count)
+            {
+                NSLog(@"dictionary to be added to self.users %@", dictionary);
+            NSDictionary *userDictionary = @{@"peerID": peerID,
+                                             @"user": dictionary};
+            [self.users addObject:userDictionary];
+            }
+        }
+    }
+    [self.tableView reloadData];
 }
 
 #pragma mark - Action for Button sending invitation
@@ -167,19 +198,19 @@
 {
     UIButton *button = (UIButton *)sender;
 
-    [button setTitle:@"Connecting" forState:UIControlStateNormal];
-    [button setEnabled:NO];
-
     UITableViewCell *cell = (UITableViewCell *)[[[sender superview]superview]superview];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 
     NSDictionary *dictionary = [self.users objectAtIndex:indexPath.row];
     MCPeerID *peerID = [dictionary objectForKey:@"peerID"];
 
-    if ([button.titleLabel.text isEqual:@"Connect"])
+    if ([button.titleLabel.text isEqual:@"Invite"])
     {
     [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30];
     }
+
+    [button setTitle:@"Connecting" forState:UIControlStateNormal];
+    [button setEnabled:NO];
 
     if ([button.titleLabel.text isEqual:@"Chat"])
     {
