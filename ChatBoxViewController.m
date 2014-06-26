@@ -73,27 +73,6 @@
         NSString *chatString = [NSString stringWithFormat:@"%@:\n%@\n\n", [self.chatingUser objectForKey:@"name"], receivedText];
         [self.chatTextView performSelectorOnMainThread:@selector(setText:) withObject:[self.chatTextView.text stringByAppendingString:chatString] waitUntilDone:NO];
     }
-//    else
-//    {
-//        self.chattingUserPeerID = [[notification userInfo] objectForKey:@"peerID"];
-//        NSData *receivedData = [[notification userInfo] objectForKey:@"data"];
-//        NSString *receivedText = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
-//        //not fully sure if this part is necessary or if its happening in mcmanager already.. ?
-//        NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
-//        request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
-//        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", peerIDFromNotification.displayName];
-//        request.predicate = predicate;
-//        self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
-//        [self.fetchedResultsController performFetch:nil];
-//        NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
-//        Peer *peer = [array firstObject];
-//        Conversation *convo = [peer.conversation anyObject];
-//        NSString *chatWithNewLine = [NSString stringWithFormat: @"\n %@ \n %@", [self.chatingUser objectForKey:@"name"], receivedText];
-//        convo.message = [convo.message stringByAppendingString:chatWithNewLine];
-//        [moc save:nil];
-//
-//    }
-
 }
 
 //notification from when you click the "CHAT" button in the drawer
@@ -118,8 +97,6 @@
 
 - (void)sendMyMessage
 {
-    if(self.chattingUserPeerID)
-    {
         NSString *chatWithNewLine = [NSString stringWithFormat:@"\n %@", self.chatTextField.text];
         NSData *dataToSend = [chatWithNewLine dataUsingEncoding:NSUTF8StringEncoding];
         NSArray *peerToSendTo = @[self.chattingUserPeerID];
@@ -171,7 +148,6 @@
 
             self.chatTextField.text = @"";
         }
-    }
     [self.chatTextField resignFirstResponder];
 }
 
@@ -213,7 +189,10 @@
     self.chatTextField.text = @"";
     //should only disconnect user from the current chatting peer
 
-    [self.appDelegate.mcManager.session.connectedPeers[0] disconnect];
+    if (self.appDelegate.mcManager.session.connectedPeers.count > 0)
+    {
+        [self.appDelegate.mcManager.session.connectedPeers[0] disconnect];
+    }
 }
 - (IBAction)onButtonPressedCancelSendingChat:(id)sender
 {
@@ -223,6 +202,14 @@
 
 - (IBAction)onButtonPressedSendChat:(id)sender
 {
-    [self sendMyMessage];
+    if(self.chattingUserPeerID)
+    {
+        [self sendMyMessage];
+    }
+    else
+    {
+        self.chattingUserPeerID = self.appDelegate.mcManager.session.connectedPeers[0];
+        [self sendMyMessage];
+    }
 }
 @end
