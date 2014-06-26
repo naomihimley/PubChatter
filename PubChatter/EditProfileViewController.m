@@ -17,15 +17,12 @@
 @property (weak, nonatomic) IBOutlet UITextView *bioTextView;
 @property (weak, nonatomic) IBOutlet UIImageView *pictureView;
 @property UIImage *profileImageTaken;
-@property (weak, nonatomic) IBOutlet UIButton *femaleGenderButton;
-@property (weak, nonatomic) IBOutlet UIButton *maleGenderButton;
-@property (weak, nonatomic) IBOutlet UIButton *otherGenderButton;
-@property (weak, nonatomic) IBOutlet UIButton *seekingMenButton;
-@property (weak, nonatomic) IBOutlet UIButton *seekingWomenButton;
-@property (weak, nonatomic) IBOutlet UIButton *seekingBothButton;
 @property (weak, nonatomic) IBOutlet UIPickerView *genderPicker;
 @property (weak, nonatomic) IBOutlet UILabel *genderLabel;
 @property NSArray *genderArray;
+@property NSArray *interestedArray;
+@property NSString *genderString;
+@property NSString *interestedString;
 
 @end
 
@@ -35,7 +32,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.genderArray = [[NSArray alloc] initWithObjects:@"Man", @"Woman", @"Other", nil];
+    self.genderArray = [[NSArray alloc] initWithObjects:@"Woman", @"Man", @"Other", nil];
+    self.interestedArray = [[NSArray alloc] initWithObjects:@"Women", @"Men", @"Other", nil];
     self.bioTextView.delegate = self;
     self.nameTextField.clearButtonMode = UITextFieldViewModeAlways;
     self.ageLabel.clearButtonMode = UITextFieldViewModeAlways;
@@ -51,7 +49,6 @@
     {
         self.cameraController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     }
-
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -94,34 +91,28 @@
         self.favoriteDrinkLabel.text = @"favorite drink";
     }
 
-    if ([[[PFUser currentUser]objectForKey: @"gender"] isEqualToNumber:@1] && [[[PFUser currentUser]objectForKey: @"sexualOrientation"] isEqualToNumber:@1]) {
-        self.genderLabel.text = @"I am a man interested in women";
+    if ([[[PFUser currentUser]objectForKey: @"gender"] isEqualToNumber:@1]) {
+        self.genderString = [[self.genderArray objectAtIndex:1] lowercaseString];
     }
-    else if ([[[PFUser currentUser]objectForKey: @"gender"] isEqualToNumber:@0] && [[[PFUser currentUser]objectForKey: @"sexualOrientation"] isEqualToNumber:@0]) {
-        self.genderLabel.text = @"I am a woman interested in men";
+    else if ([[[PFUser currentUser]objectForKey: @"gender"] isEqualToNumber:@0]) {
+        self.genderString = [[self.genderArray objectAtIndex:0] lowercaseString];
     }
-    else if ([[[PFUser currentUser]objectForKey: @"gender"] isEqualToNumber:@1] && [[[PFUser currentUser]objectForKey: @"sexualOrientation"] isEqualToNumber:@0]) {
-        self.genderLabel.text = @"I am a man interested in men";
-    }
-    else if ([[[PFUser currentUser]objectForKey: @"gender"] isEqualToNumber:@0] && [[[PFUser currentUser]objectForKey: @"sexualOrientation"] isEqualToNumber:@1]) {
-        self.genderLabel.text = @"I am a woman interested in women";
-    }
-    else if ([[[PFUser currentUser]objectForKey: @"gender"] isEqualToNumber:@0] && [[[PFUser currentUser]objectForKey: @"sexualOrientation"] isEqualToNumber:@2]) {
-        self.genderLabel.text = @"I am a woman interested in other";
-    }
-    else if ([[[PFUser currentUser]objectForKey: @"gender"] isEqualToNumber:@1] && [[[PFUser currentUser]objectForKey: @"sexualOrientation"] isEqualToNumber:@2]) {
-        self.genderLabel.text = @"I am a man interested in other";
-    }
-    else if ([[[PFUser currentUser]objectForKey: @"gender"] isEqualToNumber:@2] && [[[PFUser currentUser]objectForKey: @"sexualOrientation"] isEqualToNumber:@2]) {
-        self.genderLabel.text = @"I am other interested in other";
-    }
-    else if ([[[PFUser currentUser]objectForKey: @"gender"] isEqualToNumber:@2] && [[[PFUser currentUser]objectForKey: @"sexualOrientation"] isEqualToNumber:@0]) {
-        self.genderLabel.text = @"I am other interested in men";
-    }
-    else if ([[[PFUser currentUser]objectForKey: @"gender"] isEqualToNumber:@2] && [[[PFUser currentUser]objectForKey: @"sexualOrientation"] isEqualToNumber:@1]) {
-        self.genderLabel.text = @"I am other interested in women";
+    else {
+        self.genderString = [[self.genderArray objectAtIndex:2] lowercaseString];
     }
 
+
+    if ([[[PFUser currentUser]objectForKey: @"sexualOrientation"] isEqualToNumber:@0]) {
+        self.interestedString = [[self.interestedArray objectAtIndex:1] lowercaseString];
+    }
+    else if ([[[PFUser currentUser]objectForKey: @"sexualOrientation"] isEqualToNumber:@1]) {
+        self.interestedString = [[self.interestedArray objectAtIndex:0] lowercaseString];
+    }
+    else {
+        self.interestedString = [[self.interestedArray objectAtIndex:2] lowercaseString];
+    }
+
+    self.genderLabel.text = [NSString stringWithFormat:@"I am a %@ interested in %@", self.genderString, self.interestedString];
 }
 - (void)createUserProfileImage
 {
@@ -214,68 +205,9 @@
     if (self.favoriteDrinkLabel.text != nil) {
         [[PFUser currentUser]setObject:self.favoriteDrinkLabel.text forKey:@"favoriteDrink"];
     }
-    if ([self.femaleGenderButton isSelected]) {
-        [[PFUser currentUser]setObject:@0 forKey:@"gender"];
-    }
-    else if ([self.maleGenderButton isSelected])
-    {
-        [[PFUser currentUser]setObject:@1 forKey:@"gender"];
-    }
-    else if ([self.otherGenderButton isSelected])
-    {
-        [[PFUser currentUser]setObject:@2 forKey:@"gender"];
-    }
-    if ([self.seekingMenButton isSelected]) {
-        [[PFUser currentUser]setObject:@0 forKey:@"sexualOrientation"];
-    }
-    else if ([self.seekingWomenButton isSelected])
-    {
-        [[PFUser currentUser]setObject:@1 forKey:@"sexualOrientation"];
-    }
-    else if ([self.seekingBothButton isSelected])
-    {
-        [[PFUser currentUser]setObject:@2 forKey:@"sexualOrientation"];
-    }
+
     [[PFUser currentUser] saveInBackground];
     [self.navigationController popToRootViewControllerAnimated:NO];
-}
-- (IBAction)onFemaleGenderButtonPressed:(id)sender
-{
-    [self.femaleGenderButton setSelected:YES];
-    [self.maleGenderButton setSelected:NO];
-    [self.otherGenderButton setSelected:NO];
-}
-- (IBAction)onMaleGenderButtonPressed:(id)sender
-{
-    [self.femaleGenderButton setSelected:NO];
-    [self.maleGenderButton setSelected:YES];
-    [self.otherGenderButton setSelected:NO];
-}
-- (IBAction)onOtherGenderButtonPressed:(id)sender
-{
-    [self.femaleGenderButton setSelected:NO];
-    [self.maleGenderButton setSelected:NO];
-    [self.otherGenderButton setSelected:YES];
-}
-- (IBAction)onSeekingMenButtonPressed:(id)sender
-{
-    [self.seekingMenButton setSelected:YES];
-    [self.seekingWomenButton setSelected:NO];
-    [self.seekingBothButton setSelected:NO];
-}
-- (IBAction)onSeekingWomenButtonPressed:(id)sender
-{
-    [self.seekingMenButton setSelected:NO];
-    [self.seekingWomenButton setSelected:YES];
-    [self.seekingBothButton setSelected:NO];
-
-}
-- (IBAction)onSeekingBothButtonPressed:(id)sender
-{
-    [self.seekingMenButton setSelected:NO];
-    [self.seekingWomenButton setSelected:NO];
-    [self.seekingBothButton setSelected:YES
-     ];
 }
 
 // returns the number of 'columns' to display.
@@ -292,24 +224,55 @@
 
 -(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row   forComponent:(NSInteger)component
 {
-    return [self.genderArray objectAtIndex:row];
+    if (component == 0) {
+        return [self.genderArray objectAtIndex:row];
+    }
+    else{
+        return [self.interestedArray objectAtIndex:row];
+    }
 }
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row   inComponent:(NSInteger)component
 {
-    
     NSLog(@"Selected Row %ld", (long)row);
-    switch(row)
-    {
+    switch (component) {
         case 0:
-            self.genderLabel.text = [self.genderArray objectAtIndex:0];
+            switch(row)
+                {
+            case 0:
+                self.genderString = [[self.genderArray objectAtIndex:0] lowercaseString];
+                [[PFUser currentUser]setObject:@0 forKey:@"gender"];
+                break;
+            case 1:
+                self.genderString = [[self.genderArray objectAtIndex:1] lowercaseString];
+                [[PFUser currentUser]setObject:@1 forKey:@"gender"];
+                break;
+            case 2:
+                self.genderString = [[self.genderArray objectAtIndex:2] lowercaseString];
+                [[PFUser currentUser]setObject:@2 forKey:@"gender"];
+                break;
             break;
-        case 1:
-            self.genderLabel.text = [self.genderArray objectAtIndex:1];
+                }
             break;
-        case 2:
-            self.genderLabel.text = [self.genderArray objectAtIndex:1];
-            break;
+         case 1:
+            switch(row)
+            {
+            case 0:
+                self.interestedString = [[self.interestedArray objectAtIndex:0] lowercaseString];
+                [[PFUser currentUser]setObject:@1 forKey:@"sexualOrientation"];
+                break;
+            case 1:
+                self.interestedString = [[self.interestedArray objectAtIndex:1] lowercaseString];
+                [[PFUser currentUser]setObject:@0 forKey:@"sexualOrientation"];
+                break;
+            case 2:
+                    self.interestedString = [[self.interestedArray objectAtIndex:2] lowercaseString];
+                    [[PFUser currentUser]setObject:@2 forKey:@"sexualOrientation"];
+                break;
+            }
+        default:
+        break;
     }
+    self.genderLabel.text = [NSString stringWithFormat:@"I am a %@ interested in %@", self.genderString, self.interestedString];
 }
 
 
