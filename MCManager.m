@@ -147,30 +147,41 @@
 
 -(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
 {
-    [self.foundPeersArray addObject:peerID];
+
     NSLog(@"peerID of advertising peer from MCManager %@", peerID);
-    NSArray *array = [NSArray arrayWithArray:self.advertisingUsers];
-    NSLog(@"array in MCManager to block %@", self.advertisingUsers);
-    NSLog(@"array contains object %hhd", [array containsObject:peerID]);
-    if ([array containsObject:peerID] == 0)
+    NSLog(@"peerID.displayname %@", peerID.displayName);
+//    NSArray *array = [[NSArray alloc ]initWithArray:self.mutableArray];
+    NSLog(@"array in MCManager to block %@", self.foundPeersArray);
+    if (self.advertisingUsers.count == 0)
     {
-        NSLog(@"peer not double advertising %@", peerID);
         [self.advertisingUsers addObject:peerID];
+        NSDictionary *dictionary = @{@"peerID": peerID};
+
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:dictionary];
     }
     else
     {
+        if (![self.foundPeersArray containsObject:peerID.displayName])
+        {
+            NSLog(@"this shouldn't be a mutliple %@", peerID.displayName);
+            [self.advertisingUsers addObject:peerID];
+            NSDictionary *dictionary = @{@"peerID": peerID};
 
-        NSLog(@"peer double advertising %@", peerID);
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:dictionary];
+        }
     }
 
-    NSDictionary *dictionary = @{@"peerID": peerID};
-
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:dictionary];
+    [self.foundPeersArray addObject:peerID.displayName];
+//
+//    NSDictionary *dictionary = @{@"peerID": peerID};
+//
+//    [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:dictionary];
 }
 
 -(void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID
 {
     [self.advertisingUsers removeObject:peerID];
+    [self.foundPeersArray removeObjectAtIndex:[self.foundPeersArray indexOfObject:peerID.displayName]];
 
     NSLog(@"should remove %@", peerID);
     NSLog(@"after removing array is %@", self.advertisingUsers);
