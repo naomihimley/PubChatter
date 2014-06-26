@@ -82,6 +82,7 @@
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     if (state == CLRegionStateInside)
     {
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"PubChat"}];
         self.inARegion = YES;
         [manager startRangingBeaconsInRegion:self.richRegion];
         [manager startRangingBeaconsInRegion:self.estimoteRegion];
@@ -143,19 +144,21 @@
             [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 PFObject *bar = [objects firstObject];
                 NSArray *arrayOfUsers = [NSArray arrayWithArray:[bar objectForKey:@"usersInBar"]];
-                if (arrayOfUsers.count <= 0) {
+                if (arrayOfUsers.count <= 0)
+                {
                     [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                     [bar saveInBackground];
                     self.inARegion = NO;
+                    NSLog(@"adding user to old town ale house");
                 }
-
-                NSEnumerator *enumerator = [arrayOfUsers objectEnumerator];
-                PFUser* user;
-                while (user = [enumerator nextObject]) {
-                    if (![[user objectForKey:@"username"]isEqual:[[PFUser currentUser]objectForKey:@"username"]]) {
-                        [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
-                        [bar saveInBackground];
-                        self.inARegion = NO;
+                else
+                {
+                    for (PFUser *userr in arrayOfUsers) {
+                        if (![[userr objectForKey:@"username"]isEqual:[[PFUser currentUser]objectForKey:@"username"]]) {
+                            [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
+                            [bar saveInBackground];
+                            self.inARegion = NO;
+                        }
                     }
                 }
                 self.inARegion = NO;
@@ -169,10 +172,22 @@
             [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 PFObject *bar = [objects firstObject];
                 NSArray *arrayOfUsers = [NSArray arrayWithArray:[bar objectForKey:@"usersInBar"]];
-                if (![arrayOfUsers containsObject:[[PFUser currentUser] objectId]]) {
+                if (arrayOfUsers.count <= 0)
+                {
                     [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                     [bar saveInBackground];
                     self.inARegion = NO;
+                    NSLog(@"adding user to richs");
+                }
+                else
+                {
+                    for (PFUser *userr in arrayOfUsers) {
+                        if (![[userr objectForKey:@"username"]isEqual:[[PFUser currentUser]objectForKey:@"username"]]) {
+                            [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
+                            [bar saveInBackground];
+                            self.inARegion = NO;
+                        }
+                    }
                 }
                 self.inARegion = NO;
             }];
@@ -185,10 +200,22 @@
             [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 PFObject *bar = [objects firstObject];
                 NSArray *arrayOfUsers = [NSArray arrayWithArray:[bar objectForKey:@"usersInBar"]];
-                if (![arrayOfUsers containsObject:[[PFUser currentUser] objectId]]) {
+                if (arrayOfUsers.count <= 0)
+                {
                     [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                     [bar saveInBackground];
                     self.inARegion = NO;
+                    NSLog(@"adding user to green door");
+                }
+                else
+                {
+                    for (PFUser *userr in arrayOfUsers) {
+                        if (![[userr objectForKey:@"username"]isEqual:[[PFUser currentUser]objectForKey:@"username"]]) {
+                            [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
+                            [bar saveInBackground];
+                            self.inARegion = NO;
+                        }
+                    }
                 }
                 self.inARegion = NO;
             }];
@@ -201,10 +228,24 @@
             [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 PFObject *bar = [objects firstObject];
                 NSArray *arrayOfUsers = [NSArray arrayWithArray:[bar objectForKey:@"usersInBar"]];
-                if (![arrayOfUsers containsObject:[[PFUser currentUser] objectId]]) {
+                if (arrayOfUsers.count <= 0)
+                {
                     [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                     [bar saveInBackground];
                     self.inARegion = NO;
+                    NSLog(@"adding user to municipal bar");
+                }
+                else
+                {
+                    NSEnumerator *enumerator = [arrayOfUsers objectEnumerator];
+                    PFUser* user;
+                    while (user = [enumerator nextObject]) {
+                        if (![[user objectForKey:@"username"]isEqual:[[PFUser currentUser]objectForKey:@"username"]]) {
+                            [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
+                            [bar saveInBackground];
+                            self.inARegion = NO;
+                        }
+                    }
                 }
                 self.inARegion = NO;
             }];
