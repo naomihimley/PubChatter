@@ -151,10 +151,16 @@
     NSLog(@"peerID of advertising peer from MCManager %@", peerID);
     NSArray *array = [NSArray arrayWithArray:self.advertisingUsers];
     NSLog(@"array in MCManager to block %@", self.advertisingUsers);
-    if (![array containsObject:peerID])
+    NSLog(@"array contains object %hhd", [array containsObject:peerID]);
+    if ([array containsObject:peerID] == 0)
     {
+        NSLog(@"peer not double advertising %@", peerID);
         [self.advertisingUsers addObject:peerID];
-        NSLog(@"self.advertisingUsers from MCManager %@", self.advertisingUsers);
+    }
+    else
+    {
+
+        NSLog(@"peer double advertising %@", peerID);
     }
 
     NSDictionary *dictionary = @{@"peerID": peerID};
@@ -207,5 +213,6 @@
         self.advertiser = nil;
     }
 }
+
 
 @end
