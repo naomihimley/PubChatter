@@ -49,7 +49,7 @@
 {
     //all estimote iBeacons
     NSUUID *estimoteUUID = [[NSUUID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"];
-    self.estimoteRegion = [[CLBeaconRegion alloc]initWithProximityUUID:estimoteUUID identifier:@"anyEstimoteBeacon"];
+    self.estimoteRegion = [[CLBeaconRegion alloc]initWithProximityUUID:estimoteUUID major:19218 identifier:@"PubChat"];
     self.estimoteRegion.notifyOnEntry = YES;
     self.estimoteRegion.notifyOnExit = YES;
     self.estimoteRegion.notifyEntryStateOnDisplay = YES;
@@ -79,10 +79,11 @@
 
 -(void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region
 {
+    if ([PFUser currentUser])
+    {
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     if (state == CLRegionStateInside)
     {
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"PubChat"}];
         self.inARegion = YES;
         [manager startRangingBeaconsInRegion:self.richRegion];
         [manager startRangingBeaconsInRegion:self.estimoteRegion];
@@ -105,7 +106,7 @@
                 }];
             }
         }
-        if ([region.identifier isEqualToString:@"anyEstimoteBeacon"])
+        if ([region.identifier isEqualToString:@"PubChat"])
         {
             //this removes user from all bars
             [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"PubChat"}];
@@ -121,6 +122,7 @@
         }
         self.inARegion = NO;
     }
+    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager rangingBeaconsDidFailForRegion:(CLBeaconRegion *)region withError:(NSError *)error
@@ -130,12 +132,14 @@
 
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region
 {
+    if ([PFUser currentUser])
+    {
     //array is sorted by closest beacon to you
     CLBeacon *beacon = [[CLBeacon alloc]init];
     beacon = [beacons firstObject];
     if (self.inARegion == YES)
     {
-        if ([beacon.minor isEqual: @52834] && [beacon.major isEqual:@12505]) //old town ale house
+        if ([beacon.minor isEqual: @52834]) //old town ale house
         {
             [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"Old Town Ale House"}];
             PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
@@ -164,11 +168,12 @@
                 self.inARegion = NO;
             }];
         }
-        else if ([beacon.minor isEqual: @23023] && [beacon.major isEqual: @4921]) //rich's iPhone MM
+        else if ([beacon.minor isEqual: @23023]) //rich's iPhone MM
         {
             [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"Rich's iPhone"}];
             PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
             [queryForBar whereKey:@"objectId" equalTo:@"UL0yMO2bGj"];
+            [queryForBar includeKey:@"usersInBar"];
             [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 PFObject *bar = [objects firstObject];
                 NSArray *arrayOfUsers = [NSArray arrayWithArray:[bar objectForKey:@"usersInBar"]];
@@ -192,11 +197,12 @@
                 self.inARegion = NO;
             }];
         }
-        else if ([beacon.minor isEqual: @6704] && [beacon.major isEqual: @19218]) //Green Door
+        else if ([beacon.minor isEqual: @6704]) //Green Door
         {
             [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"Green Door"}];
             PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
             [queryForBar whereKey:@"objectId" equalTo:@"CnWKUJftyT"];
+            [queryForBar includeKey:@"usersInBar"];
             [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 PFObject *bar = [objects firstObject];
                 NSArray *arrayOfUsers = [NSArray arrayWithArray:[bar objectForKey:@"usersInBar"]];
@@ -220,11 +226,12 @@
                 self.inARegion = NO;
             }];
         }
-        else if ([beacon.minor isEqual: @16063] && [beacon.major isEqual: @13963]) //Municipal Bar
+        else if ([beacon.minor isEqual: @16063]) //Municipal Bar
         {
             [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"Municipal Bar"}];
             PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
             [queryForBar whereKey:@"objectId" equalTo:@"qVTGKr4142"];
+            [queryForBar includeKey:@"usersInBar"];
             [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 PFObject *bar = [objects firstObject];
                 NSArray *arrayOfUsers = [NSArray arrayWithArray:[bar objectForKey:@"usersInBar"]];
@@ -237,9 +244,7 @@
                 }
                 else if (arrayOfUsers.count > 0)
                 {
-                    NSEnumerator *enumerator = [arrayOfUsers objectEnumerator];
-                    PFUser* user;
-                    while (user = [enumerator nextObject]) {
+                    for (PFUser *user in arrayOfUsers) {
                         if (![[user objectForKey:@"username"]isEqual:[[PFUser currentUser]objectForKey:@"username"]]) {
                             [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                             [bar saveInBackground];
@@ -251,11 +256,12 @@
             }];
         }
     }
+    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
 {
-    if ([region.identifier isEqualToString:@"anyEstimoteBeacon"])
+    if ([region.identifier isEqualToString:@"PubChat"])
     {
         [self.beaconRegionManager startRangingBeaconsInRegion:self.estimoteRegion];
     }
@@ -268,7 +274,7 @@
 
 - (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
 {
-    if ([region.identifier isEqualToString:@"anyEstimoteBeacon"])
+    if ([region.identifier isEqualToString:@"PubChat"])
     {
         //removes User from all bar
         [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"PubChat"}];
