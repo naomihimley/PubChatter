@@ -191,7 +191,7 @@
 
     if (self.appDelegate.mcManager.session.connectedPeers.count > 0)
     {
-        [self.appDelegate.mcManager.session.connectedPeers[0] disconnect];
+        [[self.appDelegate.mcManager.session.connectedPeers objectAtIndex:0] disconnect];
     }
 }
 - (IBAction)onButtonPressedCancelSendingChat:(id)sender
