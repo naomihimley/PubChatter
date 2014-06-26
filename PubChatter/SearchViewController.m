@@ -194,7 +194,7 @@
 
     [NSURLConnection sendAsynchronousRequest:rq queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
 
-        NSLog(@"Got the data");
+        NSLog(@"Got Yelp data");
         if (connectionError) {
             NSLog(@"connection error %@", connectionError);
         }
