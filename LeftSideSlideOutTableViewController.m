@@ -11,6 +11,7 @@
 #import "AppDelegate.h"
 #import "ListOfUsersTableViewCell.h"
 #import "OPPViewController.h"
+#import "SWRevealViewController.h"
 #import <Parse/Parse.h>
 
 @interface LeftSideSlideOutTableViewController ()
@@ -299,8 +300,6 @@
 -(void)receivedInvitationForConnection:(NSNotification *)notification
 {
     MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
-
-    ListOfUsersTableViewCell *cell = [ListOfUsersTableViewCell new];
 
     NSLog(@"peerID from notification before going into dictionary %@", peerID);
     NSDictionary *user = [NSDictionary new];
