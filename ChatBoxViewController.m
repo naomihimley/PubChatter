@@ -30,7 +30,6 @@
 {
     [super viewDidLoad];
     self.chatTextView.editable = NO;
-    self.managedObjectContext = moc;
     self.fetchedResultsController.delegate = self;
     self.fetchedResultsController = [[NSFetchedResultsController alloc]init];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -99,60 +98,60 @@
 {
     if(self.chattingUserPeerID)
     {
-    NSString *chatWithNewLine = [NSString stringWithFormat:@"\n %@", self.chatTextField.text];
-    NSData *dataToSend = [chatWithNewLine dataUsingEncoding:NSUTF8StringEncoding];
-    NSArray *peerToSendTo = @[self.chattingUserPeerID];
-    NSError *error;
-    [self.appDelegate.mcManager.session sendData:dataToSend
-                                         toPeers:peerToSendTo
-                                        withMode:MCSessionSendDataReliable
-                                           error:&error];
-    if (error)
-    {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Connection to User has been lost"
-                                                           message:nil
-                                                          delegate:self
-                                                 cancelButtonTitle:@"OK"
-                                                 otherButtonTitles:nil, nil];
-        [alertView show];
-    }
-
-    else
-    {
-        NSString *chatString = [NSString stringWithFormat:@"\n I wrote:\n%@\n\n", self.chatTextField.text];
-        [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:chatString]];
-        //passed peerID from left drawer
-        if ([self doesConversationExist:self.chattingUserPeerID] == NO)
+        NSString *chatWithNewLine = [NSString stringWithFormat:@"\n %@", self.chatTextField.text];
+        NSData *dataToSend = [chatWithNewLine dataUsingEncoding:NSUTF8StringEncoding];
+        NSArray *peerToSendTo = @[self.chattingUserPeerID];
+        NSError *error;
+        [self.appDelegate.mcManager.session sendData:dataToSend
+                                             toPeers:peerToSendTo
+                                            withMode:MCSessionSendDataReliable
+                                               error:&error];
+        if (error)
         {
-            Peer *peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext:self.managedObjectContext];
-            Conversation *conversation = [NSEntityDescription insertNewObjectForEntityForName:@"Conversation" inManagedObjectContext:self.managedObjectContext];
-            conversation.message = chatString;
-            peer.peerID = self.chattingUserPeerID.displayName;
-            [peer addConversationObject:conversation];
-            [self.managedObjectContext save:nil];
-            NSLog(@"CHATBOX creating new convo in sendMyMessage");
+            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Connection to User has been lost"
+                                                               message:nil
+                                                              delegate:self
+                                                     cancelButtonTitle:@"OK"
+                                                     otherButtonTitles:nil, nil];
+            [alertView show];
         }
+
         else
         {
-            NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
-            request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", self.chattingUserPeerID.displayName];
-            request.predicate = predicate;
-            self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
-            [self.fetchedResultsController performFetch:nil];
-            NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
-            Peer *peer = [array firstObject];
-            Conversation *convo = [peer.conversation anyObject];
-            NSString *chatWithNewLine = [NSString stringWithFormat: @"\n %@ \n", chatString];
-            convo.message = [convo.message stringByAppendingString:chatWithNewLine];
-            [self.managedObjectContext save:nil];
-            NSLog(@"CHATBOX SENT adding message object: %@", convo.message);
-        }
+            NSString *chatString = [NSString stringWithFormat:@"\n I wrote:\n%@\n\n", self.chatTextField.text];
+            [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:chatString]];
+            //passed peerID from left drawer
+            if ([self doesConversationExist:self.chattingUserPeerID] == NO)
+            {
+                Peer *peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext:moc];
+                Conversation *conversation = [NSEntityDescription insertNewObjectForEntityForName:@"Conversation" inManagedObjectContext:moc];
+                conversation.message = chatString;
+                peer.peerID = self.chattingUserPeerID.displayName;
+                [peer addConversationObject:conversation];
+                [moc save:nil];
+                NSLog(@"CHATBOX creating new convo in sendMyMessage");
+            }
+            else
+            {
+                NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
+                request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", self.chattingUserPeerID.displayName];
+                request.predicate = predicate;
+                self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
+                [self.fetchedResultsController performFetch:nil];
+                NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
+                Peer *peer = [array firstObject];
+                Conversation *convo = [peer.conversation anyObject];
+                NSString *chatWithNewLine = [NSString stringWithFormat: @"\n %@ \n", chatString];
+                convo.message = [convo.message stringByAppendingString:chatWithNewLine];
+                [moc save:nil];
+                NSLog(@"CHATBOX SENT adding message object: %@", convo.message);
+            }
 
-        self.chatTextField.text = @"";
+            self.chatTextField.text = @"";
+        }
     }
     [self.chatTextField resignFirstResponder];
-    }
 }
 
 
