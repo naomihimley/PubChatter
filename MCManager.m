@@ -148,10 +148,6 @@
 -(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
 {
 
-    NSLog(@"peerID of advertising peer from MCManager %@", peerID);
-    NSLog(@"peerID.displayname %@", peerID.displayName);
-//    NSArray *array = [[NSArray alloc ]initWithArray:self.mutableArray];
-    NSLog(@"array in MCManager to block %@", self.foundPeersArray);
     if (self.advertisingUsers.count == 0)
     {
         [self.advertisingUsers addObject:peerID];
@@ -172,10 +168,6 @@
     }
 
     [self.foundPeersArray addObject:peerID.displayName];
-//
-//    NSDictionary *dictionary = @{@"peerID": peerID};
-//
-//    [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:dictionary];
 }
 
 -(void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID

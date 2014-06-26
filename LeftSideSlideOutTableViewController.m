@@ -136,9 +136,7 @@
 -(void)receivedNotificationOfUserAdvertising:(NSNotification *)notification
 {
     MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
-//    NSLog(@"peerID showing from notification %@", peerID);
 
-        //    [self.users removeAllObjects];
     if (!self.parseUsers)
     {
 
@@ -147,17 +145,16 @@
              if (!error)
              {
                  self.parseUsers = [NSArray arrayWithArray:objects];
-//                 NSLog(@"self.parseUsers %@", self.parseUsers);
              }
              [self findUsers:peerID];
-//            NSLog(@"in the query");
+
              [self.tableView reloadData];
          }];
     }
     else
     {
         [self findUsers: peerID];
-//        NSLog(@"not in the query");
+
         [self.tableView reloadData];
     }
 }
@@ -170,10 +167,8 @@
     {
         if ([[dictionary objectForKey:@"username"] isEqual:peerID.displayName])
         {
-//            NSLog(@"dictionary making the advertising peerID %@", dictionary);
             if (self.users.count < self.appDelegate.mcManager.advertisingUsers.count)
             {
-//                NSLog(@"dictionary to be added to self.users %@", dictionary);
                 NSDictionary *userDictionary = @{@"peerID": peerID,
                                                  @"user": dictionary};
                 [self.users addObject:userDictionary];
@@ -340,42 +335,5 @@
 
     oppVC.user = selectedUser;
 }
-
-#pragma mark - Old Query to hold onto for a minute
-
-//-(void)queryForUsers
-//{
-//    NSArray *blockerArray = [NSArray arrayWithArray:self.users];
-////    [self.users removeAllObjects];
-//    NSLog(@"blockerArray in query %@", blockerArray);
-//
-//    PFQuery *query = [PFQuery queryWithClassName:@"_User"];
-//    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
-//     {
-//         if (!error)
-//         {
-//             self.parseUsers = [NSArray arrayWithArray:objects];
-//             NSLog(@"self.parseUsers %@", self.parseUsers);
-//             for (MCPeerID *peerID in self.appDelegate.mcManager.advertisingUsers)
-//             {
-//                 for (PFUser *user in objects)
-//                 {
-//                     if ([peerID.displayName isEqual:[user objectForKey:@"username"]])
-//                     {
-//                         NSDictionary *dictionary = @{@"peerID": peerID,
-//                                                      @"user": user};
-////                         if (self.users.count <= self.appDelegate.mcManager.advertisingUsers.count)
-//                         if (![blockerArray containsObject:dictionary])
-//                         {
-//                             NSLog(@"dictionary items getting added to users array from query %@", dictionary);
-//                             [self.users addObject:dictionary];
-//                         }
-//                     }
-//                 }
-//                 [self.tableView reloadData];
-//             }
-//         }
-//     }];
-//}
 
 @end
