@@ -27,7 +27,7 @@
 - (void)viewDidLoad
 {
 
-    [self queryForUsers];
+//    [self queryForUsers];
 
     [super viewDidLoad];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
@@ -131,21 +131,21 @@
     return cell;
 }
 
-#pragma mark - Query
+//#pragma mark - Query
 
--(void)queryForUsers
-{
-    NSArray *blockerArray = [NSArray arrayWithArray:self.users];
-//    [self.users removeAllObjects];
-    NSLog(@"blockerArray in query %@", blockerArray);
-
-    PFQuery *query = [PFQuery queryWithClassName:@"_User"];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
-     {
-         if (!error)
-         {
-             self.parseUsers = [NSArray arrayWithArray:objects];
-             NSLog(@"self.parseUsers %@", self.parseUsers);
+//-(void)queryForUsers
+//{
+//    NSArray *blockerArray = [NSArray arrayWithArray:self.users];
+////    [self.users removeAllObjects];
+//    NSLog(@"blockerArray in query %@", blockerArray);
+//
+//    PFQuery *query = [PFQuery queryWithClassName:@"_User"];
+//    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+//     {
+//         if (!error)
+//         {
+//             self.parseUsers = [NSArray arrayWithArray:objects];
+//             NSLog(@"self.parseUsers %@", self.parseUsers);
 //             for (MCPeerID *peerID in self.appDelegate.mcManager.advertisingUsers)
 //             {
 //                 for (PFUser *user in objects)
@@ -164,9 +164,9 @@
 //                 }
 //                 [self.tableView reloadData];
 //             }
-         }
-     }];
-}
+//         }
+//     }];
+//}
 
 #pragma mark - Hadling new advertising user
 
@@ -175,6 +175,34 @@
     MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
     NSLog(@"peerID showing from notification %@", peerID);
 
+        //    [self.users removeAllObjects];
+    if (!self.parseUsers)
+    {
+
+        PFQuery *query = [PFQuery queryWithClassName:@"_User"];
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error){
+             if (!error)
+             {
+                 self.parseUsers = [NSArray arrayWithArray:objects];
+                 NSLog(@"self.parseUsers %@", self.parseUsers);
+             }
+             [self findUsers:peerID];
+            NSLog(@"in the query");
+             [self.tableView reloadData];
+         }];
+    }
+    else
+    {
+        [self findUsers: peerID];
+        NSLog(@"not in the query");
+        [self.tableView reloadData];
+    }
+}
+
+# pragma mark - Finding active users
+
+-(void)findUsers:(MCPeerID *)peerID
+{
     for (NSDictionary *dictionary in self.parseUsers)
     {
         if ([[dictionary objectForKey:@"username"] isEqual:peerID.displayName])
@@ -183,13 +211,12 @@
             if (self.users.count < self.appDelegate.mcManager.advertisingUsers.count)
             {
                 NSLog(@"dictionary to be added to self.users %@", dictionary);
-            NSDictionary *userDictionary = @{@"peerID": peerID,
-                                             @"user": dictionary};
-            [self.users addObject:userDictionary];
+                NSDictionary *userDictionary = @{@"peerID": peerID,
+                                                 @"user": dictionary};
+                [self.users addObject:userDictionary];
             }
         }
     }
-    [self.tableView reloadData];
 }
 
 #pragma mark - Action for Button sending invitation
@@ -299,10 +326,12 @@
     {
         if ([dictionary objectForKey:@"peerID"] == peerID)
         {
+            NSLog(@"peer to be removed %@", dictionary);
             userDictionary = dictionary;
         }
     }
     [self.users removeObject:userDictionary];
+    NSLog(@"self.users after a user has stopped advertising %@", self.users);
     [self.tableView reloadData];
 }
 
@@ -317,12 +346,9 @@
 
     for (NSDictionary *dictionary in self.users)
     {
-//        MCPeerID *peer = [dictionary objectForKey:@"peerID"];
-
         if ([[dictionary objectForKey:@"peerID"] isEqual:peerID])
         {
             user = dictionary;
-            NSLog(@"dictionary = user %@", dictionary);
         }
     }
 
