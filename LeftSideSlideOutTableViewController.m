@@ -175,7 +175,10 @@
     NSDictionary *dictionary = [self.users objectAtIndex:indexPath.row];
     MCPeerID *peerID = [dictionary objectForKey:@"peerID"];
 
+    if ([button.titleLabel.text isEqual:@"Connect"])
+    {
     [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30];
+    }
 
     if ([button.titleLabel.text isEqual:@"Chat"])
     {
