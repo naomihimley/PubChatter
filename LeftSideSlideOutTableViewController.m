@@ -149,6 +149,7 @@
                                                       @"user": user};
                          if (self.users.count <= self.appDelegate.mcManager.advertisingUsers.count)
                          {
+                             NSLog(@"dictionary items getting added to users array from query %@", dictionary);
                              [self.users addObject:dictionary];
                          }
                      }
@@ -175,7 +176,10 @@
     NSDictionary *dictionary = [self.users objectAtIndex:indexPath.row];
     MCPeerID *peerID = [dictionary objectForKey:@"peerID"];
 
+    if ([button.titleLabel.text isEqual:@"Connect"])
+    {
     [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30];
+    }
 
     if ([button.titleLabel.text isEqual:@"Chat"])
     {
