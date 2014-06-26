@@ -117,7 +117,7 @@
 
         else
         {
-            NSString *chatString = [NSString stringWithFormat:@"\n I wrote:\n %@", chatWithNewLine];
+            NSString *chatString = [NSString stringWithFormat:@"\n I wrote: %@", chatWithNewLine];
             [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:chatString]];
             if ([self doesConversationExist:self.chattingUserPeerID] == NO)
             {
