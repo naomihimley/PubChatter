@@ -45,8 +45,6 @@
     [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
      {
          self.profileImageView.image = [UIImage imageWithData:data];
-//         self.profileImageView.layer.cornerRadius = 10.0f;
-//         self.profileImageView.clipsToBounds = YES;
      }];
 
     if ([[PFUser currentUser]objectForKey:@"age"]) {
