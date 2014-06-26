@@ -151,7 +151,7 @@
                     self.inARegion = NO;
                     NSLog(@"adding user to old town ale house");
                 }
-                else
+                else if (arrayOfUsers.count > 0)
                 {
                     for (PFUser *userr in arrayOfUsers) {
                         if (![[userr objectForKey:@"username"]isEqual:[[PFUser currentUser]objectForKey:@"username"]]) {
@@ -179,7 +179,7 @@
                     self.inARegion = NO;
                     NSLog(@"adding user to richs");
                 }
-                else
+                else if (arrayOfUsers.count > 0)
                 {
                     for (PFUser *userr in arrayOfUsers) {
                         if (![[userr objectForKey:@"username"]isEqual:[[PFUser currentUser]objectForKey:@"username"]]) {
@@ -207,10 +207,10 @@
                     self.inARegion = NO;
                     NSLog(@"adding user to green door");
                 }
-                else
+                else if (arrayOfUsers.count > 0)
                 {
-                    for (PFUser *userr in arrayOfUsers) {
-                        if (![[userr objectForKey:@"username"]isEqual:[[PFUser currentUser]objectForKey:@"username"]]) {
+                    for (PFUser *user in arrayOfUsers) {
+                        if (![[user objectForKey:@"username"]isEqual:[[PFUser currentUser]objectForKey:@"username"]]) {
                             [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                             [bar saveInBackground];
                             self.inARegion = NO;
@@ -235,7 +235,7 @@
                     self.inARegion = NO;
                     NSLog(@"adding user to municipal bar");
                 }
-                else
+                else if (arrayOfUsers.count > 0)
                 {
                     NSEnumerator *enumerator = [arrayOfUsers objectEnumerator];
                     PFUser* user;
