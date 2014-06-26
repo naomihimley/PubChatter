@@ -31,30 +31,32 @@
 {
     [super viewDidLoad];
 
-    self.userNameLabel.text = [self.user objectForKey:@"name"];
-    self.userAgeLabel.text = [NSString stringWithFormat:@"%@",[self.user objectForKey:@"age"]];
+    // Set name and age label.
+    self.userNameLabel.text = [NSString stringWithFormat:@"%@, %@", [self.user objectForKey:@"name"],[self.user objectForKey:@"age"]];
+
+    // Set gender label.
+    if ([self.user [@"gender"] isEqual:@0]) {
+        self.sexLabel.text = @"F";
+    }
+    else if ([self.user[@"gender"] isEqual:@1]) {
+        self.sexLabel.text = @"M";
+    }
+    else if ([self.user [@"gender"] isEqual:@2]) {
+        self.sexLabel.text = @"Other";
+    }
+    else {
+        self.sexLabel.text = @"";
+    }
+
+
+
+
 
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
 
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(receivedInvitationForConnection:) name:@"MCReceivedInvitation" object:nil];
 
-    if ([self.user [@"gender"] isEqual:@0])
-    {
-        self.sexLabel.text = @"F";
-    }
-    else if ([self.user[@"gender"] isEqual:@1])
-    {
-        self.sexLabel.text = @"M";
-    }
-    else if ([self.user [@"gender"] isEqual:@2])
-    {
-        self.sexLabel.text = @"Other";
-        [self.sexLabel sizeToFit];
-    }
-    else
-    {
-        self.sexLabel.text = @"";
-    }
+
 
     if ([self.user [@"sexualOrientation"] isEqual:@0])
     {
