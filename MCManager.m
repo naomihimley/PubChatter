@@ -150,13 +150,16 @@
     [self.foundPeersArray addObject:peerID];
     NSLog(@"peerID of advertising peer from MCManager %@", peerID);
     NSArray *array = [NSArray arrayWithArray:self.advertisingUsers];
+    NSLog(@"array in MCManager to block %@", self.advertisingUsers);
     if (![array containsObject:peerID])
     {
         [self.advertisingUsers addObject:peerID];
         NSLog(@"self.advertisingUsers from MCManager %@", self.advertisingUsers);
     }
 
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:nil];
+    NSDictionary *dictionary = @{@"peerID": peerID};
+
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:dictionary];
 }
 
 -(void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID
