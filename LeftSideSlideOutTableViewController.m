@@ -187,14 +187,14 @@
                  NSLog(@"self.parseUsers %@", self.parseUsers);
              }
              [self findUsers:peerID];
-            NSLog(@"in the query");
+//            NSLog(@"in the query");
              [self.tableView reloadData];
          }];
     }
     else
     {
         [self findUsers: peerID];
-        NSLog(@"not in the query");
+//        NSLog(@"not in the query");
         [self.tableView reloadData];
     }
 }
@@ -207,10 +207,10 @@
     {
         if ([[dictionary objectForKey:@"username"] isEqual:peerID.displayName])
         {
-            NSLog(@"dictionary making the advertising peerID %@", dictionary);
+//            NSLog(@"dictionary making the advertising peerID %@", dictionary);
             if (self.users.count < self.appDelegate.mcManager.advertisingUsers.count)
             {
-                NSLog(@"dictionary to be added to self.users %@", dictionary);
+//                NSLog(@"dictionary to be added to self.users %@", dictionary);
                 NSDictionary *userDictionary = @{@"peerID": peerID,
                                                  @"user": dictionary};
                 [self.users addObject:userDictionary];
