@@ -65,13 +65,35 @@
 //notification for receiving a text
 - (void)didReceiveDataWithNotification:(NSNotification *)notification
 {
-    self.chattingUserPeerID = [[notification userInfo] objectForKey:@"peerID"];
-    NSString *peerDisplayName = [self.chatingUser objectForKey:@"name"];
-    NSData *receivedData = [[notification userInfo] objectForKey:@"data"];
-    NSString *receivedText = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
+    MCPeerID *peerIDFromNotification = [[notification userInfo]objectForKey:@"peerID"];
+    //if the data is coming from the person you're chatting with then add it to the text view
+    if ([self.chattingUserPeerID isEqual:peerIDFromNotification]) {
+        NSData *receivedData = [[notification userInfo] objectForKey:@"data"];
+        NSString *receivedText = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
+        NSString *chatString = [NSString stringWithFormat:@"%@:\n%@\n\n", [self.chatingUser objectForKey:@"name"], receivedText];
+        [self.chatTextView performSelectorOnMainThread:@selector(setText:) withObject:[self.chatTextView.text stringByAppendingString:chatString] waitUntilDone:NO];
+    }
+//    else
+//    {
+//        self.chattingUserPeerID = [[notification userInfo] objectForKey:@"peerID"];
+//        NSData *receivedData = [[notification userInfo] objectForKey:@"data"];
+//        NSString *receivedText = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
+//        //not fully sure if this part is necessary or if its happening in mcmanager already.. ?
+//        NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
+//        request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
+//        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", peerIDFromNotification.displayName];
+//        request.predicate = predicate;
+//        self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
+//        [self.fetchedResultsController performFetch:nil];
+//        NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
+//        Peer *peer = [array firstObject];
+//        Conversation *convo = [peer.conversation anyObject];
+//        NSString *chatWithNewLine = [NSString stringWithFormat: @"\n %@ \n %@", [self.chatingUser objectForKey:@"name"], receivedText];
+//        convo.message = [convo.message stringByAppendingString:chatWithNewLine];
+//        [moc save:nil];
+//
+//    }
 
-    NSString *chatString = [NSString stringWithFormat:@"%@:\n%@\n\n", peerDisplayName, receivedText];
-    [self.chatTextView performSelectorOnMainThread:@selector(setText:) withObject:[self.chatTextView.text stringByAppendingString:chatString] waitUntilDone:NO];
 }
 
 //notification from when you click the "CHAT" button in the drawer
