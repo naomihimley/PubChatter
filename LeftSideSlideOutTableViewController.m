@@ -144,6 +144,7 @@
                  {
                      if ([peerID.displayName isEqual:[user objectForKey:@"username"]])
                      {
+                         NSLog(@"peerID.displayname in query %@", peerID.displayName);
                          NSDictionary *dictionary = @{@"peerID": peerID,
                                                       @"user": user};
                          if (self.users.count <= self.appDelegate.mcManager.advertisingUsers.count)
@@ -152,6 +153,7 @@
                          }
                      }
                  }
+                 NSLog(@"self.users array in query %@", self.users);
                  [self.tableView reloadData];
              }
          }
@@ -178,6 +180,7 @@
     if ([button.titleLabel.text isEqual:@"Chat"])
     {
         [[NSNotificationCenter defaultCenter]postNotificationName:@"PeerToChatWith" object:nil userInfo:dictionary];
+        [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 
@@ -186,67 +189,68 @@
 -(void)peerDidChangeStateWithNotification:(NSNotification *)notification
 {
     MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
-    NSLog(@"peerID from notification %@", peerID);
 
     NSDictionary *userDictionary = [NSDictionary new];
     ListOfUsersTableViewCell *cell = [ListOfUsersTableViewCell new];
 
-//    for (NSDictionary *dictionary in self.users)
-//    {
-//        if ([[dictionary objectForKey:@"peerID"] isEqual:peerID])
-//        {
-//            userDictionary = dictionary;
-//        }
-//    }
-//
-//    int index = [self.users indexOfObject:userDictionary];
-//
-//    for (ListOfUsersTableViewCell *userCell in self.cellArray)
-//    {
-//        if (userCell.tag == index)
-//        {
-//            cell = userCell;
-//        }
-//    }
-//
-//    if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnecting)
-//    {
-//        [cell.chatButton setTitle:@"Connecting" forState:UIControlStateNormal];
-//    }
-//    else if ([[[notification userInfo]objectForKey:@"state"]intValue] != MCSessionStateConnecting)
-//    {
-//        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
-//        {
-//            [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
-//
-//        }
-//        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
-//        {
-//            [cell.chatButton setTitle:@"Connect" forState:UIControlStateNormal];
-//        }
-//    }
     for (NSDictionary *dictionary in self.users)
     {
-        if ([[dictionary objectForKey:@"peerID"] isEqual: peerID])
+        if ([[dictionary objectForKey:@"peerID"] isEqual:peerID])
         {
-            int index = [self.users indexOfObject:dictionary];
-
-            for (ListOfUsersTableViewCell *userCell in self.cellArray)
-            {
-                if (userCell.tag == index)
-                    NSLog(@"userCell.tag %i", userCell.tag);
-                {
-                    if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
-                    {
-                        NSLog(@"Dictionary %@", dictionary);
-//                        [userCell.chatButton setHighlighted:YES];
-                        [userCell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
-                        [userCell.chatButton setEnabled:YES];
-                    }
-                }
-            }
+            userDictionary = dictionary;
         }
     }
+
+    int index = [self.users indexOfObject:userDictionary];
+
+    for (ListOfUsersTableViewCell *userCell in self.cellArray)
+    {
+        if (userCell.tag == index)
+        {
+            cell = userCell;
+        }
+    }
+
+    if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnecting)
+    {
+        [cell.chatButton setTitle:@"Connecting" forState:UIControlStateNormal];
+        [cell.chatButton setEnabled:NO];
+    }
+    else if ([[[notification userInfo]objectForKey:@"state"]intValue] != MCSessionStateConnecting)
+    {
+        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
+        {
+            [cell.chatButton setEnabled:YES];
+            [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
+
+        }
+        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
+        {
+            [cell.chatButton setTitle:@"Connect" forState:UIControlStateNormal];
+            [cell.chatButton setEnabled:YES];
+        }
+    }
+//    for (NSDictionary *dictionary in self.users)
+//    {
+//        if ([[dictionary objectForKey:@"peerID"] isEqual: peerID])
+//        {
+//            long index = [self.users indexOfObject:dictionary];
+//
+//            for (ListOfUsersTableViewCell *userCell in self.cellArray)
+//            {
+//                if (userCell.tag == index)
+//                {
+//                    if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
+//                    {
+//                        NSLog(@"Dictionary %@", dictionary);
+////                        [userCell.chatButton setHighlighted:YES];
+//                        [userCell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
+//                        [userCell.chatButton setEnabled:YES];
+//                    }
+//                }
+//            }
+//        }
+//    }
 }
 
 # pragma mark - Stopped Advertising method catcher
@@ -278,17 +282,14 @@
 
     for (NSDictionary *dictionary in self.users)
     {
-        MCPeerID *peer = [dictionary objectForKey:@"peerID"];
+//        MCPeerID *peer = [dictionary objectForKey:@"peerID"];
 
-        NSLog(@"peerID in loop %@", peer);
-        if (peer == peerID)
+        if ([[dictionary objectForKey:@"peerID"] isEqual:peerID])
         {
             user = dictionary;
             NSLog(@"dictionary = user %@", dictionary);
         }
     }
-
-    NSLog(@"user.name %@", user);
 
     NSString *peerName = [[user objectForKey:@"user"]objectForKey:@"name"];
     NSLog(@"peerID.displayName of sender %@", peerName);

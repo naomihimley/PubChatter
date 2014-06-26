@@ -63,7 +63,7 @@
     [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
      {
          self.pictureView.layer.cornerRadius = self.pictureView.bounds.size.width /2;
-         self.pictureView.layer.masksToBounds = YES;
+         self.pictureView.clipsToBounds = YES;
          self.pictureView.layer.borderWidth = 0;
          self.pictureView.image = [UIImage imageWithData:data];
      }];
@@ -93,26 +93,36 @@
 
     if ([[[PFUser currentUser]objectForKey: @"gender"] isEqualToNumber:@1]) {
         self.genderString = [[self.genderArray objectAtIndex:1] lowercaseString];
+        [self.genderPicker selectRow:1 inComponent:0 animated:YES];
     }
     else if ([[[PFUser currentUser]objectForKey: @"gender"] isEqualToNumber:@0]) {
         self.genderString = [[self.genderArray objectAtIndex:0] lowercaseString];
+        [self.genderPicker selectRow:0 inComponent:0 animated:YES];
     }
     else {
         self.genderString = [[self.genderArray objectAtIndex:2] lowercaseString];
+        [self.genderPicker selectRow:2 inComponent:0 animated:YES];
     }
 
 
     if ([[[PFUser currentUser]objectForKey: @"sexualOrientation"] isEqualToNumber:@0]) {
         self.interestedString = [[self.interestedArray objectAtIndex:1] lowercaseString];
+        [self.genderPicker selectRow:1 inComponent:1 animated:YES];
     }
     else if ([[[PFUser currentUser]objectForKey: @"sexualOrientation"] isEqualToNumber:@1]) {
         self.interestedString = [[self.interestedArray objectAtIndex:0] lowercaseString];
+        [self.genderPicker selectRow:0 inComponent:1 animated:YES];
     }
     else {
         self.interestedString = [[self.interestedArray objectAtIndex:2] lowercaseString];
+        [self.genderPicker selectRow:2 inComponent:1 animated:YES];
     }
 
-    self.genderLabel.text = [NSString stringWithFormat:@"I am a %@ interested in %@", self.genderString, self.interestedString];
+    UIFont *boldFont = [UIFont boldSystemFontOfSize:18.0];
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"I am a %@ interested in %@", self.genderString, self.interestedString]];
+    [attrString addAttribute: NSFontAttributeName value: boldFont range: NSMakeRange(7, self.genderString.length)];
+    [attrString addAttribute: NSFontAttributeName value: boldFont range: NSMakeRange(7 + self.genderString.length + 15,self.interestedString.length)];
+    self.genderLabel.attributedText = attrString;
 }
 - (void)createUserProfileImage
 {
@@ -272,8 +282,15 @@
         default:
         break;
     }
-    self.genderLabel.text = [NSString stringWithFormat:@"I am a %@ interested in %@", self.genderString, self.interestedString];
+    UIFont *boldFont = [UIFont boldSystemFontOfSize:18.0];
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"I am a %@ interested in %@", self.genderString, self.interestedString]];
+    [attrString addAttribute: NSFontAttributeName value: boldFont range: NSMakeRange(7, self.genderString.length)];
+    [attrString addAttribute: NSFontAttributeName value: boldFont range: NSMakeRange(7 + self.genderString.length + 15,self.interestedString.length)];
+    self.genderLabel.attributedText = attrString;
 }
+
+
+
 
 
 
