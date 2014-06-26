@@ -118,9 +118,8 @@
 
         else
         {
-            NSString *chatString = [NSString stringWithFormat:@"\n I wrote:\n%@\n\n", self.chatTextField.text];
+            NSString *chatString = [NSString stringWithFormat:@"\n %@ wrote:\n%@\n\n", [[PFUser currentUser] objectForKey:@"name"], self.chatTextField.text];
             [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:chatString]];
-            //passed peerID from left drawer
             if ([self doesConversationExist:self.chattingUserPeerID] == NO)
             {
                 Peer *peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext:moc];
@@ -187,9 +186,12 @@
 
 - (IBAction)onButtonPressedEndSession:(id)sender
 {
+    //should remove the current convo from moc
     self.chatTextView.text = @"";
     self.chatTextField.text = @"";
-    [self.appDelegate.mcManager.session disconnect];
+    //should only disconnect user from the current chatting peer
+
+    [self.appDelegate.mcManager.session.connectedPeers[0] disconnect];
 }
 - (IBAction)onButtonPressedCancelSendingChat:(id)sender
 {
