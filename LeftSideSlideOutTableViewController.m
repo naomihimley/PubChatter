@@ -345,7 +345,7 @@
     NSDictionary *user = [NSDictionary new];
 
     for (NSDictionary *dictionary in self.users)
-    {
+    { 
         if ([[dictionary objectForKey:@"peerID"] isEqual:peerID])
         {
             user = dictionary;
