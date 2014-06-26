@@ -33,7 +33,7 @@
 @property CGFloat span;
 @property MKCoordinateSpan mapSpan;
 @property AppDelegate *appDelegate;
--(void)didreceiveNotification:(NSNotification *)notification;
+-(void)userEnteredBar:(NSNotification *)notification;
 
 @end
 
@@ -44,7 +44,7 @@
 {
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didreceiveNotification:)
+                                             selector:@selector(userEnteredBar:)
                                                  name:@"userEnteredBar"
                                                object:nil];
 
@@ -82,9 +82,9 @@
     [[self.appDelegate beaconRegionManager]canUserUseApp];
 }
 
--(void)didreceiveNotification:(NSNotification *)notification
+-(void)userEnteredBar:(NSNotification *)notification
 {
-    NSLog(@"notification in search vc");
+    NSLog(@"userEnteredBar Notification %@", notification);
     self.navigationItem.title = [notification.userInfo objectForKey:@"barName"];
 }
 
