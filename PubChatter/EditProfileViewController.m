@@ -118,7 +118,11 @@
         [self.genderPicker selectRow:2 inComponent:1 animated:YES];
     }
 
-    self.genderLabel.text = [NSString stringWithFormat:@"I am a %@ interested in %@", self.genderString, self.interestedString];
+    UIFont *boldFont = [UIFont boldSystemFontOfSize:18.0];
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"I am a %@ interested in %@", self.genderString, self.interestedString]];
+    [attrString addAttribute: NSFontAttributeName value: boldFont range: NSMakeRange(7, self.genderString.length)];
+    [attrString addAttribute: NSFontAttributeName value: boldFont range: NSMakeRange(7 + self.genderString.length + 15,self.interestedString.length)];
+    self.genderLabel.attributedText = attrString;
 }
 - (void)createUserProfileImage
 {
@@ -278,7 +282,11 @@
         default:
         break;
     }
-    self.genderLabel.text = [NSString stringWithFormat:@"I am a %@ interested in %@", self.genderString, self.interestedString];
+    UIFont *boldFont = [UIFont boldSystemFontOfSize:18.0];
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"I am a %@ interested in %@", self.genderString, self.interestedString]];
+    [attrString addAttribute: NSFontAttributeName value: boldFont range: NSMakeRange(7, self.genderString.length)];
+    [attrString addAttribute: NSFontAttributeName value: boldFont range: NSMakeRange(7 + self.genderString.length + 15,self.interestedString.length)];
+    self.genderLabel.attributedText = attrString;
 }
 
 
