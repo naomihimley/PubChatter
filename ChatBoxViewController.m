@@ -70,7 +70,7 @@
     if ([self.chattingUserPeerID.displayName isEqual:notificationDisplayName]) {
         NSData *receivedData = [[notification userInfo] objectForKey:@"data"];
         NSString *receivedText = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
-        NSString *chatString = [NSString stringWithFormat:@"%@:\n%@\n\n", [self.chatingUser objectForKey:@"name"], receivedText];
+        NSString *chatString = [NSString stringWithFormat:@"%@:%@\n", [self.chatingUser objectForKey:@"name"], receivedText];
         [self.chatTextView performSelectorOnMainThread:@selector(setText:) withObject:[self.chatTextView.text stringByAppendingString:chatString] waitUntilDone:NO];
     }
 }
@@ -117,7 +117,7 @@
 
         else
         {
-            NSString *chatString = [NSString stringWithFormat:@"\n I wrote:\n %@", chatWithNewLine];
+            NSString *chatString = [NSString stringWithFormat:@"\n I wrote: %@", chatWithNewLine];
             [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:chatString]];
             if ([self doesConversationExist:self.chattingUserPeerID] == NO)
             {
