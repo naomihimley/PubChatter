@@ -63,7 +63,7 @@
     [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
      {
          self.pictureView.layer.cornerRadius = self.pictureView.bounds.size.width /2;
-         self.pictureView.layer.masksToBounds = YES;
+         self.pictureView.clipsToBounds = YES;
          self.pictureView.layer.borderWidth = 0;
          self.pictureView.image = [UIImage imageWithData:data];
      }];
