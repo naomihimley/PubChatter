@@ -21,7 +21,8 @@
     self.fields = PFLogInFieldsFacebook | PFLogInFieldsSignUpButton | PFLogInFieldsDefault;
     self.logInView.dismissButton.alpha = 0.0;
     self.delegate = self;
-    self.logInView.backgroundColor = [UIColor orangeColor];
+    self.logInView.backgroundColor = [UIColor blackColor];
+    self.logInView.logo = nil;
 
     return self;
 }
