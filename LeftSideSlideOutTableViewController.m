@@ -149,6 +149,7 @@
                                                       @"user": user};
                          if (self.users.count <= self.appDelegate.mcManager.advertisingUsers.count)
                          {
+                             NSLog(@"dictionary items getting added to users array from query %@", dictionary);
                              [self.users addObject:dictionary];
                          }
                      }
