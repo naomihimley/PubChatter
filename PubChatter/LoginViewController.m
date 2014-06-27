@@ -7,6 +7,7 @@
 //
 
 #import "LoginViewController.h"
+#import "SearchViewController.h"
 #import <Parse/Parse.h>
 
 @interface LoginViewController () <PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate>
@@ -30,6 +31,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
     PFSignUpViewController *signUpViewController = [PFSignUpViewController new];
     signUpViewController.delegate = self;
     self.signUpController = signUpViewController;
@@ -80,8 +82,7 @@
 {
     // Checks if user is logged in with Facebook and updates the Parse database accordingly.
     [self updateFacebookData];
-    [self dismissViewControllerAnimated:YES completion:NULL];
-    [self performSegueWithIdentifier:@"loginsegue" sender:self];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 // Sent to the delegate when the log in attempt fails.
@@ -94,6 +95,8 @@
                       otherButtonTitles:nil] show];
     NSLog(@"Failed to log in...");
 }
+
+
 
 // Sent to the delegate when the log in screen is dismissed.
 - (void)logInViewControllerDidCancelLogIn:(PFLogInViewController *)logInController
@@ -117,7 +120,6 @@
         [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
             if (!error) {
                 NSDictionary *userData = (NSDictionary *)result;
-                NSLog(@"%@", userData);
 
                 // Set name field in Parse from Facebook.
                 [[PFUser currentUser]setObject:userData[@"first_name"] forKey:@"name"];
@@ -177,6 +179,8 @@
         }];
     }
 }
+
+
 
 
 

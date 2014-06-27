@@ -73,10 +73,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    // Check if user is logged in and, if not, send to login page.
-    if (![PFUser currentUser]) {
-        [self performSegueWithIdentifier:@"loginsegue" sender:self];
-    }
     [self isUserInBar];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [[self.appDelegate beaconRegionManager]canUserUseApp];
@@ -324,13 +320,8 @@ calloutAccessoryControlTapped:(UIControl *)control
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([segue.identifier  isEqual: @"loginsegue"])
-    {}
-    else
-    {
     BarDetailViewController *detailViewController = segue.destinationViewController;
     detailViewController.barFromSourceVC = self.selectedBar;
-    }
 }
 
 - (void)segmentChanged:(id)sender
