@@ -11,6 +11,8 @@
 #import "Peer.h"
 #import "Conversation.h"
 #import "SWRevealViewController.h"
+#import "UIColor+DesignColors.h"
+
 
 @interface ChatBoxViewController ()<UITextFieldDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *chatTextField;
@@ -29,6 +31,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.chatTextView.backgroundColor = [UIColor pubChatPurple];
     self.chatTextView.editable = NO;
     self.fetchedResultsController.delegate = self;
     self.fetchedResultsController = [[NSFetchedResultsController alloc]init];
@@ -191,7 +194,7 @@
 
     if (self.appDelegate.mcManager.session.connectedPeers.count > 0)
     {
-        [self.appDelegate.mcManager.session.connectedPeers[0] disconnect];
+        [[self.appDelegate.mcManager.session.connectedPeers objectAtIndex:0] disconnect];
     }
 }
 - (IBAction)onButtonPressedCancelSendingChat:(id)sender
