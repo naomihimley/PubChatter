@@ -11,6 +11,8 @@
 #import "Peer.h"
 #import "Conversation.h"
 #import "SWRevealViewController.h"
+#import "UIColor+DesignColors.h"
+
 
 @interface ChatBoxViewController ()<UITextFieldDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *chatTextField;

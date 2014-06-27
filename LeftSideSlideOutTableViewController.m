@@ -12,6 +12,8 @@
 #import "ListOfUsersTableViewCell.h"
 #import "OPPViewController.h"
 #import "SWRevealViewController.h"
+#import "UIColor+DesignColors.h"
+
 #import <Parse/Parse.h>
 
 @interface LeftSideSlideOutTableViewController ()
@@ -85,7 +87,7 @@
 
     PFUser *user = [dictionary objectForKey:@"user"];
 
-    cell.userNameLabel.textColor = [UIColor blueColor];
+    cell.userNameLabel.textColor = [UIColor pubChatYellow];
     cell.userAgeLabel.textColor = [UIColor blueColor];
     cell.genderLabel.textColor = [UIColor blueColor];
     cell.backgroundColor = [UIColor grayColor];
