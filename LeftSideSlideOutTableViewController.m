@@ -201,13 +201,11 @@
 
     if ([button.titleLabel.text isEqual:@"Chat"])
     {
-        self.selectedChatButton.backgroundColor = [UIColor yellowColor];
+        self.selectedChatButton.backgroundColor = [UIColor pubChatPurple];
         self.selectedChatButton = nil;
         [[NSNotificationCenter defaultCenter]postNotificationName:@"PeerToChatWith" object:nil userInfo:dictionary];
-        [self dismissViewControllerAnimated:YES completion:nil];
-        button.backgroundColor = [UIColor redColor];
+        button.backgroundColor = [UIColor pubChatBlue];
         self.selectedChatButton = button;
-
     }
 }
 
@@ -228,7 +226,7 @@
         }
     }
 
-    int index = [self.users indexOfObject:userDictionary];
+    long index = [self.users indexOfObject:userDictionary];
 
     for (ListOfUsersTableViewCell *userCell in self.cellArray)
     {
@@ -306,7 +304,7 @@
 
     ListOfUsersTableViewCell *cell = [ListOfUsersTableViewCell new];
 
-    int index = [self.users indexOfObject:self.userSendingInvitation];
+    long index = [self.users indexOfObject:self.userSendingInvitation];
 
     for (ListOfUsersTableViewCell *userCell in self.cellArray)
     {
