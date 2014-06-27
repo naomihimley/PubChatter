@@ -30,6 +30,8 @@ NSManagedObjectContext *moc;
     [Rating registerSubclass];
     [Bar registerSubclass];
 
+    
+
     [PFFacebookUtils initializeFacebook];
 
     //should this be here?

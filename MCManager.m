@@ -159,6 +159,8 @@
             [self.advertisingUsers addObject:peerID];
             NSDictionary *dictionary = @{@"peerID": peerID};
 
+            NSLog(@"found Peer");
+
             [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:dictionary];
         }
     }
@@ -196,9 +198,6 @@
         self.advertiser.delegate = self;
         [self.advertiser startAdvertisingPeer];
 
-        self.browser = [[MCNearbyServiceBrowser alloc]initWithPeer:self.peerID serviceType:@"pubchatservice"];
-        self.browser.delegate = self;
-        [self.browser startBrowsingForPeers];
     }
 
     else
@@ -208,6 +207,13 @@
         self.browser = nil;
         self.advertiser = nil;
     }
+}
+
+-(void)startBrowsingForPeers
+{
+    self.browser = [[MCNearbyServiceBrowser alloc]initWithPeer:self.peerID serviceType:@"pubchatservice"];
+    self.browser.delegate = self;
+    [self.browser startBrowsingForPeers];
 }
 
 

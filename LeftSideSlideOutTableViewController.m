@@ -32,18 +32,17 @@
 - (void)viewDidLoad
 {
 
-    //    [self queryForUsers];
-
     [super viewDidLoad];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     self.users = [NSMutableArray array];
 
     self.cellArray = [NSMutableArray array];
 
+    [self.appDelegate.mcManager startBrowsingForPeers];
+
     if ([PFUser currentUser])
     {
-        [self.appDelegate.mcManager setupPeerAndSessionWithDisplayName:[[PFUser currentUser]objectForKey:@"username"]];
-        [self.appDelegate.mcManager advertiseSelf:YES];
+
     }
 
     [[NSNotificationCenter defaultCenter]addObserver:self

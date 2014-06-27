@@ -22,5 +22,6 @@
 
 -(void)setupPeerAndSessionWithDisplayName: (NSString *)displayName;
 -(void)advertiseSelf: (BOOL)shouldAdvertise;
+-(void)startBrowsingForPeers;
 
 @end
