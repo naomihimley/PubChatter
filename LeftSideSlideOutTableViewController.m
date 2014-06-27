@@ -189,7 +189,6 @@
 
 - (IBAction)onButtonTappedSendInvitation:(id)sender
 {
-    NSLog(@"Touched button");
     UIButton *button = (UIButton *)sender;
 
     UITableViewCell *cell = (UITableViewCell *)[[[sender superview]superview]superview];
@@ -211,7 +210,7 @@
         self.selectedChatButton.backgroundColor = [UIColor pubChatPink];
         self.selectedChatButton = nil;
         [[NSNotificationCenter defaultCenter]postNotificationName:@"PeerToChatWith" object:nil userInfo:dictionary];
-        button.backgroundColor = [UIColor pubChatBlue];
+        button.backgroundColor = [UIColor pubChatYellow];
         self.selectedChatButton = button;
     }
 }
@@ -296,12 +295,14 @@
         if ([peer.displayName isEqual:peerID.displayName])
         {
             self.userSendingInvitation = dictionary;
-            NSLog(@"usersendinginvitation %@", dictionary);
+
 
         }
     }
 
-    NSString *alertViewTitle = [NSString stringWithFormat:@"%@ wants to connect and chat with you", [self.userSendingInvitation objectForKey:@"name"]];
+    PFUser *user = [self.userSendingInvitation objectForKey:@"user"];
+
+    NSString *alertViewTitle = [NSString stringWithFormat:@"%@ wants to connect and chat with you", [user objectForKey:@"name"]];
     UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:alertViewTitle message:nil delegate:self cancelButtonTitle:@"Decline" otherButtonTitles:@"Accept", nil];
     [alertView show];
 }
@@ -312,11 +313,11 @@
 
     ListOfUsersTableViewCell *cell = [ListOfUsersTableViewCell new];
 
-    long index = [self.users indexOfObject:self.userSendingInvitation];
+    MCPeerID *peerID = [self.userSendingInvitation objectForKey:@"peerID"];
 
     for (ListOfUsersTableViewCell *userCell in self.cellArray)
     {
-        if (userCell.tag == index)
+        if ([userCell.cellUserDisplayName isEqual:peerID.displayName])
         {
             cell = userCell;
         }
