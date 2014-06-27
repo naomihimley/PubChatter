@@ -238,7 +238,7 @@
 
     if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnecting)
     {
-        [cell.chatButton setTitle:@"Connecting" forState:UIControlStateNormal];
+        [cell.chatButton setTitle:@"Inviting" forState:UIControlStateNormal];
         [cell.chatButton setEnabled:NO];
     }
     else if ([[[notification userInfo]objectForKey:@"state"]intValue] != MCSessionStateConnecting)
@@ -252,7 +252,7 @@
         }
         if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
         {
-            [cell.chatButton setTitle:@"Connect" forState:UIControlStateNormal];
+            [cell.chatButton setTitle:@"Invite" forState:UIControlStateNormal];
             [cell.chatButton setEnabled:YES];
         }
     }
@@ -282,8 +282,6 @@
 {
     MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
 
-    NSDictionary *user = [NSDictionary new];
-
     for (NSDictionary *dictionary in self.users)
     { 
         if ([[dictionary objectForKey:@"peerID"] isEqual:peerID])
@@ -292,8 +290,7 @@
         }
     }
 
-    NSString *peerName = [[user objectForKey:@"user"]objectForKey:@"name"];
-    NSString *alertViewTitle = [NSString stringWithFormat:@"%@ wants to connect and chat with you", peerName];
+    NSString *alertViewTitle = [NSString stringWithFormat:@"%@ wants to connect and chat with you", [self.userSendingInvitation objectForKey:@"name"]];
     UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:alertViewTitle message:nil delegate:self cancelButtonTitle:@"Decline" otherButtonTitles:@"Accept", nil];
     [alertView show];
 }
