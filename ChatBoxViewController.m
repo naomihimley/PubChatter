@@ -100,8 +100,8 @@
 
 - (void)sendMyMessage
 {
-        NSString *chatWithNewLine = [NSString stringWithFormat:@"\n %@", self.chatTextField.text];
-        NSData *dataToSend = [chatWithNewLine dataUsingEncoding:NSUTF8StringEncoding];
+        NSString *userInput = [NSString stringWithFormat:@"%@", self.chatTextField.text];
+        NSData *dataToSend = [userInput dataUsingEncoding:NSUTF8StringEncoding];
         NSArray *peerToSendTo = @[self.chattingUserPeerID];
         NSError *error;
         [self.appDelegate.mcManager.session sendData:dataToSend
@@ -120,7 +120,7 @@
 
         else
         {
-            NSString *chatString = [NSString stringWithFormat:@"\n I wrote: %@", chatWithNewLine];
+            NSString *chatString = [NSString stringWithFormat:@"I wrote:\n%@\n\n", userInput];
             [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:chatString]];
             if ([self doesConversationExist:self.chattingUserPeerID] == NO)
             {
@@ -143,8 +143,7 @@
                 NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
                 Peer *peer = [array firstObject];
                 Conversation *convo = [peer.conversation anyObject];
-                NSString *chatWithNewLine = [NSString stringWithFormat: @"\n %@ \n", chatString];
-                convo.message = [convo.message stringByAppendingString:chatWithNewLine];
+                convo.message = [convo.message stringByAppendingString:chatString];
                 [moc save:nil];
                 NSLog(@"CHATBOX SENT adding message object: %@", convo.message);
             }
