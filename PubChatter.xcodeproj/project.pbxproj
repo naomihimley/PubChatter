@@ -62,6 +62,7 @@
 		B0782C85194BB42B0022E6E7 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C84194BB42B0022E6E7 /* Accounts.framework */; };
 		B0782CCE194E0D560022E6E7 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782CCD194E0D560022E6E7 /* CoreBluetooth.framework */; };
 		B0782CD1194F850B0022E6E7 /* EditProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0782CD0194F850B0022E6E7 /* EditProfileViewController.m */; };
+		B0D46D14195D1C2E005E7889 /* UIColor+DesignColors.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D46D13195D1C2E005E7889 /* UIColor+DesignColors.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -156,6 +157,8 @@
 		B0782CCD194E0D560022E6E7 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		B0782CCF194F850B0022E6E7 /* EditProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditProfileViewController.h; path = PubChatter/EditProfileViewController.h; sourceTree = "<group>"; };
 		B0782CD0194F850B0022E6E7 /* EditProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditProfileViewController.m; path = PubChatter/EditProfileViewController.m; sourceTree = "<group>"; };
+		B0D46D12195D1C2E005E7889 /* UIColor+DesignColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+DesignColors.h"; sourceTree = "<group>"; };
+		B0D46D13195D1C2E005E7889 /* UIColor+DesignColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+DesignColors.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,6 +226,8 @@
 				9BDBE4FF194F47380045C05B /* OPPViewController.m */,
 				9BDBE501194F47830045C05B /* ChatBoxViewController.h */,
 				9BDBE502194F47830045C05B /* ChatBoxViewController.m */,
+				B0D46D12195D1C2E005E7889 /* UIColor+DesignColors.h */,
+				B0D46D13195D1C2E005E7889 /* UIColor+DesignColors.m */,
 			);
 			name = ChatVCs;
 			path = ..;
@@ -531,6 +536,7 @@
 				0ECEAF13195884E100B92C40 /* Bar.m in Sources */,
 				0ECEAF0D19586FA800B92C40 /* RightSlideoutViewController.m in Sources */,
 				0ECEAEEB194F6FAC00B92C40 /* BarDetailViewController.m in Sources */,
+				B0D46D14195D1C2E005E7889 /* UIColor+DesignColors.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -667,7 +673,7 @@
 				GCC_PREFIX_HEADER = "PubChatter/PubChatter-Prefix.pch";
 				INFOPLIST_FILE = "PubChatter/PubChatter-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7E431316-632D-4C3C-A74A-E1E7D6C727A4";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -677,8 +683,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/yeahright/Desktop,
@@ -689,7 +695,7 @@
 				GCC_PREFIX_HEADER = "PubChatter/PubChatter-Prefix.pch";
 				INFOPLIST_FILE = "PubChatter/PubChatter-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7E431316-632D-4C3C-A74A-E1E7D6C727A4";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
