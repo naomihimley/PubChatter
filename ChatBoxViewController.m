@@ -205,14 +205,20 @@
 
 - (IBAction)onButtonPressedSendChat:(id)sender
 {
-    if(self.chattingUserPeerID)
-    {
-        [self sendMyMessage];
+    if (self.appDelegate.mcManager.session.connectedPeers.count > 0) {
+        if(self.chattingUserPeerID)
+        {
+            [self sendMyMessage];
+        }
+        else
+        {
+            self.chattingUserPeerID = self.appDelegate.mcManager.session.connectedPeers[0];
+            [self sendMyMessage];
+        }
     }
     else
     {
-        self.chattingUserPeerID = self.appDelegate.mcManager.session.connectedPeers[0];
-        [self sendMyMessage];
+        //user not connected to anyone
     }
 }
 @end

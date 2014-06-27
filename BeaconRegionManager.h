@@ -14,10 +14,11 @@
 
 
 @interface BeaconRegionManager : NSObject
-@property (strong, nonatomic) CLBeaconRegion *richRegion;
-@property (strong, nonatomic) CLBeaconRegion *estimoteRegion;
+@property (strong, nonatomic) CLBeaconRegion *greenDoorRegion;
+@property (strong, nonatomic) CLBeaconRegion *oldTownRegion;
+@property (strong, nonatomic) CLBeaconRegion *municipalRegion;
 @property (strong, nonatomic) CLLocationManager *beaconRegionManager;
-@property BOOL inARegion;
+@property BOOL firstRange;
 - (void)canUserUseApp;
 - (void)setupCLManager;
 - (void)logout;
