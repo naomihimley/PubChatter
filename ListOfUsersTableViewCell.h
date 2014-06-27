@@ -14,5 +14,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *userAgeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *genderLabel;
 @property (weak, nonatomic) IBOutlet UIButton *chatButton;
+@property (weak, nonatomic) IBOutlet UILabel *backgroundLabel;
+@property NSString *cellUserDisplayName;
 
 @end
