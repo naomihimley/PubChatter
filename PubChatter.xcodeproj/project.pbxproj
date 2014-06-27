@@ -24,6 +24,7 @@
 		0ECEAF181958BDEA00B92C40 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAF171958BDEA00B92C40 /* LoginViewController.m */; };
 		0ECEAF1A1958F98400B92C40 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0ECEAF191958F98400B92C40 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		0ECEAF1C1958F9AF00B92C40 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0ECEAF1B1958F9AF00B92C40 /* libsqlite3.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
+		0ECEAF1F195D1A8400B92C40 /* InitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAF1E195D1A8400B92C40 /* InitialViewController.m */; };
 		9BDBE4FD194F3EB50045C05B /* MCManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE4FC194F3EB50045C05B /* MCManager.m */; };
 		9BDBE500194F47380045C05B /* OPPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE4FF194F47380045C05B /* OPPViewController.m */; };
 		9BDBE503194F47830045C05B /* ChatBoxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE502194F47830045C05B /* ChatBoxViewController.m */; };
@@ -104,6 +105,8 @@
 		0ECEAF171958BDEA00B92C40 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = PubChatter/LoginViewController.m; sourceTree = "<group>"; };
 		0ECEAF191958F98400B92C40 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		0ECEAF1B1958F9AF00B92C40 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		0ECEAF1D195D1A8400B92C40 /* InitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InitialViewController.h; path = PubChatter/InitialViewController.h; sourceTree = "<group>"; };
+		0ECEAF1E195D1A8400B92C40 /* InitialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InitialViewController.m; path = PubChatter/InitialViewController.m; sourceTree = "<group>"; };
 		9BDBE4FB194F3EB50045C05B /* MCManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCManager.h; sourceTree = "<group>"; };
 		9BDBE4FC194F3EB50045C05B /* MCManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCManager.m; sourceTree = "<group>"; };
 		9BDBE4FE194F47380045C05B /* OPPViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OPPViewController.h; sourceTree = "<group>"; };
@@ -260,6 +263,8 @@
 		9BDBE55C194FA44F0045C05B /* UserProfileVCs */ = {
 			isa = PBXGroup;
 			children = (
+				0ECEAF1D195D1A8400B92C40 /* InitialViewController.h */,
+				0ECEAF1E195D1A8400B92C40 /* InitialViewController.m */,
 				0ECEAF161958BDEA00B92C40 /* LoginViewController.h */,
 				0ECEAF171958BDEA00B92C40 /* LoginViewController.m */,
 				B0782CCF194F850B0022E6E7 /* EditProfileViewController.h */,
@@ -521,6 +526,7 @@
 				0EB31FFB194BC158005A3B82 /* SearchViewController.m in Sources */,
 				0ECEAEE8194F69A000B92C40 /* YelpBar.m in Sources */,
 				B0623C591959D21400A9AFD6 /* Peer.m in Sources */,
+				0ECEAF1F195D1A8400B92C40 /* InitialViewController.m in Sources */,
 				0ECEAF0719560FCA00B92C40 /* SWRevealViewController.m in Sources */,
 				9BDBE6151959CB120045C05B /* LeftSideSlideOutTableViewController.m in Sources */,
 				B0782C48194BB3700022E6E7 /* main.m in Sources */,

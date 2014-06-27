@@ -88,9 +88,11 @@
     PFUser *user = [dictionary objectForKey:@"user"];
 
     cell.userNameLabel.textColor = [UIColor pubChatYellow];
-    cell.userAgeLabel.textColor = [UIColor blueColor];
-    cell.genderLabel.textColor = [UIColor blueColor];
-    cell.backgroundColor = [UIColor grayColor];
+    cell.userAgeLabel.textColor = [UIColor whiteColor];
+    cell.genderLabel.textColor = [UIColor whiteColor];
+    cell.backgroundColor = [UIColor pubChatPurple];
+    cell.chatButton.backgroundColor = [UIColor pubChatPink];
+    cell.chatButton.titleLabel.textColor = [UIColor whiteColor];
 
     cell.userNameLabel.text = [user objectForKey:@"name"];
     cell.chatButton.tag = indexPath.row;

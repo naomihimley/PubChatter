@@ -39,6 +39,7 @@ NSManagedObjectContext *moc;
         [alert show];
     }
     moc = self.managedObjectContext;
+
     return YES;
 
 }
