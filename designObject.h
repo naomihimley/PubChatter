@@ -14,7 +14,7 @@
 @property UIColor *pubChatLightPink;
 @property UIColor *pubChatYellow;
 @property UIColor *pubChatBlue;
-
+@property BOOL isRichsWorking;
 
 - (id)initWithDesigns;
 
