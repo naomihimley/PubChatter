@@ -254,27 +254,6 @@
             [cell.chatButton setEnabled:YES];
         }
     }
-//    for (NSDictionary *dictionary in self.users)
-//    {
-//        if ([[dictionary objectForKey:@"peerID"] isEqual: peerID])
-//        {
-//            long index = [self.users indexOfObject:dictionary];
-//
-//            for (ListOfUsersTableViewCell *userCell in self.cellArray)
-//            {
-//                if (userCell.tag == index)
-//                {
-//                    if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
-//                    {
-//                        NSLog(@"Dictionary %@", dictionary);
-////                        [userCell.chatButton setHighlighted:YES];
-//                        [userCell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
-//                        [userCell.chatButton setEnabled:YES];
-//                    }
-//                }
-//            }
-//        }
-//    }
 }
 
 # pragma mark - Stopped Advertising method catcher
