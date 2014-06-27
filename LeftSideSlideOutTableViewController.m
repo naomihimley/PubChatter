@@ -21,6 +21,7 @@
 @property NSMutableArray *users;
 @property NSArray *parseUsers;
 @property NSDictionary *userSendingInvitation;
+@property UIButton *selectedChatButton;
 
 @end
 
@@ -35,15 +36,12 @@
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     self.users = [NSMutableArray array];
 
-
-    NSLog(@"self.users in viewDidLoad %@", self.users);
     self.cellArray = [NSMutableArray array];
 
     if ([PFUser currentUser])
     {
         [self.appDelegate.mcManager setupPeerAndSessionWithDisplayName:[[PFUser currentUser]objectForKey:@"username"]];
         [self.appDelegate.mcManager advertiseSelf:YES];
-        NSLog(@"username %@", [[PFUser currentUser]objectForKey:@"username"]);
     }
 
     [[NSNotificationCenter defaultCenter]addObserver:self
@@ -96,8 +94,6 @@
     cell.chatButton.tag = indexPath.row;
     [self.cellArray addObject:cell];
     cell.tag = [self.users indexOfObject:dictionary];
-
-    NSLog(@"cell.tag %i",cell.tag);
 
     if ([user objectForKey:@"age"])
     {
@@ -193,16 +189,21 @@
 
     if ([button.titleLabel.text isEqual:@"Invite"])
     {
-    [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30];
-    }
+        [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30];
 
-    [button setTitle:@"Connecting" forState:UIControlStateNormal];
-    [button setEnabled:NO];
+        [button setTitle:@"Connecting" forState:UIControlStateNormal];
+        [button setEnabled:NO];
+    }
 
     if ([button.titleLabel.text isEqual:@"Chat"])
     {
+        self.selectedChatButton.backgroundColor = [UIColor yellowColor];
+        self.selectedChatButton = nil;
         [[NSNotificationCenter defaultCenter]postNotificationName:@"PeerToChatWith" object:nil userInfo:dictionary];
         [self dismissViewControllerAnimated:YES completion:nil];
+        button.backgroundColor = [UIColor redColor];
+        self.selectedChatButton = button;
+
     }
 }
 
@@ -242,9 +243,10 @@
     {
         if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
         {
-            [cell.chatButton setEnabled:YES];
-            [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
-
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [cell.chatButton setEnabled:YES];
+                [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
+            });
         }
         if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
         {
@@ -286,12 +288,10 @@
     {
         if ([dictionary objectForKey:@"peerID"] == peerID)
         {
-            NSLog(@"peer to be removed %@", dictionary);
             userDictionary = dictionary;
         }
     }
     [self.users removeObject:userDictionary];
-    NSLog(@"self.users after a user has stopped advertising %@", self.users);
     [self.tableView reloadData];
 }
 
@@ -301,7 +301,6 @@
 {
     MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
 
-    NSLog(@"peerID from notification before going into dictionary %@", peerID);
     NSDictionary *user = [NSDictionary new];
 
     for (NSDictionary *dictionary in self.users)

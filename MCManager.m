@@ -44,14 +44,10 @@
 {
     NSDictionary *dictionary = @{@"peerID": peerID,
                                  @"state": [NSNumber numberWithInt:state]};
-    NSLog(@"STATE: %i", state);
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidChangeStateNotification"
-                                                        object:nil
-                                                      userInfo:dictionary];
-
-
-
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidChangeStateNotification"
+                                                            object:nil
+                                                          userInfo:dictionary];
 }
 
 -(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID
@@ -174,9 +170,6 @@
 {
     [self.advertisingUsers removeObject:peerID];
     [self.foundPeersArray removeObjectAtIndex:[self.foundPeersArray indexOfObject:peerID.displayName]];
-
-    NSLog(@"should remove %@", peerID);
-    NSLog(@"after removing array is %@", self.advertisingUsers);
 
     NSDictionary *dictionary = @{@"peerID": peerID};
     [[NSNotificationCenter defaultCenter]postNotificationName:@"MCPeerStopAdvertising" object:nil userInfo:dictionary];
