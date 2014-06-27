@@ -327,7 +327,7 @@
             </objects>
             <point key="canvasLocation" x="-804" y="781"/>
         </scene>
-        <!--Left Side Slide Out Table View Controller-->
+        <!--Left Side Slide Out Table View Controller - Users Near You-->
         <scene sceneID="w0X-wg-H8c">
             <objects>
                 <tableViewController id="2zl-ft-bxb" customClass="LeftSideSlideOutTableViewController" sceneMemberID="viewController">
@@ -405,7 +405,7 @@
                             <outlet property="delegate" destination="2zl-ft-bxb" id="h5i-wH-TVa"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="fuX-i5-5lO"/>
+                    <navigationItem key="navigationItem" title="Users Near You" id="fuX-i5-5lO"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a6L-bb-yOt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

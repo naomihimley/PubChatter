@@ -257,8 +257,20 @@
         }
         if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
         {
-            [cell.chatButton setTitle:@"Invite" forState:UIControlStateNormal];
-            [cell.chatButton setEnabled:YES];
+            if ([cell.chatButton.titleLabel.text isEqual: @"Connecting"])
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [cell.chatButton setTitle:@"Declined" forState:UIControlStateNormal];
+                    [cell.chatButton setEnabled:NO];
+                });
+            }
+            else
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [cell.chatButton setTitle:@"Invite" forState:UIControlStateNormal];
+                    [cell.chatButton setEnabled:YES];
+                });
+            }
         }
     }
 }
@@ -321,12 +333,21 @@
             cell = userCell;
         }
     }
+    if (accept)
+    {
+        void (^invitationHandler)(BOOL, MCSession *) = [self.appDelegate.mcManager.invitationHandlerArray objectAtIndex:0];
+        invitationHandler(accept, self.appDelegate.mcManager.session);
+        [cell.chatButton setTitle:@"Connecting" forState:UIControlStateNormal];
+        cell.chatButton.backgroundColor = [UIColor pubChatBlue];
+        [cell.chatButton setEnabled:NO];
+    }
+    else
+    {
+        void (^invitationHandler)(BOOL, MCSession *) = [self.appDelegate.mcManager.invitationHandlerArray objectAtIndex:0];
+        invitationHandler(0, self.appDelegate.mcManager.session);
+        [cell.chatButton setTitle:@"Declined" forState:UIControlStateNormal];
+    }
 
-    [cell.chatButton setTitle:@"Connecting" forState:UIControlStateNormal];
-    [cell.chatButton setEnabled:NO];
-
-    void (^invitationHandler)(BOOL, MCSession *) = [self.appDelegate.mcManager.invitationHandlerArray objectAtIndex:0];
-    invitationHandler(accept, self.appDelegate.mcManager.session);
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

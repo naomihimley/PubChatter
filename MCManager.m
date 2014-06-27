@@ -48,6 +48,7 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidChangeStateNotification"
                                                             object:nil
                                                           userInfo:dictionary];
+    NSLog(@"STATE %i", state);
 }
 
 -(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID
