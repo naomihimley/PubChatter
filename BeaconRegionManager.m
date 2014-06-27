@@ -47,30 +47,40 @@
 
 - (void)createBeaconRegion
 {
-    //all estimote iBeacons
-    NSUUID *estimoteUUID = [[NSUUID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"];
-    self.estimoteRegion = [[CLBeaconRegion alloc]initWithProximityUUID:estimoteUUID major:19218 identifier:@"PubChat"];
-    self.estimoteRegion.notifyOnEntry = YES;
-    self.estimoteRegion.notifyOnExit = YES;
-    self.estimoteRegion.notifyEntryStateOnDisplay = YES;
-    [self.beaconRegionManager startMonitoringForRegion:self.estimoteRegion];
-
-    //rich's phone
-    NSUUID *uuid = [[NSUUID alloc] initWithUUIDString:@"8492E75F-4FD6-469D-B132-043FE94921D8"];
-    self.richRegion = [[CLBeaconRegion alloc] initWithProximityUUID:uuid identifier:@"richiPhone"];
-    self.richRegion.notifyOnEntry = YES;
-    self.richRegion.notifyOnExit=YES;
-    self.richRegion.notifyEntryStateOnDisplay=YES;
-    [self.beaconRegionManager startMonitoringForRegion:self.richRegion];
-    [self.beaconRegionManager requestStateForRegion:self.estimoteRegion];
+    //Green Door
+    NSUUID *estimoteUUIDGreenDoor = [[NSUUID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"];
+    self.greenDoorRegion = [[CLBeaconRegion alloc]initWithProximityUUID:estimoteUUIDGreenDoor major:19218 minor:6704 identifier:@"Green Door"];
+    self.greenDoorRegion.notifyOnEntry = YES;
+    self.greenDoorRegion.notifyOnExit = YES;
+    self.greenDoorRegion.notifyEntryStateOnDisplay = YES;
+    [self.beaconRegionManager startMonitoringForRegion:self.greenDoorRegion];
+    [self.beaconRegionManager startRangingBeaconsInRegion:self.greenDoorRegion];
+    //Old Town Ale House
+    NSUUID *estimoteUUIDOldTown = [[NSUUID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"];
+    self.oldTownRegion = [[CLBeaconRegion alloc]initWithProximityUUID:estimoteUUIDOldTown major:19218 minor:52834 identifier:@"Old Town Ale House"];
+    self.oldTownRegion.notifyOnEntry = YES;
+    self.oldTownRegion.notifyOnExit = YES;
+    self.oldTownRegion.notifyEntryStateOnDisplay = YES;
+    [self.beaconRegionManager startMonitoringForRegion:self.oldTownRegion];
+    [self.beaconRegionManager startRangingBeaconsInRegion:self.oldTownRegion];
+    //Municipal Bar
+    NSUUID *estimoteUUIDMunicipal = [[NSUUID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"];
+    self.municipalRegion = [[CLBeaconRegion alloc]initWithProximityUUID:estimoteUUIDMunicipal major:19218 minor:16063 identifier:@"Municipal Bar"];
+    self.municipalRegion.notifyOnEntry = YES;
+    self.municipalRegion.notifyOnExit = YES;
+    self.municipalRegion.notifyEntryStateOnDisplay = YES;
+    [self.beaconRegionManager startMonitoringForRegion:self.municipalRegion];
+    [self.beaconRegionManager startRangingBeaconsInRegion:self.municipalRegion];
 }
 
 - (void)logout
 {
-    [self.beaconRegionManager stopMonitoringForRegion:self.richRegion];
-    [self.beaconRegionManager stopMonitoringForRegion:self.estimoteRegion];
-    [self.beaconRegionManager stopRangingBeaconsInRegion:self.richRegion];
-    [self.beaconRegionManager stopRangingBeaconsInRegion:self.estimoteRegion];
+    [self.beaconRegionManager stopMonitoringForRegion:self.municipalRegion];
+    [self.beaconRegionManager stopRangingBeaconsInRegion:self.municipalRegion];
+    [self.beaconRegionManager stopMonitoringForRegion:self.greenDoorRegion];
+    [self.beaconRegionManager stopRangingBeaconsInRegion:self.greenDoorRegion];
+    [self.beaconRegionManager stopMonitoringForRegion:self.oldTownRegion];
+    [self.beaconRegionManager stopRangingBeaconsInRegion:self.oldTownRegion];
 }
 
 #pragma mark - CLLocationManagerDelegate Methods
@@ -84,28 +94,18 @@
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     if (state == CLRegionStateInside)
     {
-        self.inARegion = YES;
-        [manager startRangingBeaconsInRegion:self.richRegion];
-        [manager startRangingBeaconsInRegion:self.estimoteRegion];
-//        [self.appDelegate.mcManager advertiseSelf:YES];
+        self.firstRange = YES;
+        [self.beaconRegionManager startMonitoringForRegion:self.greenDoorRegion];
+        [self.beaconRegionManager startRangingBeaconsInRegion:self.greenDoorRegion];
+        [self.beaconRegionManager startMonitoringForRegion:self.municipalRegion];
+        [self.beaconRegionManager startRangingBeaconsInRegion:self.municipalRegion];
+        [self.beaconRegionManager startMonitoringForRegion:self.oldTownRegion];
+        [self.beaconRegionManager startRangingBeaconsInRegion:self.oldTownRegion];
 
     }
     else if (state == CLRegionStateOutside)
     {
 //        [self.appDelegate.mcManager advertiseSelf:NO];
-        if ([region.identifier isEqualToString:@"richiPhone"])
-        {
-            [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"PubChat"}];
-            if ([PFUser currentUser]) {
-                PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
-                [queryForBar whereKey:@"objectId" equalTo:@"UL0yMO2bGj"];
-                [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-                    PFObject *bar = [objects firstObject];
-                    [bar removeObject:[PFUser currentUser] forKey:@"usersInBar"];
-                    [bar saveInBackground];
-                }];
-            }
-        }
         if ([region.identifier isEqualToString:@"PubChat"])
         {
             //this removes user from all bars
@@ -120,7 +120,7 @@
             }];
 
         }
-        self.inARegion = NO;
+        self.firstRange = NO;
     }
     }
 }
@@ -137,10 +137,11 @@
     //array is sorted by closest beacon to you
     CLBeacon *beacon = [[CLBeacon alloc]init];
     beacon = [beacons firstObject];
-    if (self.inARegion == YES)
+    if (self.firstRange == YES)
     {
-        if ([beacon.minor isEqual: @52834]) //old town ale house
+        if ([region.minor isEqual: @52834]) //old town ale house
         {
+            self.firstRange = NO;
             [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"Old Town Ale House"}];
             PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
             [queryForBar whereKey:@"objectId" equalTo:@"cxmc5pwBsf"];
@@ -152,7 +153,7 @@
                 {
                     [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                     [bar saveInBackground];
-                    self.inARegion = NO;
+                    self.firstRange = NO;
                     NSLog(@"adding user to old town ale house");
                 }
                 else if (arrayOfUsers.count > 0)
@@ -161,44 +162,16 @@
                         if (![[userr objectForKey:@"username"]isEqual:[[PFUser currentUser]objectForKey:@"username"]]) {
                             [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                             [bar saveInBackground];
-                            self.inARegion = NO;
+                            self.firstRange = NO;
                         }
                     }
                 }
-                self.inARegion = NO;
+                self.firstRange = NO;
             }];
         }
-        else if ([beacon.minor isEqual: @23023]) //rich's iPhone MM
+        else if ([region.minor isEqual: @6704]) //Green Door
         {
-            [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"Rich's iPhone"}];
-            PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
-            [queryForBar whereKey:@"objectId" equalTo:@"UL0yMO2bGj"];
-            [queryForBar includeKey:@"usersInBar"];
-            [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-                PFObject *bar = [objects firstObject];
-                NSArray *arrayOfUsers = [NSArray arrayWithArray:[bar objectForKey:@"usersInBar"]];
-                if (arrayOfUsers.count <= 0)
-                {
-                    [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
-                    [bar saveInBackground];
-                    self.inARegion = NO;
-                    NSLog(@"adding user to richs");
-                }
-                else if (arrayOfUsers.count > 0)
-                {
-                    for (PFUser *userr in arrayOfUsers) {
-                        if (![[userr objectForKey:@"username"]isEqual:[[PFUser currentUser]objectForKey:@"username"]]) {
-                            [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
-                            [bar saveInBackground];
-                            self.inARegion = NO;
-                        }
-                    }
-                }
-                self.inARegion = NO;
-            }];
-        }
-        else if ([beacon.minor isEqual: @6704]) //Green Door
-        {
+            self.firstRange = NO;
             [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"Green Door"}];
             PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
             [queryForBar whereKey:@"objectId" equalTo:@"CnWKUJftyT"];
@@ -210,7 +183,7 @@
                 {
                     [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                     [bar saveInBackground];
-                    self.inARegion = NO;
+                    self.firstRange = NO;
                     NSLog(@"adding user to green door");
                 }
                 else if (arrayOfUsers.count > 0)
@@ -219,15 +192,16 @@
                         if (![[user objectForKey:@"username"]isEqual:[[PFUser currentUser]objectForKey:@"username"]]) {
                             [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                             [bar saveInBackground];
-                            self.inARegion = NO;
+                            self.firstRange = NO;
                         }
                     }
                 }
-                self.inARegion = NO;
+                self.firstRange = NO;
             }];
         }
-        else if ([beacon.minor isEqual: @16063]) //Municipal Bar
+        else if ([region.minor isEqual: @16063]) //Municipal Bar
         {
+            self.firstRange = NO;
             [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"Municipal Bar"}];
             PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
             [queryForBar whereKey:@"objectId" equalTo:@"qVTGKr4142"];
@@ -239,7 +213,7 @@
                 {
                     [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                     [bar saveInBackground];
-                    self.inARegion = NO;
+                    self.firstRange = NO;
                     NSLog(@"adding user to municipal bar");
                 }
                 else if (arrayOfUsers.count > 0)
@@ -248,11 +222,11 @@
                         if (![[user objectForKey:@"username"]isEqual:[[PFUser currentUser]objectForKey:@"username"]]) {
                             [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                             [bar saveInBackground];
-                            self.inARegion = NO;
+                            self.firstRange = NO;
                         }
                     }
                 }
-                self.inARegion = NO;
+                self.firstRange = NO;
             }];
         }
     }
@@ -263,13 +237,13 @@
 {
     if ([region.identifier isEqualToString:@"PubChat"])
     {
-        [self.beaconRegionManager startRangingBeaconsInRegion:self.estimoteRegion];
-    }
-    if ([region.identifier isEqualToString:@"richiPhone"])
-    {
-        [self.beaconRegionManager startRangingBeaconsInRegion:self.richRegion];
-    }
-    self.inARegion = YES;
+        [self.beaconRegionManager startMonitoringForRegion:self.greenDoorRegion];
+        [self.beaconRegionManager startRangingBeaconsInRegion:self.greenDoorRegion];
+        [self.beaconRegionManager startMonitoringForRegion:self.municipalRegion];
+        [self.beaconRegionManager startRangingBeaconsInRegion:self.municipalRegion];
+        [self.beaconRegionManager startMonitoringForRegion:self.oldTownRegion];
+        [self.beaconRegionManager startRangingBeaconsInRegion:self.oldTownRegion];    }
+    self.firstRange = YES;
 }
 
 - (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
@@ -278,7 +252,7 @@
     {
         //removes User from all bar
         [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"PubChat"}];
-        self.inARegion = NO;
+        self.firstRange = NO;
         PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
         [queryForBar whereKey:@"objectId" equalTo:@"cxmc5pwBsf"];
         [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -286,17 +260,6 @@
                 [bar removeObject:[PFUser currentUser] forKey:@"usersInBar"];
                 [bar saveInBackground];
             }
-        }];
-    }
-    if ([region.identifier isEqualToString:@"richiPhone"])
-    {
-        self.inARegion = NO;
-        PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
-        [queryForBar whereKey:@"objectId" equalTo:@"UL0yMO2bGj"];
-        [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            PFObject *bar = [objects firstObject];
-            [bar removeObject:[PFUser currentUser] forKey:@"usersInBar"];
-            [bar saveInBackground];
         }];
     }
 }
