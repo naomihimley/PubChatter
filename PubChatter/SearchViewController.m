@@ -15,6 +15,7 @@
 #import "SearchTableViewCell.h"
 #import <Parse/Parse.h>
 #import "LoginViewController.h"
+#import "UIImageView+WebCache.h"
 #import "AppDelegate.h"
 
 @interface SearchViewController () <UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate, MKMapViewDelegate>
@@ -26,6 +27,7 @@
 @property NSString *queryString;
 @property NSArray *barLocations;
 @property YelpBar *selectedBar;
+@property NSArray *arrImagesUrl;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *toggleControlOutlet;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UIButton *searchButtonOutlet;
@@ -238,6 +240,12 @@
             }
             NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"distanceFromUser" ascending:YES];
             self.barLocations = [arrayOfYelpBarObjects sortedArrayUsingDescriptors:@[descriptor]];
+
+            NSMutableArray *tempArray = [[NSMutableArray alloc] init];
+            for (YelpBar *yelpBar in self.barLocations) {
+                [tempArray addObject:yelpBar.businessImageURL];
+            }
+            self.arrImagesUrl = [NSArray arrayWithArray:tempArray];
             [self getBarLatandLong:self.barLocations];
         }
     }];
@@ -305,11 +313,15 @@ calloutAccessoryControlTapped:(UIControl *)control
 {
     YelpBar *yelpBar = [self.barLocations objectAtIndex:indexPath.row];
     SearchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    NSString *milesFromUser = [NSString stringWithFormat:@"%.02f miles", yelpBar.distanceFromUser * 0.000621371];
+    cell.imageView.clipsToBounds = YES;
 
+    NSString *milesFromUser = [NSString stringWithFormat:@"%.02f miles", yelpBar.distanceFromUser * 0.000621371];
     cell.barNameLabel.text = yelpBar.name;
     cell.barDistanceLabel.text = milesFromUser;
-    cell.imageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:yelpBar.businessImageURL]]];
+    [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[self.arrImagesUrl objectAtIndex:indexPath.row]]
+                      placeholderImage:[UIImage imageNamed:@"placeholder"]];
+    [cell layoutSubviews];
+    
     return cell;
 }
 
@@ -318,7 +330,6 @@ calloutAccessoryControlTapped:(UIControl *)control
     NSIndexPath *selectedIndexPath = self.tableView.indexPathForSelectedRow;
     self.selectedBar = [self.barLocations objectAtIndex:selectedIndexPath.row];
     [self performSegueWithIdentifier:@"segue" sender:self];
-
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
