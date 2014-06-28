@@ -977,7 +977,7 @@
         <scene sceneID="UBQ-g4-tB7">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="cxc-Hy-A8F" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" systemItem="search" id="Xg2-uS-hDw"/>
+                    <tabBarItem key="tabBarItem" image="Map_Icon" id="Xg2-uS-hDw"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="emp-RN-18e">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1011,11 +1011,11 @@
             </objects>
             <point key="canvasLocation" x="189" y="738"/>
         </scene>
-        <!--Navigation Controller - Chat-->
+        <!--Navigation Controller-->
         <scene sceneID="rkT-ig-V4e">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="1cf-gW-tII" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Chat" id="5AM-e4-BMJ"/>
+                    <tabBarItem key="tabBarItem" title="" image="Chat_Icon3" id="5AM-e4-BMJ"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="zl4-WX-tDK">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1068,6 +1068,10 @@
             <point key="canvasLocation" x="-804" y="67"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Chat_Icon3" width="30" height="30"/>
+        <image name="Map_Icon" width="30" height="30"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
