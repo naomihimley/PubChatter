@@ -53,6 +53,13 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    if (!self.chattingUserPeerID) {
+        self.navigationItem.title = @"Not Chatting";
+    }
+    else
+    {
+        [self fetch];
+    }
 }
 
 
@@ -82,6 +89,7 @@
 {
     self.chattingUserPeerID = [[notification userInfo]objectForKey:@"peerID"];
     self.chatingUser = [[notification userInfo]objectForKey:@"user"];
+    self.navigationItem.title = self.chattingUserPeerID.displayName;
     [self fetch];
 }
 
@@ -102,9 +110,13 @@
 
 - (void)sort: (NSSet *)set
 {
+    NSLog(@"sort");
     NSSortDescriptor *sorter = [[NSSortDescriptor alloc] initWithKey:@"timeStamp" ascending:YES];
     self.sortedArray = [[set allObjects] sortedArrayUsingDescriptors:@[sorter]];
     [self.tableView reloadData];
+    NSInteger lastRowNumber = [self.tableView numberOfRowsInSection:0] - 1;
+    NSIndexPath* ip = [NSIndexPath indexPathForRow:lastRowNumber inSection:0];
+    [self.tableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 
 # pragma mark - TableViewDelegate methods
@@ -223,6 +235,7 @@
 - (IBAction)onButtonPressedEndSession:(id)sender
 {
     //should remove the current convo from moc
+    self.navigationItem.title = @"Not Chatting";
     self.chatTextField.text = @"";
     self.chattingUserPeerID = nil;
     [self fetch];
