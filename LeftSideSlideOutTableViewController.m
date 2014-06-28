@@ -356,7 +356,7 @@
         void (^invitationHandler)(BOOL, MCSession *) = [self.appDelegate.mcManager.invitationHandlerArray objectAtIndex:0];
         invitationHandler(accept, self.appDelegate.mcManager.session);
         [cell.chatButton setTitle:@"Connecting" forState:UIControlStateNormal];
-        cell.chatButton.backgroundColor = [UIColor pubChatBlue];
+        cell.chatButton.backgroundColor = [UIColor pubChatPink];
         [cell.chatButton setEnabled:NO];
     }
     else
