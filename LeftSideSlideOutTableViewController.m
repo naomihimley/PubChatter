@@ -103,6 +103,17 @@
     cell.cellUserDisplayName = peerID.displayName;
     [cell.chatButton setTitle:@"Invite" forState:UIControlStateNormal];
 
+    cell.chatButton.layer.masksToBounds = YES;
+    cell.chatButton.layer.cornerRadius = 5.0f;
+    cell.chatButton.layer.borderWidth = 1.0f;
+    cell.chatButton.layer.borderColor = [[UIColor blackColor]CGColor];
+
+    cell.backgroundLabel.layer.masksToBounds = YES;
+    cell.backgroundLabel.layer.cornerRadius = 5.0f;
+    cell.backgroundLabel.layer.borderWidth = 1.0f;
+    cell.backgroundLabel.layer.borderColor = [[UIColor blackColor]CGColor];
+    
+
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     if ([user objectForKey:@"age"])
     {
@@ -133,6 +144,11 @@
 
     PFFile *imageFile = [user objectForKey:@"picture"];
     [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+//        cell.userImage.layer.cornerRadius = cell.userImage.bounds.size.width /2.0;
+        cell.userImage.layer.masksToBounds = YES;
+        cell.userImage.layer.cornerRadius = 5.0f;
+        cell.userImage.layer.borderWidth = 1.0f;
+        cell.userImage.layer.borderColor = [[UIColor blackColor]CGColor];
         cell.userImage.image = [UIImage imageWithData:data];
     }];
     return cell;
