@@ -92,7 +92,6 @@
         {
             if (state == CLRegionStateInside)
             {
-                NSLog(@"inside old town");
                 [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"Old Town Ale House"}];
                 PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
                 [queryForBar whereKey:@"objectId" equalTo:@"cxmc5pwBsf"];
@@ -104,7 +103,6 @@
                     {
                         [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                         [bar saveInBackground];
-                        NSLog(@"adding user to old town ale because empty");
                     }
                     else if (arrayOfUsers.count > 0)
                     {
@@ -114,7 +112,6 @@
                             {
                                 [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                                 [bar saveInBackground];
-                                NSLog(@"adding to old town %@", bar);
                             }
                         }
                     }
@@ -122,7 +119,6 @@
             }
             else if (state == CLRegionStateOutside)
             {
-                NSLog(@"region identifier for regionOUTSIDE %@", region.identifier);
                 PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
                 [queryForBar whereKey:@"objectId" equalTo:@"cxmc5pwBsf"];
                 [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
@@ -130,13 +126,11 @@
                      PFObject *bar = [objects firstObject];
                      [bar removeObject:[PFUser currentUser] forKey:@"usersInBar"];
                      [bar saveInBackground];
-                     NSLog(@"removing me from OLDT: %@", [bar objectForKey:@"barName"]);
                  }];
             }
         }
         if ([region.identifier isEqualToString:@"GreenDoor"])
         {
-            NSLog(@"inside green door");
             if (state == CLRegionStateInside)
             {
                 [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"Green Door"}];
@@ -151,7 +145,6 @@
                     {
                         [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                         [bar saveInBackground];
-                        NSLog(@"add to green door because empty");
                     }
                     else if (arrayOfUsers.count > 0)
                     {
@@ -161,7 +154,6 @@
                             {
                                 [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                                 [bar saveInBackground];
-                                NSLog(@"add to greendoor");
                             }
                         }
                     }
@@ -169,7 +161,6 @@
             }
             else if (state == CLRegionStateOutside)
             {
-                NSLog(@"region identifier for regionOUTSIDE %@", region.identifier);
                 PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
                 [queryForBar whereKey:@"objectId" equalTo:@"CnWKUJftyT"];
                 [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
@@ -177,13 +168,11 @@
                      PFObject *bar = [objects firstObject];
                      [bar removeObject:[PFUser currentUser] forKey:@"usersInBar"];
                      [bar saveInBackground];
-                     NSLog(@"removing me from greendoor:%@", [bar objectForKey:@"barName"]);
                  }];
             }
         }
         if ([region.identifier isEqualToString:@"Municipal"])
         {
-            NSLog(@"inside municipal");
             if (state == CLRegionStateInside)
             {
                 [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"Municipal Bar"}];
@@ -197,7 +186,6 @@
                     {
                         [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                         [bar saveInBackground];
-                        NSLog(@"adding to muni because empty");
                     }
                     else if (arrayOfUsers.count > 0)
                     {
@@ -207,7 +195,6 @@
                             {
                                 [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                                 [bar saveInBackground];
-                                NSLog(@"adding to muni:%@", bar);
                             }
                         }
                     }
@@ -222,7 +209,6 @@
                      PFObject *bar = [objects firstObject];
                      [bar removeObject:[PFUser currentUser] forKey:@"usersInBar"];
                      [bar saveInBackground];
-                     NSLog(@"removing me from municipal?%@", [bar objectForKey:@"barName"]);
                  }];
             }
         }
@@ -237,7 +223,6 @@
 {
     if ([region.identifier isEqualToString:@"GreenDoor"]||[region.identifier isEqualToString:@"Municipal"] || [region.identifier isEqualToString:@"OldTown"])
     {
-        NSLog(@"didEnterRegion");
         [self.beaconRegionManager startMonitoringForRegion:self.greenDoorRegion];
         [self.beaconRegionManager startMonitoringForRegion:self.municipalRegion];
         [self.beaconRegionManager startMonitoringForRegion:self.oldTownRegion];

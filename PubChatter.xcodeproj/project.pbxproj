@@ -63,6 +63,7 @@
 		B0D46D14195D1C2E005E7889 /* UIColor+DesignColors.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D46D13195D1C2E005E7889 /* UIColor+DesignColors.m */; };
 		B0D46D17195E1B5E005E7889 /* Peer.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D46D16195E1B5E005E7889 /* Peer.m */; };
 		B0D46D1A195E1B5E005E7889 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D46D19195E1B5E005E7889 /* Message.m */; };
+		B0D46D1D195F3E64005E7889 /* ChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D46D1C195F3E64005E7889 /* ChatTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -159,6 +160,8 @@
 		B0D46D16195E1B5E005E7889 /* Peer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Peer.m; path = ../Peer.m; sourceTree = "<group>"; };
 		B0D46D18195E1B5E005E7889 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Message.h; path = ../Message.h; sourceTree = "<group>"; };
 		B0D46D19195E1B5E005E7889 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Message.m; path = ../Message.m; sourceTree = "<group>"; };
+		B0D46D1B195F3E64005E7889 /* ChatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatTableViewCell.h; path = PubChatter/ChatTableViewCell.h; sourceTree = "<group>"; };
+		B0D46D1C195F3E64005E7889 /* ChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChatTableViewCell.m; path = PubChatter/ChatTableViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -222,6 +225,8 @@
 		9BDBE559194FA3D00045C05B /* ChatVCs */ = {
 			isa = PBXGroup;
 			children = (
+				B0D46D1B195F3E64005E7889 /* ChatTableViewCell.h */,
+				B0D46D1C195F3E64005E7889 /* ChatTableViewCell.m */,
 				9BDBE4FE194F47380045C05B /* OPPViewController.h */,
 				9BDBE4FF194F47380045C05B /* OPPViewController.m */,
 				9BDBE501194F47830045C05B /* ChatBoxViewController.h */,
@@ -522,6 +527,7 @@
 				B03F23251954DBE400DB67F8 /* BeaconRegionManager.m in Sources */,
 				B0623C391958FF1500A9AFD6 /* PubChatter.xcdatamodeld in Sources */,
 				9BDBE4FD194F3EB50045C05B /* MCManager.m in Sources */,
+				B0D46D1D195F3E64005E7889 /* ChatTableViewCell.m in Sources */,
 				0ECEAF181958BDEA00B92C40 /* LoginViewController.m in Sources */,
 				0EB31FFB194BC158005A3B82 /* SearchViewController.m in Sources */,
 				B0D46D17195E1B5E005E7889 /* Peer.m in Sources */,

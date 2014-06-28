@@ -48,7 +48,6 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidChangeStateNotification"
                                                             object:nil
                                                           userInfo:dictionary];
-    NSLog(@"STATE %i", state);
 }
 
 -(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID
@@ -56,9 +55,6 @@
     NSDictionary *dictionary = @{@"data": data,
                                  @"peerID": peerID};
     NSString *receivedText = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidReceiveDataNotification"
-                                                        object:nil
-                                                      userInfo:dictionary];
     if (![self doesConversationExist:peerID])
     {
         Peer *peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext:moc];
@@ -69,6 +65,9 @@
         peer.peerID = peerID.displayName;
         [peer addMessagesObject:message];
         [moc save:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidReceiveDataNotification"
+                                                            object:nil
+                                                          userInfo:dictionary];
         NSLog(@"creating a new conversation in didReceiveData");
     }
     else if ([self doesConversationExist:peerID])
@@ -88,6 +87,9 @@
         message.timeStamp = [NSDate date];
         [peer addMessagesObject:message];
         [moc save:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidReceiveDataNotification"
+                                                            object:nil
+                                                          userInfo:dictionary];
         NSLog(@"adding received message in didReceiveData");
     }
 }

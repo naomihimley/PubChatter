@@ -148,12 +148,28 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1ky-A8-udI">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gMY-OG-1WS">
+                                <rect key="frame" x="127" y="68" width="66" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Quit Chat">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onButtonPressedEndSession:" destination="BIN-h3-l0M" eventType="touchUpInside" id="mLZ-5v-ufJ"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4wy-6y-CN3">
+                                <rect key="frame" x="15" y="460" width="291" height="52"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tJd-bY-Dbm">
-                                        <rect key="frame" x="264" y="104" width="36" height="30"/>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter chat text here!" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="o83-7g-8hF">
+                                        <rect key="frame" x="0.0" y="11" width="205" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tJd-bY-Dbm">
+                                        <rect key="frame" x="235" y="11" width="36" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Send">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -162,73 +178,53 @@
                                             <action selector="onButtonPressedSendChat:" destination="BIN-h3-l0M" eventType="touchUpInside" id="aHI-6q-l1d"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Im4-6i-88l">
-                                        <rect key="frame" x="20" y="105" width="48" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Cancel">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="onButtonPressedCancelSendingChat:" destination="BIN-h3-l0M" eventType="touchUpInside" id="adJ-pi-WKk"/>
-                                        </connections>
-                                    </button>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter chat text here!" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="o83-7g-8hF">
-                                        <rect key="frame" x="20" y="73" width="280" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </textField>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uqq-zN-VfC">
-                                        <rect key="frame" x="20" y="131" width="280" height="334"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" red="0.90196079015731812" green="0.90196079015731812" blue="0.90196079015731812" alpha="1" colorSpace="calibratedRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="334" id="Qeu-yb-w5c"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                    </textView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gMY-OG-1WS">
-                                        <rect key="frame" x="127" y="473" width="66" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Quit Chat">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="onButtonPressedEndSession:" destination="BIN-h3-l0M" eventType="touchUpInside" id="mLZ-5v-ufJ"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
-                                <constraints>
-                                    <constraint firstItem="Uqq-zN-VfC" firstAttribute="centerX" secondItem="1ky-A8-udI" secondAttribute="centerX" id="4Ug-Hr-r4P"/>
-                                    <constraint firstItem="gMY-OG-1WS" firstAttribute="centerX" secondItem="Uqq-zN-VfC" secondAttribute="centerX" id="7RL-Ao-Sbg"/>
-                                    <constraint firstAttribute="bottom" secondItem="gMY-OG-1WS" secondAttribute="bottom" constant="65" id="Cdn-xD-0mV"/>
-                                    <constraint firstItem="Im4-6i-88l" firstAttribute="top" secondItem="o83-7g-8hF" secondAttribute="bottom" constant="2" id="M8p-RU-Pbn"/>
-                                    <constraint firstItem="o83-7g-8hF" firstAttribute="trailing" secondItem="tJd-bY-Dbm" secondAttribute="trailing" id="U04-1r-apn"/>
-                                    <constraint firstItem="Uqq-zN-VfC" firstAttribute="top" secondItem="o83-7g-8hF" secondAttribute="bottom" constant="28" id="V2a-er-gZH"/>
-                                    <constraint firstItem="Uqq-zN-VfC" firstAttribute="leading" secondItem="Im4-6i-88l" secondAttribute="leading" id="Z6F-LR-YGT"/>
-                                    <constraint firstAttribute="trailing" secondItem="o83-7g-8hF" secondAttribute="trailing" constant="20" symbolic="YES" id="s8j-3M-KzM"/>
-                                    <constraint firstItem="o83-7g-8hF" firstAttribute="top" secondItem="1ky-A8-udI" secondAttribute="top" constant="73" id="uCR-gO-1tB"/>
-                                    <constraint firstItem="tJd-bY-Dbm" firstAttribute="top" secondItem="o83-7g-8hF" secondAttribute="bottom" constant="1" id="uzI-MM-f8a"/>
-                                    <constraint firstItem="o83-7g-8hF" firstAttribute="leading" secondItem="1ky-A8-udI" secondAttribute="leading" constant="20" symbolic="YES" id="whY-vQ-H4m"/>
-                                    <constraint firstItem="gMY-OG-1WS" firstAttribute="top" secondItem="Uqq-zN-VfC" secondAttribute="bottom" constant="8" symbolic="YES" id="wjr-rI-2Et"/>
-                                    <constraint firstItem="o83-7g-8hF" firstAttribute="leading" secondItem="Im4-6i-88l" secondAttribute="leading" id="xId-aK-Yik"/>
-                                    <constraint firstItem="tJd-bY-Dbm" firstAttribute="trailing" secondItem="Uqq-zN-VfC" secondAttribute="trailing" id="zhC-Q1-wBA"/>
-                                </constraints>
-                            </scrollView>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="68" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="ePF-5u-znW">
+                                <rect key="frame" x="0.0" y="96" width="320" height="356"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" rowHeight="68" id="qf1-u4-MBD" customClass="ChatTableViewCell">
+                                        <rect key="frame" x="0.0" y="22" width="320" height="68"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qf1-u4-MBD" id="jhn-QF-O1v">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="67"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="right" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="35" translatesAutoresizingMaskIntoConstraints="NO" id="Rum-Ac-CJr">
+                                                    <rect key="frame" x="253" y="23" width="35" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="left" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="24" translatesAutoresizingMaskIntoConstraints="NO" id="87S-5X-NqK">
+                                                    <rect key="frame" x="12" y="23" width="24" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="leftLabel" destination="87S-5X-NqK" id="Iqz-w4-eth"/>
+                                            <outlet property="rightLabel" destination="Rum-Ac-CJr" id="Cs8-UL-TzM"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="BIN-h3-l0M" id="cwS-1g-PzT"/>
+                                    <outlet property="delegate" destination="BIN-h3-l0M" id="aks-Qs-tS3"/>
+                                </connections>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="1ky-A8-udI" secondAttribute="trailing" id="1Kr-Xy-5dJ"/>
-                            <constraint firstAttribute="bottom" secondItem="1ky-A8-udI" secondAttribute="bottom" id="4VF-6K-AsI"/>
-                            <constraint firstItem="1ky-A8-udI" firstAttribute="top" secondItem="bc5-8k-tS4" secondAttribute="top" id="DID-ph-nbC"/>
-                            <constraint firstItem="1ky-A8-udI" firstAttribute="leading" secondItem="bc5-8k-tS4" secondAttribute="leading" id="bGm-8W-xFG"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="mKX-Di-BUn"/>
                     <connections>
                         <outlet property="chatTextField" destination="o83-7g-8hF" id="7Et-GK-ozE"/>
-                        <outlet property="chatTextView" destination="Uqq-zN-VfC" id="B40-aU-9Fj"/>
+                        <outlet property="tableView" destination="ePF-5u-znW" id="1Ua-Si-wyr"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u5u-hH-8DW" userLabel="First Responder" sceneMemberID="firstResponder"/>
