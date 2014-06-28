@@ -32,18 +32,17 @@
 - (void)viewDidLoad
 {
 
-//    [self queryForUsers];
-
     [super viewDidLoad];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     self.users = [NSMutableArray array];
 
     self.cellArray = [NSMutableArray array];
 
+    [self.appDelegate.mcManager startBrowsingForPeers];
+
     if ([PFUser currentUser])
     {
-        [self.appDelegate.mcManager setupPeerAndSessionWithDisplayName:[[PFUser currentUser]objectForKey:@"username"]];
-        [self.appDelegate.mcManager advertiseSelf:YES];
+
     }
 
     [[NSNotificationCenter defaultCenter]addObserver:self
@@ -85,20 +84,26 @@
     ListOfUsersTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     NSDictionary *dictionary = [self.users objectAtIndex:indexPath.row];
 
+    MCPeerID *peerID = [dictionary objectForKey:@"peerID"];
+
     PFUser *user = [dictionary objectForKey:@"user"];
 
     cell.userNameLabel.textColor = [UIColor pubChatYellow];
     cell.userAgeLabel.textColor = [UIColor whiteColor];
     cell.genderLabel.textColor = [UIColor whiteColor];
-    cell.backgroundColor = [UIColor pubChatPurple];
+    cell.backgroundColor = [UIColor clearColor];
     cell.chatButton.backgroundColor = [UIColor pubChatPink];
     cell.chatButton.titleLabel.textColor = [UIColor whiteColor];
+    cell.backgroundLabel.backgroundColor = [UIColor pubChatPurple];
 
     cell.userNameLabel.text = [user objectForKey:@"name"];
     cell.chatButton.tag = indexPath.row;
     [self.cellArray addObject:cell];
     cell.tag = [self.users indexOfObject:dictionary];
+    cell.cellUserDisplayName = peerID.displayName;
+    [cell.chatButton setTitle:@"Invite" forState:UIControlStateNormal];
 
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     if ([user objectForKey:@"age"])
     {
         cell.userAgeLabel.text = [NSString stringWithFormat:@"%@",[user objectForKey:@"age"]];
@@ -144,14 +149,14 @@
 
         PFQuery *query = [PFQuery queryWithClassName:@"_User"];
         [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error){
-             if (!error)
-             {
-                 self.parseUsers = [NSArray arrayWithArray:objects];
-             }
-             [self findUsers:peerID];
+            if (!error)
+            {
+                self.parseUsers = [NSArray arrayWithArray:objects];
+            }
+            [self findUsers:peerID];
 
-             [self.tableView reloadData];
-         }];
+            [self.tableView reloadData];
+        }];
     }
     else
     {
@@ -195,16 +200,16 @@
     {
         [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30];
 
-        [button setTitle:@"Connecting" forState:UIControlStateNormal];
+        [button setTitle:@"Inviting" forState:UIControlStateNormal];
         [button setEnabled:NO];
     }
 
     if ([button.titleLabel.text isEqual:@"Chat"])
     {
-        self.selectedChatButton.backgroundColor = [UIColor pubChatPurple];
+        self.selectedChatButton.backgroundColor = [UIColor pubChatPink];
         self.selectedChatButton = nil;
         [[NSNotificationCenter defaultCenter]postNotificationName:@"PeerToChatWith" object:nil userInfo:dictionary];
-        button.backgroundColor = [UIColor pubChatBlue];
+        button.backgroundColor = [UIColor pubChatYellow];
         self.selectedChatButton = button;
     }
 }
@@ -226,11 +231,11 @@
         }
     }
 
-    long index = [self.users indexOfObject:userDictionary];
+    //    long index = [self.users indexOfObject:userDictionary];
 
     for (ListOfUsersTableViewCell *userCell in self.cellArray)
     {
-        if (userCell.tag == index)
+        if ([userCell.cellUserDisplayName isEqual:peerID.displayName])
         {
             cell = userCell;
         }
@@ -252,8 +257,20 @@
         }
         if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
         {
-            [cell.chatButton setTitle:@"Invite" forState:UIControlStateNormal];
-            [cell.chatButton setEnabled:YES];
+            if ([cell.chatButton.titleLabel.text isEqual: @"Connecting"])
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [cell.chatButton setTitle:@"Declined" forState:UIControlStateNormal];
+                    [cell.chatButton setEnabled:NO];
+                });
+            }
+            else
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [cell.chatButton setTitle:@"Invite" forState:UIControlStateNormal];
+                    [cell.chatButton setEnabled:YES];
+                });
+            }
         }
     }
 }
@@ -280,17 +297,23 @@
 
 -(void)receivedInvitationForConnection:(NSNotification *)notification
 {
+    self.userSendingInvitation = nil;
     MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
 
     for (NSDictionary *dictionary in self.users)
-    { 
-        if ([[dictionary objectForKey:@"peerID"] isEqual:peerID])
+    {
+        MCPeerID *peer = [dictionary objectForKey:@"peerID"];
+        if ([peer.displayName isEqual:peerID.displayName])
         {
             self.userSendingInvitation = dictionary;
+
+
         }
     }
 
-    NSString *alertViewTitle = [NSString stringWithFormat:@"%@ wants to connect and chat with you", [self.userSendingInvitation objectForKey:@"name"]];
+    PFUser *user = [self.userSendingInvitation objectForKey:@"user"];
+
+    NSString *alertViewTitle = [NSString stringWithFormat:@"%@ wants to connect and chat with you", [user objectForKey:@"name"]];
     UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:alertViewTitle message:nil delegate:self cancelButtonTitle:@"Decline" otherButtonTitles:@"Accept", nil];
     [alertView show];
 }
@@ -301,31 +324,40 @@
 
     ListOfUsersTableViewCell *cell = [ListOfUsersTableViewCell new];
 
-    long index = [self.users indexOfObject:self.userSendingInvitation];
+    MCPeerID *peerID = [self.userSendingInvitation objectForKey:@"peerID"];
 
     for (ListOfUsersTableViewCell *userCell in self.cellArray)
     {
-        if (userCell.tag == index)
+        if ([userCell.cellUserDisplayName isEqual:peerID.displayName])
         {
             cell = userCell;
         }
     }
+    if (accept)
+    {
+        void (^invitationHandler)(BOOL, MCSession *) = [self.appDelegate.mcManager.invitationHandlerArray objectAtIndex:0];
+        invitationHandler(accept, self.appDelegate.mcManager.session);
+        [cell.chatButton setTitle:@"Connecting" forState:UIControlStateNormal];
+        cell.chatButton.backgroundColor = [UIColor pubChatBlue];
+        [cell.chatButton setEnabled:NO];
+    }
+    else
+    {
+        void (^invitationHandler)(BOOL, MCSession *) = [self.appDelegate.mcManager.invitationHandlerArray objectAtIndex:0];
+        invitationHandler(0, self.appDelegate.mcManager.session);
+        [cell.chatButton setTitle:@"Declined" forState:UIControlStateNormal];
+    }
 
-    [cell.chatButton setTitle:@"Connecting" forState:UIControlStateNormal];
-    [cell.chatButton setEnabled:NO];
-
-    void (^invitationHandler)(BOOL, MCSession *) = [self.appDelegate.mcManager.invitationHandlerArray objectAtIndex:0];
-    invitationHandler(accept, self.appDelegate.mcManager.session);
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     OPPViewController *oppVC = segue.destinationViewController;
     NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-
+    
     NSDictionary *dictionary = [self.users objectAtIndex:indexPath.row];
     PFUser *selectedUser = [dictionary objectForKey:@"user"];
-
+    
     oppVC.user = selectedUser;
 }
 
