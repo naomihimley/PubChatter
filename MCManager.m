@@ -9,7 +9,7 @@
 #import "MCManager.h"
 #import <Parse/Parse.h>
 #import "Peer.h"
-#import "Conversation.h"
+#import "Message.h"
 
 @implementation MCManager
 
@@ -59,18 +59,17 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidReceiveDataNotification"
                                                         object:nil
                                                       userInfo:dictionary];
-    MCPeerID *tempID = [dictionary objectForKey:@"peerID"];
-    NSString *display = tempID.displayName;
-    NSString *chatString = [NSString stringWithFormat:@"%@:\n%@\n\n", display, receivedText];
-
     if (![self doesConversationExist:peerID])
     {
         Peer *peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext:moc];
-        Conversation *conversation = [NSEntityDescription insertNewObjectForEntityForName:@"Conversation" inManagedObjectContext:moc];
-        conversation.message = chatString;
+        Message *message = [NSEntityDescription insertNewObjectForEntityForName:@"Message" inManagedObjectContext:moc];
+        message.text = receivedText;
+        message.isMyMessage = @0;
+        message.timeStamp = [NSDate date];
         peer.peerID = peerID.displayName;
-        [peer addConversationObject:conversation];
+        [peer addMessagesObject:message];
         [moc save:nil];
+        NSLog(@"creating a new conversation in didReceiveData");
     }
     else if ([self doesConversationExist:peerID])
     {
@@ -83,12 +82,13 @@
         //got the Peer who sent you the message
         NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
         Peer *peer = [array firstObject];
-        //the peer has a conversation NSSet which only has one Conversation in it
-        Conversation *convo = [peer.conversation anyObject];
-        //update the message associated with that convo and save
-        convo.message = [convo.message stringByAppendingString:chatString];
+        Message *message = [NSEntityDescription insertNewObjectForEntityForName:@"Message" inManagedObjectContext:moc];
+        message.text = receivedText;
+        message.isMyMessage = @0;
+        message.timeStamp = [NSDate date];
+        [peer addMessagesObject:message];
         [moc save:nil];
-        NSLog(@"adding received message to MOC");
+        NSLog(@"adding received message in didReceiveData");
     }
 }
 - (BOOL)doesConversationExist :(MCPeerID *)peerID

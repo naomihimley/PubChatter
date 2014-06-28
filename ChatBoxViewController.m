@@ -9,7 +9,7 @@
 #import "ChatBoxViewController.h"
 #import "AppDelegate.h"
 #import "Peer.h"
-#import "Conversation.h"
+#import "Message.h"
 #import "SWRevealViewController.h"
 #import "UIColor+DesignColors.h"
 
@@ -89,10 +89,14 @@
     request.predicate = predicate;
     self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
     [self.fetchedResultsController performFetch:nil];
+
     NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
     Peer *peer = [array firstObject];
-    Conversation *convo = [peer.conversation anyObject];
-    self.chatTextView.text = convo.message;
+    NSSet *messagesSet = peer.messages;
+    NSSortDescriptor *sorter = [[NSSortDescriptor alloc] initWithKey:@"timeStamp" ascending:YES];
+    NSArray *sortedMessages = [[messagesSet allObjects] sortedArrayUsingDescriptors:@[sorter]];
+    NSLog(@"sorted messages array: %@", sortedMessages);
+    //load the tableView here!
 }
 
 #pragma mark - Helper method implementations
@@ -100,7 +104,7 @@
 
 - (void)sendMyMessage
 {
-        NSString *userInput = [NSString stringWithFormat:@"%@", self.chatTextField.text];
+        NSString *userInput = self.chatTextField.text;
         NSData *dataToSend = [userInput dataUsingEncoding:NSUTF8StringEncoding];
         NSArray *peerToSendTo = @[self.chattingUserPeerID];
         NSError *error;
@@ -120,17 +124,18 @@
 
         else
         {
-            NSString *chatString = [NSString stringWithFormat:@"I wrote:\n%@\n\n", userInput];
-            [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:chatString]];
+//            [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:chatString]];
             if ([self doesConversationExist:self.chattingUserPeerID] == NO)
             {
                 Peer *peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext:moc];
-                Conversation *conversation = [NSEntityDescription insertNewObjectForEntityForName:@"Conversation" inManagedObjectContext:moc];
-                conversation.message = chatString;
+                Message *message = [NSEntityDescription insertNewObjectForEntityForName:@"Message" inManagedObjectContext:moc];
+                message.text = userInput;
+                message.isMyMessage = @1;
+                message.timeStamp = [NSDate date];
                 peer.peerID = self.chattingUserPeerID.displayName;
-                [peer addConversationObject:conversation];
+                [peer addMessagesObject:message];
                 [moc save:nil];
-                NSLog(@"CHATBOX creating new convo in sendMyMessage");
+                NSLog(@"CHATBOX creating new Peer and Message in sendMyMessage");
             }
             else
             {
@@ -142,10 +147,13 @@
                 [self.fetchedResultsController performFetch:nil];
                 NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
                 Peer *peer = [array firstObject];
-                Conversation *convo = [peer.conversation anyObject];
-                convo.message = [convo.message stringByAppendingString:chatString];
+                Message *message = [NSEntityDescription insertNewObjectForEntityForName:@"Message" inManagedObjectContext:moc];
+                message.text = userInput;
+                message.isMyMessage = @1;
+                message.timeStamp = [NSDate date];
+                [peer addMessagesObject:message];
                 [moc save:nil];
-                NSLog(@"CHATBOX SENT adding message object: %@", convo.message);
+                NSLog(@"CHATBOX adding message in sendMyMessage: %@", message.text);
             }
 
             self.chatTextField.text = @"";
@@ -179,7 +187,6 @@
         NSLog(@"the peer id was null IN CHATBOX");
         return NO;
     }
-
 }
 
 # pragma mark - Button Actions

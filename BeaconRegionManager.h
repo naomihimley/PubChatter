@@ -18,7 +18,6 @@
 @property (strong, nonatomic) CLBeaconRegion *oldTownRegion;
 @property (strong, nonatomic) CLBeaconRegion *municipalRegion;
 @property (strong, nonatomic) CLLocationManager *beaconRegionManager;
-@property BOOL firstRange;
 - (void)canUserUseApp;
 - (void)setupCLManager;
 - (void)logout;
