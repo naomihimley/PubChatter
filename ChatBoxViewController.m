@@ -131,7 +131,16 @@
     if (self.sortedArray)
     {
         Message *message = [self.sortedArray objectAtIndex:indexPath.row];
-        cell.textLabel.text = message.text;
+        if ([message.isMyMessage  isEqual: @1]) {
+            cell.rightLabel.text = message.text;
+            cell.rightLabel.textAlignment = NSTextAlignmentRight;
+            [cell.rightLabel sizeToFit];
+        }
+        else
+        {
+            cell.leftLabel.text = message.text;
+            [cell.leftLabel sizeToFit];
+        }
     }
     return cell;
 }
