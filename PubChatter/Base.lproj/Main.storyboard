@@ -349,7 +349,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H4n-xq-CAP">
-                                            <rect key="frame" x="5" y="23" width="72" height="60"/>
+                                            <rect key="frame" x="5" y="17" width="75" height="75"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         </imageView>
                                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pOd-aK-sZV">
@@ -724,16 +724,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CGp-eV-NSK">
-                                <rect key="frame" x="248" y="93" width="44" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="logout">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="onLogOutButtonTapped:" destination="TiO-qo-PR7" eventType="touchUpInside" id="ls1-Pr-ceT"/>
-                                </connections>
-                            </button>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BRJ-uR-Cci">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -817,11 +807,10 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="BRJ-uR-Cci" firstAttribute="top" secondItem="W0y-Y8-11J" secondAttribute="top" id="8hP-pi-D6I"/>
-                            <constraint firstItem="CGp-eV-NSK" firstAttribute="top" secondItem="1br-bg-rG3" secondAttribute="bottom" constant="29" id="DaD-Yu-Zhg"/>
                             <constraint firstAttribute="bottom" secondItem="BRJ-uR-Cci" secondAttribute="bottom" id="Vqv-8I-2kb"/>
+                            <constraint firstItem="BRJ-uR-Cci" firstAttribute="top" secondItem="W0y-Y8-11J" secondAttribute="top" id="YLx-OA-3ba"/>
                             <constraint firstItem="BRJ-uR-Cci" firstAttribute="leading" secondItem="W0y-Y8-11J" secondAttribute="leading" id="eXS-jQ-rj1"/>
                             <constraint firstAttribute="trailing" secondItem="BRJ-uR-Cci" secondAttribute="trailing" id="rtf-hc-dva"/>
-                            <constraint firstAttribute="trailing" secondItem="CGp-eV-NSK" secondAttribute="trailing" constant="28" id="uJK-KQ-nnC"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="oSW-J4-SVr">

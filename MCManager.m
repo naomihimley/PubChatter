@@ -150,6 +150,7 @@
     if (self.advertisingUsers.count == 0)
     {
         [self.advertisingUsers addObject:peerID];
+        [self.foundPeersArray addObject:self.peerID];
         NSDictionary *dictionary = @{@"peerID": peerID};
 
         [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:dictionary];
