@@ -12,14 +12,15 @@
 #import "Message.h"
 #import "SWRevealViewController.h"
 #import "UIColor+DesignColors.h"
+#import "ChatTableViewCell.h"
 
-
-@interface ChatBoxViewController ()<UITextFieldDelegate, UIAlertViewDelegate>
+@interface ChatBoxViewController ()<UITextFieldDelegate, UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITextField *chatTextField;
-@property (weak, nonatomic) IBOutlet UITextView *chatTextView;
 @property PFUser *chatingUser;
 @property MCPeerID *chattingUserPeerID;
 @property AppDelegate *appDelegate;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property NSArray *sortedArray;
 
 -(void)didReceiveDataWithNotification: (NSNotification *)notification;
 -(void)sendMyMessage;
@@ -31,8 +32,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.chatTextView.backgroundColor = [UIColor pubChatPurple];
-    self.chatTextView.editable = NO;
+    self.sortedArray = [NSArray new];
     self.fetchedResultsController.delegate = self;
     self.fetchedResultsController = [[NSFetchedResultsController alloc]init];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -68,13 +68,12 @@
 //notification for receiving a text
 - (void)didReceiveDataWithNotification:(NSNotification *)notification
 {
+    NSLog(@"notification in chatbox on receive a text");
     NSString *notificationDisplayName =[[[notification userInfo]objectForKey:@"peerID"] displayName];
     //if the data is coming from the person you're chatting with then add it to the text view
     if ([self.chattingUserPeerID.displayName isEqual:notificationDisplayName]) {
-        NSData *receivedData = [[notification userInfo] objectForKey:@"data"];
-        NSString *receivedText = [[NSString alloc] initWithData:receivedData encoding:NSUTF8StringEncoding];
-        NSString *chatString = [NSString stringWithFormat:@"%@:%@\n", [self.chatingUser objectForKey:@"name"], receivedText];
-        [self.chatTextView performSelectorOnMainThread:@selector(setText:) withObject:[self.chatTextView.text stringByAppendingString:chatString] waitUntilDone:NO];
+        NSLog(@"if statement in notification");
+        [self fetch];
     }
 }
 
@@ -83,20 +82,46 @@
 {
     self.chattingUserPeerID = [[notification userInfo]objectForKey:@"peerID"];
     self.chatingUser = [[notification userInfo]objectForKey:@"user"];
+    [self fetch];
+}
+
+#pragma mark - FetchedResultsController Helper Methods
+- (void)fetch
+{
+    NSLog(@"fetch");
     NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", self.chattingUserPeerID.displayName];
     request.predicate = predicate;
     self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
     [self.fetchedResultsController performFetch:nil];
-
     NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
     Peer *peer = [array firstObject];
-    NSSet *messagesSet = peer.messages;
+    [self sort:peer.messages];
+}
+
+- (void)sort: (NSSet *)set
+{
     NSSortDescriptor *sorter = [[NSSortDescriptor alloc] initWithKey:@"timeStamp" ascending:YES];
-    NSArray *sortedMessages = [[messagesSet allObjects] sortedArrayUsingDescriptors:@[sorter]];
-    NSLog(@"sorted messages array: %@", sortedMessages);
-    //load the tableView here!
+    self.sortedArray = [[set allObjects] sortedArrayUsingDescriptors:@[sorter]];
+    [self.tableView reloadData];
+}
+
+# pragma mark - TableViewDelegate methods
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return self.sortedArray.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    ChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    if (self.sortedArray)
+    {
+        Message *message = [self.sortedArray objectAtIndex:indexPath.row];
+        cell.textLabel.text = message.text;
+    }
+    return cell;
 }
 
 #pragma mark - Helper method implementations
@@ -104,6 +129,8 @@
 
 - (void)sendMyMessage
 {
+    if (self.chattingUserPeerID)
+    {
         NSString *userInput = self.chatTextField.text;
         NSData *dataToSend = [userInput dataUsingEncoding:NSUTF8StringEncoding];
         NSArray *peerToSendTo = @[self.chattingUserPeerID];
@@ -124,7 +151,6 @@
 
         else
         {
-//            [self.chatTextView setText:[self.chatTextView.text stringByAppendingString:chatString]];
             if ([self doesConversationExist:self.chattingUserPeerID] == NO)
             {
                 Peer *peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext:moc];
@@ -135,6 +161,7 @@
                 peer.peerID = self.chattingUserPeerID.displayName;
                 [peer addMessagesObject:message];
                 [moc save:nil];
+                [self fetch];
                 NSLog(@"CHATBOX creating new Peer and Message in sendMyMessage");
             }
             else
@@ -153,12 +180,14 @@
                 message.timeStamp = [NSDate date];
                 [peer addMessagesObject:message];
                 [moc save:nil];
-                NSLog(@"CHATBOX adding message in sendMyMessage: %@", message.text);
+                [self fetch];
+                NSLog(@"CHATBOX adding message in sendMyMessage");
             }
-
-            self.chatTextField.text = @"";
         }
+    }
+    self.chatTextField.text = @"";
     [self.chatTextField resignFirstResponder];
+
 }
 
 
@@ -194,19 +223,19 @@
 - (IBAction)onButtonPressedEndSession:(id)sender
 {
     //should remove the current convo from moc
-    self.chatTextView.text = @"";
     self.chatTextField.text = @"";
+    self.chattingUserPeerID = nil;
+    [self fetch];
     //should only disconnect user from the current chatting peer
 
-    if (self.appDelegate.mcManager.session.connectedPeers.count > 0)
-    {
-        [[self.appDelegate.mcManager.session.connectedPeers objectAtIndex:0] disconnect];
-    }
-}
-- (IBAction)onButtonPressedCancelSendingChat:(id)sender
-{
-    self.chatTextField.text = @"";
-    [self.chatTextField resignFirstResponder];
+    NSLog(@"%@", self.appDelegate.mcManager.session.connectedPeers);
+//    for (MCPeerID *peer in self.appDelegate.mcManager.session.connectedPeers) {
+//        if (peer.displayName isEqual:self.chattingUserPeerID.displayName) {
+//            MCSession *session = [[MCSession ]]
+//        }
+//    }
+//    self.appDelegate.mcManager.session.connectedPeers 
+
 }
 
 - (IBAction)onButtonPressedSendChat:(id)sender
