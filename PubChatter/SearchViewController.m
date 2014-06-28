@@ -80,6 +80,7 @@
 
 -(void)userEnteredBar:(NSNotification *)notification
 {
+    NSLog(@"notification %@",[notification.userInfo objectForKey:@"barName"]);
     self.navigationItem.title = [notification.userInfo objectForKey:@"barName"];
 }
 
