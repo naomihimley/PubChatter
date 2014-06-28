@@ -24,6 +24,4 @@
 @property NSString *categories;
 @property NSString *offers;
 
-
-
 @end

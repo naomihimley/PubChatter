@@ -11,7 +11,7 @@
 @interface SearchTableViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *barNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *barDistanceLabel;
-@property (weak, nonatomic) IBOutlet UILabel *barAddressLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
+
 
 @end
