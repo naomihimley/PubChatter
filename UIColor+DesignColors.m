@@ -11,34 +11,38 @@
 @implementation UIColor (DesignColors)
 
 
-+ (UIColor *)pubChatPurple
++ (UIColor *)cellBackgroundColor
 {
     CGFloat red = 56.0/255.0;
     CGFloat green = 66.0/255.0;
     CGFloat blue = 111.0/255.0;
     return [UIColor colorWithRed:red green:green blue:blue alpha:1];
 }
-+ (UIColor *)pubChatPink
+
++ (UIColor *)buttonColor
 {
     CGFloat red = 139.0/255.0;
     CGFloat green = 20.0/255.0;
     CGFloat blue = 91.0/255.0;
     return [UIColor colorWithRed:red green:green blue:blue alpha:1];
 }
-+ (UIColor *)pubChatLightPink
+
++ (UIColor *)backgroundColor
 {
     CGFloat red = 213.0/255.0;
     CGFloat green = 50.0/255.0;
     CGFloat blue = 125.0/255.0;
     return [UIColor colorWithRed:red green:green blue:blue alpha:1];
 }
-+ (UIColor *)pubChatBlue
+
++ (UIColor *)navBarColor
 {
     CGFloat red = 20.0/255.0;
     CGFloat green = 47.0/255.0;
     CGFloat blue = 89.0/255.0;
     return [UIColor colorWithRed:red green:green blue:blue alpha:1];}
-+ (UIColor *)pubChatYellow
+
++ (UIColor *)nameColor
 {
     CGFloat red = 216.0/255.0;
     CGFloat green = 222.0/255.0;
