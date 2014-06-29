@@ -21,6 +21,7 @@
 @property AppDelegate *appDelegate;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property NSArray *sortedArray;
+@property ChatTableViewCell *customCell;
 
 -(void)didReceiveDataWithNotification: (NSNotification *)notification;
 -(void)sendMyMessage;
@@ -104,7 +105,8 @@
     [self.fetchedResultsController performFetch:nil];
     NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
     Peer *peer = [array firstObject];
-    if (peer.messages) {
+    if (peer.messages)
+    {
         [self sort:peer.messages];
     }
 }
@@ -121,6 +123,20 @@
 }
 
 # pragma mark - TableViewDelegate methods
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (!self.customCell)
+    {
+        self.customCell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    }
+    Message *message = [self.sortedArray objectAtIndex:indexPath.row];
+    [self.customCell.rightLabel setText:message.text];
+    [self.customCell layoutIfNeeded];
+    CGFloat height = [self.customCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+    return height;
+
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.sortedArray.count;
@@ -128,6 +144,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+
     ChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
     if (self.sortedArray)
     {
@@ -135,11 +152,15 @@
         if ([message.isMyMessage  isEqual: @1]) {
             cell.rightLabel.text = message.text;
             [cell.rightLabel sizeToFit];
+            cell.leftLabel.text = @"";
+            cell.leftLabel.hidden = YES;
         }
         else
         {
             cell.leftLabel.text = message.text;
             [cell.leftLabel sizeToFit];
+            cell.rightLabel.text = @"";
+            cell.rightLabel.hidden = YES;
         }
     }
     return cell;
