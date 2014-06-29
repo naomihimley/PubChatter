@@ -9,11 +9,11 @@
 #import <UIKit/UIKit.h>
 
 @interface UIColor (DesignColors)
-+ (UIColor *)pubChatPurple;
-+ (UIColor *)pubChatPink;
-+ (UIColor *)pubChatLightPink;
-+ (UIColor *)pubChatBlue;
-+ (UIColor *)pubChatYellow;
++ (UIColor *)backgroundColor;
++ (UIColor *)buttonColor;
++ (UIColor *)accentColor;
++ (UIColor *)navBarColor;
++ (UIColor *)nameColor;
 
 
 @end

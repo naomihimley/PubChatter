@@ -57,6 +57,8 @@
     NSString *receivedText = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     if (![self doesConversationExist:peerID])
     {
+        //first text
+        NSLog(@"received first text manager");
         Peer *peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext:moc];
         Message *message = [NSEntityDescription insertNewObjectForEntityForName:@"Message" inManagedObjectContext:moc];
         message.text = receivedText;
@@ -68,7 +70,6 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidReceiveDataNotification"
                                                             object:nil
                                                           userInfo:dictionary];
-        NSLog(@"creating a new conversation in didReceiveData");
     }
     else if ([self doesConversationExist:peerID])
     {
@@ -86,11 +87,12 @@
         message.isMyMessage = @0;
         message.timeStamp = [NSDate date];
         [peer addMessagesObject:message];
-        [moc save:nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidReceiveDataNotification"
-                                                            object:nil
-                                                          userInfo:dictionary];
-        NSLog(@"adding received message in didReceiveData");
+        if ([moc save:nil]) {
+            NSLog(@"adding received message in didReceiveData");
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidReceiveDataNotification"
+                                                                object:nil
+                                                              userInfo:dictionary];
+        }
     }
 }
 - (BOOL)doesConversationExist :(MCPeerID *)peerID
@@ -107,10 +109,10 @@
         NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
         if (array.count < 1)
         {
-            NSLog(@"not returning any fetched results");
+            NSLog(@"convo does not exist");
             return NO;
         }
-        NSLog(@"the fetch returned something");
+        NSLog(@"convo exists");
         return YES;
     }
     else

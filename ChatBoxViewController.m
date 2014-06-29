@@ -96,7 +96,6 @@
 #pragma mark - FetchedResultsController Helper Methods
 - (void)fetch
 {
-    NSLog(@"fetch");
     NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", self.chattingUserPeerID.displayName];
@@ -105,7 +104,9 @@
     [self.fetchedResultsController performFetch:nil];
     NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
     Peer *peer = [array firstObject];
-    [self sort:peer.messages];
+    if (peer.messages) {
+        [self sort:peer.messages];
+    }
 }
 
 - (void)sort: (NSSet *)set
@@ -131,7 +132,15 @@
     if (self.sortedArray)
     {
         Message *message = [self.sortedArray objectAtIndex:indexPath.row];
-        cell.textLabel.text = message.text;
+        if ([message.isMyMessage  isEqual: @1]) {
+            cell.rightLabel.text = message.text;
+            [cell.rightLabel sizeToFit];
+        }
+        else
+        {
+            cell.leftLabel.text = message.text;
+            [cell.leftLabel sizeToFit];
+        }
     }
     return cell;
 }
@@ -174,7 +183,7 @@
                 [peer addMessagesObject:message];
                 [moc save:nil];
                 [self fetch];
-                NSLog(@"CHATBOX creating new Peer and Message in sendMyMessage");
+                NSLog(@"sending the first text");
             }
             else
             {
@@ -193,7 +202,7 @@
                 [peer addMessagesObject:message];
                 [moc save:nil];
                 [self fetch];
-                NSLog(@"CHATBOX adding message in sendMyMessage");
+                NSLog(@"sending a message");
             }
         }
     }

@@ -33,7 +33,7 @@
 {
 
     [super viewDidLoad];
-    self.navigationController.navigationBar.backgroundColor = [UIColor pubChatBlue];
+    self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
     self.navigationController.navigationBar.alpha = 1.0;
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     self.users = [NSMutableArray array];
@@ -90,13 +90,13 @@
 
     PFUser *user = [dictionary objectForKey:@"user"];
 
-    cell.userNameLabel.textColor = [UIColor pubChatYellow];
+    cell.userNameLabel.textColor = [UIColor nameColor];
     cell.userAgeLabel.textColor = [UIColor whiteColor];
     cell.genderLabel.textColor = [UIColor whiteColor];
     cell.backgroundColor = [UIColor clearColor];
-    cell.chatButton.backgroundColor = [UIColor pubChatPink];
+    cell.chatButton.backgroundColor = [UIColor buttonColor];
     cell.chatButton.titleLabel.textColor = [UIColor whiteColor];
-    cell.backgroundLabel.backgroundColor = [UIColor pubChatPurple];
+    cell.backgroundLabel.backgroundColor = [UIColor backgroundColor];
 
     cell.userNameLabel.text = [user objectForKey:@"name"];
     cell.chatButton.tag = indexPath.row;
@@ -224,10 +224,10 @@
 
     if ([button.titleLabel.text isEqual:@"Chat"])
     {
-        self.selectedChatButton.backgroundColor = [UIColor pubChatPink];
+        self.selectedChatButton.backgroundColor = [UIColor buttonColor];
         self.selectedChatButton = nil;
         [[NSNotificationCenter defaultCenter]postNotificationName:@"PeerToChatWith" object:nil userInfo:dictionary];
-        button.backgroundColor = [UIColor pubChatYellow];
+        button.backgroundColor = [UIColor nameColor];
         self.selectedChatButton = button;
     }
 }
@@ -356,7 +356,7 @@
         void (^invitationHandler)(BOOL, MCSession *) = [self.appDelegate.mcManager.invitationHandlerArray objectAtIndex:0];
         invitationHandler(accept, self.appDelegate.mcManager.session);
         [cell.chatButton setTitle:@"Connecting" forState:UIControlStateNormal];
-        cell.chatButton.backgroundColor = [UIColor pubChatPink];
+        cell.chatButton.backgroundColor = [UIColor buttonColor];
         [cell.chatButton setEnabled:NO];
     }
     else
