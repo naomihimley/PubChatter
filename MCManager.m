@@ -40,6 +40,14 @@
 
 #pragma mark - MCSession Delegate Methods
 
+-(void)session:(MCSession *)session didReceiveCertificate:(NSArray *)certificate fromPeer:(MCPeerID *)peerID certificateHandler:(void (^)(BOOL))certificateHandler
+{
+    if (certificateHandler != nil)
+    {
+        certificateHandler(YES);
+    }
+}
+
 -(void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state
 {
     NSDictionary *dictionary = @{@"peerID": peerID,
