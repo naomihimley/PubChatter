@@ -146,9 +146,13 @@
     {
         cell.genderLabel.text = @"other";
     }
+    else if ([user objectForKey:@"age"])
+    {
+        cell.genderLabel.text = [NSString stringWithFormat:@"%@", [user objectForKey:@"age"]];
+    }
     else
     {
-        cell.genderLabel.text = @"";
+        cell.genderLabel.text = @"No Info";
     }
 
     PFFile *imageFile = [user objectForKey:@"picture"];

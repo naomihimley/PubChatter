@@ -78,6 +78,10 @@
     {
          self.sexLabel.text = @"other";
     }
+    else if ([self.user objectForKey:@"age"])
+    {
+        self.sexLabel.text = [NSString stringWithFormat:[self.user objectForKey:@"age"]];
+    }
     else
     {
         self.sexLabel.text = @"No Info";
