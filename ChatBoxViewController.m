@@ -23,6 +23,7 @@
 @property NSArray *sortedArray;
 @property ChatTableViewCell *customCell;
 @property CGFloat chatTextFieldy;
+@property CGFloat tableViewy;
 @property (weak, nonatomic) IBOutlet UIView *chatFieldView;
 
 -(void)didReceiveDataWithNotification: (NSNotification *)notification;
@@ -36,6 +37,7 @@
 {
     [super viewDidLoad];
     self.chatTextFieldy = self.chatFieldView.frame.origin.y;
+    self.tableViewy = self.tableView.frame.origin.y;
     self.sortedArray = [NSArray new];
     self.fetchedResultsController.delegate = self;
     self.fetchedResultsController = [[NSFetchedResultsController alloc]init];
@@ -77,14 +79,19 @@
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    [UIView beginAnimations:@"Animate Text Field Up" context:nil];
+    [UIView beginAnimations:@"Animate Up" context:nil];
     [UIView setAnimationDuration:0.3];
     [UIView setAnimationBeginsFromCurrentState:YES];
 
     self.chatFieldView.frame = CGRectMake(self.chatFieldView.frame.origin.x,
-                                          322,
+                                          310,
                                           self.chatFieldView.frame.size.width,
                                           self.chatFieldView.frame.size.height);
+
+    self.tableView.frame = CGRectMake(self.tableView.frame.origin.x,
+                                      100,
+                                      self.tableView.frame.size.width,
+                                      self.tableView.frame.size.height);
     [UIView commitAnimations];
 }
 
@@ -98,6 +105,11 @@
                                           self.chatTextFieldy,
                                           self.chatFieldView.frame.size.width,
                                           self.chatFieldView.frame.size.height);
+
+    self.tableView.frame = CGRectMake(self.tableView.frame.origin.x,
+                                      self.tableViewy,
+                                      self.tableView.frame.size.width,
+                                      self.tableView.frame.size.height);
 
     [UIView commitAnimations];
 }
