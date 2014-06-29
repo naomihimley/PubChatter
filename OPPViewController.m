@@ -22,7 +22,6 @@
 @property (weak, nonatomic) IBOutlet UIView *backgroundLayoutView;
 @property AppDelegate *appDelegate;
 
-
 -(void)receivedInvitationForConnection: (NSNotification *)notification;
 
 
@@ -46,6 +45,7 @@
     self.bioLabel.editable = NO;
     self.favDrinkLabel.textColor = [UIColor whiteColor];
     self.bioLabel.backgroundColor = [UIColor clearColor];
+    self.view.backgroundColor = [UIColor blackColor];
 
     // Set name and age label.
     self.userNameLabel.text = [self.user objectForKey:@"name"];
