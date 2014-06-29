@@ -122,9 +122,12 @@
     NSString *notificationDisplayName =[[[notification userInfo]objectForKey:@"peerID"] displayName];
     //if the data is coming from the person you're chatting with then add it to the text view
     if ([self.chattingUserPeerID.displayName isEqual:notificationDisplayName]) {
-        NSLog(@"if statement in notification");
-        [self fetch];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"if statement in notification");
+            [self fetch];
+        });
     }
+
 }
 
 //notification from when you click the "CHAT" button in the drawer
@@ -132,7 +135,7 @@
 {
     self.chattingUserPeerID = [[notification userInfo]objectForKey:@"peerID"];
     self.chatingUser = [[notification userInfo]objectForKey:@"user"];
-    self.navigationItem.title = self.chattingUserPeerID.displayName;
+    self.navigationItem.title = [self.chatingUser objectForKey:@"name"];
     [self fetch];
 }
 
@@ -151,6 +154,12 @@
     {
         [self sort:peer.messages];
     }
+    else
+    {
+        //load an empty tableView
+        self.sortedArray = [NSArray new];
+        [self.tableView reloadData];
+    }
 }
 
 - (void)sort: (NSSet *)set
@@ -167,28 +176,29 @@
 # pragma mark - TableViewDelegate methods
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
-//this way works for doing the left label
     if (!self.customCell)
     {
         self.customCell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
     }
-
-    ///configure the cell
     Message *message = [self.sortedArray objectAtIndex:indexPath.row];
     if ([message.isMyMessage isEqual: @0])
     {
         [self.customCell.leftLabel setText:message.text];
+        self.customCell.leftLabel.lineBreakMode = NSLineBreakByCharWrapping;
     }
     else
     {
         [self.customCell.rightLabel setText:message.text];
-        
+        self.customCell.rightLabel.lineBreakMode = NSLineBreakByCharWrapping;
     }
-
     [self.customCell layoutIfNeeded];
     CGFloat height = [self.customCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
     return height;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 70;
 }
 
 
@@ -199,27 +209,24 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ChatTableViewCell *cell = [[ChatTableViewCell alloc]init];
-
-    cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
-
+    ChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
     if (self.sortedArray)
     {
         Message *message = [self.sortedArray objectAtIndex:indexPath.row];
         if ([message.isMyMessage isEqual: @0]) {
-//            cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
             [cell.leftLabel setText:message.text];
+            self.customCell.leftLabel.lineBreakMode = NSLineBreakByCharWrapping;
             cell.leftLabel.textAlignment = NSTextAlignmentLeft;
             cell.rightLabel.text = @"";
-            cell.rightLabel.hidden = YES;
+//            cell.rightLabel.hidden = YES;
         }
         else
         {
-//            cell = [tableView dequeueReusableCellWithIdentifier:@"Cell2"];
             [cell.rightLabel setText: message.text];
             cell.rightLabel.textAlignment = NSTextAlignmentRight;
+            self.customCell.rightLabel.lineBreakMode = NSLineBreakByCharWrapping;
             cell.leftLabel.text = @"";
-            cell.leftLabel.hidden = YES;
+//            cell.leftLabel.hidden = YES;
         }
     }
     return cell;
