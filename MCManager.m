@@ -40,6 +40,14 @@
 
 #pragma mark - MCSession Delegate Methods
 
+-(void)session:(MCSession *)session didReceiveCertificate:(NSArray *)certificate fromPeer:(MCPeerID *)peerID certificateHandler:(void (^)(BOOL))certificateHandler
+{
+    if (certificateHandler != nil)
+    {
+        certificateHandler(YES);
+    }
+}
+
 -(void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state
 {
     NSDictionary *dictionary = @{@"peerID": peerID,
@@ -146,21 +154,21 @@
 //    NSString *remotePeerName = peerID.displayName;
 
 //    BOOL shouldInvite = ([myPeerID.displayName compare:remotePeerName] == NSOrderedDescending);
-    [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
-    NSLog(@"Found peer and invited");
-
+//    NSLog(@"Found peer and invited");
+//
 //    if (shouldInvite)
 //    {
 //        NSLog(@"inviting advertising peer to session %@", peerID.displayName);
 //        [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
 //    }
 
-    if (self.advertisingUsers.count == 0)
+    if (self.advertisingUsers.count == 0 && peerID.displayName != self.peerID.displayName)
     {
         [self.advertisingUsers addObject:peerID];
-        [self.foundPeersArray addObject:self.peerID];
+        [self.foundPeersArray addObject:self.peerID.displayName];
         NSDictionary *dictionary = @{@"peerID": peerID};
 
+        [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
         [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:dictionary];
     }
     else
@@ -172,6 +180,8 @@
             NSDictionary *dictionary = @{@"peerID": peerID};
 
             NSLog(@"found Peer");
+
+            [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
 
             [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:dictionary];
         }
@@ -188,6 +198,7 @@
     [self.foundPeersArray removeObjectAtIndex:[self.foundPeersArray indexOfObject:peerID.displayName]];
 
     NSDictionary *dictionary = @{@"peerID": peerID};
+    NSLog(@"peer stopped advertising %@", peerID.displayName);
     [[NSNotificationCenter defaultCenter]postNotificationName:@"MCPeerStopAdvertising" object:nil userInfo:dictionary];
 }
 -(void)browser:(MCNearbyServiceBrowser *)browser didNotStartBrowsingForPeers:(NSError *)error
