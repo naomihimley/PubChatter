@@ -40,6 +40,8 @@
 @property AppDelegate *appDelegate;
 @property NSInteger counter;
 @property BOOL searchActivated;
+@property BOOL didCheckForBeaconMonitoring;
+@property BOOL initialMapLoad;
 -(void)userEnteredBar:(NSNotification *)notification;
 
 @end
@@ -55,11 +57,9 @@
                                                  name:@"userEnteredBar"
                                                object:nil];
 
-    // Add tap gesture recognizer that dismisses keyboard on a screen tap.
-//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
-//    [self.view addGestureRecognizer:tap];
-
     // Do set up work, set querystring, mapspan, and begin looking for user location.
+    self.didCheckForBeaconMonitoring = NO;
+    self.initialMapLoad = YES;
     self.queryString = @"bar";
     self.mapSpan = MKCoordinateSpanMake(0.01, 0.01);
     self.toggleControlOutlet.selectedSegmentIndex = 0;
@@ -103,7 +103,8 @@
             CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(self.userLocation.coordinate.latitude, self.userLocation.coordinate.longitude);
             MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, self.mapSpan);
             [self.mapView setRegion:region animated:YES];
-            [self getYelpJSONWithSearch:self.queryString andLongitude:self.userLocation.coordinate.longitude andLatitude:self.userLocation.coordinate.latitude andSortType:@"1" andNumResults:@"20"];
+            NSLog(@"setting map region");
+            self.mapView.delegate = self;
             break;
         }
     }
@@ -138,18 +139,6 @@
     }
 }
 
-- (void)search
-{
-    // Clear the map of previous annotations and set queryString from user input.
-    [self.mapView removeAnnotations:self.mapView.annotations];
-    self.queryString = self.searchBar.text;
-
-    // Finds the single best result based on querystring input and user's current location.
-    [self getYelpJSONWithSearch:self.queryString andLongitude:self.userLocation.coordinate.longitude andLatitude:self.userLocation.coordinate.latitude andSortType:@"0" andNumResults:@"1"];
-
-    // Disables search button until results are returned and dismisses keyboard.
-    [self.searchBar endEditing:YES];
-}
 
 #pragma mark - IBActions
 
@@ -313,23 +302,32 @@
             }
             self.barLocations = [NSArray arrayWithArray:arrayOfYelpBarObjects];
 
+            // Check if bar locations array is empty, if so, present alert to user that no results were found.
+            if (self.barLocations.count == 0) {
+                NSLog(@"No results found for this area");
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No results found in this area" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alert show];
+                self.redrawAreaButtonOutlet.enabled = YES;
+            }
+
+            else {
             // Create array of business image URL for lazy loading in tableView.
             NSMutableArray *tempArray = [[NSMutableArray alloc] init];
             for (YelpBar *yelpBar in self.barLocations) {
                 if (yelpBar.businessImageURL) {
                     [tempArray addObject:yelpBar.businessImageURL];
                 }
-
                 // If bar does not have a businessImageURL, use the placeholder image.
                 else {
                     NSURL *placeholderURL = [[NSBundle mainBundle] URLForResource:@"placeholder" withExtension:@"png"];
                     NSString *placeholderURLString = [NSString stringWithContentsOfURL:placeholderURL encoding:NSASCIIStringEncoding error:nil];
                     NSLog(@"%@", placeholderURLString);
                     [tempArray addObject:placeholderURLString];
+                    }
                 }
-            }
             self.arrImagesUrl = [NSArray arrayWithArray:tempArray];
             [self getBarLatandLong:self.barLocations];
+            }
         }
     }];
 }
@@ -340,9 +338,11 @@
 
     // Check if search results were found, if not, display the alert.
     if (self.barLocations.count == 0) {
-        [self showNoResultsFound];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"No results found matching %@", self.queryString] message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alert show];
+        NSLog(@"No search results");
     }
-    // Else there are YelpBars.
+    // Else, API call returned YelpBars.
     else {
     // Set counter to 0
     self.counter = 0;
@@ -359,11 +359,11 @@
                      if (self.searchActivated) {
                          NSLog(@"This was a search");
                          if (placemarks.count == 0) {
-                             // Address pulled from Yelp is bad, so attempt a natural language query based on YelpBar's name.
+                             // Address pulled from Yelp is bad and MapKit couldn't find a placemark, so attempt a natural language query based on YelpBar's name.
                              NSLog(@"Address from Yelp was bad");
                              [self performLanguageQuery];
                          }
-                         // If a placemark is found, set yelpBar lat/long, add annotation to map, and set mapView area around that location.
+                         // If a placemark is found from search, set yelpBar lat/long, add annotation to map, and set mapView area around that location.
                          else {
                              NSLog(@"Result found");
                              MKPlacemark *pmark = [placemarks firstObject];
@@ -375,7 +375,6 @@
                              barAnnotation.title = yelpBar.name;
                              barAnnotation.subtitle = [NSString stringWithFormat:@"%.02f miles", yelpBar.distanceFromUser * 0.000621371];
                              [self.mapView addAnnotation:barAnnotation];
-
                              self.mapSpan = MKCoordinateSpanMake(0.015, 0.015);
                              CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(pmark.location.coordinate.latitude, pmark.location.coordinate.longitude);
                              MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, self.mapSpan);
@@ -384,7 +383,7 @@
                          }
                      }
 
-                     // Else, the user is doing search in region, and must iterate through placemarks and place annotations on map.
+                     // Else, the user is doing a redraw in mapArea, so iterate through placemarks and place annotations on map.
                      else {
 
                      for (CLPlacemark* placemark in placemarks)
@@ -401,16 +400,21 @@
                         }
                          NSLog(@"This was a redraw in region");
                      }
-
                      // When counter equals the number of barLocations in the array, then tableview can be reloaded and buttons set to enabled.
                      if (self.counter == self.barLocations.count) {
+                        // Sort barLocations array by distance from user.
                          NSArray *array = [NSArray arrayWithArray:self.barLocations];
                          self.barLocations = nil;
                          NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"distanceFromUser" ascending:YES];
                          self.barLocations = [array sortedArrayUsingDescriptors:@[descriptor]];
+
+                         //Reload tableview
                          [self.tableView reloadData];
                          self.redrawAreaButtonOutlet.enabled = YES;
-                         NSLog(@"Finished search");
+                         if (!self.didCheckForBeaconMonitoring) {
+                             [self checkIfBeaconMonitoringIsAvailable];
+                         }
+                         NSLog(@"Done");
                    }
             }];
         }
@@ -467,6 +471,17 @@
     }
 }
 
+-(void)checkIfBeaconMonitoringIsAvailable
+{
+    if (![CLLocationManager isMonitoringAvailableForClass:[CLBeaconRegion class]]) {
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"iBeacon ranging not available on this device" message:@"iBeacon ranging available on iOS 5 or later" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    [alert show];
+    }
+    self.didCheckForBeaconMonitoring = YES;
+}
+
+#pragma mark - MapKit methods
+
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation
 {
     MKPinAnnotationView *pin = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil];
@@ -488,6 +503,16 @@ calloutAccessoryControlTapped:(UIControl *)control
         if ([view.annotation.title isEqualToString:bar.name]) {
             self.selectedBar = bar;
         }
+    }
+}
+
+- (void)mapViewDidFinishRenderingMap:(MKMapView *)mapView fullyRendered:(BOOL)fullyRendered
+{
+    if (self.initialMapLoad) {
+    NSLog(@"Map finished loading");
+    [self getMapRect];
+    [self getYelpJSONFromMapRedraw:@"bar" andSWLatitude:self.SWBoundsLatitude andSWLongitude:self.SWBoundsLongitude andNELatitude:self.NEBoundsLatitude andNELongitude:self.NEBoundsLongitude andSortType:@"0" andNumResults:@"20"];
+        self.initialMapLoad = NO;
     }
 }
 
@@ -558,34 +583,33 @@ calloutAccessoryControlTapped:(UIControl *)control
     }
 }
 
--(void)showNoResultsFound
-{
-    // Display "no results found alert"
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"No results found matching %@", self.queryString] message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
-        self.redrawAreaButtonOutlet.enabled = YES;
-        NSLog(@"No search results");
-}
-
--(void)dismissKeyboard
-{
-    [self.view endEditing:YES];
-}
-
+#pragma mark - Search bar delegate methods.
 // Enables search on keyPad search button pressed.
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-    // Perform search.
-        self.searchActivated  = YES;
-        [self search];
+    // Set search boolean.
+    self.searchActivated  = YES;
+
+    // Clear the map of previous annotations and set queryString from user input.
+    [self.mapView removeAnnotations:self.mapView.annotations];
+    self.queryString = self.searchBar.text;
+    self.searchBar.text = nil;
+
+    // Finds the single best result based on querystring input and user's current location.
+    [self getYelpJSONWithSearch:self.queryString andLongitude:self.userLocation.coordinate.longitude andLatitude:self.userLocation.coordinate.latitude andSortType:@"0" andNumResults:@"1"];
+
+    // Dismiss keyboard.
+    [self.searchBar endEditing:YES];
 }
 
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
-    [self dismissKeyboard];
+    // Dismiss keyboard and remove searchbar text.
     self.searchBar.text = nil;
+    [self.searchBar endEditing:YES];
 }
 
+#pragma  mark - Map coordinate methods
 
 -(void)getMapRect {
     MKMapRect mRect = self.mapView.visibleMapRect;
