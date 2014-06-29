@@ -103,7 +103,8 @@
     [self.cellArray addObject:cell];
     cell.tag = [self.users indexOfObject:dictionary];
     cell.cellUserDisplayName = peerID.displayName;
-    [cell.chatButton setTitle:@"Invite" forState:UIControlStateNormal];
+//    [cell.chatButton setTitle:@"Invite" forState:UIControlStateNormal];
+    [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
 
     cell.backgroundLabel.layer.masksToBounds = YES;
     cell.backgroundLabel.layer.borderColor = [[UIColor blackColor]CGColor];
@@ -164,7 +165,7 @@
     return cell;
 }
 
-#pragma mark - Hadling new advertising user
+#pragma mark - Handling new advertising user
 
 -(void)receivedNotificationOfUserAdvertising:(NSNotification *)notification
 {
@@ -200,7 +201,7 @@
     {
         if ([[dictionary objectForKey:@"username"] isEqual:peerID.displayName])
         {
-            if (self.users.count < self.appDelegate.mcManager.advertisingUsers.count)
+            if (self.users.count < self.appDelegate.mcManager.session.connectedPeers.count)
             {
                 NSDictionary *userDictionary = @{@"peerID": peerID,
                                                  @"user": dictionary};
@@ -220,15 +221,15 @@
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 
     NSDictionary *dictionary = [self.users objectAtIndex:indexPath.row];
-    MCPeerID *peerID = [dictionary objectForKey:@"peerID"];
+//    MCPeerID *peerID = [dictionary objectForKey:@"peerID"];
 
-    if ([button.titleLabel.text isEqual:@"Invite"])
-    {
-        [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30];
-
-        [button setTitle:@"Inviting" forState:UIControlStateNormal];
-        [button setEnabled:NO];
-    }
+//    if ([button.titleLabel.text isEqual:@"Invite"])
+//    {
+//        [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30];
+//
+//        [button setTitle:@"Inviting" forState:UIControlStateNormal];
+//        [button setEnabled:NO];
+//    }
 
     if ([button.titleLabel.text isEqual:@"Chat"])
     {
@@ -325,57 +326,57 @@
 
 -(void)receivedInvitationForConnection:(NSNotification *)notification
 {
-    self.userSendingInvitation = nil;
-    MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
-
-    for (NSDictionary *dictionary in self.users)
-    {
-        MCPeerID *peer = [dictionary objectForKey:@"peerID"];
-        if ([peer.displayName isEqual:peerID.displayName])
-        {
-            self.userSendingInvitation = dictionary;
-
-
-        }
-    }
-
-    PFUser *user = [self.userSendingInvitation objectForKey:@"user"];
-
-    NSString *alertViewTitle = [NSString stringWithFormat:@"%@ wants to connect and chat with you", [user objectForKey:@"name"]];
-    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:alertViewTitle message:nil delegate:self cancelButtonTitle:@"Decline" otherButtonTitles:@"Accept", nil];
-    [alertView show];
+//    self.userSendingInvitation = nil;
+//    MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
+//
+//    for (NSDictionary *dictionary in self.users)
+//    {
+//        MCPeerID *peer = [dictionary objectForKey:@"peerID"];
+//        if ([peer.displayName isEqual:peerID.displayName])
+//        {
+//            self.userSendingInvitation = dictionary;
+//
+//
+//        }
+//    }
+//
+//    PFUser *user = [self.userSendingInvitation objectForKey:@"user"];
+//
+//    NSString *alertViewTitle = [NSString stringWithFormat:@"%@ wants to connect and chat with you", [user objectForKey:@"name"]];
+//    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:alertViewTitle message:nil delegate:self cancelButtonTitle:@"Decline" otherButtonTitles:@"Accept", nil];
+//    [alertView show];
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    BOOL accept = (buttonIndex != alertView.cancelButtonIndex);
-
-    ListOfUsersTableViewCell *cell = [ListOfUsersTableViewCell new];
-
-    MCPeerID *peerID = [self.userSendingInvitation objectForKey:@"peerID"];
-
-    for (ListOfUsersTableViewCell *userCell in self.cellArray)
-    {
-        if ([userCell.cellUserDisplayName isEqual:peerID.displayName])
-        {
-            cell = userCell;
-        }
-    }
-    if (accept)
-    {
-        void (^invitationHandler)(BOOL, MCSession *) = [self.appDelegate.mcManager.invitationHandlerArray objectAtIndex:0];
-        invitationHandler(accept, self.appDelegate.mcManager.session);
-        [cell.chatButton setTitle:@"Connecting" forState:UIControlStateNormal];
-        cell.chatButton.titleLabel.textColor = [UIColor buttonColor];
-        [cell.chatButton setEnabled:NO];
-    }
-    else
-    {
-        void (^invitationHandler)(BOOL, MCSession *) = [self.appDelegate.mcManager.invitationHandlerArray objectAtIndex:0];
-        invitationHandler(0, self.appDelegate.mcManager.session);
-        [cell.chatButton setTitle:@"Declined" forState:UIControlStateNormal];
-        cell.chatButton.titleLabel.textColor = [UIColor buttonColor];
-    }
+//    BOOL accept = (buttonIndex != alertView.cancelButtonIndex);
+//
+//    ListOfUsersTableViewCell *cell = [ListOfUsersTableViewCell new];
+//
+//    MCPeerID *peerID = [self.userSendingInvitation objectForKey:@"peerID"];
+//
+//    for (ListOfUsersTableViewCell *userCell in self.cellArray)
+//    {
+//        if ([userCell.cellUserDisplayName isEqual:peerID.displayName])
+//        {
+//            cell = userCell;
+//        }
+//    }
+//    if (accept)
+//    {
+//        void (^invitationHandler)(BOOL, MCSession *) = [self.appDelegate.mcManager.invitationHandlerArray objectAtIndex:0];
+//        invitationHandler(accept, self.appDelegate.mcManager.session);
+//        [cell.chatButton setTitle:@"Connecting" forState:UIControlStateNormal];
+//        cell.chatButton.titleLabel.textColor = [UIColor buttonColor];
+//        [cell.chatButton setEnabled:NO];
+//    }
+//    else
+//    {
+//        void (^invitationHandler)(BOOL, MCSession *) = [self.appDelegate.mcManager.invitationHandlerArray objectAtIndex:0];
+//        invitationHandler(0, self.appDelegate.mcManager.session);
+//        [cell.chatButton setTitle:@"Declined" forState:UIControlStateNormal];
+//        cell.chatButton.titleLabel.textColor = [UIColor buttonColor];
+//    }
 
 }
 

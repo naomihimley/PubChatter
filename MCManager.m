@@ -44,6 +44,8 @@
 {
     NSDictionary *dictionary = @{@"peerID": peerID,
                                  @"state": [NSNumber numberWithInt:state]};
+    
+    NSLog(@"PEER Changing STATE %@: %i", peerID.displayName, state);
 
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidChangeStateNotification"
                                                             object:nil
@@ -122,32 +124,36 @@
     }
 }
 
--(void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error
-{
-}
-
--(void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress
-{
-}
-
--(void)session:(MCSession *)session didReceiveStream:(NSInputStream *)stream withName:(NSString *)streamName fromPeer:(MCPeerID *)peerID
-{
-}
-
 #pragma mark - MCNearbyServiceAdvertiser Delegate methods
 
 -(void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void (^)(BOOL, MCSession *))invitationHandler
 {
-    NSDictionary *dictionary = @{@"peerID":peerID};
-    self.invitationHandlerArray = [NSMutableArray arrayWithObject:[invitationHandler copy]];
+    NSLog(@"didReceiveInvitationFromPeer %@", peerID.displayName);
 
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"MCReceivedInvitation" object:nil userInfo:dictionary];
+    invitationHandler(YES, self.session);
+
+//    NSDictionary *dictionary = @{@"peerID":peerID};
+//    self.invitationHandlerArray = [NSMutableArray arrayWithObject:[invitationHandler copy]];
+//
+//    [[NSNotificationCenter defaultCenter]postNotificationName:@"MCReceivedInvitation" object:nil userInfo:dictionary];
 }
 
 #pragma mark - MCNearbyServiceBrowser Delegate Methods
 
 -(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
 {
+//    MCPeerID *myPeerID = self.session.myPeerID;
+//    NSString *remotePeerName = peerID.displayName;
+
+//    BOOL shouldInvite = ([myPeerID.displayName compare:remotePeerName] == NSOrderedDescending);
+    [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
+    NSLog(@"Found peer and invited");
+
+//    if (shouldInvite)
+//    {
+//        NSLog(@"inviting advertising peer to session %@", peerID.displayName);
+//        [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
+//    }
 
     if (self.advertisingUsers.count == 0)
     {
@@ -170,6 +176,8 @@
             [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:dictionary];
         }
     }
+
+    NSLog(@"self.foundpeerArray %@", self.foundPeersArray);
 
     [self.foundPeersArray addObject:peerID.displayName];
 }
@@ -221,6 +229,22 @@
     self.browser.delegate = self;
     [self.browser startBrowsingForPeers];
 }
+
+#pragma mark - Unused Delegate Methods
+
+
+-(void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error
+{
+}
+
+-(void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress
+{
+}
+
+-(void)session:(MCSession *)session didReceiveStream:(NSInputStream *)stream withName:(NSString *)streamName fromPeer:(MCPeerID *)peerID
+{
+}
+
 
 
 @end

@@ -369,11 +369,16 @@
                                                 <action selector="onButtonTappedSendInvitation:" destination="2zl-ft-bxb" eventType="touchUpInside" id="nMg-hI-RLc"/>
                                             </connections>
                                         </button>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Chat_Recieved_Icon" translatesAutoresizingMaskIntoConstraints="NO" id="hEu-aj-iy8">
+                                            <rect key="frame" x="80" y="7" width="20" height="20"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </imageView>
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="backgroundLabel" destination="iQk-6Y-ddY" id="DZ5-dA-Avz"/>
                                     <outlet property="chatButton" destination="pOd-aK-sZV" id="5ew-Jx-xIY"/>
+                                    <outlet property="chatReceivedImage" destination="hEu-aj-iy8" id="5au-KF-SRZ"/>
                                     <outlet property="genderLabel" destination="IAn-od-EXS" id="1Tw-3V-ECS"/>
                                     <outlet property="userAgeLabel" destination="kNe-GZ-5T4" id="1al-BR-QAF"/>
                                     <outlet property="userImage" destination="H4n-xq-CAP" id="4qk-HO-AwL"/>
@@ -1002,6 +1007,7 @@
     </scenes>
     <resources>
         <image name="Chat_Icon3" width="30" height="30"/>
+        <image name="Chat_Recieved_Icon" width="20" height="20"/>
         <image name="Map_Icon" width="30" height="30"/>
         <image name="ProfileIcon" width="30" height="30"/>
     </resources>
