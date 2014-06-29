@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface UIColor (DesignColors)
-+ (UIColor *)cellBackgroundColor;
-+ (UIColor *)buttonColor;
 + (UIColor *)backgroundColor;
++ (UIColor *)buttonColor;
++ (UIColor *)accentColor;
 + (UIColor *)navBarColor;
 + (UIColor *)nameColor;
 

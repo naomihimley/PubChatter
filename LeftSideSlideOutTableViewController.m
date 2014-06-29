@@ -94,9 +94,9 @@
     cell.userAgeLabel.textColor = [UIColor whiteColor];
     cell.genderLabel.textColor = [UIColor whiteColor];
     cell.backgroundColor = [UIColor clearColor];
-    cell.chatButton.backgroundColor = [UIColor buttonColor];
-    cell.chatButton.titleLabel.textColor = [UIColor whiteColor];
-    cell.backgroundLabel.backgroundColor = [UIColor cellBackgroundColor];
+    cell.chatButton.backgroundColor = [UIColor clearColor];
+    cell.chatButton.titleLabel.textColor = [UIColor buttonColor];
+    cell.backgroundLabel.backgroundColor = [UIColor backgroundColor];
 
     cell.userNameLabel.text = [user objectForKey:@"name"];
     cell.chatButton.tag = indexPath.row;
@@ -105,14 +105,7 @@
     cell.cellUserDisplayName = peerID.displayName;
     [cell.chatButton setTitle:@"Invite" forState:UIControlStateNormal];
 
-    cell.chatButton.layer.masksToBounds = YES;
-    cell.chatButton.layer.cornerRadius = 5.0f;
-    cell.chatButton.layer.borderWidth = 1.0f;
-    cell.chatButton.layer.borderColor = [[UIColor blackColor]CGColor];
-
     cell.backgroundLabel.layer.masksToBounds = YES;
-    cell.backgroundLabel.layer.cornerRadius = 5.0f;
-    cell.backgroundLabel.layer.borderWidth = 1.0f;
     cell.backgroundLabel.layer.borderColor = [[UIColor blackColor]CGColor];
     
 
@@ -126,30 +119,45 @@
         cell.userAgeLabel.text = @"";
     }
 
-    if ([user [@"gender"] isEqual:@0])
+    if ([user [@"gender"] isEqual:@0] && [user objectForKey:@"age"])
     {
-        cell.genderLabel.text = @"F";
+        cell.genderLabel.text = [NSString stringWithFormat:@"%@, female", [user objectForKey:@"age"]];
+        [cell.genderLabel sizeToFit];
     }
-    else if ([user[@"gender"] isEqual:@1])
+    else if ([user[@"gender"] isEqual:@1] && [user objectForKey:@"age"])
     {
-        cell.genderLabel.text = @"M";
+        cell.genderLabel.text = [NSString stringWithFormat:@"%@, male", [user objectForKey:@"age"]];
+        [cell.genderLabel sizeToFit];
+    }
+    else if ([user [@"gender"] isEqual:@2] && [user objectForKey:@"age"])
+    {
+        cell.genderLabel.text = [NSString stringWithFormat:@"%@, other", [user objectForKey:@"age"]];
+        [cell.genderLabel sizeToFit];
+    }
+    else if ([user [@"gender"] isEqual:@0])
+    {
+        cell.genderLabel.text = @"female";
+    }
+    else if ([user [@"gender"] isEqual:@1])
+    {
+        cell.genderLabel.text = @"male";
     }
     else if ([user [@"gender"] isEqual:@2])
     {
-        cell.genderLabel.text = @"Other";
-        [cell.genderLabel sizeToFit];
+        cell.genderLabel.text = @"other";
+    }
+    else if ([user objectForKey:@"age"])
+    {
+        cell.genderLabel.text = [NSString stringWithFormat:@"%@", [user objectForKey:@"age"]];
     }
     else
     {
-        cell.genderLabel.text = @"";
+        cell.genderLabel.text = @"No Info";
     }
 
     PFFile *imageFile = [user objectForKey:@"picture"];
     [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-//        cell.userImage.layer.cornerRadius = cell.userImage.bounds.size.width /2.0;
         cell.userImage.layer.masksToBounds = YES;
-        cell.userImage.layer.cornerRadius = 5.0f;
-        cell.userImage.layer.borderWidth = 1.0f;
         cell.userImage.layer.borderColor = [[UIColor blackColor]CGColor];
         cell.userImage.image = [UIImage imageWithData:data];
     }];
@@ -224,10 +232,10 @@
 
     if ([button.titleLabel.text isEqual:@"Chat"])
     {
-        self.selectedChatButton.backgroundColor = [UIColor buttonColor];
+        self.selectedChatButton.titleLabel.textColor = [UIColor buttonColor];
         self.selectedChatButton = nil;
         [[NSNotificationCenter defaultCenter]postNotificationName:@"PeerToChatWith" object:nil userInfo:dictionary];
-        button.backgroundColor = [UIColor nameColor];
+        button.titleLabel.textColor = [UIColor accentColor];
         self.selectedChatButton = button;
     }
 }
@@ -278,6 +286,7 @@
             if ([cell.chatButton.titleLabel.text isEqual: @"Connecting"])
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    cell.chatButton.titleLabel.textColor = [UIColor accentColor];
                     [cell.chatButton setTitle:@"Declined" forState:UIControlStateNormal];
                     [cell.chatButton setEnabled:NO];
                 });
@@ -286,6 +295,7 @@
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [cell.chatButton setTitle:@"Invite" forState:UIControlStateNormal];
+                    cell.chatButton.titleLabel.textColor = [UIColor buttonColor];
                     [cell.chatButton setEnabled:YES];
                 });
             }
@@ -356,7 +366,7 @@
         void (^invitationHandler)(BOOL, MCSession *) = [self.appDelegate.mcManager.invitationHandlerArray objectAtIndex:0];
         invitationHandler(accept, self.appDelegate.mcManager.session);
         [cell.chatButton setTitle:@"Connecting" forState:UIControlStateNormal];
-        cell.chatButton.backgroundColor = [UIColor buttonColor];
+        cell.chatButton.titleLabel.textColor = [UIColor buttonColor];
         [cell.chatButton setEnabled:NO];
     }
     else
@@ -364,6 +374,7 @@
         void (^invitationHandler)(BOOL, MCSession *) = [self.appDelegate.mcManager.invitationHandlerArray objectAtIndex:0];
         invitationHandler(0, self.appDelegate.mcManager.session);
         [cell.chatButton setTitle:@"Declined" forState:UIControlStateNormal];
+        cell.chatButton.titleLabel.textColor = [UIColor buttonColor];
     }
 
 }

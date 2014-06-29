@@ -9,15 +9,17 @@
 #import "OPPViewController.h"
 #import "AppDelegate.h"
 #import "ChatBoxViewController.h"
+#import "UIColor+DesignColors.h"
 
 @interface OPPViewController ()<UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *userNameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *userAgeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *sexLabel;
 @property (weak, nonatomic) IBOutlet UITextView *bioLabel;
 @property (weak, nonatomic) IBOutlet UILabel *sexualOrientationLabel;
 @property (weak, nonatomic) IBOutlet UILabel *favDrinkLabel;
+@property (weak, nonatomic) IBOutlet UINavigationBar *navBar;
+@property (weak, nonatomic) IBOutlet UIView *backgroundLayoutView;
 @property AppDelegate *appDelegate;
 
 -(void)receivedInvitationForConnection: (NSNotification *)notification;
@@ -33,50 +35,91 @@
     self.chatArray = [NSMutableArray array];
     self.chatDictionaryArray = [NSMutableArray array];
 
+    self.userNameLabel.textColor =[UIColor nameColor];
+    self.navBar.backgroundColor = [UIColor navBarColor];
+    self.backgroundLayoutView.backgroundColor = [UIColor backgroundColor];
+    self.sexualOrientationLabel.textColor = [UIColor whiteColor];
+    self.sexLabel.textColor = [UIColor whiteColor];
+    self.bioLabel.editable = YES;
+    self.bioLabel.textColor = [UIColor whiteColor];
+    self.bioLabel.editable = NO;
+    self.favDrinkLabel.textColor = [UIColor whiteColor];
+    self.bioLabel.backgroundColor = [UIColor clearColor];
+    self.view.backgroundColor = [UIColor blackColor];
+
     // Set name and age label.
-    self.userNameLabel.text = [NSString stringWithFormat:@"%@, %@", [self.user objectForKey:@"name"],[self.user objectForKey:@"age"]];
+    self.userNameLabel.text = [self.user objectForKey:@"name"];
 
     // Set gender label.
-    if ([self.user [@"gender"] isEqual:@0]) {
-        self.sexLabel.text = @"F";
+    if ([self.user [@"gender"] isEqual:@0] && [self.user objectForKey:@"age"])
+    {
+        self.sexLabel.text = [NSString stringWithFormat:@"%@, female", [self.user objectForKey:@"age"]];
+        [self.sexLabel sizeToFit];
     }
-    else if ([self.user[@"gender"] isEqual:@1]) {
-        self.sexLabel.text = @"M";
+    else if ([self.user[@"gender"] isEqual:@1] && [self.user objectForKey:@"age"])
+    {
+       self.sexLabel.text = [NSString stringWithFormat:@"%@, male", [self.user objectForKey:@"age"]];
+        [self.sexLabel sizeToFit];
     }
-    else if ([self.user [@"gender"] isEqual:@2]) {
-        self.sexLabel.text = @"Other";
+    else if ([self.user [@"gender"] isEqual:@2] && [self.user objectForKey:@"age"])
+    {
+       self.sexLabel.text = [NSString stringWithFormat:@"%@, other", [self.user objectForKey:@"age"]];
+        [self.sexLabel sizeToFit];
     }
-    else {
-        self.sexLabel.text = @"";
+    else if ([self.user [@"gender"] isEqual:@0])
+    {
+        self.sexLabel.text = @"male";
+    }
+    else if ([self.user [@"gender"] isEqual:@1])
+    {
+         self.sexLabel.text = @"female";
+    }
+    else if ([self.user [@"gender"] isEqual:@2])
+    {
+         self.sexLabel.text = @"other";
+    }
+    else if ([self.user objectForKey:@"age"])
+    {
+        self.sexLabel.text = [NSString stringWithFormat:[self.user objectForKey:@"age"]];
+    }
+    else
+    {
+        self.sexLabel.text = @"No Info";
     }
 
     // Set about me.
-    if ([self.user objectForKey:@"bio"]) {
+    if ([self.user objectForKey:@"bio"])
+    {
         NSString *name = [self.user objectForKey:@"name"];
         UIFont *boldFont = [UIFont boldSystemFontOfSize:12.0];
         NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"About %@\n%@", name, [self.user objectForKey:@"bio"]]];
         [attrString addAttribute: NSFontAttributeName value: boldFont range: NSMakeRange(0, 6 + name.length)];
         self.bioLabel.attributedText = attrString;
     }
-    else {
-        self.bioLabel.text = @"";
+    else
+    {
+        self.bioLabel.text = @"No Bio Info";
     }
 
     // Set sexual orientation label.
-    if ([self.user [@"sexualOrientation"] isEqual:@0]) {
+    if ([self.user [@"sexualOrientation"] isEqual:@0])
+    {
         self.sexualOrientationLabel.text = @"Interested in: Men";
         [self.sexualOrientationLabel sizeToFit];
     }
-    else if ([self.user[@"sexualOrientation"] isEqual:@1]) {
+    else if ([self.user[@"sexualOrientation"] isEqual:@1])
+    {
         self.sexualOrientationLabel.text = @"Interested in: Women";
         [self.sexualOrientationLabel sizeToFit];
     }
-    else if ([self.user [@"sexualOrientation"] isEqual:@2]) {
+    else if ([self.user [@"sexualOrientation"] isEqual:@2])
+    {
         self.sexualOrientationLabel.text = @"Bisexual";
         [self.sexualOrientationLabel sizeToFit];
     }
-    else {
-        self.sexualOrientationLabel.text = @"";
+    else
+    {
+        self.sexualOrientationLabel.text = @"No Info";
     }
 
     // Set profile image.

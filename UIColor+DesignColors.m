@@ -11,7 +11,7 @@
 @implementation UIColor (DesignColors)
 
 
-+ (UIColor *)cellBackgroundColor
++ (UIColor *)backgroundColor
 {
     CGFloat red = 56.0/255.0;
     CGFloat green = 66.0/255.0;
@@ -19,7 +19,7 @@
     return [UIColor colorWithRed:red green:green blue:blue alpha:1];
 }
 
-+ (UIColor *)buttonColor
++ (UIColor *)accentColor
 {
     CGFloat red = 139.0/255.0;
     CGFloat green = 20.0/255.0;
@@ -27,7 +27,7 @@
     return [UIColor colorWithRed:red green:green blue:blue alpha:1];
 }
 
-+ (UIColor *)backgroundColor
++ (UIColor *)buttonColor
 {
     CGFloat red = 213.0/255.0;
     CGFloat green = 50.0/255.0;
