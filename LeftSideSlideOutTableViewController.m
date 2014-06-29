@@ -68,6 +68,11 @@
     self.tableView.backgroundColor = [UIColor whiteColor];
 }
 
+-(void)dealloc
+{
+    self.users = nil;
+}
+
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -97,7 +102,7 @@
     cell.genderLabel.textColor = [UIColor whiteColor];
     cell.backgroundColor = [UIColor clearColor];
     cell.chatButton.backgroundColor = [UIColor clearColor];
-    cell.chatButton.titleLabel.textColor = [UIColor buttonColor];
+//    cell.chatButton.titleLabel.textColor = [UIColor buttonColor];
     cell.backgroundLabel.backgroundColor = [UIColor backgroundColor];
 
     cell.userNameLabel.text = [user objectForKey:@"name"];
@@ -106,6 +111,7 @@
     cell.tag = [self.users indexOfObject:dictionary];
     cell.cellUserDisplayName = peerID.displayName;
 //    [cell.chatButton setTitle:@"Invite" forState:UIControlStateNormal];
+    [cell.chatButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
     [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
 
     cell.backgroundLabel.layer.masksToBounds = YES;
@@ -215,6 +221,14 @@
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 
     NSDictionary *dictionary = [self.users objectAtIndex:indexPath.row];
+
+    self.selectedChatButton.titleLabel.textColor = [UIColor buttonColor];
+    self.selectedChatButton = nil;
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"PeerToChatWith" object:nil userInfo:dictionary];
+    button.titleLabel.textColor = [UIColor accentColor];
+    [cell.chatReceivedImage setHidden:YES];
+    self.selectedChatButton = button;
+
 //    MCPeerID *peerID = [dictionary objectForKey:@"peerID"];
 
 //    if ([button.titleLabel.text isEqual:@"Invite"])
@@ -224,16 +238,6 @@
 //        [button setTitle:@"Inviting" forState:UIControlStateNormal];
 //        [button setEnabled:NO];
 //    }
-
-    if ([button.titleLabel.text isEqual:@"Chat"])
-    {
-        self.selectedChatButton.titleLabel.textColor = [UIColor buttonColor];
-        self.selectedChatButton = nil;
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"PeerToChatWith" object:nil userInfo:dictionary];
-        button.titleLabel.textColor = [UIColor accentColor];
-        [cell.chatReceivedImage setHidden:YES];
-        self.selectedChatButton = button;
-    }
 }
 
 #pragma mark - Private method for handling the changing of peer's state

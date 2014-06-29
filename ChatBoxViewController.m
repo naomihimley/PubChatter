@@ -22,6 +22,8 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property NSArray *sortedArray;
 @property ChatTableViewCell *customCell;
+@property CGFloat chatTextFieldy;
+@property (weak, nonatomic) IBOutlet UIView *chatFieldView;
 
 -(void)didReceiveDataWithNotification: (NSNotification *)notification;
 -(void)sendMyMessage;
@@ -33,6 +35,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.chatTextFieldy = self.chatFieldView.frame.origin.y;
     self.sortedArray = [NSArray new];
     self.fetchedResultsController.delegate = self;
     self.fetchedResultsController = [[NSFetchedResultsController alloc]init];
@@ -70,6 +73,33 @@
 {
     [self sendMyMessage];
     return YES;
+}
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    [UIView beginAnimations:@"Animate Text Field Up" context:nil];
+    [UIView setAnimationDuration:0.3];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+
+    self.chatFieldView.frame = CGRectMake(self.chatFieldView.frame.origin.x,
+                                          322,
+                                          self.chatFieldView.frame.size.width,
+                                          self.chatFieldView.frame.size.height);
+    [UIView commitAnimations];
+}
+
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    [UIView beginAnimations:@"Animate Text Field Back" context:nil];
+    [UIView setAnimationDuration:0.3];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+
+    self.chatFieldView.frame = CGRectMake(self.chatFieldView.frame.origin.x,
+                                          self.chatTextFieldy,
+                                          self.chatFieldView.frame.size.width,
+                                          self.chatFieldView.frame.size.height);
+
+    [UIView commitAnimations];
 }
 
 #pragma mark - Notification Methods
