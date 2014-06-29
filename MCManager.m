@@ -142,18 +142,18 @@
 
 -(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
 {
-//    MCPeerID *myPeerID = self.session.myPeerID;
-//    NSString *remotePeerName = peerID.displayName;
+    MCPeerID *myPeerID = self.session.myPeerID;
+    NSString *remotePeerName = peerID.displayName;
 
-//    BOOL shouldInvite = ([myPeerID.displayName compare:remotePeerName] == NSOrderedDescending);
-    [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
+    BOOL shouldInvite = ([myPeerID.displayName compare:remotePeerName] == NSOrderedDescending);
+//    [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
     NSLog(@"Found peer and invited");
 
-//    if (shouldInvite)
-//    {
-//        NSLog(@"inviting advertising peer to session %@", peerID.displayName);
-//        [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
-//    }
+    if (shouldInvite)
+    {
+        NSLog(@"inviting advertising peer to session %@", peerID.displayName);
+        [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
+    }
 
     if (self.advertisingUsers.count == 0)
     {
@@ -188,6 +188,7 @@
     [self.foundPeersArray removeObjectAtIndex:[self.foundPeersArray indexOfObject:peerID.displayName]];
 
     NSDictionary *dictionary = @{@"peerID": peerID};
+    NSLog(@"peer stopped advertising %@", peerID.displayName);
     [[NSNotificationCenter defaultCenter]postNotificationName:@"MCPeerStopAdvertising" object:nil userInfo:dictionary];
 }
 -(void)browser:(MCNearbyServiceBrowser *)browser didNotStartBrowsingForPeers:(NSError *)error

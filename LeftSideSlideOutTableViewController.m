@@ -240,6 +240,10 @@
 
 -(void)peerDidChangeStateWithNotification:(NSNotification *)notification
 {
+    if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
+    {
+          [self.appDelegate.mcManager.browser invitePeer:[[notification userInfo] objectForKey:@"peerID"] toSession:self.appDelegate.mcManager.session withContext:nil timeout:30.0];
+    }
 //    MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
 //
 //    NSDictionary *userDictionary = [NSDictionary new];
@@ -324,7 +328,7 @@
     MCPeerID *peerID = [[notification userInfo] objectForKey:@"peerID"];
 
     NSDictionary *userDictionary = [NSDictionary new];
-    ListOfUsersTableViewCell *cell = [ListOfUsersTableViewCell new];
+//    ListOfUsersTableViewCell *cell = [ListOfUsersTableViewCell new];
 
     for (NSDictionary *dictionary in self.users)
     {
