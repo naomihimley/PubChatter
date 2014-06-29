@@ -28,6 +28,7 @@
 @property NSArray *barLocations;
 @property YelpBar *selectedBar;
 @property NSArray *arrImagesUrl;
+@property (weak, nonatomic) IBOutlet UIButton *currentLocationButtonOutlet;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *toggleControlOutlet;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UIButton *redrawAreaButtonOutlet;
@@ -63,6 +64,7 @@
     self.queryString = @"bar";
     self.mapSpan = MKCoordinateSpanMake(0.01, 0.01);
     self.toggleControlOutlet.selectedSegmentIndex = 0;
+    self.currentLocationButtonOutlet.hidden = NO;
     self.mapView.hidden = NO;
     self.redrawAreaButtonOutlet.hidden = NO;
     self.redrawAreaButtonOutlet.layer.cornerRadius = 5.0f;
@@ -105,6 +107,8 @@
             [self.mapView setRegion:region animated:YES];
             NSLog(@"setting map region");
             self.mapView.delegate = self;
+            self.mapView.showsUserLocation = YES;
+            self.currentLocationButtonOutlet.enabled = YES;
             break;
         }
     }
@@ -161,6 +165,11 @@
     [self segmentChanged:sender];
 }
 
+- (IBAction)snapToCurrentLocation:(id)sender
+{
+    self.currentLocationButtonOutlet.enabled = NO;
+    [self.locationManager startUpdatingLocation];
+}
 
 // Gets JSON data from Yelp and sets YelpBar custom class properties.
 -(void)getYelpJSONWithSearch:(NSString *)query andLongitude:(CGFloat)longitude andLatitude:(CGFloat)latitude andSortType:(NSString*)sortType andNumResults:(NSString *)numResults
@@ -484,10 +493,15 @@
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation
 {
+    if ([annotation isKindOfClass:MKUserLocation.class]) {
+        return nil;
+    }
+    else {
     MKPinAnnotationView *pin = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil];
     pin.canShowCallout = YES;
     pin.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
     return pin;
+    }
 }
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view
@@ -557,11 +571,13 @@ calloutAccessoryControlTapped:(UIControl *)control
 {
     if ([sender selectedSegmentIndex] == 0) {
             self.mapView.hidden = NO;
+            self.currentLocationButtonOutlet.hidden = NO;
             self.tableView.hidden = YES;
             self.redrawAreaButtonOutlet.hidden = NO;
         }
         else
         {
+            self.currentLocationButtonOutlet.hidden = YES;
             self.mapView.hidden = YES;
             self.tableView.hidden = NO;
             self.redrawAreaButtonOutlet.hidden = YES;
@@ -572,11 +588,13 @@ calloutAccessoryControlTapped:(UIControl *)control
 {
     if (index == 0) {
         self.mapView.hidden = NO;
+        self.currentLocationButtonOutlet.hidden = NO;
         self.tableView.hidden = YES;
         self.redrawAreaButtonOutlet.hidden = NO;
     }
     else
     {
+        self.currentLocationButtonOutlet.hidden = YES;
         self.mapView.hidden = YES;
         self.tableView.hidden = NO;
         self.redrawAreaButtonOutlet.hidden = YES;
