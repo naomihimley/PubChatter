@@ -14,7 +14,6 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.rightLabel.textAlignment = NSTextAlignmentRight;
     }
     return self;
 }
@@ -30,5 +29,6 @@
 
     // Configure the view for the selected state
 }
+
 
 @end
