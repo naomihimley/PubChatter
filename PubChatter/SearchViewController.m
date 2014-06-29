@@ -474,7 +474,7 @@
 -(void)checkIfBeaconMonitoringIsAvailable
 {
     if (![CLLocationManager isMonitoringAvailableForClass:[CLBeaconRegion class]]) {
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Unable To Monitor Location" message:@"Only works on iOS 5 and later" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"iBeacon ranging not available on this device" message:@"iBeacon ranging available on iOS 5 or later" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
     [alert show];
     }
     self.didCheckForBeaconMonitoring = YES;
