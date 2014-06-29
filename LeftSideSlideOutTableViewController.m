@@ -96,7 +96,7 @@
     cell.backgroundColor = [UIColor clearColor];
     cell.chatButton.backgroundColor = [UIColor buttonColor];
     cell.chatButton.titleLabel.textColor = [UIColor whiteColor];
-    cell.backgroundLabel.backgroundColor = [UIColor cellBackgroundColor];
+    cell.backgroundLabel.backgroundColor = [UIColor backgroundColor];
 
     cell.userNameLabel.text = [user objectForKey:@"name"];
     cell.chatButton.tag = indexPath.row;
