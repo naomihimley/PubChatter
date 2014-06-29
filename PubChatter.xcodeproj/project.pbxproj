@@ -13,6 +13,7 @@
 		0EB32005194BD2D4005A3B82 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EB32004194BD2D4005A3B82 /* Parse.framework */; };
 		0EB3200B194CBDD0005A3B82 /* TDOAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB3200A194CBDD0005A3B82 /* TDOAuth.m */; };
 		0EB32011194E4AC3005A3B82 /* SearchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB32010194E4AC3005A3B82 /* SearchTableViewCell.m */; };
+		0EC9E01119601ABC0060C5A7 /* placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EC9E01019601ABC0060C5A7 /* placeholder.png */; };
 		0ECEAEE8194F69A000B92C40 /* YelpBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAEE7194F69A000B92C40 /* YelpBar.m */; };
 		0ECEAEEB194F6FAC00B92C40 /* BarDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAEEA194F6FAC00B92C40 /* BarDetailViewController.m */; };
 		0ECEAEEE194F8AD200B92C40 /* BarWebpageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAEED194F8AD200B92C40 /* BarWebpageViewController.m */; };
@@ -103,6 +104,7 @@
 		0EB3200A194CBDD0005A3B82 /* TDOAuth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TDOAuth.m; sourceTree = "<group>"; };
 		0EB3200F194E4AC3005A3B82 /* SearchTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchTableViewCell.h; sourceTree = "<group>"; };
 		0EB32010194E4AC3005A3B82 /* SearchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchTableViewCell.m; sourceTree = "<group>"; };
+		0EC9E01019601ABC0060C5A7 /* placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = placeholder.png; sourceTree = "<group>"; };
 		0ECEAEE6194F69A000B92C40 /* YelpBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YelpBar.h; sourceTree = "<group>"; };
 		0ECEAEE7194F69A000B92C40 /* YelpBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YelpBar.m; sourceTree = "<group>"; };
 		0ECEAEE9194F6FAC00B92C40 /* BarDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BarDetailViewController.h; path = ../BarDetailViewController.h; sourceTree = "<group>"; };
@@ -464,6 +466,7 @@
 				0ECEAF12195884E100B92C40 /* Bar.m */,
 				0ECEAF0E19587F4E00B92C40 /* Rating.h */,
 				0ECEAF0F19587F4E00B92C40 /* Rating.m */,
+				0EC9E01019601ABC0060C5A7 /* placeholder.png */,
 				B0782C53194BB3700022E6E7 /* Images.xcassets */,
 				B0782C42194BB3700022E6E7 /* Supporting Files */,
 			);
@@ -589,6 +592,7 @@
 				B0782C54194BB3700022E6E7 /* Images.xcassets in Resources */,
 				B0782C46194BB3700022E6E7 /* InfoPlist.strings in Resources */,
 				B0782C4F194BB3700022E6E7 /* Main.storyboard in Resources */,
+				0EC9E01119601ABC0060C5A7 /* placeholder.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
