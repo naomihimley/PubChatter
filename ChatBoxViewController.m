@@ -125,39 +125,28 @@
 # pragma mark - TableViewDelegate methods
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    Message *message = [self.sortedArray objectAtIndex:indexPath.row];
-//    CGFloat width = 225;
-//    UIFont *font = [UIFont systemFontOfSize:15];
-//    NSAttributedString *string =[[NSAttributedString alloc]
-//                                 initWithString:message.text
-//                                 attributes:@ {NSFontAttributeName:font}];
-//    CGRect rect = [string boundingRectWithSize:(CGSize){width, MAXFLOAT} options:NSStringDrawingUsesLineFragmentOrigin context:nil];
-//    CGSize size = rect.size;
-//    return size.height;
 
+//this way works for doing the left label
+    if (!self.customCell)
+    {
+        self.customCell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    }
 
-        if (!self.customCell) {
-            self.customCell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
-        }
-
-        ///configure the cell
+    ///configure the cell
     Message *message = [self.sortedArray objectAtIndex:indexPath.row];
-    if ([message.isMyMessage isEqual: @0]) {
+    if ([message.isMyMessage isEqual: @0])
+    {
         [self.customCell.leftLabel setText:message.text];
     }
     else
     {
         [self.customCell.rightLabel setText:message.text];
+        
     }
 
-    ///layout cell
     [self.customCell layoutIfNeeded];
-
-    //get height
     CGFloat height = [self.customCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
-    
     return height;
-
 }
 
 
@@ -170,12 +159,13 @@
 {
     ChatTableViewCell *cell = [[ChatTableViewCell alloc]init];
 
+    cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
 
     if (self.sortedArray)
     {
         Message *message = [self.sortedArray objectAtIndex:indexPath.row];
         if ([message.isMyMessage isEqual: @0]) {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+//            cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
             [cell.leftLabel setText:message.text];
             cell.leftLabel.textAlignment = NSTextAlignmentLeft;
             cell.rightLabel.text = @"";
@@ -183,7 +173,7 @@
         }
         else
         {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"Cell2"];
+//            cell = [tableView dequeueReusableCellWithIdentifier:@"Cell2"];
             [cell.rightLabel setText: message.text];
             cell.rightLabel.textAlignment = NSTextAlignmentRight;
             cell.leftLabel.text = @"";
