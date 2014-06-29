@@ -201,7 +201,7 @@
     {
         if ([[dictionary objectForKey:@"username"] isEqual:peerID.displayName])
         {
-            if (self.users.count < self.appDelegate.mcManager.session.connectedPeers.count)
+            if (self.users.count < self.appDelegate.mcManager.advertisingUsers.count)
             {
                 NSDictionary *userDictionary = @{@"peerID": peerID,
                                                  @"user": dictionary};
