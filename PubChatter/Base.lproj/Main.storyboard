@@ -68,7 +68,7 @@
                                 <color key="backgroundColor" red="0.90196079015731812" green="0.90196079015731812" blue="0.90196079015731812" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V0L-Rb-Lxn">
-                                <rect key="frame" x="0.0" y="10" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="19" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <items>
                                     <navigationItem title="Title" id="hcy-eh-bFH">
@@ -107,7 +107,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TKH-Qn-2Hg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="189" y="59"/>
+            <point key="canvasLocation" x="215" y="67"/>
         </scene>
         <!--Chat Box View Controller-->
         <scene sceneID="Fek-hV-Cfv">
@@ -381,11 +381,16 @@
                                                 <action selector="onButtonTappedSendInvitation:" destination="2zl-ft-bxb" eventType="touchUpInside" id="nMg-hI-RLc"/>
                                             </connections>
                                         </button>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Chat_Recieved_Icon" translatesAutoresizingMaskIntoConstraints="NO" id="hEu-aj-iy8">
+                                            <rect key="frame" x="80" y="7" width="20" height="20"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </imageView>
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="backgroundLabel" destination="iQk-6Y-ddY" id="DZ5-dA-Avz"/>
                                     <outlet property="chatButton" destination="pOd-aK-sZV" id="5ew-Jx-xIY"/>
+                                    <outlet property="chatReceivedImage" destination="hEu-aj-iy8" id="5au-KF-SRZ"/>
                                     <outlet property="genderLabel" destination="IAn-od-EXS" id="1Tw-3V-ECS"/>
                                     <outlet property="userAgeLabel" destination="kNe-GZ-5T4" id="1al-BR-QAF"/>
                                     <outlet property="userImage" destination="H4n-xq-CAP" id="4qk-HO-AwL"/>
@@ -420,9 +425,6 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="x0k-DN-OnA">
                                 <rect key="frame" x="0.0" y="150" width="320" height="320"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <connections>
-                                    <outlet property="delegate" destination="vXZ-lx-hvc" id="M6k-7f-1o1"/>
-                                </connections>
                             </mapView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="63" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="yRl-4U-zPV">
                                 <rect key="frame" x="0.0" y="154" width="343" height="365"/>
@@ -1014,6 +1016,7 @@
     </scenes>
     <resources>
         <image name="Chat_Icon3" width="30" height="30"/>
+        <image name="Chat_Recieved_Icon" width="20" height="20"/>
         <image name="Map_Icon" width="30" height="30"/>
         <image name="ProfileIcon" width="30" height="30"/>
     </resources>
