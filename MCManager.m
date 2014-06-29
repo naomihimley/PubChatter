@@ -142,25 +142,25 @@
 
 -(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
 {
-    MCPeerID *myPeerID = self.session.myPeerID;
-    NSString *remotePeerName = peerID.displayName;
+//    MCPeerID *myPeerID = self.session.myPeerID;
+//    NSString *remotePeerName = peerID.displayName;
 
-    BOOL shouldInvite = ([myPeerID.displayName compare:remotePeerName] == NSOrderedDescending);
-//    [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
-    NSLog(@"Found peer and invited");
+//    BOOL shouldInvite = ([myPeerID.displayName compare:remotePeerName] == NSOrderedDescending);
+//    NSLog(@"Found peer and invited");
+//
+//    if (shouldInvite)
+//    {
+//        NSLog(@"inviting advertising peer to session %@", peerID.displayName);
+//        [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
+//    }
 
-    if (shouldInvite)
-    {
-        NSLog(@"inviting advertising peer to session %@", peerID.displayName);
-        [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
-    }
-
-    if (self.advertisingUsers.count == 0)
+    if (self.advertisingUsers.count == 0 && peerID.displayName != self.peerID.displayName)
     {
         [self.advertisingUsers addObject:peerID];
-        [self.foundPeersArray addObject:self.peerID];
+        [self.foundPeersArray addObject:self.peerID.displayName];
         NSDictionary *dictionary = @{@"peerID": peerID};
 
+        [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
         [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:dictionary];
     }
     else
@@ -172,6 +172,8 @@
             NSDictionary *dictionary = @{@"peerID": peerID};
 
             NSLog(@"found Peer");
+
+            [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
 
             [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:dictionary];
         }

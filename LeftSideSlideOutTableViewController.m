@@ -65,6 +65,10 @@
                                             selector:@selector(receivedChatDataFromPeer:) name:@"MCDidReceiveDataNotification"
                                               object:nil];
 
+    [[NSNotificationCenter defaultCenter]addObserver:self
+                                            selector:@selector(peerDidChangeStateWithNotification:) name:@"MCDidChangeStateNotification"
+                                              object:nil];
+
     self.tableView.backgroundColor = [UIColor whiteColor];
 }
 
@@ -102,7 +106,6 @@
     cell.genderLabel.textColor = [UIColor whiteColor];
     cell.backgroundColor = [UIColor clearColor];
     cell.chatButton.backgroundColor = [UIColor clearColor];
-//    cell.chatButton.titleLabel.textColor = [UIColor buttonColor];
     cell.backgroundLabel.backgroundColor = [UIColor backgroundColor];
 
     cell.userNameLabel.text = [user objectForKey:@"name"];
@@ -110,7 +113,6 @@
     [self.cellArray addObject:cell];
     cell.tag = [self.users indexOfObject:dictionary];
     cell.cellUserDisplayName = peerID.displayName;
-//    [cell.chatButton setTitle:@"Invite" forState:UIControlStateNormal];
     [cell.chatButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
     [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
 
@@ -246,7 +248,8 @@
 {
     if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
     {
-          [self.appDelegate.mcManager.browser invitePeer:[[notification userInfo] objectForKey:@"peerID"] toSession:self.appDelegate.mcManager.session withContext:nil timeout:30.0];
+//          [self.appDelegate.mcManager.browser invitePeer:[[notification userInfo] objectForKey:@"peerID"] toSession:self.appDelegate.mcManager.session withContext:nil timeout:30.0];
+        NSLog(@"Connected peers: %@", self.appDelegate.mcManager.session.connectedPeers);
     }
 //    MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
 //
