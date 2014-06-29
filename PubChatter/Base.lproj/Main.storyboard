@@ -193,12 +193,6 @@
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="71"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="225" translatesAutoresizingMaskIntoConstraints="NO" id="Rum-Ac-CJr">
-                                                    <rect key="frame" x="82" y="25" width="225" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="225" translatesAutoresizingMaskIntoConstraints="NO" id="87S-5X-NqK">
                                                     <rect key="frame" x="12" y="23" width="225" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -209,7 +203,26 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="leftLabel" destination="87S-5X-NqK" id="Iqz-w4-eth"/>
-                                            <outlet property="rightLabel" destination="Rum-Ac-CJr" id="Cs8-UL-TzM"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Cell2" rowHeight="72" id="zC4-8v-bA2" customClass="ChatTableViewCell">
+                                        <rect key="frame" x="0.0" y="94" width="320" height="72"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zC4-8v-bA2" id="goa-co-btN">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="71"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8bP-Gq-rgz">
+                                                    <rect key="frame" x="107" y="25" width="186" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="rightLabel" destination="8bP-Gq-rgz" id="YdL-DF-Qc3"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -992,11 +1005,11 @@
             </objects>
             <point key="canvasLocation" x="170" y="-646"/>
         </scene>
-        <!--Navigation Controller - Profile-->
+        <!--Navigation Controller-->
         <scene sceneID="aUi-F2-Zr5">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="BsO-qZ-Xte" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Profile" id="9Ap-tB-x6P"/>
+                    <tabBarItem key="tabBarItem" title="" image="ProfileIcon" id="9Ap-tB-x6P"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="iEH-Mc-S1Z">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1071,6 +1084,7 @@
     <resources>
         <image name="Chat_Icon3" width="30" height="30"/>
         <image name="Map_Icon" width="30" height="30"/>
+        <image name="ProfileIcon" width="30" height="30"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
