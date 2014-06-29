@@ -426,4 +426,20 @@ calloutAccessoryControlTapped:(UIControl *)control
     [self.view endEditing:YES];
 }
 
+-(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    // Check for an empty search field and displays an alert to user.
+    if ([self.searchBar.text isEqual:@""]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Search for local bars in the search field above" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alert show];
+    }
+    // Perform search.
+    else {
+        self.searchActivated  = YES;
+        [self search];
+    }
+}
+
+
+
 @end
