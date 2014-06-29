@@ -21,6 +21,7 @@
 @property AppDelegate *appDelegate;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property NSArray *sortedArray;
+@property ChatTableViewCell *customCell;
 
 -(void)didReceiveDataWithNotification: (NSNotification *)notification;
 -(void)sendMyMessage;
@@ -104,7 +105,8 @@
     [self.fetchedResultsController performFetch:nil];
     NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
     Peer *peer = [array firstObject];
-    if (peer.messages) {
+    if (peer.messages)
+    {
         [self sort:peer.messages];
     }
 }
@@ -121,6 +123,44 @@
 }
 
 # pragma mark - TableViewDelegate methods
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+//    Message *message = [self.sortedArray objectAtIndex:indexPath.row];
+//    CGFloat width = 225;
+//    UIFont *font = [UIFont systemFontOfSize:15];
+//    NSAttributedString *string =[[NSAttributedString alloc]
+//                                 initWithString:message.text
+//                                 attributes:@ {NSFontAttributeName:font}];
+//    CGRect rect = [string boundingRectWithSize:(CGSize){width, MAXFLOAT} options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+//    CGSize size = rect.size;
+//    return size.height;
+
+
+        if (!self.customCell) {
+            self.customCell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+        }
+
+        ///configure the cell
+    Message *message = [self.sortedArray objectAtIndex:indexPath.row];
+    if ([message.isMyMessage isEqual: @0]) {
+        [self.customCell.leftLabel setText:message.text];
+    }
+    else
+    {
+        [self.customCell.rightLabel setText:message.text];
+    }
+
+    ///layout cell
+    [self.customCell layoutIfNeeded];
+
+    //get height
+    CGFloat height = [self.customCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+    
+    return height;
+
+}
+
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.sortedArray.count;
@@ -128,18 +168,26 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    ChatTableViewCell *cell = [[ChatTableViewCell alloc]init];
+
+
     if (self.sortedArray)
     {
         Message *message = [self.sortedArray objectAtIndex:indexPath.row];
-        if ([message.isMyMessage  isEqual: @1]) {
-            cell.rightLabel.text = message.text;
-            [cell.rightLabel sizeToFit];
+        if ([message.isMyMessage isEqual: @0]) {
+            cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+            [cell.leftLabel setText:message.text];
+            cell.leftLabel.textAlignment = NSTextAlignmentLeft;
+            cell.rightLabel.text = @"";
+            cell.rightLabel.hidden = YES;
         }
         else
         {
-            cell.leftLabel.text = message.text;
-            [cell.leftLabel sizeToFit];
+            cell = [tableView dequeueReusableCellWithIdentifier:@"Cell2"];
+            [cell.rightLabel setText: message.text];
+            cell.rightLabel.textAlignment = NSTextAlignmentRight;
+            cell.leftLabel.text = @"";
+            cell.leftLabel.hidden = YES;
         }
     }
     return cell;
