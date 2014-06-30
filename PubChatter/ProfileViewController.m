@@ -10,7 +10,7 @@
 #import "AppDelegate.h"
 #import "UIColor+DesignColors.h"
 
-@interface ProfileViewController ()<CLLocationManagerDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate>
+@interface ProfileViewController ()<CLLocationManagerDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *genderLabel;
@@ -19,6 +19,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *favDrinkLabel;
 @property (weak, nonatomic) IBOutlet UIView *viewInBackground;
 @property AppDelegate *appDelegate;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet UIView *infoContainerView;
 
 -(void)didreceiveNotification:(NSNotification *)notification;
 
@@ -33,6 +35,8 @@
                                                  name:@"userEnteredBar"
                                                object:nil];
     [self setStyle];
+
+    self.scrollView.delegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated

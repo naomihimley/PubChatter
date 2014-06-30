@@ -752,61 +752,116 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="river" translatesAutoresizingMaskIntoConstraints="NO" id="c7y-Sf-chb">
-                                <rect key="frame" x="1" y="61" width="318" height="447"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="river" translatesAutoresizingMaskIntoConstraints="NO" id="c7y-Sf-chb">
+                                <rect key="frame" x="0.0" y="0.0" width="319" height="568"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rv5-eM-I00">
-                                <rect key="frame" x="20" y="78" width="280" height="426"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="MMU-Ya-M0I">
+                                <rect key="frame" x="18" y="82" width="284" height="404"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AhR-Rv-Uv9">
-                                        <rect key="frame" x="64" y="10" width="152" height="142"/>
+                                    <view autoresizesSubviews="NO" contentMode="scaleAspectFit" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rv5-eM-I00">
+                                        <rect key="frame" x="8" y="5" width="269" height="390"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.80000001192092896" green="0.80000001192092896" blue="0.80000001192092896" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    </view>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="AhR-Rv-Uv9">
+                                        <rect key="frame" x="67" y="15" width="150" height="150"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4hK-rA-SAa">
-                                        <rect key="frame" x="55" y="177" width="170" height="24"/>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" text="Bio" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cs2-za-3nj">
+                                        <rect key="frame" x="41" y="241" width="201" height="66"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="17"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="66" id="HDH-Se-jGM"/>
+                                        </constraints>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="12"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Fav Drink" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xUN-M0-MC6">
+                                        <rect key="frame" x="61" y="366" width="161" height="18"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="18" id="hxX-Qg-qVJ"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="14"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Sex" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ohn-f3-xHg">
-                                        <rect key="frame" x="80" y="216" width="120" height="20"/>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Sex" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ohn-f3-xHg">
+                                        <rect key="frame" x="77" y="198" width="129" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="Bio" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cs2-za-3nj">
-                                        <rect key="frame" x="64" y="251" width="152" height="66"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="12"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                    </textView>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Sexual Orientation" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o4K-bs-dJl">
-                                        <rect key="frame" x="64" y="330" width="152" height="18"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="14"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Fav Drink" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xUN-M0-MC6">
-                                        <rect key="frame" x="64" y="361" width="152" height="18"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="14"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                 </subviews>
-                                <color key="backgroundColor" red="0.80000001192092896" green="0.80000001192092896" blue="0.80000001192092896" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            </view>
+                                <constraints>
+                                    <constraint firstItem="Ohn-f3-xHg" firstAttribute="top" secondItem="AhR-Rv-Uv9" secondAttribute="bottom" constant="33" id="26C-1B-zLz"/>
+                                    <constraint firstAttribute="bottom" secondItem="xUN-M0-MC6" secondAttribute="bottom" constant="20" symbolic="YES" id="3gF-mT-7hn"/>
+                                    <constraint firstItem="xUN-M0-MC6" firstAttribute="top" secondItem="cs2-za-3nj" secondAttribute="bottom" constant="59" id="4F2-gf-SpD"/>
+                                    <constraint firstItem="AhR-Rv-Uv9" firstAttribute="leading" secondItem="MMU-Ya-M0I" secondAttribute="leading" constant="67" id="4sJ-5M-7SQ"/>
+                                    <constraint firstAttribute="bottom" secondItem="rv5-eM-I00" secondAttribute="bottom" id="5Ik-IL-5Ds"/>
+                                    <constraint firstItem="rv5-eM-I00" firstAttribute="leading" secondItem="MMU-Ya-M0I" secondAttribute="leading" id="ByW-hZ-BrW"/>
+                                    <constraint firstItem="Ohn-f3-xHg" firstAttribute="centerX" secondItem="cs2-za-3nj" secondAttribute="centerX" id="Eom-bz-cAO"/>
+                                    <constraint firstItem="Ohn-f3-xHg" firstAttribute="leading" secondItem="MMU-Ya-M0I" secondAttribute="leading" constant="77" id="VB3-qg-O0I"/>
+                                    <constraint firstItem="cs2-za-3nj" firstAttribute="top" secondItem="Ohn-f3-xHg" secondAttribute="bottom" constant="23" id="W1J-U3-cn5"/>
+                                    <constraint firstItem="cs2-za-3nj" firstAttribute="centerX" secondItem="xUN-M0-MC6" secondAttribute="centerX" id="Wew-pj-Xo8"/>
+                                    <constraint firstItem="AhR-Rv-Uv9" firstAttribute="top" secondItem="MMU-Ya-M0I" secondAttribute="top" constant="15" id="bxO-YH-2l8"/>
+                                    <constraint firstItem="cs2-za-3nj" firstAttribute="leading" secondItem="MMU-Ya-M0I" secondAttribute="leading" constant="41" id="fE9-kO-Zwv"/>
+                                    <constraint firstAttribute="trailing" secondItem="cs2-za-3nj" secondAttribute="trailing" constant="42" id="gCD-bb-Q9s"/>
+                                    <constraint firstItem="xUN-M0-MC6" firstAttribute="leading" secondItem="MMU-Ya-M0I" secondAttribute="leading" constant="61" id="gze-bf-QhK"/>
+                                    <constraint firstItem="rv5-eM-I00" firstAttribute="centerY" secondItem="MMU-Ya-M0I" secondAttribute="centerY" id="hFM-hN-1mg"/>
+                                    <constraint firstAttribute="trailing" secondItem="rv5-eM-I00" secondAttribute="trailing" id="hjn-f8-2QA"/>
+                                    <constraint firstItem="rv5-eM-I00" firstAttribute="top" secondItem="MMU-Ya-M0I" secondAttribute="top" id="i1K-yg-VfF"/>
+                                    <constraint firstItem="AhR-Rv-Uv9" firstAttribute="centerX" secondItem="MMU-Ya-M0I" secondAttribute="centerX" id="lJt-OJ-fUq"/>
+                                    <constraint firstItem="rv5-eM-I00" firstAttribute="centerX" secondItem="AhR-Rv-Uv9" secondAttribute="centerX" id="qN4-IL-XK2"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="delegate" destination="TiO-qo-PR7" id="fFc-pz-xug"/>
+                                </connections>
+                            </scrollView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Sexual Orientation" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o4K-bs-dJl">
+                                <rect key="frame" x="79" y="409" width="161" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="18" id="dHm-lt-NxE"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="14"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4hK-rA-SAa">
+                                <rect key="frame" x="70" y="248" width="179" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="24" id="0K5-wF-kOb"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="MMU-Ya-M0I" firstAttribute="leading" secondItem="W0y-Y8-11J" secondAttribute="leading" constant="18" id="52F-1G-tua"/>
+                            <constraint firstItem="c7y-Sf-chb" firstAttribute="top" secondItem="W0y-Y8-11J" secondAttribute="top" id="5Ey-00-QRw"/>
+                            <constraint firstItem="4hK-rA-SAa" firstAttribute="top" secondItem="1br-bg-rG3" secondAttribute="bottom" constant="184" id="DN5-rE-9fw"/>
+                            <constraint firstItem="c7y-Sf-chb" firstAttribute="centerX" secondItem="4hK-rA-SAa" secondAttribute="centerX" id="Jrx-Hv-IWa"/>
+                            <constraint firstItem="4hK-rA-SAa" firstAttribute="leading" secondItem="W0y-Y8-11J" secondAttribute="leading" constant="70" id="QLo-9y-86w"/>
+                            <constraint firstItem="c7y-Sf-chb" firstAttribute="leading" secondItem="W0y-Y8-11J" secondAttribute="leading" id="SN0-Zg-7ir"/>
+                            <constraint firstItem="aHt-Gz-ZxQ" firstAttribute="top" secondItem="o4K-bs-dJl" secondAttribute="bottom" constant="100" id="T63-H5-9A9"/>
+                            <constraint firstItem="o4K-bs-dJl" firstAttribute="centerX" secondItem="4hK-rA-SAa" secondAttribute="centerX" id="dHS-pA-aaU"/>
+                            <constraint firstItem="o4K-bs-dJl" firstAttribute="leading" secondItem="W0y-Y8-11J" secondAttribute="leading" constant="79" id="fbI-JL-t8b"/>
+                            <constraint firstItem="MMU-Ya-M0I" firstAttribute="top" secondItem="1br-bg-rG3" secondAttribute="bottom" constant="18" id="iVN-0I-4cO"/>
+                            <constraint firstItem="MMU-Ya-M0I" firstAttribute="centerX" secondItem="W0y-Y8-11J" secondAttribute="centerX" id="lAz-iy-XF2"/>
+                            <constraint firstAttribute="trailing" secondItem="c7y-Sf-chb" secondAttribute="trailing" constant="1" id="lkl-Ex-CRF"/>
+                            <constraint firstItem="c7y-Sf-chb" firstAttribute="centerY" secondItem="MMU-Ya-M0I" secondAttribute="centerY" id="rgr-9r-lCd"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="oSW-J4-SVr">
                         <barButtonItem key="rightBarButtonItem" systemItem="edit" id="N74-nf-soR">
@@ -819,8 +874,10 @@
                         <outlet property="bioTextView" destination="cs2-za-3nj" id="Y3h-iR-d1B"/>
                         <outlet property="favDrinkLabel" destination="xUN-M0-MC6" id="xy1-q6-6Ej"/>
                         <outlet property="genderLabel" destination="Ohn-f3-xHg" id="Bil-wt-tyz"/>
+                        <outlet property="infoContainerView" destination="rv5-eM-I00" id="prA-Bj-EO5"/>
                         <outlet property="nameLabel" destination="4hK-rA-SAa" id="luI-y7-PBm"/>
                         <outlet property="profileImageView" destination="AhR-Rv-Uv9" id="ftJ-dm-RQ1"/>
+                        <outlet property="scrollView" destination="MMU-Ya-M0I" id="z9Q-Mw-oEs"/>
                         <outlet property="sexualOrientationLabel" destination="o4K-bs-dJl" id="UlH-AL-ceK"/>
                         <outlet property="viewInBackground" destination="rv5-eM-I00" id="Jux-9h-wJg"/>
                     </connections>

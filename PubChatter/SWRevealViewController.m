@@ -931,6 +931,7 @@ static NSString * const SWSegueRightIdentifier = @"sw_right";
 - (void)revealToggle:(id)sender
 {    
     [self revealToggleAnimated:YES];
+    NSLog(@"Left swipe out");
 }
 
 
