@@ -39,8 +39,9 @@
     [super viewDidLoad];
     self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
     self.navigationController.navigationBar.alpha = 1.0;
-    self.tableView.backgroundColor = [UIColor whiteColor];
-    self.tableView.separatorColor = [UIColor backgroundColor];
+    self.tableView.backgroundColor = [UIColor clearColor];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"river"]];
+    self.tableView.separatorColor = [UIColor clearColor];
     self.viewy = self.view.frame.origin.y;
     self.chatTextFieldy = self.chatFieldView.frame.origin.y;
     self.tableViewy = self.tableView.frame.origin.y;
@@ -219,7 +220,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
-    cell.backgroundColor = [UIColor backgroundColor];
+    cell.backgroundColor = [UIColor clearColor];
     cell.leftLabel.textColor = [UIColor whiteColor];
     cell.rightLabel.textColor = [UIColor whiteColor];
 
@@ -230,14 +231,18 @@
             [cell.leftLabel setText:message.text];
             self.customCell.leftLabel.lineBreakMode = NSLineBreakByCharWrapping;
             cell.leftLabel.textAlignment = NSTextAlignmentLeft;
-            cell.rightLabel.text = @"";
+            cell.leftLabel.backgroundColor = [UIColor backgroundColor];
+            cell.leftLabel.hidden = NO;
+            cell.rightLabel.hidden = YES;
         }
         else
         {
             [cell.rightLabel setText: message.text];
+            cell.rightLabel.backgroundColor = [UIColor backgroundColor];
             cell.rightLabel.textAlignment = NSTextAlignmentRight;
             self.customCell.rightLabel.lineBreakMode = NSLineBreakByCharWrapping;
-            cell.leftLabel.text = @"";
+            cell.rightLabel.hidden = NO;
+            cell.leftLabel.hidden = YES;
         }
     }
     return cell;
