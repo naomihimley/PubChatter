@@ -25,6 +25,7 @@
 @property CGFloat viewy;
 @property (weak, nonatomic) IBOutlet UIView *chatFieldView;
 @property BOOL isUserInteration;
+@property (weak, nonatomic) IBOutlet UIButton *listOfUsersButton;
 
 -(void)didReceiveDataWithNotification: (NSNotification *)notification;
 -(void)sendMyMessage;

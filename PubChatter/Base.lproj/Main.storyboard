@@ -184,9 +184,9 @@
                                 </connections>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gMY-OG-1WS">
-                                <rect key="frame" x="127" y="68" width="66" height="30"/>
+                                <rect key="frame" x="117" y="64" width="87" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Quit Chat">
+                                <state key="normal" title="List of Users">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -233,6 +233,7 @@
                     <connections>
                         <outlet property="chatFieldView" destination="4wy-6y-CN3" id="i5J-ZE-tJO"/>
                         <outlet property="chatTextField" destination="o83-7g-8hF" id="7Et-GK-ozE"/>
+                        <outlet property="listOfUsersButton" destination="gMY-OG-1WS" id="dhL-Q5-u1H"/>
                         <outlet property="tableView" destination="ePF-5u-znW" id="1Ua-Si-wyr"/>
                     </connections>
                 </viewController>
