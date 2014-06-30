@@ -248,20 +248,20 @@
 {
     if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
     {
-        MCPeerID *myPeerID = self.appDelegate.mcManager.session.myPeerID;
-        MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
-        NSString *remotePeerName = peerID.displayName;
+//        MCPeerID *myPeerID = self.appDelegate.mcManager.session.myPeerID;
+//        MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
+//        NSString *remotePeerName = peerID.displayName;
 
         NSLog(@"hopefully not disconnecting randomly");
 
-        BOOL shouldInvite = ([myPeerID.displayName compare:remotePeerName] == NSOrderedDescending);
+//        BOOL shouldInvite = ([myPeerID.displayName compare:remotePeerName] == NSOrderedDescending);
         NSLog(@"MCManager connected peers array after one disconnected %@", self.appDelegate.mcManager.session.connectedPeers);
 
-        if (shouldInvite)
-        {
+//        if (shouldInvite)
+//        {
 //            NSLog(@"inviting advertising peer to session %@", peerID.displayName);
 //            [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30.0];
-    }
+//    }
     if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
     {
         NSLog(@"Connect peers after changing state to connected %@", self.appDelegate.mcManager.session.connectedPeers);
@@ -295,8 +295,11 @@
     if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnecting)
     {
 //        [cell.chatButton setTitle:@"Inviting" forState:UIControlStateNormal];
-//        [cell.chatButton setEnabled:NO];
-        cell.chatButton.shouldInvite = NO;
+//
+        dispatch_async(dispatch_get_main_queue(), ^{
+             cell.chatButton.shouldInvite = NO;
+        });
+
     }
     else if ([[[notification userInfo]objectForKey:@"state"]intValue] != MCSessionStateConnecting)
     {
@@ -306,7 +309,10 @@
 //                [cell.chatButton setEnabled:YES];
 //                [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
 //            });
-            cell.chatButton.shouldInvite = NO;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                 cell.chatButton.shouldInvite = NO;
+            });
+
         }
 //        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
 //        {
