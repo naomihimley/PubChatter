@@ -10,4 +10,6 @@
 
 @interface ChatButton : UIButton
 
+@property BOOL shouldInvite;
+
 @end
