@@ -14,6 +14,7 @@
 + (UIColor *)accentColor;
 + (UIColor *)navBarColor;
 + (UIColor *)nameColor;
++ (UIColor *)textColor;
 
 
 @end

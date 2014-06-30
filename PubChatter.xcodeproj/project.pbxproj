@@ -49,6 +49,7 @@
 		9BDBE508194F8A400045C05B /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BDBE507194F8A400045C05B /* MultipeerConnectivity.framework */; };
 		9BDBE6151959CB120045C05B /* LeftSideSlideOutTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDBE6141959CB120045C05B /* LeftSideSlideOutTableViewController.m */; };
 		B03F23251954DBE400DB67F8 /* BeaconRegionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B03F23241954DBE400DB67F8 /* BeaconRegionManager.m */; };
+		B057555F1961097300E73647 /* ChatButton.m in Sources */ = {isa = PBXBuildFile; fileRef = B057555E1961097300E73647 /* ChatButton.m */; };
 		B0623BEC1958FDE600A9AFD6 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0623BEB1958FDE600A9AFD6 /* CoreData.framework */; };
 		B0623C391958FF1500A9AFD6 /* PubChatter.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B0623C371958FF1500A9AFD6 /* PubChatter.xcdatamodeld */; };
 		B0782C3C194BB3700022E6E7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0782C3B194BB3700022E6E7 /* Foundation.framework */; };
@@ -172,6 +173,8 @@
 		9BDBE6141959CB120045C05B /* LeftSideSlideOutTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LeftSideSlideOutTableViewController.m; path = ../LeftSideSlideOutTableViewController.m; sourceTree = "<group>"; };
 		B03F23231954DBE400DB67F8 /* BeaconRegionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeaconRegionManager.h; sourceTree = "<group>"; };
 		B03F23241954DBE400DB67F8 /* BeaconRegionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconRegionManager.m; sourceTree = "<group>"; };
+		B057555D1961097300E73647 /* ChatButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatButton.h; sourceTree = SOURCE_ROOT; };
+		B057555E1961097300E73647 /* ChatButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatButton.m; sourceTree = SOURCE_ROOT; };
 		B0623BEB1958FDE600A9AFD6 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		B0623C381958FF1500A9AFD6 /* PubChatter.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PubChatter.xcdatamodel; sourceTree = "<group>"; };
 		B0782C38194BB3700022E6E7 /* PubChatter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PubChatter.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -261,6 +264,8 @@
 		0ECEAF0419560F9A00B92C40 /* Slideout Drawer VCs */ = {
 			isa = PBXGroup;
 			children = (
+				B057555D1961097300E73647 /* ChatButton.h */,
+				B057555E1961097300E73647 /* ChatButton.m */,
 				9BDBE6131959CB120045C05B /* LeftSideSlideOutTableViewController.h */,
 				9BDBE6141959CB120045C05B /* LeftSideSlideOutTableViewController.m */,
 				0ECEAF0B19586FA800B92C40 /* RightSlideoutViewController.h */,
@@ -550,7 +555,7 @@
 				ORGANIZATIONNAME = "Naomi Himley";
 				TargetAttributes = {
 					B0782C37194BB3700022E6E7 = {
-						DevelopmentTeam = 6SW4QY498T;
+						DevelopmentTeam = CF4F3Y3JFY;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -654,6 +659,7 @@
 				0ECEB046195F6A2C00B92C40 /* UIImageView+HighlightedWebCache.m in Sources */,
 				0ECEB03A195F6A2C00B92C40 /* NSData+ImageContentType.m in Sources */,
 				B0D46D14195D1C2E005E7889 /* UIColor+DesignColors.m in Sources */,
+				B057555F1961097300E73647 /* ChatButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
