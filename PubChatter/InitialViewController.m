@@ -11,6 +11,7 @@
 
 @interface InitialViewController ()
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 
 @end
 
@@ -20,11 +21,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.imageView.image = [UIImage imageNamed:@"river"];
+    [self.activityIndicator startAnimating];
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
-    [self.activityIndicator startAnimating];
 
     if (![PFUser currentUser]) {
         [self performSegueWithIdentifier:@"loginsegue" sender:self];

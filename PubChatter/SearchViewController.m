@@ -43,14 +43,15 @@
 @property AppDelegate *appDelegate;
 @property NSInteger counter;
 @property BOOL searchActivated;
+@property BOOL redrawActivated;
 @property BOOL didCheckForBeaconMonitoring;
 @property BOOL initialMapLoad;
+@property id request;
 -(void)userEnteredBar:(NSNotification *)notification;
 
 @end
 
 @implementation SearchViewController
-
 
 - (void)viewDidLoad
 {
@@ -78,6 +79,7 @@
     self.locationManager.delegate = self;
     self.searchBar.delegate = self;
     self.searchActivated = NO;
+    self.redrawActivated = NO;
 
     // Set drawerview actions
     self.rateBarButton.customView.hidden = YES;
@@ -118,6 +120,8 @@
     }
 }
 
+#pragma  mark - iBeacon methods
+
 -(void)userEnteredBar:(NSNotification *)notification
 {
     NSLog(@"notification %@",[notification.userInfo objectForKey:@"barName"]);
@@ -150,9 +154,10 @@
 
 #pragma mark - IBActions
 
-// Removes all annotations from mapView, creates a new map region from the current mapView region, which is used to make another call to Yelp API. Disables button until results are returned.
+// Removes all annotations from mapView, finds current map SW and NE coordinates for bounded box Yelp query.
 - (IBAction)onRedrawRegionButtonPressed:(id)sender
 {
+    self.redrawActivated = YES;
     self.activityIndicatorOutlet.hidden = NO;
     [self.activityIndicatorOutlet startAnimating];
     self.redrawAreaButtonOutlet.enabled = NO;
@@ -162,7 +167,28 @@
     [self getMapRect];
 
     // Call method to get JSON with boundary box parameters, "bar" search term, 20 results
-    [self getYelpJSONFromMapRedraw:@"bar" andSWLatitude:self.SWBoundsLatitude andSWLongitude:self.SWBoundsLongitude andNELatitude:self.NEBoundsLatitude andNELongitude:self.NEBoundsLongitude andSortType:@"1" andNumResults:@"20"];
+    [self getYelpJSONFromMapRedraw:@"bar" andSWLatitude:self.SWBoundsLatitude andSWLongitude:self.SWBoundsLongitude andNELatitude:self.NEBoundsLatitude andNELongitude:self.NEBoundsLongitude andSortType:@"1" andNumResults:@"20" andLongitude:0.0 andLatitude:0.0];
+}
+
+// Enables search on keyPad search button pressed.
+-(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    self.activityIndicatorOutlet.hidden = NO;
+    [self.activityIndicatorOutlet startAnimating];
+
+    // Set search boolean.
+    self.searchActivated  = YES;
+
+    // Clear the map of previous annotations and set queryString from user input.
+    [self.mapView removeAnnotations:self.mapView.annotations];
+    self.queryString = self.searchBar.text;
+    self.searchBar.text = nil;
+
+    // Finds the single best result based on querystring input and user's current location.
+    [self getYelpJSONFromMapRedraw:self.queryString andSWLatitude:0.0 andSWLongitude:0.0 andNELatitude:0.0 andNELongitude:0.0 andSortType:@"0" andNumResults:@"1" andLongitude:self.userLocation.coordinate.longitude andLatitude:self.userLocation.coordinate.latitude];
+
+    // Dismiss keyboard.
+    [self.searchBar endEditing:YES];
 }
 
 // Toggles mapview and tableview
@@ -177,112 +203,46 @@
     [self.locationManager startUpdatingLocation];
 }
 
-// Gets JSON data from Yelp and sets YelpBar custom class properties.
--(void)getYelpJSONWithSearch:(NSString *)query andLongitude:(CGFloat)longitude andLatitude:(CGFloat)latitude andSortType:(NSString*)sortType andNumResults:(NSString *)numResults
+#pragma mark - API call methods
+
+-(void)getYelpJSONFromMapRedraw:(NSString *)query andSWLatitude:(CGFloat)swlatitude andSWLongitude:(CGFloat)swlongitude andNELatitude:(CGFloat)nelatitude andNELongitude:(CGFloat)nelongitude andSortType:(NSString*)sortType andNumResults:(NSString *)numResults andLongitude:(CGFloat)longitude andLatitude:(CGFloat)latitude
 {
-//    NSLog(@"%@", sortType);
-    id rq = [TDOAuth URLRequestForPath:@"/v2/search" GETParameters:@{@"term": query, @"ll": [NSString stringWithFormat:@"%f,%f", latitude, longitude], @"limit" : numResults, @"sort" : sortType}
+    //Perform a bounded box query
+    if (self.redrawActivated) {
+    self.request = [TDOAuth URLRequestForPath:@"/v2/search" GETParameters:@{@"term": query, @"bounds": [NSString stringWithFormat:@"%f,%f|%f,%f", swlatitude, swlongitude, nelatitude, nelongitude], @"limit" : numResults, @"sort" : sortType}
                                   host:@"api.yelp.com"
                            consumerKey:@"LdaQSTTYqZuYXrta5vVAgw"
                         consumerSecret:@"k6KpVPXHSykD8aQXSXqdi7GboMY"
                            accessToken:@"PRBX3m8UH4Q2RmZ-HOTKmjFPLVzmz4UL"
                            tokenSecret:@"ao0diFl7jAe8cDDXnc-O1N-vQm8"];
+    }
 
-    [NSURLConnection sendAsynchronousRequest:rq queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        NSLog(@"Yelp data returned");
+    //Perform a point query (i.e. query about a center long/lat point).
+    else if (self.searchActivated) {
+        self.request = [TDOAuth URLRequestForPath:@"/v2/search" GETParameters:@{@"term": query, @"ll": [NSString stringWithFormat:@"%f,%f", latitude, longitude], @"limit" : numResults, @"sort" : sortType}
+                                      host:@"api.yelp.com"
+                               consumerKey:@"LdaQSTTYqZuYXrta5vVAgw"
+                            consumerSecret:@"k6KpVPXHSykD8aQXSXqdi7GboMY"
+                               accessToken:@"PRBX3m8UH4Q2RmZ-HOTKmjFPLVzmz4UL"
+                               tokenSecret:@"ao0diFl7jAe8cDDXnc-O1N-vQm8"];
+    }
+
+    [NSURLConnection sendAsynchronousRequest:self.request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+
         if (connectionError) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unable to retrieve data due to poor network connection" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             [alert show];
-            NSLog(@"connection error %@", connectionError);
-        }
-        else
-        {
-            NSDictionary *dictionary  = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&connectionError];
-
-            NSMutableArray *arrayOfYelpBarObjects = [[NSMutableArray alloc] init];
-            NSArray *yelpBars = [dictionary objectForKey:@"businesses"];
-
-            for (NSDictionary *dictionary in yelpBars)
-            {
-                YelpBar *yelpBar = [[YelpBar alloc] init];
-                yelpBar.name = [dictionary objectForKey:@"name"];
-                yelpBar.address = [NSString stringWithFormat:@"%@ %@ %@ %@", [[[dictionary objectForKey:@"location"] objectForKey:@"address"] firstObject], [[dictionary objectForKey:@"location"] objectForKey:@"city"], [[dictionary objectForKey:@"location"] objectForKey:@"state_code"], [[dictionary objectForKey:@"location"] objectForKey:@"postal_code"]];
-                yelpBar.distanceFromUser = [[dictionary objectForKey:@"distance"] floatValue];
-                yelpBar.telephone = [dictionary objectForKey:@"phone"];
-                yelpBar.businessMobileURL = [dictionary objectForKey:@"mobile_url"];
-                yelpBar.businessURL = [dictionary objectForKey:@"url"];
-                yelpBar.businessImageURL = [dictionary objectForKey:@"image_url"];
-                yelpBar.businessRatingImageURL = [dictionary objectForKey:@"rating_img_url_small"];
-                yelpBar.aboutBusiness = [dictionary objectForKey:@"snippet_text"];
-
-                if ([[dictionary objectForKey:@"categories"] count] == 3) {
-                    yelpBar.categories = [[[dictionary objectForKey:@"categories"] objectAtIndex:0] objectAtIndex:0];
-                    yelpBar.offers = [NSString stringWithFormat:@"%@, %@", [[[dictionary objectForKey:@"categories"] objectAtIndex:1] objectAtIndex:0], [[[dictionary objectForKey:@"categories"] objectAtIndex:2] objectAtIndex:0]];
-                }
-                else if ([[dictionary objectForKey:@"categories"] count] == 2) {
-                    yelpBar.categories = [[[dictionary objectForKey:@"categories"] objectAtIndex:0] objectAtIndex:0];
-                    yelpBar.offers = [NSString stringWithFormat:@"%@", [[[dictionary objectForKey:@"categories"] objectAtIndex:1] objectAtIndex:0]];
-                }
-                else if ([[dictionary objectForKey:@"categories"] count] == 1) {
-                    yelpBar.categories = [[[dictionary objectForKey:@"categories"] objectAtIndex:0] objectAtIndex:0];
-                    yelpBar.offers = @"n/a";
-                }
-                else {
-                    yelpBar.categories = @"n/a";
-                    yelpBar.offers = @"n/a";
-                }
-                yelpBar.yelpID = [dictionary objectForKey:@"id"];
-                [arrayOfYelpBarObjects addObject:yelpBar];
-            }
-            // Order objects based on proximity to user.
-            NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"distanceFromUser" ascending:YES];
-            self.barLocations = [arrayOfYelpBarObjects sortedArrayUsingDescriptors:@[descriptor]];
-
-            // Create array of business image URL for lazy loading in tableView.
-            NSMutableArray *tempArray = [[NSMutableArray alloc] init];
-
-            for (YelpBar *yelpBar in self.barLocations) {
-                if (yelpBar.businessImageURL) {
-                    [tempArray addObject:yelpBar.businessImageURL];
-                }
-
-                // If bar does not have a businessImageURL, use the placeholder image.
-                else {
-                    NSURL *placeholderURL = [[NSBundle mainBundle] URLForResource:@"placeholder" withExtension:@"png"];
-                    NSString *placeholderURLString = [NSString stringWithContentsOfURL:placeholderURL encoding:NSASCIIStringEncoding error:nil];
-                    NSLog(@"%@", placeholderURLString);
-                    [tempArray addObject:placeholderURLString];
-                }
-            }
-            self.arrImagesUrl = [NSArray arrayWithArray:tempArray];
-            [self getBarLatandLong:self.barLocations];
-        }
-    }];
-}
-
--(void)getYelpJSONFromMapRedraw:(NSString *)query andSWLatitude:(CGFloat)swlatitude andSWLongitude:(CGFloat)swlongitude andNELatitude:(CGFloat)nelatitude andNELongitude:(CGFloat)nelongitude andSortType:(NSString*)sortType andNumResults:(NSString *)numResults
-{
-    //    NSLog(@"%@", sortType);
-    id rq = [TDOAuth URLRequestForPath:@"/v2/search" GETParameters:@{@"term": query, @"bounds": [NSString stringWithFormat:@"%f,%f|%f,%f", swlatitude, swlongitude, nelatitude, nelongitude], @"limit" : numResults, @"sort" : sortType}
-                                  host:@"api.yelp.com"
-                           consumerKey:@"LdaQSTTYqZuYXrta5vVAgw"
-                        consumerSecret:@"k6KpVPXHSykD8aQXSXqdi7GboMY"
-                           accessToken:@"PRBX3m8UH4Q2RmZ-HOTKmjFPLVzmz4UL"
-                           tokenSecret:@"ao0diFl7jAe8cDDXnc-O1N-vQm8"];
-
-    [NSURLConnection sendAsynchronousRequest:rq queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        NSLog(@"Yelp data returned");
-        if (connectionError) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unable to retrieve data due to poor network connection" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alert show];
-            NSLog(@"connection error %@", connectionError);
+            NSLog(@"connection error");
             [self.activityIndicatorOutlet stopAnimating];
             self.activityIndicatorOutlet.hidden = YES;
             self.redrawAreaButtonOutlet.enabled = YES;
             self.currentLocationButtonOutlet.enabled = YES;
+            self.redrawActivated = NO;
+            self.searchActivated = NO;
         }
         else
         {
+            NSLog(@"Yelp data returned");
             NSDictionary *dictionary  = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&connectionError];
 
             NSMutableArray *arrayOfYelpBarObjects = [[NSMutableArray alloc] init];
@@ -299,6 +259,10 @@
                 yelpBar.businessImageURL = [dictionary objectForKey:@"image_url"];
                 yelpBar.businessRatingImageURL = [dictionary objectForKey:@"rating_img_url_small"];
                 yelpBar.aboutBusiness = [dictionary objectForKey:@"snippet_text"];
+
+                if (self.searchActivated) {
+                    yelpBar.distanceFromUser = [[dictionary objectForKey:@"distance"] floatValue];
+                }
 
                 if ([[dictionary objectForKey:@"categories"] count] == 3) {
                     yelpBar.categories = [[[dictionary objectForKey:@"categories"] objectAtIndex:0] objectAtIndex:0];
@@ -321,14 +285,37 @@
             }
             self.barLocations = [NSArray arrayWithArray:arrayOfYelpBarObjects];
 
-            // Check if bar locations array is empty, if so, present alert to user that no results were found.
+            // Check if bar locations array is empty, if so, present alerts to user that no results were found.
             if (self.barLocations.count == 0) {
-                NSLog(@"No results found for this area");
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No results found in this area" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                [alert show];
-                self.redrawAreaButtonOutlet.enabled = YES;
+                if (self.searchActivated) {
+                    // Search returned no results.
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"No results found matching %@", self.queryString] message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    [alert show];
+                    [self.activityIndicatorOutlet stopAnimating];
+                    self.activityIndicatorOutlet.hidden = YES;
+                    self.redrawAreaButtonOutlet.enabled = YES;
+                    self.currentLocationButtonOutlet.enabled = YES;
+                    self.redrawActivated = NO;
+                    self.searchActivated = NO;
+                    [self.tableView reloadData];
+                    NSLog(@"No search results");
+                }
+                    //Redraw in region returned no results.
+                else if (self.redrawActivated) {
+                    NSLog(@"No results found for this area");
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No results found in this area" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    [alert show];
+                    [self.activityIndicatorOutlet stopAnimating];
+                    self.activityIndicatorOutlet.hidden = YES;
+                    self.redrawAreaButtonOutlet.enabled = YES;
+                    self.currentLocationButtonOutlet.enabled = YES;
+                    self.redrawActivated = NO;
+                    self.searchActivated = NO;
+                    [self.tableView reloadData];
+                }
             }
 
+            // Else, query returned results.
             else {
             // Create array of business image URL for lazy loading in tableView.
             NSMutableArray *tempArray = [[NSMutableArray alloc] init];
@@ -345,6 +332,7 @@
                     }
                 }
             self.arrImagesUrl = [NSArray arrayWithArray:tempArray];
+                NSLog(@"%lu should always equal %lu", (unsigned long)self.arrImagesUrl.count, (unsigned long)self.barLocations.count);
             [self getBarLatandLong:self.barLocations];
             }
         }
@@ -355,14 +343,6 @@
 {
     NSLog(@"Number of YelpBar's returned: %lu", (unsigned long)yelpBars.count);
 
-    // Check if search results were found, if not, display the alert.
-    if (self.barLocations.count == 0) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"No results found matching %@", self.queryString] message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
-        NSLog(@"No search results");
-    }
-    // Else, API call returned YelpBars.
-    else {
     // Set counter to 0
     self.counter = 0;
     for (YelpBar *yelpBar in yelpBars) {
@@ -379,7 +359,7 @@
                          NSLog(@"This was a search");
                          if (placemarks.count == 0) {
                              // Address pulled from Yelp is bad and MapKit couldn't find a placemark, so attempt a natural language query based on YelpBar's name.
-                             NSLog(@"Address from Yelp was bad");
+                             NSLog(@"Bad Yelp address string");
                              [self performLanguageQuery];
                          }
                          // If a placemark is found from search, set yelpBar lat/long, add annotation to map, and set mapView area around that location.
@@ -404,13 +384,13 @@
 
                      // Else, the user is doing a redraw in mapArea, so iterate through placemarks and place annotations on map.
                      else {
-
                      for (CLPlacemark* placemark in placemarks)
                      {
+                         MKPointAnnotation *barAnnotation = [[MKPointAnnotation alloc] init];
+                         NSLog(@"Number of placemarks returned: %lu", (unsigned long)placemarks.count);
                          yelpBar.latitude = placemark.location.coordinate.latitude;
                          yelpBar.longitude = placemark.location.coordinate.longitude;
                          yelpBar.distanceFromUser = [self.userLocation distanceFromLocation:placemark.location];
-                         MKPointAnnotation *barAnnotation = [[MKPointAnnotation alloc] init];
                          barAnnotation.coordinate = CLLocationCoordinate2DMake(yelpBar.latitude, yelpBar.longitude);
                          barAnnotation.title = yelpBar.name;
                          barAnnotation.subtitle = [NSString stringWithFormat:@"%.02f miles", yelpBar.distanceFromUser * 0.000621371];
@@ -430,16 +410,18 @@
                          //Reload tableview
                          [self.tableView reloadData];
                          self.redrawAreaButtonOutlet.enabled = YES;
+                         self.currentLocationButtonOutlet.enabled = YES;
+                         self.searchActivated = NO;
+                         self.redrawActivated = NO;
+                         [self.activityIndicatorOutlet stopAnimating];
+                         self.activityIndicatorOutlet.hidden = YES;
                          if (!self.didCheckForBeaconMonitoring) {
                              [self checkIfBeaconMonitoringIsAvailable];
                          }
-                         [self.activityIndicatorOutlet stopAnimating];
-                         self.activityIndicatorOutlet.hidden = YES;
                          NSLog(@"Done");
                    }
             }];
         }
-    }
 }
 
 -(void)performLanguageQuery
@@ -455,8 +437,8 @@
     request.region = MKCoordinateRegionMake(self.userLocation.coordinate, MKCoordinateSpanMake(.3, .3));
     MKLocalSearch *search = [[MKLocalSearch alloc] initWithRequest:request];
     [search startWithCompletionHandler:^(MKLocalSearchResponse *response, NSError *error) {
-        NSArray *mapItems = response.mapItems;
 
+        NSArray *mapItems = response.mapItems;
         // If there is a response from query, then set the lat/long properties of YelpBar and add the MKPointAnnotation to the map.
         if (mapItems.count > 0) {
         NSLog(@"Natural language query successful");
@@ -474,7 +456,6 @@
         CLLocationCoordinate2D centerCoordinate = CLLocationCoordinate2DMake(yelpBar.latitude, yelpBar.longitude);
         MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, self.mapSpan);
         [self.mapView setRegion:region animated:YES];
-        self.searchActivated = NO;
         }
 
         // Else, natural language query was unsuccessful. Tell user a location couldn't be found, but display the tableView, so they know they can see the bar details.
@@ -486,21 +467,16 @@
             // Since a YelpBar does exist, but MapKit can't find it's location, show the user the tableView, where the bar will be displayed.
             self.toggleControlOutlet.selectedSegmentIndex = 1;
             [self changeSegment:self.toggleControlOutlet.selectedSegmentIndex];
-            self.searchActivated = NO;
             }
+        self.redrawActivated = NO;
+        self.searchActivated = NO;
+        self.redrawAreaButtonOutlet.enabled = YES;
+        self.currentLocationButtonOutlet.enabled = YES;
         [self.activityIndicatorOutlet stopAnimating];
         self.activityIndicatorOutlet.hidden = YES;
+        NSLog(@"Done");
         }];
     }
-}
-
--(void)checkIfBeaconMonitoringIsAvailable
-{
-    if (![CLLocationManager isMonitoringAvailableForClass:[CLBeaconRegion class]]) {
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"iBeacon ranging not available on this device" message:@"iBeacon ranging available on iOS 5 or later" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-    [alert show];
-    }
-    self.didCheckForBeaconMonitoring = YES;
 }
 
 #pragma mark - MapKit methods
@@ -538,10 +514,11 @@ calloutAccessoryControlTapped:(UIControl *)control
 {
     if (self.initialMapLoad) {
     self.activityIndicatorOutlet.hidden = NO;
+    self.redrawActivated = YES;
     [self.activityIndicatorOutlet startAnimating];
     NSLog(@"Map finished loading");
     [self getMapRect];
-    [self getYelpJSONFromMapRedraw:@"bar" andSWLatitude:self.SWBoundsLatitude andSWLongitude:self.SWBoundsLongitude andNELatitude:self.NEBoundsLatitude andNELongitude:self.NEBoundsLongitude andSortType:@"0" andNumResults:@"20"];
+    [self getYelpJSONFromMapRedraw:@"bar" andSWLatitude:self.SWBoundsLatitude andSWLongitude:self.SWBoundsLongitude andNELatitude:self.NEBoundsLatitude andNELongitude:self.NEBoundsLongitude andSortType:@"1" andNumResults:@"20" andLongitude:0.0 andLatitude:0.0];
         self.initialMapLoad = NO;
     }
 }
@@ -586,6 +563,7 @@ calloutAccessoryControlTapped:(UIControl *)control
     detailViewController.barFromSourceVC = self.selectedBar;
 }
 
+#pragma  mark - Toggle logic methods
 - (void)segmentChanged:(id)sender
 {
     if ([sender selectedSegmentIndex] == 0) {
@@ -621,27 +599,6 @@ calloutAccessoryControlTapped:(UIControl *)control
 }
 
 #pragma mark - Search bar delegate methods.
-// Enables search on keyPad search button pressed.
--(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
-{
-    self.activityIndicatorOutlet.hidden = NO;
-    [self.activityIndicatorOutlet startAnimating];
-
-    // Set search boolean.
-    self.searchActivated  = YES;
-
-    // Clear the map of previous annotations and set queryString from user input.
-    [self.mapView removeAnnotations:self.mapView.annotations];
-    self.queryString = self.searchBar.text;
-    self.searchBar.text = nil;
-
-    // Finds the single best result based on querystring input and user's current location.
-    [self getYelpJSONWithSearch:self.queryString andLongitude:self.userLocation.coordinate.longitude andLatitude:self.userLocation.coordinate.latitude andSortType:@"0" andNumResults:@"1"];
-
-    // Dismiss keyboard.
-    [self.searchBar endEditing:YES];
-}
-
 -(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
     // Dismiss keyboard and remove searchbar text.
@@ -649,7 +606,7 @@ calloutAccessoryControlTapped:(UIControl *)control
     [self.searchBar endEditing:YES];
 }
 
-#pragma  mark - Map coordinate methods
+#pragma  mark - Map bound helper methods
 
 -(void)getMapRect {
     MKMapRect mRect = self.mapView.visibleMapRect;
@@ -704,6 +661,18 @@ calloutAccessoryControlTapped:(UIControl *)control
     self.tableView.backgroundColor = [UIColor backgroundColor];
     self.searchBar.backgroundColor = [UIColor backgroundColor];
     self.activityIndicatorOutlet.color = [UIColor backgroundColor];
+}
+
+#pragma mark - other methods
+
+//Gets called once, when viewcontroller loads and map/table has loaded.
+-(void)checkIfBeaconMonitoringIsAvailable
+{
+    if (![CLLocationManager isMonitoringAvailableForClass:[CLBeaconRegion class]]) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"iBeacon ranging not available on this device" message:@"iBeacon ranging available on iOS 5 or later" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+    }
+    self.didCheckForBeaconMonitoring = YES;
 }
 
 @end
