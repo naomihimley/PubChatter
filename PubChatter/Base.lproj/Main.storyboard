@@ -343,14 +343,6 @@
                                     <rect key="frame" x="0.0" y="0.0" width="287" height="101"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iQk-6Y-ddY">
-                                            <rect key="frame" x="0.0" y="7" width="287" height="93"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <color key="backgroundColor" red="0.90196079015731812" green="0.90196079015731812" blue="0.90196079015731812" alpha="1" colorSpace="calibratedRGB"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Name" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="85" translatesAutoresizingMaskIntoConstraints="NO" id="x4X-g2-UBl">
                                             <rect key="frame" x="80" y="23" width="85" height="27"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -388,7 +380,6 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="backgroundLabel" destination="iQk-6Y-ddY" id="DZ5-dA-Avz"/>
                                     <outlet property="chatButton" destination="pOd-aK-sZV" id="5ew-Jx-xIY"/>
                                     <outlet property="chatReceivedImage" destination="hEu-aj-iy8" id="5au-KF-SRZ"/>
                                     <outlet property="genderLabel" destination="IAn-od-EXS" id="1Tw-3V-ECS"/>

@@ -42,9 +42,7 @@
 
     [self.appDelegate.mcManager startBrowsingForPeers];
 
-//    self.navigationController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Chicago Skyline_Images-05.png"]];
-//    self.tableView.backgroundColor = [UIColor clearColor];
-    [self.tableView setBackgroundView: [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Skyline"]]];
+    [self.tableView setBackgroundView: [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"river"]]];
 
     if ([PFUser currentUser])
     {
@@ -109,8 +107,8 @@
     cell.userAgeLabel.textColor = [UIColor whiteColor];
     cell.genderLabel.textColor = [UIColor whiteColor];
     cell.backgroundColor = [UIColor clearColor];
-    cell.chatButton.backgroundColor = [UIColor clearColor];
-    cell.backgroundLabel.backgroundColor = [UIColor backgroundColor];
+    cell.chatButton.backgroundColor = [UIColor whiteColor];
+    cell.backgroundColor = [UIColor backgroundColor];
 
     cell.userNameLabel.text = [user objectForKey:@"name"];
     cell.chatButton.tag = indexPath.row;
@@ -120,8 +118,8 @@
     [cell.chatButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
     [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
 
-    cell.backgroundLabel.layer.masksToBounds = YES;
-    cell.backgroundLabel.layer.borderColor = [[UIColor blackColor]CGColor];
+    cell.layer.masksToBounds = YES;
+    cell.contentView.layer.opacity = 0.9f;
 
     cell.chatButton.shouldInvite = YES;
     
