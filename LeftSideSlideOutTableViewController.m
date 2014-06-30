@@ -248,9 +248,27 @@
 {
     if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
     {
-//          [self.appDelegate.mcManager.browser invitePeer:[[notification userInfo] objectForKey:@"peerID"] toSession:self.appDelegate.mcManager.session withContext:nil timeout:30.0];
-        NSLog(@"Connected peers: %@", self.appDelegate.mcManager.session.connectedPeers);
+        MCPeerID *myPeerID = self.appDelegate.mcManager.session.myPeerID;
+        MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
+        NSString *remotePeerName = peerID.displayName;
+
+        NSLog(@"hopefully not disconnecting randomly");
+
+        BOOL shouldInvite = ([myPeerID.displayName compare:remotePeerName] == NSOrderedDescending);
+        NSLog(@"MCManager connected peers array after one disconnected %@", self.appDelegate.mcManager.session.connectedPeers);
+
+        if (shouldInvite)
+        {
+            NSLog(@"inviting advertising peer to session %@", peerID.displayName);
+//            [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30.0];
     }
+    if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
+    {
+        NSLog(@"Connect peers after changing state to connected %@", self.appDelegate.mcManager.session.connectedPeers);
+
+        }
+    }
+
 //    MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
 //
 //    NSDictionary *userDictionary = [NSDictionary new];
