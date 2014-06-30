@@ -8,9 +8,11 @@
 
 #import "LoginViewController.h"
 #import "SearchViewController.h"
+#import "UIColor+DesignColors.h"
 #import <Parse/Parse.h>
 
 @interface LoginViewController () <PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate>
+@property (weak, nonatomic) IBOutlet UIImageView *backgroundImageView;
 
 @end
 
@@ -22,8 +24,26 @@
     self.fields = PFLogInFieldsFacebook | PFLogInFieldsSignUpButton | PFLogInFieldsDefault;
     self.logInView.dismissButton.alpha = 0.0;
     self.delegate = self;
-    self.logInView.backgroundColor = [UIColor blackColor];
+//    self.backgroundImageView.image = [UIImage imageNamed:@"riverpic"];
+    [self.logInView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"river"]]];
+
+    self.logInView.usernameField.backgroundColor = [UIColor backgroundColor];
+    self.logInView.usernameField.layer.opacity = 0.9f;
+    self.logInView.passwordField.backgroundColor = [UIColor backgroundColor];
+    self.logInView.passwordField.layer.opacity = 0.9f;
+    self.logInView.usernameField.textColor = [UIColor whiteColor];
+    self.logInView.passwordField.textColor = [UIColor whiteColor];
+    UIColor *color = [UIColor whiteColor];
+    self.logInView.usernameField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"User Name" attributes:@{NSForegroundColorAttributeName: color}];
+    self.logInView.passwordField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Password" attributes:@{NSForegroundColorAttributeName: color}];
+    self.logInView.usernameField.layer.cornerRadius = 5.0f;
+    self.logInView.passwordField.layer.cornerRadius = 5.0f;
+
+    [self.logInView.logInButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+
+
     self.logInView.logo = nil;
+    self.delegate = self;
 
     return self;
 }
@@ -35,6 +55,8 @@
     PFSignUpViewController *signUpViewController = [PFSignUpViewController new];
     signUpViewController.delegate = self;
     self.signUpController = signUpViewController;
+    [self.signUpController.signUpView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"river"]]];
+    
 }
 
 // Sent to the delegate to determine whether the log in request should be submitted to the server.
@@ -82,7 +104,8 @@
 {
     // Checks if user is logged in with Facebook and updates the Parse database accordingly.
     [self updateFacebookData];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self performSegueWithIdentifier:@"next" sender:self];
+//    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 // Sent to the delegate when the log in attempt fails.

@@ -246,11 +246,16 @@
                                 <rect key="frame" x="150" y="274" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6sZ-ae-Xf9">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
                         <outlet property="activityIndicator" destination="ovq-bl-WpJ" id="2ln-dB-2K3"/>
+                        <outlet property="imageView" destination="6sZ-ae-Xf9" id="8Z6-ge-Yye"/>
                         <segue destination="YtN-Te-lIS" kind="modal" identifier="loginsegue" id="NjQ-JL-4D6"/>
                         <segue destination="unr-Eu-85D" kind="modal" identifier="onward" id="iIA-I2-AMM"/>
                     </connections>
@@ -1011,6 +1016,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="KUh-Ac-1xt"/>
+                    <connections>
+                        <segue destination="unr-Eu-85D" kind="modal" identifier="next" id="OCk-mp-ig6"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Ut-BM-T1u" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1047,4 +1055,7 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="OCk-mp-ig6"/>
+    </inferredMetricsTieBreakers>
 </document>
