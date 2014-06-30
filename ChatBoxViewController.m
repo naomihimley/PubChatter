@@ -37,6 +37,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
+    self.navigationController.navigationBar.alpha = 1.0;
+    self.tableView.backgroundColor = [UIColor whiteColor];
+    self.tableView.separatorColor = [UIColor backgroundColor];
     self.viewy = self.view.frame.origin.y;
     self.chatTextFieldy = self.chatFieldView.frame.origin.y;
     self.tableViewy = self.tableView.frame.origin.y;
@@ -215,6 +219,10 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    cell.backgroundColor = [UIColor backgroundColor];
+    cell.leftLabel.textColor = [UIColor whiteColor];
+    cell.rightLabel.textColor = [UIColor whiteColor];
+
     if (self.sortedArray)
     {
         Message *message = [self.sortedArray objectAtIndex:indexPath.row];
