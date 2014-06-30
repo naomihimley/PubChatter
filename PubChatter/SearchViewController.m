@@ -88,17 +88,19 @@
     self.rateBarButton.action = @selector(rightRevealToggle:);
 //    [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     [self.view resignFirstResponder];
-}
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
     [self isUserInBar];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [[self.appDelegate beaconRegionManager]canUserUseApp];
 
     [self.appDelegate.mcManager setupPeerAndSessionWithDisplayName:[[PFUser currentUser]objectForKey:@"username"]];
     [self.appDelegate.mcManager advertiseSelf:YES];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
 }
 
 // Finds user location and sets the userLocation property
