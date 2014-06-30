@@ -42,6 +42,9 @@
 
     [self.appDelegate.mcManager startBrowsingForPeers];
 
+    self.navigationController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Skyline"]];
+//    self.tableView.backgroundColor = [UIColor clearColor];
+
     if ([PFUser currentUser])
     {
 
@@ -252,10 +255,9 @@
 //        MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
 //        NSString *remotePeerName = peerID.displayName;
 
-        NSLog(@"hopefully not disconnecting randomly");
+
 
 //        BOOL shouldInvite = ([myPeerID.displayName compare:remotePeerName] == NSOrderedDescending);
-        NSLog(@"MCManager connected peers array after one disconnected %@", self.appDelegate.mcManager.session.connectedPeers);
 
 //        if (shouldInvite)
 //        {
@@ -375,7 +377,6 @@
     {
         if ([userCell.cellUserDisplayName isEqual:peerID.displayName])
         {
-//            cell = userCell;
             [userCell.chatReceivedImage setHidden:NO];
         }
     }
