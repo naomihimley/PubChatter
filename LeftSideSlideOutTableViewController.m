@@ -116,7 +116,13 @@
     [cell.chatButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
     [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
 
+    cell.chatButton.layer.cornerRadius = 5.0f;
+
     cell.chatButton.shouldInvite = YES;
+
+    cell.layer.masksToBounds = YES;
+    cell.layer.borderWidth = 0.25f;
+    cell.layer.borderColor = [[UIColor whiteColor]CGColor];
     
 
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -245,6 +251,7 @@
 {
     if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
     {
+
 //        MCPeerID *myPeerID = self.appDelegate.mcManager.session.myPeerID;
 //        MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
 //        NSString *remotePeerName = peerID.displayName;
@@ -310,8 +317,12 @@
             });
 
         }
-//        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
-//        {
+        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                   cell.chatButton.shouldInvite = YES;
+            });
+
 //            if ([cell.chatButton.titleLabel.text isEqual: @"Connecting"])
 //            {
 //                dispatch_async(dispatch_get_main_queue(), ^{
@@ -328,7 +339,7 @@
 //                    [cell.chatButton setEnabled:YES];
 //                });
 //            }
-//        }
+        }
     }
 }
 
