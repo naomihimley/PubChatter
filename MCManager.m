@@ -42,10 +42,7 @@
 
 -(void)session:(MCSession *)session didReceiveCertificate:(NSArray *)certificate fromPeer:(MCPeerID *)peerID certificateHandler:(void (^)(BOOL))certificateHandler
 {
-    if (certificateHandler != nil)
-    {
-        certificateHandler(YES);
-    }
+    certificateHandler(YES);
 }
 
 -(void)session:(MCSession *)session peer:(MCPeerID *)peerID didChangeState:(MCSessionState)state
@@ -150,6 +147,7 @@
 
 -(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
 {
+    NSMutableArray *peersConnectedTo = [NSMutableArray array];
 //    MCPeerID *myPeerID = self.session.myPeerID;
 //    NSString *remotePeerName = peerID.displayName;
 
@@ -161,6 +159,10 @@
 //        NSLog(@"inviting advertising peer to session %@", peerID.displayName);
 //        [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
 //    }
+    for (MCPeerID *peer in self.session.connectedPeers)
+    {
+        [peersConnectedTo addObject:peer.displayName];
+    }
 
     if (self.advertisingUsers.count == 0 && peerID.displayName != self.peerID.displayName)
     {
@@ -168,7 +170,7 @@
         [self.foundPeersArray addObject:self.peerID.displayName];
         NSDictionary *dictionary = @{@"peerID": peerID};
 
-        [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
+//        [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
         [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:dictionary];
     }
     else
@@ -185,6 +187,11 @@
 
             [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:dictionary];
         }
+    }
+
+    if (![peersConnectedTo containsObject:peerID.displayName])
+    {
+         [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
     }
 
     NSLog(@"self.foundpeerArray %@", self.foundPeersArray);
