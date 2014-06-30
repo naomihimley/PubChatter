@@ -14,7 +14,7 @@
 #import "UIColor+DesignColors.h"
 #import "ChatTableViewCell.h"
 
-@interface ChatBoxViewController ()<UITextFieldDelegate, UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface ChatBoxViewController ()<UITextFieldDelegate, UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource, SWRevealViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *chatTextField;
 @property PFUser *chatingUser;
 @property MCPeerID *chattingUserPeerID;
@@ -24,6 +24,7 @@
 @property ChatTableViewCell *customCell;
 @property CGFloat viewy;
 @property (weak, nonatomic) IBOutlet UIView *chatFieldView;
+@property BOOL isUserInteration;
 
 -(void)didReceiveDataWithNotification: (NSNotification *)notification;
 -(void)sendMyMessage;
@@ -35,6 +36,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.revealViewController.delegate = self;
     self.sortedArray = [NSArray new];
     self.fetchedResultsController.delegate = self;
     self.fetchedResultsController = [[NSFetchedResultsController alloc]init];
@@ -57,6 +59,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.isUserInteration = YES;
     if (!self.chattingUserPeerID) {
         self.navigationItem.title = @"Not Chatting";
     }
@@ -66,6 +69,7 @@
     }
     [self style];
 }
+
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
@@ -159,6 +163,13 @@
 }
 
 # pragma mark - TableViewDelegate methods
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    [self.view endEditing:YES];
+    NSLog(@"scroll view did scroll");
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     //how it was before
@@ -225,6 +236,25 @@
     }
     return cell;
 }
+
+#pragma mark - Reveal Delegate Method
+
+- (void)revealController:(SWRevealViewController *)revealController didMoveToPosition:(FrontViewPosition)position
+{
+    if (self.isUserInteration)
+    {
+        self.tableView.userInteractionEnabled = NO;
+        self.tabBarController.tabBar.userInteractionEnabled = NO;
+        self.isUserInteration = NO;
+    }
+    else
+    {
+        self.tableView.userInteractionEnabled = YES;
+        self.tabBarController.tabBar.userInteractionEnabled = YES;
+        self.isUserInteration = YES;
+    }
+}
+
 
 #pragma mark - Helper method implementations
 
