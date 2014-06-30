@@ -82,8 +82,6 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    NSLog(@"Left swipe out");
 }
 
 #pragma mark - Table view data source

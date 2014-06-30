@@ -601,8 +601,8 @@ calloutAccessoryControlTapped:(UIControl *)control
     [cell.imageView sd_setImageWithURL:[NSURL URLWithString:yelpBar.businessImageURL]
                       placeholderImage:[UIImage imageNamed:@"placeholder2"]];
     [cell layoutSubviews];
-    cell.backgroundColor = [UIColor backgroundColor];
-    cell.barNameLabel.textColor = [UIColor whiteColor];
+    cell.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.9];
+    cell.barNameLabel.textColor = [UIColor nameColor];
     cell.barDistanceLabel.textColor = [UIColor whiteColor];
 
     return cell;
@@ -711,13 +711,14 @@ calloutAccessoryControlTapped:(UIControl *)control
 
 -(void)setStyle
 {
-    self.view.backgroundColor = [UIColor backgroundColor];
-    self.toggleControlOutlet.backgroundColor = [UIColor backgroundColor];
-    self.toggleControlOutlet.tintColor = [UIColor whiteColor];
-    self.redrawAreaButtonOutlet.backgroundColor = [UIColor whiteColor];
-    [self.redrawAreaButtonOutlet setTitleColor:[UIColor backgroundColor] forState:UIControlStateNormal];
-    self.redrawAreaButtonOutlet.titleLabel.textColor = [UIColor backgroundColor];
-    self.tableView.backgroundColor = [UIColor backgroundColor];
+    self.tableView.backgroundColor = [UIColor clearColor];
+    self.view.backgroundColor = [UIColor clearColor];
+    self.toggleControlOutlet.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.9];
+    self.toggleControlOutlet.tintColor = [UIColor textColor];
+    self.redrawAreaButtonOutlet.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.9];
+    [self.redrawAreaButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+    self.redrawAreaButtonOutlet.layer.borderWidth = 1.0f;
+    self.redrawAreaButtonOutlet.layer.borderColor = [[UIColor buttonColor]CGColor];
     self.searchBar.backgroundColor = [UIColor backgroundColor];
     self.activityIndicatorOutlet.color = [UIColor backgroundColor];
 }

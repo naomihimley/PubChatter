@@ -90,10 +90,12 @@
     // Set about me.
     if ([self.user objectForKey:@"bio"])
     {
+        UIColor *color = [UIColor whiteColor];
         NSString *name = [self.user objectForKey:@"name"];
         UIFont *boldFont = [UIFont boldSystemFontOfSize:12.0];
         NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"About %@\n%@", name, [self.user objectForKey:@"bio"]]];
         [attrString addAttribute: NSFontAttributeName value: boldFont range: NSMakeRange(0, 6 + name.length)];
+        [attrString addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, attrString.length)];
         self.bioLabel.attributedText = attrString;
     }
     else
