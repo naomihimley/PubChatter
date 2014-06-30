@@ -16,6 +16,7 @@
 #import <Parse/Parse.h>
 #import "LoginViewController.h"
 #import "UIImageView+WebCache.h"
+#import "UIColor+DesignColors.h"
 #import "AppDelegate.h"
 
 @interface SearchViewController () <UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate, MKMapViewDelegate>
@@ -28,6 +29,7 @@
 @property NSArray *barLocations;
 @property YelpBar *selectedBar;
 @property NSArray *arrImagesUrl;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicatorOutlet;
 @property (weak, nonatomic) IBOutlet UIButton *currentLocationButtonOutlet;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *toggleControlOutlet;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
@@ -53,12 +55,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setStyle];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(userEnteredBar:)
                                                  name:@"userEnteredBar"
                                                object:nil];
 
     // Do set up work, set querystring, mapspan, and begin looking for user location.
+    self.activityIndicatorOutlet.hidden = YES;
     self.didCheckForBeaconMonitoring = NO;
     self.initialMapLoad = YES;
     self.queryString = @"bar";
@@ -149,6 +153,8 @@
 // Removes all annotations from mapView, creates a new map region from the current mapView region, which is used to make another call to Yelp API. Disables button until results are returned.
 - (IBAction)onRedrawRegionButtonPressed:(id)sender
 {
+    self.activityIndicatorOutlet.hidden = NO;
+    [self.activityIndicatorOutlet startAnimating];
     self.redrawAreaButtonOutlet.enabled = NO;
     [self.mapView removeAnnotations:self.mapView.annotations];
 
@@ -423,6 +429,8 @@
                          if (!self.didCheckForBeaconMonitoring) {
                              [self checkIfBeaconMonitoringIsAvailable];
                          }
+                         self.activityIndicatorOutlet.hidden = YES;
+                         [self.activityIndicatorOutlet stopAnimating];
                          NSLog(@"Done");
                    }
             }];
@@ -476,6 +484,8 @@
             [self changeSegment:self.toggleControlOutlet.selectedSegmentIndex];
             self.searchActivated = NO;
             }
+        self.activityIndicatorOutlet.hidden = YES;
+        [self.activityIndicatorOutlet stopAnimating];
         }];
     }
 }
@@ -523,6 +533,8 @@ calloutAccessoryControlTapped:(UIControl *)control
 - (void)mapViewDidFinishRenderingMap:(MKMapView *)mapView fullyRendered:(BOOL)fullyRendered
 {
     if (self.initialMapLoad) {
+    self.activityIndicatorOutlet.hidden = NO;
+    [self.activityIndicatorOutlet startAnimating];
     NSLog(@"Map finished loading");
     [self getMapRect];
     [self getYelpJSONFromMapRedraw:@"bar" andSWLatitude:self.SWBoundsLatitude andSWLongitude:self.SWBoundsLongitude andNELatitude:self.NEBoundsLatitude andNELongitude:self.NEBoundsLongitude andSortType:@"0" andNumResults:@"20"];
@@ -549,7 +561,10 @@ calloutAccessoryControlTapped:(UIControl *)control
     [cell.imageView sd_setImageWithURL:[NSURL URLWithString:[self.arrImagesUrl objectAtIndex:indexPath.row]]
                       placeholderImage:[UIImage imageNamed:@"placeholder2"]];
     [cell layoutSubviews];
-    
+    cell.backgroundColor = [UIColor backgroundColor];
+    cell.barNameLabel.textColor = [UIColor whiteColor];
+    cell.barDistanceLabel.textColor = [UIColor whiteColor];
+
     return cell;
 }
 
@@ -605,6 +620,9 @@ calloutAccessoryControlTapped:(UIControl *)control
 // Enables search on keyPad search button pressed.
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
+    self.activityIndicatorOutlet.hidden = NO;
+    [self.activityIndicatorOutlet startAnimating];
+
     // Set search boolean.
     self.searchActivated  = YES;
 
@@ -667,6 +685,21 @@ calloutAccessoryControlTapped:(UIControl *)control
     self.SWBoundsLongitude = bottomLeft.longitude;
     self.NEBoundsLatitude = topRight.latitude;
     self.NEBoundsLongitude  = topRight.longitude;
+}
+
+#pragma mark - Set style method
+
+-(void)setStyle
+{
+    self.view.backgroundColor = [UIColor backgroundColor];
+    self.toggleControlOutlet.backgroundColor = [UIColor backgroundColor];
+    self.toggleControlOutlet.tintColor = [UIColor whiteColor];
+    self.redrawAreaButtonOutlet.backgroundColor = [UIColor whiteColor];
+    [self.redrawAreaButtonOutlet setTitleColor:[UIColor backgroundColor] forState:UIControlStateNormal];
+    self.redrawAreaButtonOutlet.titleLabel.textColor = [UIColor backgroundColor];
+    self.tableView.backgroundColor = [UIColor backgroundColor];
+    self.searchBar.backgroundColor = [UIColor backgroundColor];
+    self.activityIndicatorOutlet.color = [UIColor backgroundColor];
 }
 
 @end
