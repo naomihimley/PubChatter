@@ -24,7 +24,6 @@
     self.fields = PFLogInFieldsFacebook | PFLogInFieldsSignUpButton | PFLogInFieldsDefault;
     self.logInView.dismissButton.alpha = 0.0;
     self.delegate = self;
-//    self.backgroundImageView.image = [UIImage imageNamed:@"riverpic"];
     [self.logInView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"river"]]];
 
     self.logInView.usernameField.backgroundColor = [UIColor backgroundColor];

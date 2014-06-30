@@ -106,7 +106,7 @@
     cell.userNameLabel.textColor = [UIColor nameColor];
     cell.genderLabel.textColor = [UIColor whiteColor];
     cell.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.8];
-    cell.chatButton.backgroundColor = [UIColor whiteColor];
+    cell.chatButton.backgroundColor = [UIColor clearColor];
 
     cell.userNameLabel.text = [user objectForKey:@"name"];
     cell.chatButton.tag = indexPath.row;
@@ -117,7 +117,8 @@
     [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
 
     cell.chatButton.layer.cornerRadius = 5.0f;
-
+    cell.chatButton.layer.borderWidth = 1.0f;
+    cell.chatButton.layer.borderColor= [[UIColor buttonColor]CGColor];
     cell.chatButton.shouldInvite = YES;
 
     cell.layer.masksToBounds = YES;
@@ -166,7 +167,8 @@
     PFFile *imageFile = [user objectForKey:@"picture"];
     [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
         cell.userImage.layer.masksToBounds = YES;
-        cell.userImage.layer.borderColor = [[UIColor blackColor]CGColor];
+        cell.userImage.layer.borderWidth = 1.0f;
+        cell.userImage.layer.borderColor = [[UIColor accentColor]CGColor];
         cell.userImage.image = [UIImage imageWithData:data];
     }];
     return cell;
@@ -382,7 +384,9 @@
     {
         if ([userCell.cellUserDisplayName isEqual:peerID.displayName])
         {
-            [userCell.chatReceivedImage setHidden:NO];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [userCell.chatReceivedImage setHidden:NO];
+            });
         }
     }
 
