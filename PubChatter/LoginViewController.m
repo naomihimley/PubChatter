@@ -42,8 +42,6 @@
     [self.logInView.logInButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 
 
-
-
     self.logInView.logo = nil;
     self.delegate = self;
 
@@ -57,6 +55,8 @@
     PFSignUpViewController *signUpViewController = [PFSignUpViewController new];
     signUpViewController.delegate = self;
     self.signUpController = signUpViewController;
+    [self.signUpController.signUpView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"river"]]];
+    
 }
 
 // Sent to the delegate to determine whether the log in request should be submitted to the server.
