@@ -118,6 +118,8 @@
 
     cell.backgroundLabel.layer.masksToBounds = YES;
     cell.backgroundLabel.layer.borderColor = [[UIColor blackColor]CGColor];
+
+    cell.chatButton.shouldInvite = YES;
     
 
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -217,7 +219,7 @@
 
 - (IBAction)onButtonTappedSendInvitation:(id)sender
 {
-    UIButton *button = (UIButton *)sender;
+    ChatButton *button = (ChatButton *)sender;
 
     ListOfUsersTableViewCell *cell = (ListOfUsersTableViewCell *)[[[sender superview]superview]superview];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
@@ -231,15 +233,13 @@
     [cell.chatReceivedImage setHidden:YES];
     self.selectedChatButton = button;
 
-//    MCPeerID *peerID = [dictionary objectForKey:@"peerID"];
+    MCPeerID *peerID = [dictionary objectForKey:@"peerID"];
 
-//    if ([button.titleLabel.text isEqual:@"Invite"])
-//    {
-//        [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30];
-//
-//        [button setTitle:@"Inviting" forState:UIControlStateNormal];
-//        [button setEnabled:NO];
-//    }
+    if (button.shouldInvite == YES)
+    {
+        [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30];
+        button.shouldInvite = NO;
+    }
 }
 
 #pragma mark - Private method for handling the changing of peer's state
@@ -248,20 +248,20 @@
 {
     if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
     {
-        MCPeerID *myPeerID = self.appDelegate.mcManager.session.myPeerID;
-        MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
-        NSString *remotePeerName = peerID.displayName;
+//        MCPeerID *myPeerID = self.appDelegate.mcManager.session.myPeerID;
+//        MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
+//        NSString *remotePeerName = peerID.displayName;
 
         NSLog(@"hopefully not disconnecting randomly");
 
-        BOOL shouldInvite = ([myPeerID.displayName compare:remotePeerName] == NSOrderedDescending);
+//        BOOL shouldInvite = ([myPeerID.displayName compare:remotePeerName] == NSOrderedDescending);
         NSLog(@"MCManager connected peers array after one disconnected %@", self.appDelegate.mcManager.session.connectedPeers);
 
-        if (shouldInvite)
-        {
-            NSLog(@"inviting advertising peer to session %@", peerID.displayName);
+//        if (shouldInvite)
+//        {
+//            NSLog(@"inviting advertising peer to session %@", peerID.displayName);
 //            [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30.0];
-    }
+//    }
     if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
     {
         NSLog(@"Connect peers after changing state to connected %@", self.appDelegate.mcManager.session.connectedPeers);
@@ -269,43 +269,51 @@
         }
     }
 
-//    MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
-//
-//    NSDictionary *userDictionary = [NSDictionary new];
-//    ListOfUsersTableViewCell *cell = [ListOfUsersTableViewCell new];
-//
-//    for (NSDictionary *dictionary in self.users)
-//    {
-//        if ([[dictionary objectForKey:@"peerID"] isEqual:peerID])
-//        {
-//            userDictionary = dictionary;
-//        }
-//    }
-//
-//    //    long index = [self.users indexOfObject:userDictionary];
-//
-//    for (ListOfUsersTableViewCell *userCell in self.cellArray)
-//    {
-//        if ([userCell.cellUserDisplayName isEqual:peerID.displayName])
-//        {
-//            cell = userCell;
-//        }
-//    }
-//
-//    if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnecting)
-//    {
+    MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
+
+    NSDictionary *userDictionary = [NSDictionary new];
+    ListOfUsersTableViewCell *cell = [ListOfUsersTableViewCell new];
+
+    for (NSDictionary *dictionary in self.users)
+    {
+        if ([[dictionary objectForKey:@"peerID"] isEqual:peerID])
+        {
+            userDictionary = dictionary;
+        }
+    }
+
+    //    long index = [self.users indexOfObject:userDictionary];
+
+    for (ListOfUsersTableViewCell *userCell in self.cellArray)
+    {
+        if ([userCell.cellUserDisplayName isEqual:peerID.displayName])
+        {
+            cell = userCell;
+        }
+    }
+
+    if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnecting)
+    {
 //        [cell.chatButton setTitle:@"Inviting" forState:UIControlStateNormal];
-//        [cell.chatButton setEnabled:NO];
-//    }
-//    else if ([[[notification userInfo]objectForKey:@"state"]intValue] != MCSessionStateConnecting)
-//    {
-//        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
-//        {
+//
+        dispatch_async(dispatch_get_main_queue(), ^{
+             cell.chatButton.shouldInvite = NO;
+        });
+
+    }
+    else if ([[[notification userInfo]objectForKey:@"state"]intValue] != MCSessionStateConnecting)
+    {
+        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
+        {
 //            dispatch_async(dispatch_get_main_queue(), ^{
 //                [cell.chatButton setEnabled:YES];
 //                [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
 //            });
-//        }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                 cell.chatButton.shouldInvite = NO;
+            });
+
+        }
 //        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
 //        {
 //            if ([cell.chatButton.titleLabel.text isEqual: @"Connecting"])
@@ -325,7 +333,7 @@
 //                });
 //            }
 //        }
-//    }
+    }
 }
 
 # pragma mark - Stopped Advertising method catcher
