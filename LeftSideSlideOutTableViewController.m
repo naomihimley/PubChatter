@@ -234,17 +234,18 @@
     self.selectedChatButton.titleLabel.textColor = [UIColor buttonColor];
     self.selectedChatButton = nil;
     [[NSNotificationCenter defaultCenter]postNotificationName:@"PeerToChatWith" object:nil userInfo:dictionary];
-    button.titleLabel.textColor = [UIColor accentColor];
+//    button.titleLabel.textColor = [UIColor accentColor];
+    [button setTitleColor:[UIColor accentColor] forState:UIControlStateNormal];
     [cell.chatReceivedImage setHidden:YES];
     self.selectedChatButton = button;
 
-    MCPeerID *peerID = [dictionary objectForKey:@"peerID"];
+//    MCPeerID *peerID = [dictionary objectForKey:@"peerID"];
 
-    if (button.shouldInvite == YES)
-    {
-        [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30];
-        button.shouldInvite = NO;
-    }
+//    if (button.shouldInvite == YES)
+//    {
+//        [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30];
+//        button.shouldInvite = NO;
+//    }
 }
 
 #pragma mark - Private method for handling the changing of peer's state
@@ -301,9 +302,9 @@
     {
 //        [cell.chatButton setTitle:@"Inviting" forState:UIControlStateNormal];
 //
-        dispatch_async(dispatch_get_main_queue(), ^{
-             cell.chatButton.shouldInvite = NO;
-        });
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//             cell.chatButton.shouldInvite = NO;
+//        });
 
     }
     else if ([[[notification userInfo]objectForKey:@"state"]intValue] != MCSessionStateConnecting)
@@ -314,16 +315,16 @@
 //                [cell.chatButton setEnabled:YES];
 //                [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
 //            });
-            dispatch_async(dispatch_get_main_queue(), ^{
-                 cell.chatButton.shouldInvite = NO;
-            });
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                 cell.chatButton.shouldInvite = NO;
+//            });
 
         }
         if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
         {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                   cell.chatButton.shouldInvite = YES;
-            });
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                   cell.chatButton.shouldInvite = YES;
+//            });
 
 //            if ([cell.chatButton.titleLabel.text isEqual: @"Connecting"])
 //            {

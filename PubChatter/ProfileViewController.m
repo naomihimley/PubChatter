@@ -34,10 +34,7 @@
                                                object:nil];
     self.navigationItem.title= @"PubChat";
     self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
-    self.viewInBackground.opaque = YES;
-    self.viewInBackground.layer.opacity = 0.9f;
-    self.viewInBackground.alpha = 0.9f;
-    [self.viewInBackground setBackgroundColor:[[UIColor backgroundColor]colorWithAlphaComponent:0.9f]];
+    [self.viewInBackground setBackgroundColor:[[UIColor backgroundColor]colorWithAlphaComponent:0.95f]];
 
     self.view.backgroundColor = [UIColor blackColor];
     self.nameLabel.textColor = [UIColor nameColor];

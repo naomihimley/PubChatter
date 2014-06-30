@@ -37,7 +37,7 @@
 
     self.userNameLabel.textColor =[UIColor nameColor];
     self.navBar.backgroundColor = [UIColor navBarColor];
-    self.backgroundLayoutView.backgroundColor = [UIColor backgroundColor];
+    self.backgroundLayoutView.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.95f];
     self.sexualOrientationLabel.textColor = [UIColor whiteColor];
     self.sexLabel.textColor = [UIColor whiteColor];
     self.bioLabel.editable = YES;
@@ -80,7 +80,7 @@
     }
     else if ([self.user objectForKey:@"age"])
     {
-        self.sexLabel.text = [NSString stringWithFormat:[self.user objectForKey:@"age"]];
+        self.sexLabel.text = [NSString stringWithFormat:@"%@",[self.user objectForKey:@"age"]];
     }
     else
     {
