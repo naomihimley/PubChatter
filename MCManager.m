@@ -135,19 +135,21 @@
 {
     NSLog(@"didReceiveInvitationFromPeer %@", peerID.displayName);
 
-    NSMutableArray *peersConnectedTo = [NSMutableArray array];
-
-    for (MCPeerID *peer in self.session.connectedPeers)
-    {
-        [peersConnectedTo addObject:peer.displayName];
-    }
-    NSLog(@"peersConnectedTo array in didReceiveInvitation %@", peersConnectedTo);
-
-    if (![peersConnectedTo containsObject:peerID.displayName])
-    {
-        NSLog(@"accepting invitation");
-        invitationHandler(YES, self.session);
-    }
+//    NSMutableArray *peersConnectedTo = [NSMutableArray array];
+//
+//    for (MCPeerID *peer in self.session.connectedPeers)
+//    {
+//        [peersConnectedTo addObject:peer.displayName];
+//    }
+//    NSLog(@"peersConnectedTo array in didReceiveInvitation %@", peersConnectedTo);
+//
+//    if (![peersConnectedTo containsObject:peerID.displayName])
+//    {
+//        NSLog(@"accepting invitation");
+//        invitationHandler(YES, self.session);
+//    }
+    NSLog(@"accepting invitation");
+    invitationHandler(YES, self.session);
 
 
 
@@ -161,24 +163,24 @@
 
 -(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
 {
-    NSMutableArray *peersConnectedTo = [NSMutableArray array];
-
-    NSLog(@"connectedPeers in browser delegate %@", self.session.connectedPeers);
-    for (MCPeerID *peer in self.session.connectedPeers)
-    {
-        [peersConnectedTo addObject:peer.displayName];
-    }
-    MCPeerID *myPeerID = self.session.myPeerID;
-    NSString *remotePeerName = peerID.displayName;
-
-    BOOL shouldInvite = ([myPeerID.displayName compare:remotePeerName] == NSOrderedDescending && ![peersConnectedTo containsObject:peerID.displayName]);
-    NSLog(@"Found peer and invited");
-
-    if (shouldInvite)
-    {
-        NSLog(@"inviting advertising peer to session %@", peerID.displayName);
-        [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
-    }
+//    NSMutableArray *peersConnectedTo = [NSMutableArray array];
+//
+//    NSLog(@"connectedPeers in browser delegate %@", self.session.connectedPeers);
+//    for (MCPeerID *peer in self.session.connectedPeers)
+//    {
+//        [peersConnectedTo addObject:peer.displayName];
+//    }
+//    MCPeerID *myPeerID = self.session.myPeerID;
+//    NSString *remotePeerName = peerID.displayName;
+//
+//    BOOL shouldInvite = ([myPeerID.displayName compare:remotePeerName] == NSOrderedDescending && ![peersConnectedTo containsObject:peerID.displayName]);
+//    NSLog(@"Found peer and invited");
+//
+//    if (shouldInvite)
+//    {
+//        NSLog(@"inviting advertising peer to session %@", peerID.displayName);
+//        [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
+//    }
 
 //    NSLog(@"peersConnectedTo Array in found advertising peers %@", peersConnectedTo);
 //
@@ -212,17 +214,17 @@
         }
     }
 
-    for (MCPeerID *peer in self.session.connectedPeers)
-    {
-        [peersConnectedTo addObject:peer.displayName];
-    }
-
-    NSLog(@"peersConnectedTo Array in found advertising peers %@", peersConnectedTo);
-
-    if (![peersConnectedTo containsObject:peerID.displayName])
-    {
-         [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
-    }
+//    for (MCPeerID *peer in self.session.connectedPeers)
+//    {
+//        [peersConnectedTo addObject:peer.displayName];
+//    }
+//
+//    NSLog(@"peersConnectedTo Array in found advertising peers %@", peersConnectedTo);
+//
+//    if (![peersConnectedTo containsObject:peerID.displayName])
+//    {
+//         [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
+//    }
 
     [self.foundPeersArray addObject:peerID.displayName];
 }
