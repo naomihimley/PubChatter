@@ -42,8 +42,9 @@
 
     [self.appDelegate.mcManager startBrowsingForPeers];
 
-    self.navigationController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Skyline"]];
+//    self.navigationController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"Chicago Skyline_Images-05.png"]];
 //    self.tableView.backgroundColor = [UIColor clearColor];
+    [self.tableView setBackgroundView: [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Skyline"]]];
 
     if ([PFUser currentUser])
     {
