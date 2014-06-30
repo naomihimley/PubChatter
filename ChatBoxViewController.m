@@ -24,6 +24,7 @@
 @property ChatTableViewCell *customCell;
 @property CGFloat chatTextFieldy;
 @property CGFloat tableViewy;
+@property CGFloat viewy;
 @property (weak, nonatomic) IBOutlet UIView *chatFieldView;
 
 -(void)didReceiveDataWithNotification: (NSNotification *)notification;
@@ -36,6 +37,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.viewy = self.view.frame.origin.y;
     self.chatTextFieldy = self.chatFieldView.frame.origin.y;
     self.tableViewy = self.tableView.frame.origin.y;
     self.sortedArray = [NSArray new];
@@ -79,39 +81,18 @@
 
 -(void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    [UIView beginAnimations:@"Animate Up" context:nil];
-    [UIView setAnimationDuration:0.3];
-    [UIView setAnimationBeginsFromCurrentState:YES];
 
-    self.chatFieldView.frame = CGRectMake(self.chatFieldView.frame.origin.x,
-                                          310,
-                                          self.chatFieldView.frame.size.width,
-                                          self.chatFieldView.frame.size.height);
-
-    self.tableView.frame = CGRectMake(self.tableView.frame.origin.x,
-                                      100,
-                                      self.tableView.frame.size.width,
-                                      self.tableView.frame.size.height);
-    [UIView commitAnimations];
+        [UIView animateWithDuration:0.5 animations:^{
+            self.view.center = CGPointMake(self.view.center.x, self.view.center.y - 160);
+        }];
 }
 
 -(void)textFieldDidEndEditing:(UITextField *)textField
 {
-    [UIView beginAnimations:@"Animate Text Field Back" context:nil];
-    [UIView setAnimationDuration:0.3];
-    [UIView setAnimationBeginsFromCurrentState:YES];
+    [UIView animateWithDuration:0.5 animations:^{
+        self.view.frame = CGRectMake(self.view.frame.origin.x, self.viewy, self.view.frame.size.width, self.view.frame.size.height);
 
-    self.chatFieldView.frame = CGRectMake(self.chatFieldView.frame.origin.x,
-                                          self.chatTextFieldy,
-                                          self.chatFieldView.frame.size.width,
-                                          self.chatFieldView.frame.size.height);
-
-    self.tableView.frame = CGRectMake(self.tableView.frame.origin.x,
-                                      self.tableViewy,
-                                      self.tableView.frame.size.width,
-                                      self.tableView.frame.size.height);
-
-    [UIView commitAnimations];
+    }];
 }
 
 #pragma mark - Notification Methods
@@ -123,7 +104,6 @@
     //if the data is coming from the person you're chatting with then add it to the text view
     if ([self.chattingUserPeerID.displayName isEqual:notificationDisplayName]) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"if statement in notification");
             [self fetch];
         });
     }
@@ -196,24 +176,26 @@
 # pragma mark - TableViewDelegate methods
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (!self.customCell)
-    {
-        self.customCell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
-    }
-    Message *message = [self.sortedArray objectAtIndex:indexPath.row];
-    if ([message.isMyMessage isEqual: @0])
-    {
-        [self.customCell.leftLabel setText:message.text];
-        self.customCell.leftLabel.lineBreakMode = NSLineBreakByCharWrapping;
-    }
-    else
-    {
-        [self.customCell.rightLabel setText:message.text];
-        self.customCell.rightLabel.lineBreakMode = NSLineBreakByCharWrapping;
-    }
-    [self.customCell layoutIfNeeded];
-    CGFloat height = [self.customCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
-    return height;
+        if (!self.customCell)
+        {
+            self.customCell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+        }
+        Message *message = [self.sortedArray objectAtIndex:indexPath.row];
+        if ([message.isMyMessage isEqual: @0])
+        {
+            [self.customCell.leftLabel setText:message.text];
+            self.customCell.leftLabel.lineBreakMode = NSLineBreakByCharWrapping;
+        }
+        else
+        {
+            [self.customCell.rightLabel setText:message.text];
+            self.customCell.rightLabel.lineBreakMode = NSLineBreakByCharWrapping;
+        }
+
+        [self.customCell layoutIfNeeded];
+        CGFloat height = [self.customCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+
+        return height;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -238,7 +220,6 @@
             self.customCell.leftLabel.lineBreakMode = NSLineBreakByCharWrapping;
             cell.leftLabel.textAlignment = NSTextAlignmentLeft;
             cell.rightLabel.text = @"";
-//            cell.rightLabel.hidden = YES;
         }
         else
         {
@@ -246,7 +227,6 @@
             cell.rightLabel.textAlignment = NSTextAlignmentRight;
             self.customCell.rightLabel.lineBreakMode = NSLineBreakByCharWrapping;
             cell.leftLabel.text = @"";
-//            cell.leftLabel.hidden = YES;
         }
     }
     return cell;
