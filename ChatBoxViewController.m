@@ -142,6 +142,24 @@
 #pragma mark - FetchedResultsController Helper Methods
 - (void)fetch
 {
+    //    //trying a new kind of fetch
+//    NSEntityDescription *description = [NSEntityDescription entityForName:@"Peer" inManagedObjectContext:moc];
+//    NSFetchRequest *request = [[NSFetchRequest alloc]init];
+//    request.sortDescriptors = [NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES];
+//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", self.chattingUserPeerID.displayName];
+//    request.predicate = predicate;
+//    [request setEntity:description];
+//    [request setResultType:NSDictionaryResultType];
+//    [request setReturnsDistinctResults:YES];
+//    request.propertiesToFetch = @[@"messages"];
+//    // Execute the fetch.
+//    NSError *error;
+//    NSArray *objects = [moc executeFetchRequest:request error:&error];
+//    if (objects == nil) {
+//        NSLog(@"didn't return anything");
+//    }
+//    NSLog(@"the new fetch returned : %@", objects);
+
     NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", self.chattingUserPeerID.displayName];
@@ -156,9 +174,10 @@
     }
     else
     {
-        //load an empty tableView
+        //load an empty tableView because you dont have a conversation started with that person.
         self.sortedArray = [NSArray new];
         [self.tableView reloadData];
+
     }
 }
 
@@ -168,6 +187,7 @@
     NSSortDescriptor *sorter = [[NSSortDescriptor alloc] initWithKey:@"timeStamp" ascending:YES];
     self.sortedArray = [[set allObjects] sortedArrayUsingDescriptors:@[sorter]];
     [self.tableView reloadData];
+
     NSInteger lastRowNumber = [self.tableView numberOfRowsInSection:0] - 1;
     NSIndexPath* ip = [NSIndexPath indexPathForRow:lastRowNumber inSection:0];
     [self.tableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionTop animated:NO];
@@ -330,25 +350,15 @@
 
 - (IBAction)onButtonPressedEndSession:(id)sender
 {
-    //should remove the current convo from moc
     self.navigationItem.title = @"Not Chatting";
     self.chatTextField.text = @"";
     self.chattingUserPeerID = nil;
     [self fetch];
-    //should only disconnect user from the current chatting peer
-
-    NSLog(@"%@", self.appDelegate.mcManager.session.connectedPeers);
-//    for (MCPeerID *peer in self.appDelegate.mcManager.session.connectedPeers) {
-//        if (peer.displayName isEqual:self.chattingUserPeerID.displayName) {
-//            MCSession *session = [[MCSession ]]
-//        }
-//    }
-//    self.appDelegate.mcManager.session.connectedPeers 
-
 }
 
 - (IBAction)onButtonPressedSendChat:(id)sender
 {
+
     if (self.appDelegate.mcManager.session.connectedPeers.count > 0) {
         if(self.chattingUserPeerID)
         {
@@ -362,7 +372,7 @@
     }
     else
     {
-        //user not connected to anyone
+        NSLog(@"connected peers array is zero,because YOUR state is disconnected should we have an alert?");
     }
 }
 @end

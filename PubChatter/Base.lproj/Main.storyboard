@@ -179,7 +179,7 @@
                                     <action selector="onButtonPressedEndSession:" destination="BIN-h3-l0M" eventType="touchUpInside" id="mLZ-5v-ufJ"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4wy-6y-CN3">
+                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4wy-6y-CN3">
                                 <rect key="frame" x="15" y="460" width="291" height="52"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
@@ -204,6 +204,9 @@
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="4wy-6y-CN3" secondAttribute="bottom" constant="56" id="klV-Ta-Ywz"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="mKX-Di-BUn"/>
                     <connections>
