@@ -104,11 +104,9 @@
     [cell.chatReceivedImage setHidden:YES];
 
     cell.userNameLabel.textColor = [UIColor nameColor];
-    cell.userAgeLabel.textColor = [UIColor whiteColor];
     cell.genderLabel.textColor = [UIColor whiteColor];
-    cell.backgroundColor = [UIColor clearColor];
+    cell.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.8];
     cell.chatButton.backgroundColor = [UIColor whiteColor];
-    cell.backgroundColor = [UIColor backgroundColor];
 
     cell.userNameLabel.text = [user objectForKey:@"name"];
     cell.chatButton.tag = indexPath.row;
@@ -117,9 +115,6 @@
     cell.cellUserDisplayName = peerID.displayName;
     [cell.chatButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
     [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
-
-    cell.layer.masksToBounds = YES;
-    cell.contentView.layer.opacity = 0.9f;
 
     cell.chatButton.shouldInvite = YES;
     
