@@ -550,7 +550,7 @@
 				ORGANIZATIONNAME = "Naomi Himley";
 				TargetAttributes = {
 					B0782C37194BB3700022E6E7 = {
-						DevelopmentTeam = S38456XTSR;
+						DevelopmentTeam = 6SW4QY498T;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
