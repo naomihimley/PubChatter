@@ -429,8 +429,8 @@
                          if (!self.didCheckForBeaconMonitoring) {
                              [self checkIfBeaconMonitoringIsAvailable];
                          }
-                         self.activityIndicatorOutlet.hidden = YES;
                          [self.activityIndicatorOutlet stopAnimating];
+                         self.activityIndicatorOutlet.hidden = YES;
                          NSLog(@"Done");
                    }
             }];
@@ -484,8 +484,8 @@
             [self changeSegment:self.toggleControlOutlet.selectedSegmentIndex];
             self.searchActivated = NO;
             }
-        self.activityIndicatorOutlet.hidden = YES;
         [self.activityIndicatorOutlet stopAnimating];
+        self.activityIndicatorOutlet.hidden = YES;
         }];
     }
 }
