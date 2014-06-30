@@ -32,20 +32,7 @@
                                              selector:@selector(didreceiveNotification:)
                                                  name:@"userEnteredBar"
                                                object:nil];
-    self.navigationItem.title= @"PubChat";
-    self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
-    [self.viewInBackground setBackgroundColor:[[UIColor backgroundColor]colorWithAlphaComponent:0.95f]];
-
-    self.view.backgroundColor = [UIColor blackColor];
-    self.nameLabel.textColor = [UIColor nameColor];
-    self.genderLabel.textColor = [UIColor whiteColor];
-    self.bioTextView.editable = YES;
-    self.bioTextView.textColor = [UIColor whiteColor];
-    self.bioTextView.editable = NO;
-    self.sexualOrientationLabel.textColor = [UIColor whiteColor];
-    self.favDrinkLabel.textColor = [UIColor whiteColor];
-    self.bioTextView.backgroundColor = [UIColor clearColor];
-
+    [self setStyle];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -68,11 +55,14 @@
 
     if ([[PFUser currentUser]objectForKey:@"bio"]) {
 
+        UIColor *color = [UIColor whiteColor];
         NSString *name = [[PFUser currentUser]objectForKey:@"name"];
         UIFont *boldFont = [UIFont boldSystemFontOfSize:12.0];
         NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"About %@\n%@", name, [[PFUser currentUser]objectForKey:@"bio"]]];
         [attrString addAttribute: NSFontAttributeName value: boldFont range: NSMakeRange(0, 6 + name.length)];
+        [attrString addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, attrString.length)];
         self.bioTextView.attributedText = attrString;
+        self.bioTextView.textAlignment = NSTextAlignmentCenter;
     }
     else
     {
@@ -160,5 +150,26 @@
 {
     [PFUser logOut];
     [self.tabBarController setSelectedIndex:0];
+}
+
+#pragma mark - Styling method
+-(void)setStyle
+{
+    self.navigationItem.title= @"PubChat";
+    self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
+    self.viewInBackground.opaque = YES;
+    self.viewInBackground.layer.opacity = 0.9f;
+    self.viewInBackground.alpha = 0.9f;
+    [self.viewInBackground setBackgroundColor:[[UIColor backgroundColor]colorWithAlphaComponent:0.9f]];
+
+    self.view.backgroundColor = [UIColor blackColor];
+    self.nameLabel.textColor = [UIColor nameColor];
+    self.genderLabel.textColor = [UIColor whiteColor];
+    self.bioTextView.editable = YES;
+    self.bioTextView.textColor = [UIColor whiteColor];
+    self.bioTextView.editable = NO;
+    self.sexualOrientationLabel.textColor = [UIColor whiteColor];
+    self.favDrinkLabel.textColor = [UIColor whiteColor];
+    self.bioTextView.backgroundColor = [UIColor clearColor];
 }
 @end
