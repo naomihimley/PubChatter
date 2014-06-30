@@ -22,8 +22,6 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property NSArray *sortedArray;
 @property ChatTableViewCell *customCell;
-@property CGFloat chatTextFieldy;
-@property CGFloat tableViewy;
 @property CGFloat viewy;
 @property (weak, nonatomic) IBOutlet UIView *chatFieldView;
 
@@ -37,14 +35,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
-    self.navigationController.navigationBar.alpha = 1.0;
-    self.tableView.backgroundColor = [UIColor clearColor];
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"river"]];
-    self.tableView.separatorColor = [UIColor clearColor];
-    self.viewy = self.view.frame.origin.y;
-    self.chatTextFieldy = self.chatFieldView.frame.origin.y;
-    self.tableViewy = self.tableView.frame.origin.y;
     self.sortedArray = [NSArray new];
     self.fetchedResultsController.delegate = self;
     self.fetchedResultsController = [[NSFetchedResultsController alloc]init];
@@ -61,6 +51,7 @@
     self.chatTextField.delegate = self;
     [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     [self.view resignFirstResponder];
+    self.viewy = self.view.frame.origin.y;
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -73,7 +64,9 @@
     {
         [self fetch];
     }
+    [self style];
 }
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [self.view endEditing:YES];
@@ -130,24 +123,6 @@
 #pragma mark - FetchedResultsController Helper Methods
 - (void)fetch
 {
-    //    //trying a new kind of fetch
-//    NSEntityDescription *description = [NSEntityDescription entityForName:@"Peer" inManagedObjectContext:moc];
-//    NSFetchRequest *request = [[NSFetchRequest alloc]init];
-//    request.sortDescriptors = [NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES];
-//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", self.chattingUserPeerID.displayName];
-//    request.predicate = predicate;
-//    [request setEntity:description];
-//    [request setResultType:NSDictionaryResultType];
-//    [request setReturnsDistinctResults:YES];
-//    request.propertiesToFetch = @[@"messages"];
-//    // Execute the fetch.
-//    NSError *error;
-//    NSArray *objects = [moc executeFetchRequest:request error:&error];
-//    if (objects == nil) {
-//        NSLog(@"didn't return anything");
-//    }
-//    NSLog(@"the new fetch returned : %@", objects);
-
     NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
     request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", self.chattingUserPeerID.displayName];
@@ -162,6 +137,7 @@
     }
     else
     {
+        NSLog(@"loading an empty tableView");
         //load an empty tableView because you dont have a conversation started with that person.
         self.sortedArray = [NSArray new];
         [self.tableView reloadData];
@@ -179,11 +155,13 @@
     NSInteger lastRowNumber = [self.tableView numberOfRowsInSection:0] - 1;
     NSIndexPath* ip = [NSIndexPath indexPathForRow:lastRowNumber inSection:0];
     [self.tableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    NSLog(@"right after it should scroll:(");
 }
 
 # pragma mark - TableViewDelegate methods
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    //how it was before
         if (!self.customCell)
         {
             self.customCell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
@@ -192,24 +170,23 @@
         if ([message.isMyMessage isEqual: @0])
         {
             [self.customCell.leftLabel setText:message.text];
-            self.customCell.leftLabel.lineBreakMode = NSLineBreakByCharWrapping;
+            self.customCell.leftLabel.lineBreakMode = NSLineBreakByWordWrapping;
         }
         else
         {
             [self.customCell.rightLabel setText:message.text];
-            self.customCell.rightLabel.lineBreakMode = NSLineBreakByCharWrapping;
+            self.customCell.rightLabel.lineBreakMode = NSLineBreakByWordWrapping;
         }
 
         [self.customCell layoutIfNeeded];
         CGFloat height = [self.customCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
-
         return height;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 70;
-}
+//- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    return 70;
+//}
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -229,9 +206,9 @@
         Message *message = [self.sortedArray objectAtIndex:indexPath.row];
         if ([message.isMyMessage isEqual: @0]) {
             [cell.leftLabel setText:message.text];
-            self.customCell.leftLabel.lineBreakMode = NSLineBreakByCharWrapping;
             cell.leftLabel.textAlignment = NSTextAlignmentLeft;
-            cell.leftLabel.backgroundColor = [UIColor backgroundColor];
+            cell.leftLabel.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
+            cell.leftLabel.lineBreakMode = NSLineBreakByWordWrapping;
             cell.leftLabel.hidden = NO;
             cell.rightLabel.hidden = YES;
         }
@@ -240,7 +217,8 @@
             [cell.rightLabel setText: message.text];
             cell.rightLabel.backgroundColor = [UIColor backgroundColor];
             cell.rightLabel.textAlignment = NSTextAlignmentRight;
-            self.customCell.rightLabel.lineBreakMode = NSLineBreakByCharWrapping;
+            cell.rightLabel.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
+            cell.rightLabel.lineBreakMode = NSLineBreakByWordWrapping;
             cell.rightLabel.hidden = NO;
             cell.leftLabel.hidden = YES;
         }
@@ -286,7 +264,6 @@
                 [peer addMessagesObject:message];
                 [moc save:nil];
                 [self fetch];
-                NSLog(@"sending the first text");
             }
             else
             {
@@ -305,7 +282,6 @@
                 [peer addMessagesObject:message];
                 [moc save:nil];
                 [self fetch];
-                NSLog(@"sending a message");
             }
         }
     }
@@ -370,5 +346,15 @@
     {
         NSLog(@"connected peers array is zero,because YOUR state is disconnected should we have an alert?");
     }
+}
+
+#pragma  mark - Style Method
+- (void)style
+{
+    self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
+    self.navigationController.navigationBar.alpha = 1.0;
+    self.tableView.backgroundColor = [UIColor clearColor];
+    self.tableView.separatorColor = [UIColor clearColor];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"river"]];
 }
 @end

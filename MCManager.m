@@ -26,6 +26,7 @@
         self.advertisingUsers = [NSMutableArray array];
         self.foundPeersArray = [NSMutableArray array];
         self.fetchedResultsController = [[NSFetchedResultsController alloc]init];
+        self.randomNumber = arc4random_uniform(100);
     }
     return self;
 }
@@ -133,7 +134,7 @@
 
 -(void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void (^)(BOOL, MCSession *))invitationHandler
 {
-    NSLog(@"didReceiveInvitationFromPeer %@", peerID.displayName);
+//    NSLog(@"didReceiveInvitationFromPeer %@", peerID.displayName);
 
 //    NSMutableArray *peersConnectedTo = [NSMutableArray array];
 //
@@ -148,10 +149,19 @@
 //        NSLog(@"accepting invitation");
 //        invitationHandler(YES, self.session);
 //    }
-    NSLog(@"accepting invitation");
-    invitationHandler(YES, self.session);
+    NSString *string = [[NSString alloc] initWithData:context encoding:NSUTF8StringEncoding];
+    int peersInt = [string intValue];
 
 
+    if (self.randomNumber > peersInt)
+    {
+        NSLog(@"My number was larger so I accept: mine %i %@ %i", self.randomNumber, peerID.displayName,  peersInt);
+         invitationHandler(YES, self.session);
+    }
+    else
+    {
+        NSLog(@"My number was the lesser to I did not accept: mine %i %@ %i", self.randomNumber,peerID.displayName, peersInt);
+    }
 
 //    NSDictionary *dictionary = @{@"peerID":peerID};
 //    self.invitationHandlerArray = [NSMutableArray arrayWithObject:[invitationHandler copy]];
@@ -189,6 +199,14 @@
 //        [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
 //    }
 
+    if (self.session.connectedPeers.count == 0)
+    {
+        NSString *string = [NSString stringWithFormat:@"%i", self.randomNumber];
+        NSLog(@"sending int %@, SHOULD ONLY HAPPEN ONCE", string);
+        NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
+
+        [browser invitePeer:peerID toSession:self.session withContext:data timeout:30.0];
+    }
 
     if (self.advertisingUsers.count == 0 && peerID.displayName != self.peerID.displayName)
     {
@@ -206,9 +224,9 @@
             [self.advertisingUsers addObject:peerID];
             NSDictionary *dictionary = @{@"peerID": peerID};
 
-            NSLog(@"found Peer and sending invitation because we are not connected");
+//            NSLog(@"found Peer and sending invitation because we are not connected");
 
-            [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
+//            [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
 
             [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:dictionary];
         }

@@ -19,6 +19,7 @@
 @property NSMutableArray *invitationHandlerArray;
 @property NSMutableArray *foundPeersArray;
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
+@property int randomNumber;
 
 -(void)setupPeerAndSessionWithDisplayName: (NSString *)displayName;
 -(void)advertiseSelf: (BOOL)shouldAdvertise;
