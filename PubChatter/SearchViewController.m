@@ -276,6 +276,10 @@
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unable to retrieve data due to poor network connection" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             [alert show];
             NSLog(@"connection error %@", connectionError);
+            [self.activityIndicatorOutlet stopAnimating];
+            self.activityIndicatorOutlet.hidden = YES;
+            self.redrawAreaButtonOutlet.enabled = YES;
+            self.currentLocationButtonOutlet.enabled = YES;
         }
         else
         {
