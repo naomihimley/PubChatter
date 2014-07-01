@@ -141,7 +141,7 @@
     //Add Favorite drink label
     self.favDrinkLabel = [[UILabel alloc] init];
     self.favDrinkLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 30);
-    self.favDrinkLabel.text = self.favDrink;
+    self.favDrinkLabel.text = [NSString stringWithFormat:@"Favorite drink: %@", self.favDrink];
     self.favDrinkLabel.textAlignment = NSTextAlignmentCenter;
     self.favDrinkLabel.textColor = [UIColor whiteColor];
     [self.scrollView addSubview:self.favDrinkLabel];

@@ -145,7 +145,7 @@
     //Add Favorite drink label
     self.favDrinkLabel = [[UILabel alloc] init];
     self.favDrinkLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 30);
-    self.favDrinkLabel.text = self.favDrink;
+    self.favDrinkLabel.text = [NSString stringWithFormat:@"Favorite drink: %@", self.favDrink];
     self.favDrinkLabel.textAlignment = NSTextAlignmentCenter;
     self.favDrinkLabel.textColor = [UIColor whiteColor];
     [self.scrollView addSubview:self.favDrinkLabel];
@@ -160,14 +160,6 @@
     self.backgroundView.layer.cornerRadius = 5.0f;
     self.backgroundView.layer.borderColor = [[UIColor whiteColor] CGColor];
     self.backgroundView.layer.borderWidth = 1.0f;
-    [self.scrollView insertSubview:self.backgroundView atIndex:0];
-
-    // Add image borderview
-    self.imageBorderView = [[UILabel alloc] init];
-    self.imageBorderView.frame = CGRectMake(0, 0, 10, 30);
-    self.imageBorderView.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.95f];
-    self.imageBorderView.layer.borderColor = [[UIColor whiteColor] CGColor];
-    self.imageBorderView.layer.borderWidth = 1.0f;
     [self.scrollView insertSubview:self.backgroundView atIndex:0];
 
 
