@@ -62,6 +62,7 @@
 
     if(self.session.connectedPeers.count == 0)
     {
+        [self.session disconnect];
         [self setupPeerAndSessionWithDisplayName:[[PFUser currentUser]objectForKey:@"username"]];
         [self advertiseSelf:YES];
         self.shouldInvite = YES;
