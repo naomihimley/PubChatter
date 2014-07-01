@@ -26,7 +26,7 @@
 @property (weak, nonatomic) IBOutlet UIView *chatFieldView;
 @property (weak, nonatomic) IBOutlet UITextField *chatTextField;
 @property (weak, nonatomic) IBOutlet UIView *sendView;
-@property (weak, nonatomic) IBOutlet UIButton *findPubChattersButton;
+@property (strong, nonatomic) IBOutlet UIButton *findPubChattersButton;
 @property (weak, nonatomic) IBOutlet UIButton *sendButton;
 @property (weak, nonatomic) IBOutlet UILabel *barLabel;
 -(void)userEnteredBar:(NSNotification *)notification;
@@ -186,25 +186,22 @@
 # pragma mark - TableViewDelegate methods
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-        if (!self.customCell)
-        {
-            self.customCell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
-        }
-        Message *message = [self.sortedArray objectAtIndex:indexPath.row];
-        if ([message.isMyMessage isEqual: @0])
-        {
-            [self.customCell.leftLabel setText:message.text];
-            self.customCell.leftLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        }
-        else
-        {
-            [self.customCell.rightLabel setText:message.text];
-            self.customCell.rightLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        }
-
-        [self.customCell layoutIfNeeded];
-        CGFloat height = [self.customCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
-        return height;
+    if (!self.customCell) {
+        self.customCell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    }
+    Message *message = [self.sortedArray objectAtIndex:indexPath.row];
+    if ([message.isMyMessage isEqual: @0]) {
+        [self.customCell.leftLabel setText:message.text];
+        self.customCell.leftLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    }
+    else
+    {
+        [self.customCell.rightLabel setText:message.text];
+        self.customCell.rightLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    }
+    [self.customCell layoutIfNeeded];
+    CGFloat height = [self.customCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+    return height;
 }
 
 //- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -220,38 +217,52 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
-    cell.backgroundColor = [UIColor clearColor];
-    cell.leftLabel.textColor = [UIColor whiteColor];
-    cell.rightLabel.textColor = [UIColor whiteColor];
-    cell.leftLabel.layer.cornerRadius = 10.0f;
-    cell.leftLabel.layer.masksToBounds = YES;
-    cell.rightLabel.layer.cornerRadius = 10.0f;
-    cell.rightLabel.layer.masksToBounds = YES;
-
     if (self.sortedArray)
     {
         Message *message = [self.sortedArray objectAtIndex:indexPath.row];
-        if ([message.isMyMessage isEqual: @0]) {
+        if ([message.isMyMessage isEqual:@0]) {
+            ChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
             [cell.leftLabel setText:message.text];
             cell.leftLabel.textAlignment = NSTextAlignmentLeft;
+            cell.backgroundColor = [UIColor clearColor];
+            cell.leftLabel.textColor = [UIColor whiteColor];
+            cell.rightLabel.textColor = [UIColor whiteColor];
+            cell.leftLabel.layer.cornerRadius = 10.0f;
+            cell.leftLabel.layer.masksToBounds = YES;
+            cell.rightLabel.layer.cornerRadius = 10.0f;
+            cell.rightLabel.layer.masksToBounds = YES;
             cell.leftLabel.backgroundColor = [[UIColor accentColor] colorWithAlphaComponent:0.9];
             cell.leftLabel.lineBreakMode = NSLineBreakByWordWrapping;
             cell.leftLabel.hidden = NO;
             cell.rightLabel.hidden = YES;
+            return cell;
         }
         else
         {
-            [cell.rightLabel setText: message.text];
-            cell.rightLabel.backgroundColor = [UIColor backgroundColor];
+            ChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell2"];
+            [cell.rightLabel setText:message.text];
             cell.rightLabel.textAlignment = NSTextAlignmentRight;
+            cell.backgroundColor = [UIColor clearColor];
+            cell.leftLabel.textColor = [UIColor whiteColor];
+            cell.rightLabel.textColor = [UIColor whiteColor];
+            cell.leftLabel.layer.cornerRadius = 10.0f;
+            cell.leftLabel.layer.masksToBounds = YES;
+            cell.rightLabel.layer.cornerRadius = 10.0f;
+            cell.rightLabel.layer.masksToBounds = YES;
             cell.rightLabel.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
             cell.rightLabel.lineBreakMode = NSLineBreakByWordWrapping;
             cell.rightLabel.hidden = NO;
             cell.leftLabel.hidden = YES;
+
+            return cell;
         }
     }
+    else
+    {
+    ChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    cell.leftLabel.text = @"this shouldnt happen";
     return cell;
+    }
 }
 
 #pragma mark - Reveal Delegate Method
@@ -410,9 +421,13 @@
     self.tableView.separatorColor = [UIColor clearColor];
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"river"]];
 
-    [self.findPubChattersButton setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
-    [self.findPubChattersButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
-    [self.findPubChattersButton setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 120, 33)];
+    label.numberOfLines = 2;
+    label.text = @"Find\nPubChatters";
+    label.textAlignment = NSTextAlignmentCenter;
+    label.font = [UIFont boldSystemFontOfSize:13];
+    [self.findPubChattersButton addSubview:label];
+    label.textColor = [UIColor buttonColor];
     self.findPubChattersButton.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
     self.findPubChattersButton.layer.cornerRadius = 5.0f;
     self.findPubChattersButton.layer.masksToBounds = YES;
