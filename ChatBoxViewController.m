@@ -15,19 +15,18 @@
 #import "ChatTableViewCell.h"
 
 @interface ChatBoxViewController ()<UITextFieldDelegate, UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource, SWRevealViewControllerDelegate>
-@property (weak, nonatomic) IBOutlet UITextField *chatTextField;
 @property PFUser *chatingUser;
 @property MCPeerID *chattingUserPeerID;
 @property AppDelegate *appDelegate;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property NSArray *sortedArray;
 @property ChatTableViewCell *customCell;
 @property CGFloat viewy;
-@property (weak, nonatomic) IBOutlet UIView *chatFieldView;
 @property BOOL isUserInteration;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIView *chatFieldView;
+@property (weak, nonatomic) IBOutlet UITextField *chatTextField;
 @property (weak, nonatomic) IBOutlet UIView *sendView;
 @property (weak, nonatomic) IBOutlet UIButton *findPubChattersButton;
-
 @property (weak, nonatomic) IBOutlet UIButton *sendButton;
 @property (weak, nonatomic) IBOutlet UILabel *barLabel;
 -(void)userEnteredBar:(NSNotification *)notification;
@@ -239,7 +238,7 @@
         if ([message.isMyMessage isEqual: @0]) {
             [cell.leftLabel setText:message.text];
             cell.leftLabel.textAlignment = NSTextAlignmentLeft;
-            cell.leftLabel.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
+            cell.leftLabel.backgroundColor = [[UIColor accentColor] colorWithAlphaComponent:0.9];
             cell.leftLabel.lineBreakMode = NSLineBreakByWordWrapping;
             cell.leftLabel.hidden = NO;
             cell.rightLabel.hidden = YES;
@@ -376,12 +375,16 @@
     if (self.appDelegate.mcManager.session.connectedPeers.count > 0) {
         if(self.chattingUserPeerID)
         {
-            [self sendMyMessage];
+            if (self.chatTextField.text && self.chatTextField.text.length > 0) {
+                [self sendMyMessage];
+            }
         }
         else
         {
             self.chattingUserPeerID = self.appDelegate.mcManager.session.connectedPeers[0];
-            [self sendMyMessage];
+            if (self.chatTextField.text && self.chatTextField.text.length > 0) {
+                [self sendMyMessage];
+            }
         }
     }
     else
