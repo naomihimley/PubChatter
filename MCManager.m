@@ -27,6 +27,7 @@
         self.foundPeersArray = [NSMutableArray array];
         self.fetchedResultsController = [[NSFetchedResultsController alloc]init];
         self.randomNumber = arc4random_uniform(100);
+        self.shouldInvite = YES;
     }
     return self;
 }
@@ -134,50 +135,40 @@
 
 -(void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void (^)(BOOL, MCSession *))invitationHandler
 {
-//    NSLog(@"didReceiveInvitationFromPeer %@", peerID.displayName);
 
-//    NSMutableArray *peersConnectedTo = [NSMutableArray array];
-//
-//    for (MCPeerID *peer in self.session.connectedPeers)
+    self.shouldInvite = NO;
+
+//    NSString *string = [[NSString alloc] initWithData:context encoding:NSUTF8StringEncoding];
+//    int peersInt = [string intValue];
+
+//    if (self.session.connectedPeers == 0)
 //    {
-//        [peersConnectedTo addObject:peer.displayName];
+    NSLog(@"accepting invite from %@", peerID.displayName);
+        invitationHandler(YES,self.session);
+//        if (self.randomNumber > peersInt)
+//        {
+//            NSLog(@"My number was larger so I accept: mine %i %@ %i", self.randomNumber, peerID.displayName,  peersInt);
+//            invitationHandler(YES, self.session);
+//        }
+//        else
+//        {
+//            NSLog(@"My number was the lesser to I did not accept: mine %i %@ %i", self.randomNumber,peerID.displayName, peersInt);
+//        }
 //    }
-//    NSLog(@"peersConnectedTo array in didReceiveInvitation %@", peersConnectedTo);
-//
-//    if (![peersConnectedTo containsObject:peerID.displayName])
+//    else
 //    {
-//        NSLog(@"accepting invitation");
-//        invitationHandler(YES, self.session);
+////        invitationHandler(YES,self.session);
 //    }
-    NSString *string = [[NSString alloc] initWithData:context encoding:NSUTF8StringEncoding];
-    int peersInt = [string intValue];
-
-
-    if (self.randomNumber > peersInt)
-    {
-        NSLog(@"My number was larger so I accept: mine %i %@ %i", self.randomNumber, peerID.displayName,  peersInt);
-         invitationHandler(YES, self.session);
-    }
-    else
-    {
-        NSLog(@"My number was the lesser to I did not accept: mine %i %@ %i", self.randomNumber,peerID.displayName, peersInt);
-    }
-
-//    NSDictionary *dictionary = @{@"peerID":peerID};
-//    self.invitationHandlerArray = [NSMutableArray arrayWithObject:[invitationHandler copy]];
-//
-//    [[NSNotificationCenter defaultCenter]postNotificationName:@"MCReceivedInvitation" object:nil userInfo:dictionary];
 }
 
 #pragma mark - MCNearbyServiceBrowser Delegate Methods
 
 -(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
 {
-    BOOL shouldSend = YES;
 
-    if (shouldSend == YES)
+    if (self.shouldInvite == YES)
     {
-        shouldSend = NO;
+        self.shouldInvite = NO;
         if (self.session.connectedPeers.count == 0)
         {
             NSString *string = [NSString stringWithFormat:@"%i", self.randomNumber];

@@ -134,14 +134,11 @@
                                 </connections>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gMY-OG-1WS">
-                                <rect key="frame" x="117" y="64" width="87" height="30"/>
+                                <rect key="frame" x="71" y="69" width="179" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="List of Users">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <connections>
-                                    <action selector="onButtonPressedEndSession:" destination="BIN-h3-l0M" eventType="touchUpInside" id="mLZ-5v-ufJ"/>
-                                </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4wy-6y-CN3">
                                 <rect key="frame" x="0.0" y="467" width="320" height="52"/>
@@ -154,7 +151,7 @@
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tJd-bY-Dbm">
-                                        <rect key="frame" x="250" y="11" width="36" height="30"/>
+                                        <rect key="frame" x="244" y="10" width="56" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" title="Send">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -184,6 +181,8 @@
                         <outlet property="chatFieldView" destination="4wy-6y-CN3" id="i5J-ZE-tJO"/>
                         <outlet property="chatTextField" destination="o83-7g-8hF" id="7Et-GK-ozE"/>
                         <outlet property="listOfUsersButton" destination="gMY-OG-1WS" id="dhL-Q5-u1H"/>
+                        <outlet property="sendButton" destination="tJd-bY-Dbm" id="BR6-ZI-Q5N"/>
+                        <outlet property="sendView" destination="4wy-6y-CN3" id="k68-fe-Qeb"/>
                         <outlet property="tableView" destination="ePF-5u-znW" id="1Ua-Si-wyr"/>
                     </connections>
                 </viewController>
@@ -266,9 +265,8 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </slider>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DGz-Ix-jUD">
-                                <rect key="frame" x="99" y="45" width="198" height="30"/>
+                                <rect key="frame" x="165" y="144" width="66" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <state key="normal" title="Rate">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -276,10 +274,18 @@
                                     <action selector="onRateButtonPressed:" destination="1Gh-oe-Tw0" eventType="touchUpInside" id="LeP-h9-Lfa"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pV2-Fq-5Hb">
+                                <rect key="frame" x="99" y="31" width="198" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="inABarLabel" destination="pV2-Fq-5Hb" id="0Ba-AO-h9k"/>
                         <outlet property="rateBarButtonOutlet" destination="DGz-Ix-jUD" id="lfa-70-MV9"/>
                         <outlet property="sliderOutlet" destination="ucO-Xe-ufQ" id="pYp-zC-sFo"/>
                     </connections>
@@ -332,7 +338,7 @@
                                             </state>
                                             <state key="highlighted" title="Chat"/>
                                             <connections>
-                                                <action selector="onButtonTappedSendInvitation:" destination="2zl-ft-bxb" eventType="touchUpInside" id="nMg-hI-RLc"/>
+                                                <action selector="onButtonTappedSelectPeerToChatWith:" destination="2zl-ft-bxb" eventType="touchUpInside" id="sTv-mF-OD2"/>
                                             </connections>
                                         </button>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Chat_Received_Icon" translatesAutoresizingMaskIntoConstraints="NO" id="hEu-aj-iy8">
@@ -758,6 +764,20 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="river" translatesAutoresizingMaskIntoConstraints="NO" id="82m-O8-zCJ">
+                                <rect key="frame" x="0.0" y="58" width="320" height="453"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H8C-dH-a2c">
+                                <rect key="frame" x="13" y="284" width="293" height="162"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.90196079015731812" green="0.90196079015731812" blue="0.90196079015731812" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="TZQ-pU-qhq" id="5xC-tL-NIa"/>
+                                    <outlet property="delegate" destination="TZQ-pU-qhq" id="OjP-QJ-xPX"/>
+                                </connections>
+                            </pickerView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="age" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0VN-Do-nYD">
                                 <rect key="frame" x="12" y="114" width="169" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -768,6 +788,7 @@
                                 <rect key="frame" x="13" y="205" width="293" height="71"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.85961347892244899" green="0.94974525396992426" blue="1" alpha="0.56000000000000005" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
@@ -804,14 +825,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H8C-dH-a2c">
-                                <rect key="frame" x="13" y="279" width="293" height="162"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <connections>
-                                    <outlet property="dataSource" destination="TZQ-pU-qhq" id="5xC-tL-NIa"/>
-                                    <outlet property="delegate" destination="TZQ-pU-qhq" id="OjP-QJ-xPX"/>
-                                </connections>
-                            </pickerView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yU4-6t-sGP">
                                 <rect key="frame" x="5" y="281" width="311" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

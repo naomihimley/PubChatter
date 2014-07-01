@@ -35,7 +35,7 @@
     return [UIColor colorWithRed:red green:green blue:blue alpha:1];
 }
 
-+ (UIColor *)accentColor
++ (UIColor *)textColor
 {
 //    return [UIColor whiteColor];
 //    CGFloat red = 76.0/255.0;
@@ -68,7 +68,7 @@
     return [UIColor colorWithRed:red green:green blue:blue alpha:1];
 }
 
-+(UIColor *)textColor
++(UIColor *)accentColor
 {
     CGFloat red = 248.0/255.0;
     CGFloat green = 227.0/255.0;

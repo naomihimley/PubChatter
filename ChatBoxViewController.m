@@ -26,6 +26,9 @@
 @property (weak, nonatomic) IBOutlet UIView *chatFieldView;
 @property BOOL isUserInteration;
 @property (weak, nonatomic) IBOutlet UIButton *listOfUsersButton;
+@property (weak, nonatomic) IBOutlet UIView *sendView;
+
+@property (weak, nonatomic) IBOutlet UIButton *sendButton;
 
 -(void)didReceiveDataWithNotification: (NSNotification *)notification;
 -(void)sendMyMessage;
@@ -38,6 +41,7 @@
 {
     [super viewDidLoad];
     self.revealViewController.delegate = self;
+    [self.listOfUsersButton addTarget:self.revealViewController action:@selector(revealToggle:) forControlEvents:UIControlEventTouchUpInside];
     self.sortedArray = [NSArray new];
     self.fetchedResultsController.delegate = self;
     self.fetchedResultsController = [[NSFetchedResultsController alloc]init];
@@ -88,14 +92,14 @@
 -(void)textFieldDidBeginEditing:(UITextField *)textField
 {
 
-        [UIView animateWithDuration:0.5 animations:^{
+        [UIView animateWithDuration:0.25 animations:^{
             self.view.center = CGPointMake(self.view.center.x, self.view.center.y - 160);
         }];
 }
 
 -(void)textFieldDidEndEditing:(UITextField *)textField
 {
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.25 animations:^{
         self.view.frame = CGRectMake(self.view.frame.origin.x, self.viewy, self.view.frame.size.width, self.view.frame.size.height);
 
     }];
@@ -142,7 +146,6 @@
     }
     else
     {
-        NSLog(@"loading an empty tableView");
         //load an empty tableView because you dont have a conversation started with that person.
         self.sortedArray = [NSArray new];
         [self.tableView reloadData];
@@ -152,7 +155,6 @@
 
 - (void)sort: (NSSet *)set
 {
-    NSLog(@"sort");
     NSSortDescriptor *sorter = [[NSSortDescriptor alloc] initWithKey:@"timeStamp" ascending:YES];
     self.sortedArray = [[set allObjects] sortedArrayUsingDescriptors:@[sorter]];
     [self.tableView reloadData];
@@ -160,20 +162,16 @@
     NSInteger lastRowNumber = [self.tableView numberOfRowsInSection:0] - 1;
     NSIndexPath* ip = [NSIndexPath indexPathForRow:lastRowNumber inSection:0];
     [self.tableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionTop animated:NO];
-    NSLog(@"right after it should scroll:(");
 }
-
-# pragma mark - TableViewDelegate methods
-
+#pragma mark - ScrollView Method
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [self.view endEditing:YES];
-    NSLog(@"scroll view did scroll");
 }
 
+# pragma mark - TableViewDelegate methods
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //how it was before
         if (!self.customCell)
         {
             self.customCell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
@@ -212,6 +210,10 @@
     cell.backgroundColor = [UIColor clearColor];
     cell.leftLabel.textColor = [UIColor whiteColor];
     cell.rightLabel.textColor = [UIColor whiteColor];
+    cell.leftLabel.layer.cornerRadius = 10.0f;
+    cell.leftLabel.layer.masksToBounds = YES;
+    cell.rightLabel.layer.cornerRadius = 10.0f;
+    cell.rightLabel.layer.masksToBounds = YES;
 
     if (self.sortedArray)
     {
@@ -350,15 +352,6 @@
 }
 
 # pragma mark - Button Actions
-
-- (IBAction)onButtonPressedEndSession:(id)sender
-{
-    self.navigationItem.title = @"Not Chatting";
-    self.chatTextField.text = @"";
-    self.chattingUserPeerID = nil;
-    [self fetch];
-}
-
 - (IBAction)onButtonPressedSendChat:(id)sender
 {
 
@@ -382,6 +375,19 @@
 #pragma  mark - Style Method
 - (void)style
 {
+    self.sendView.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
+    [self.sendButton setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
+    [self.sendButton setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
+    [self.sendButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+    self.sendButton.layer.cornerRadius = 5.0f;
+    self.sendButton.layer.masksToBounds = YES;
+    self.sendButton.layer.borderWidth = 1.0f;
+    self.sendButton.layer.borderColor= [[UIColor buttonColor]CGColor];
+
+    self.listOfUsersButton.titleLabel.font = [UIFont systemFontOfSize:20];
+    [self.listOfUsersButton setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
+    [self.listOfUsersButton setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
+    [self.listOfUsersButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
     self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
     self.navigationController.navigationBar.alpha = 1.0;
     self.tableView.backgroundColor = [UIColor clearColor];
