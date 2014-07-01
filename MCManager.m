@@ -46,6 +46,7 @@
 
 -(void)makeInviter
 {
+    NSLog(@"Received notification to become the inviter");
     self.shouldInvite = YES;
 }
 
@@ -194,7 +195,6 @@
 
     NSLog(@"self.shouldInvite after receiving invitation %hhd", self.shouldInvite);
 
-    NSLog(@"accepting invite from %@", peerID.displayName);
 
 }
 
@@ -216,6 +216,7 @@
 //                self.shouldInvite = NO;
                 NSString *string = [NSString stringWithFormat:@"%i", self.randomNumber];
                 NSLog(@"sending int %@, sending to: %@", string, peerID.displayName);
+                
                 NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
 
                 [browser invitePeer:peerID toSession:self.session withContext:data timeout:30.0];
@@ -277,7 +278,6 @@
         self.advertiser.delegate = self;
         NSLog(@"starting advertising should only happen once");
         [self.advertiser startAdvertisingPeer];
-        self.shouldInvite = YES;
 
     }
 
