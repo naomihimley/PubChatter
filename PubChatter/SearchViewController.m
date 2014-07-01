@@ -198,7 +198,16 @@
 -(void)getYelpJSONFromMapRedraw:(NSString *)query andSWLatitude:(CGFloat)swlatitude andSWLongitude:(CGFloat)swlongitude andNELatitude:(CGFloat)nelatitude andNELongitude:(CGFloat)nelongitude andSortType:(NSString*)sortType andNumResults:(NSString *)numResults andLongitude:(CGFloat)longitude andLatitude:(CGFloat)latitude
 {
     //Perform a bounded box query
-    if (self.redrawActivated) {
+    if (self.redrawActivated && self.initialMapLoad) {
+        NSLog(@"Initial mapview load");
+        self.request = [TDOAuth URLRequestForPath:@"/v2/search" GETParameters:@{@"term": query, @"ll": [NSString stringWithFormat:@"%f,%f", latitude, longitude], @"limit" : numResults, @"sort" : sortType}
+                                             host:@"api.yelp.com"
+                                      consumerKey:@"LdaQSTTYqZuYXrta5vVAgw"
+                                   consumerSecret:@"k6KpVPXHSykD8aQXSXqdi7GboMY"
+                                      accessToken:@"PRBX3m8UH4Q2RmZ-HOTKmjFPLVzmz4UL"
+                                      tokenSecret:@"ao0diFl7jAe8cDDXnc-O1N-vQm8"];
+    }
+    else if (self.redrawActivated) {
     self.request = [TDOAuth URLRequestForPath:@"/v2/search" GETParameters:@{@"term": query, @"bounds": [NSString stringWithFormat:@"%f,%f|%f,%f", swlatitude, swlongitude, nelatitude, nelongitude], @"limit" : numResults, @"sort" : sortType}
                                   host:@"api.yelp.com"
                            consumerKey:@"LdaQSTTYqZuYXrta5vVAgw"
@@ -216,6 +225,8 @@
                                accessToken:@"PRBX3m8UH4Q2RmZ-HOTKmjFPLVzmz4UL"
                                tokenSecret:@"ao0diFl7jAe8cDDXnc-O1N-vQm8"];
     }
+
+    self.initialMapLoad = NO;
 
     [NSURLConnection sendAsynchronousRequest:self.request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
 
@@ -556,11 +567,13 @@ calloutAccessoryControlTapped:(UIControl *)control
     self.redrawActivated = YES;
     [self.activityIndicatorOutlet startAnimating];
     [self getMapRect];
-    [self getYelpJSONFromMapRedraw:@"bar" andSWLatitude:self.SWBoundsLatitude andSWLongitude:self.SWBoundsLongitude andNELatitude:self.NEBoundsLatitude andNELongitude:self.NEBoundsLongitude andSortType:@"1" andNumResults:@"20" andLongitude:0.0 andLatitude:0.0];
-        self.initialMapLoad = NO;
+
+        NSLog(@"%f, %f", self.userLocation.coordinate.latitude, self.userLocation.coordinate.longitude);
+    [self getYelpJSONFromMapRedraw:self.queryString andSWLatitude:0.0 andSWLongitude:0.0 andNELatitude:0.0 andNELongitude:0.0 andSortType:@"1" andNumResults:@"20" andLongitude:self.userLocation.coordinate.longitude andLatitude:self.userLocation.coordinate.latitude];
         }
     }
 }
+
 
 #pragma mark - Tableview methods
 
