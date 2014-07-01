@@ -564,8 +564,7 @@ calloutAccessoryControlTapped:(UIControl *)control
 }
 
 - (void)mapViewDidFinishRenderingMap:(MKMapView *)mapView fullyRendered:(BOOL)fullyRendered
-{
-    NSLog(@"This should never run before setting map");
+{    NSLog(@"Map finished loading");
     if (self.initialMapLoad) {
     self.activityIndicatorOutlet.hidden = NO;
     self.redrawActivated = YES;
