@@ -33,6 +33,7 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *toggleControlOutlet;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UIButton *redrawAreaButtonOutlet;
+@property (weak, nonatomic) IBOutlet UIButton *rateBarButton;
 @property CGFloat span;
 @property CGFloat SWBoundsLatitude;
 @property CGFloat SWBoundsLongitude;
@@ -84,14 +85,14 @@
 
     // Set drawerview actions
     self.revealViewController.delegate = self;
-    self.rateBarButton.customView.hidden = YES;
-    self.rateBarButton.tintColor = [UIColor blueColor];
-    self.rateBarButton.target = self.revealViewController;
-    self.rateBarButton.action = @selector(rightRevealToggle:);
+//    self.rateBarButton.customView.hidden = YES;
+//    self.rateBarButton.tintColor = [UIColor blueColor];
+
+    [self.rateBarButton addTarget:self.revealViewController action:@selector(rightRevealToggle:) forControlEvents:UIControlEventTouchUpInside];
 //    [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     [self.view resignFirstResponder];
 
-    [self isUserInBar];
+//    [self isUserInBar];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [[self.appDelegate beaconRegionManager]canUserUseApp];
 
@@ -129,32 +130,36 @@
 
 -(void)userEnteredBar:(NSNotification *)notification
 {
-    NSLog(@"notification %@",[notification.userInfo objectForKey:@"barName"]);
+    NSLog(@"search vc notification %@",[notification.userInfo objectForKey:@"barName"]);
     self.navigationItem.title = [notification.userInfo objectForKey:@"barName"];
+    NSString *barname = [notification.userInfo objectForKey:@"barName"];
+    if ([barname isEqualToString:@"PubChat"]) {
+        self.rateBarButton.hidden = YES;
+    }
 }
 
 // Check if the user is listed as being in a "Bar", add in Parse backend.
-- (void)isUserInBar
-{
-    if ([PFUser currentUser]) {
-        PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
-        [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
-        [queryForBar includeKey:@"usersInBar"];
-        [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
-         {
-             PFObject *bar = [objects firstObject];
-             if (bar)
-             {
-                 self.rateBarButton.customView.hidden = NO;
-                 self.navigationItem.title = [bar objectForKey:@"barName"];
-             }
-             else
-             {
-                 self.navigationItem.title = @"PubChat";
-             }
-         }];
-    }
-}
+//- (void)isUserInBar
+//{
+//    if ([PFUser currentUser]) {
+//        PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
+//        [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
+//        [queryForBar includeKey:@"usersInBar"];
+//        [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+//         {
+//             PFObject *bar = [objects firstObject];
+//             if (bar)
+//             {
+//                 self.rateBarButton.customView.hidden = NO;
+//                 self.navigationItem.title = [bar objectForKey:@"barName"];
+//             }
+//             else
+//             {
+//                 self.navigationItem.title = @"PubChat";
+//             }
+//         }];
+//    }
+//}
 
 
 #pragma mark - IBActions
