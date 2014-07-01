@@ -19,7 +19,7 @@
 #import "UIColor+DesignColors.h"
 #import "AppDelegate.h"
 
-@interface SearchViewController () <UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate, MKMapViewDelegate>
+@interface SearchViewController () <UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate, MKMapViewDelegate, SWRevealViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property CLLocationManager *locationManager;
@@ -46,6 +46,7 @@
 @property BOOL redrawActivated;
 @property BOOL didCheckForBeaconMonitoring;
 @property BOOL initialMapLoad;
+@property BOOL isUserInteraction;
 @property id request;
 -(void)userEnteredBar:(NSNotification *)notification;
 
@@ -82,6 +83,7 @@
     self.redrawActivated = NO;
 
     // Set drawerview actions
+    self.revealViewController.delegate = self;
     self.rateBarButton.customView.hidden = YES;
     self.rateBarButton.tintColor = [UIColor blueColor];
     self.rateBarButton.target = self.revealViewController;
@@ -100,6 +102,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.isUserInteraction = YES;
 
 }
 
@@ -665,6 +668,25 @@ calloutAccessoryControlTapped:(UIControl *)control
     [self.searchBar endEditing:YES];
 }
 
+#pragma mark - SWReveal Delegate Method
+
+- (void)revealController:(SWRevealViewController *)revealController didMoveToPosition:(FrontViewPosition)position
+{
+    if (self.isUserInteraction)
+    {
+        self.mapView.userInteractionEnabled = NO;
+        self.tableView.userInteractionEnabled = NO;
+        self.tabBarController.tabBar.userInteractionEnabled = NO;
+        self.isUserInteraction = NO;
+    }
+    else
+    {
+        self.mapView.userInteractionEnabled = YES;
+        self.tableView.userInteractionEnabled = YES;
+        self.tabBarController.tabBar.userInteractionEnabled = YES;
+        self.isUserInteraction = YES;
+    }
+}
 #pragma  mark - Map bound helper methods
 
 -(void)getMapRect {
