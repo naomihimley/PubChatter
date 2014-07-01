@@ -62,7 +62,8 @@
 
     if(self.session.connectedPeers.count == 0)
     {
-        for (MCPeerID *peerID in self.advertisingUsers) {
+        for (MCPeerID *peerID in self.advertisingUsers)
+        {
             NSLog(@"have no connected peers so will send an invitation");
             [self.browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
         }
@@ -255,35 +256,5 @@
 -(void)session:(MCSession *)session didReceiveStream:(NSInputStream *)stream withName:(NSString *)streamName fromPeer:(MCPeerID *)peerID
 {
 }
-
-#pragma mark - old logic for determining to send invite
-
-//    NSMutableArray *peersConnectedTo = [NSMutableArray array];
-//
-//    NSLog(@"connectedPeers in browser delegate %@", self.session.connectedPeers);
-//    for (MCPeerID *peer in self.session.connectedPeers)
-//    {
-//        [peersConnectedTo addObject:peer.displayName];
-//    }
-//    MCPeerID *myPeerID = self.session.myPeerID;
-//    NSString *remotePeerName = peerID.displayName;
-//
-//    BOOL shouldInvite = ([myPeerID.displayName compare:remotePeerName] == NSOrderedDescending && ![peersConnectedTo containsObject:peerID.displayName]);
-//    NSLog(@"Found peer and invited");
-//
-//    if (shouldInvite)
-//    {
-//        NSLog(@"inviting advertising peer to session %@", peerID.displayName);
-//        [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
-//    }
-
-//    NSLog(@"peersConnectedTo Array in found advertising peers %@", peersConnectedTo);
-//
-//    if (![peersConnectedTo containsObject:peerID.displayName])
-//    {
-//        [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
-//    }
-
-
 
 @end

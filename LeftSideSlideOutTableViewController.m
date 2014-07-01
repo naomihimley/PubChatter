@@ -235,18 +235,10 @@
     self.selectedChatButton.titleLabel.textColor = [UIColor buttonColor];
     self.selectedChatButton = nil;
     [[NSNotificationCenter defaultCenter]postNotificationName:@"PeerToChatWith" object:nil userInfo:dictionary];
-//    button.titleLabel.textColor = [UIColor accentColor];
     [button setTitleColor:[UIColor accentColor] forState:UIControlStateNormal];
+    button.layer.borderColor = [[UIColor accentColor] CGColor];
     [cell.chatReceivedImage setHidden:YES];
     self.selectedChatButton = button;
-
-//    MCPeerID *peerID = [dictionary objectForKey:@"peerID"];
-
-//    if (button.shouldInvite == YES)
-//    {
-//        [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30];
-//        button.shouldInvite = NO;
-//    }
 }
 
 #pragma mark - Private method for handling the changing of peer's state
@@ -255,23 +247,9 @@
 {
     if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
     {
-
-//        MCPeerID *myPeerID = self.appDelegate.mcManager.session.myPeerID;
-//        MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
-//        NSString *remotePeerName = peerID.displayName;
-
-
-
-//        BOOL shouldInvite = ([myPeerID.displayName compare:remotePeerName] == NSOrderedDescending);
-
-//        if (shouldInvite)
-//        {
-//            NSLog(@"inviting advertising peer to session %@", peerID.displayName);
-//            [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30.0];
-//    }
-    if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
-    {
-        NSLog(@"Connect peers after changing state to connected %@", self.appDelegate.mcManager.session.connectedPeers);
+        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
+        {
+            NSLog(@"Connect peers after changing state to connected %@", self.appDelegate.mcManager.session.connectedPeers);
 
         }
     }
@@ -289,8 +267,6 @@
         }
     }
 
-    //    long index = [self.users indexOfObject:userDictionary];
-
     for (ListOfUsersTableViewCell *userCell in self.cellArray)
     {
         if ([userCell.cellUserDisplayName isEqual:peerID.displayName])
@@ -299,51 +275,14 @@
         }
     }
 
-    if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnecting)
-    {
-//        [cell.chatButton setTitle:@"Inviting" forState:UIControlStateNormal];
-//
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//             cell.chatButton.shouldInvite = NO;
-//        });
-
-    }
-    else if ([[[notification userInfo]objectForKey:@"state"]intValue] != MCSessionStateConnecting)
-    {
         if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
         {
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [cell.chatButton setEnabled:YES];
-//                [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
-//            });
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                 cell.chatButton.shouldInvite = NO;
-//            });
+
 
         }
         if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
         {
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                   cell.chatButton.shouldInvite = YES;
-//            });
 
-//            if ([cell.chatButton.titleLabel.text isEqual: @"Connecting"])
-//            {
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    cell.chatButton.titleLabel.textColor = [UIColor accentColor];
-//                    [cell.chatButton setTitle:@"Declined" forState:UIControlStateNormal];
-//                    [cell.chatButton setEnabled:NO];
-//                });
-//            }
-//            else
-//            {
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    [cell.chatButton setTitle:@"Invite" forState:UIControlStateNormal];
-//                    cell.chatButton.titleLabel.textColor = [UIColor buttonColor];
-//                    [cell.chatButton setEnabled:YES];
-//                });
-//            }
-        }
     }
 }
 
