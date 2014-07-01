@@ -27,7 +27,7 @@
         self.foundPeersArray = [NSMutableArray array];
         self.fetchedResultsController = [[NSFetchedResultsController alloc]init];
         self.randomNumber = arc4random_uniform(100);
-        self.shouldInvite = YES;
+//        self.shouldInvite = YES;
     }
     return self;
 }
@@ -62,11 +62,14 @@
 
     if(self.session.connectedPeers.count == 0)
     {
-        for (MCPeerID *peerID in self.advertisingUsers)
-        {
-            NSLog(@"have no connected peers so will send an invitation");
-            [self.browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
-        }
+        [self setupPeerAndSessionWithDisplayName:[[PFUser currentUser]objectForKey:@"username"]];
+        [self advertiseSelf:YES];
+        self.shouldInvite = YES;
+//        for (MCPeerID *peerID in self.advertisingUsers)
+//        {
+//            NSLog(@"have no connected peers so will send an invitation");
+//            [self.browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
+//        }
     }
 }
 
@@ -165,10 +168,11 @@
         if (self.session.connectedPeers.count == 0)
         {
             NSString *string = [NSString stringWithFormat:@"%i", self.randomNumber];
-            NSLog(@"sending int %@, SHOULD ONLY HAPPEN WHEN FIRST BROWSING", string);
+            NSLog(@"sending int %@, sending to: %@", string, peerID.displayName);
             NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
 
             [browser invitePeer:peerID toSession:self.session withContext:data timeout:30.0];
+
         }
     }
 
@@ -225,6 +229,7 @@
         self.advertiser.delegate = self;
         NSLog(@"starting advertising should only happen once");
         [self.advertiser startAdvertisingPeer];
+        self.shouldInvite = YES;
 
     }
 
