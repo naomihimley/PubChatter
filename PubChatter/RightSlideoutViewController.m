@@ -19,6 +19,7 @@
 @property Bar *bar;
 @property Rating *rating;
 @property (weak, nonatomic) IBOutlet UILabel *inABarLabel;
+-(void)userEnteredBar:(NSNotification *)notification;
 
 @end
 
@@ -31,6 +32,10 @@
     self.sliderOutlet.minimumValue = 0;
     self.sliderOutlet.maximumValue = 5;
     self.sliderOutlet.value = 0;
+    [[NSNotificationCenter defaultCenter]addObserver:self
+                                            selector:@selector(userEnteredBar:)
+                                                name:@"userEnteredBar"
+                                              object:nil];
 }
 
 -(void) viewDidAppear:(BOOL)animated
@@ -42,6 +47,27 @@
     [self style];
 }
 
+- (void)userEnteredBar: (NSNotification *)notification
+{
+    NSLog(@"user entered bar notification in ratings");
+    NSString *barName = [[notification userInfo] objectForKey:@"barName"];
+    if ([barName isEqualToString:@"PubChat"])
+    {
+        self.inABarLabel.text = @"Not in a Bar";
+        [self.rateBarButtonOutlet setTitle:@"Rate" forState:UIControlStateNormal];
+        self.sliderOutlet.enabled = NO;
+        self.rateBarButtonOutlet.enabled = NO;
+    }
+    else
+    {
+        self.inABarLabel.text = barName;
+        [self.rateBarButtonOutlet setTitle:[NSString stringWithFormat:@"Rate"] forState:UIControlStateNormal];
+        self.rateBarButtonOutlet.enabled = YES;
+        self.sliderOutlet.enabled = YES;
+        [self checkIfUserHasRatedBar];
+    }
+}
+
 -(void)checkIfUserisInBar
 {
     PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
@@ -49,7 +75,7 @@
     [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if ([objects firstObject]) {
             self.bar = [objects firstObject];
-            self.inABarLabel.text = [NSString stringWithFormat:@"%@", [self.bar valueForKey:@"barName"]];
+//            self.inABarLabel.text = [NSString stringWithFormat:@"%@", [self.bar valueForKey:@"barName"]];
             [self.rateBarButtonOutlet setTitle:[NSString stringWithFormat:@"Rate"] forState:UIControlStateNormal];
             self.rateBarButtonOutlet.enabled = YES;
             self.sliderOutlet.enabled = YES;
