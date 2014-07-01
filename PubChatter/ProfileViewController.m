@@ -264,10 +264,8 @@
 -(void)setStyle
 {
     //Style nameagelabel
-    self.navigationItem.title= @"PubChat";
     self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
     self.backgroundView.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.95f];
-
 //    self.viewInBackground.opaque = YES;
 //    self.viewInBackground.layer.opacity = 0.9f;
 //    self.viewInBackground.alpha = 0.9f;
