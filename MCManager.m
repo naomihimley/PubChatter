@@ -161,7 +161,7 @@
     if (self.shouldInvite == YES)
     {
         //could change this so that it goes through for all peers found when you start advertising and would help fix issue for when the peer your connected to leaves so you won't lose all connections
-        self.shouldInvite = NO;
+//        self.shouldInvite = NO;
         if (self.session.connectedPeers.count == 0)
         {
             NSString *string = [NSString stringWithFormat:@"%i", self.randomNumber];
