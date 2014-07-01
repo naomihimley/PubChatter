@@ -80,7 +80,6 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="364" id="f6k-C4-A34"/>
                                     <constraint firstAttribute="width" constant="320" id="mch-EM-fMY"/>
                                 </constraints>
                                 <prototypes>
@@ -133,13 +132,6 @@
                                     <outlet property="delegate" destination="BIN-h3-l0M" id="aks-Qs-tS3"/>
                                 </connections>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gMY-OG-1WS">
-                                <rect key="frame" x="71" y="69" width="179" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="List of Users">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4wy-6y-CN3">
                                 <rect key="frame" x="0.0" y="467" width="320" height="52"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -167,20 +159,39 @@
                                     <constraint firstAttribute="width" constant="320" id="zo9-Gu-tdB"/>
                                 </constraints>
                             </view>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="PubChat" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oYL-w9-sU9">
+                                <rect key="frame" x="20" y="67" width="280" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="ePF-5u-znW" firstAttribute="top" secondItem="bc5-8k-tS4" secondAttribute="top" constant="96" id="9Lx-f6-Cim"/>
                             <constraint firstAttribute="bottom" secondItem="4wy-6y-CN3" secondAttribute="bottom" constant="49" id="TVy-Wq-QwZ"/>
                             <constraint firstItem="ePF-5u-znW" firstAttribute="leading" secondItem="bc5-8k-tS4" secondAttribute="leading" id="fLK-s3-rKI"/>
                             <constraint firstItem="4wy-6y-CN3" firstAttribute="top" secondItem="ePF-5u-znW" secondAttribute="bottom" id="i0L-sO-aaP"/>
                             <constraint firstItem="4wy-6y-CN3" firstAttribute="leading" secondItem="bc5-8k-tS4" secondAttribute="leading" id="nY7-gr-zmT"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="mKX-Di-BUn"/>
+                    <navigationItem key="navigationItem" id="mKX-Di-BUn">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="MkT-SN-RWI">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="xzr-2O-CCt">
+                                <rect key="frame" x="16" y="5" width="120" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="Find PubChatters">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
+                        <outlet property="barLabel" destination="oYL-w9-sU9" id="5wN-eE-baa"/>
                         <outlet property="chatFieldView" destination="4wy-6y-CN3" id="i5J-ZE-tJO"/>
                         <outlet property="chatTextField" destination="o83-7g-8hF" id="7Et-GK-ozE"/>
-                        <outlet property="listOfUsersButton" destination="gMY-OG-1WS" id="dhL-Q5-u1H"/>
+                        <outlet property="findPubChattersButton" destination="xzr-2O-CCt" id="gQE-SK-g1B"/>
                         <outlet property="sendButton" destination="tJd-bY-Dbm" id="BR6-ZI-Q5N"/>
                         <outlet property="sendView" destination="4wy-6y-CN3" id="k68-fe-Qeb"/>
                         <outlet property="tableView" destination="ePF-5u-znW" id="1Ua-Si-wyr"/>
@@ -524,13 +535,22 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Nfg-J9-79T">
-                        <barButtonItem key="rightBarButtonItem" title="Rate Bar" id="c1E-OB-oV5"/>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="H7L-W8-4Al">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="3Yb-XK-lNF">
+                                <rect key="frame" x="233" y="5" width="71" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="Rate Bar">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="activityIndicatorOutlet" destination="ouS-ZV-dZe" id="8FU-3c-rCX"/>
                         <outlet property="currentLocationButtonOutlet" destination="ZoH-dO-wJL" id="tpo-zj-xJ8"/>
                         <outlet property="mapView" destination="x0k-DN-OnA" id="fXJ-Q8-CWo"/>
-                        <outlet property="rateBarButton" destination="c1E-OB-oV5" id="8fZ-TD-Vz1"/>
+                        <outlet property="rateBarButton" destination="3Yb-XK-lNF" id="zfb-sY-2Lb"/>
                         <outlet property="redrawAreaButtonOutlet" destination="pSX-FI-4XA" id="Fcc-Nj-q07"/>
                         <outlet property="searchBar" destination="DYK-FT-feA" id="HbD-W8-kUD"/>
                         <outlet property="tableView" destination="yRl-4U-zPV" id="37b-6B-isQ"/>
@@ -808,11 +828,11 @@
             </objects>
             <point key="canvasLocation" x="-290" y="725"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Navigation Controller - Bars-->
         <scene sceneID="UBQ-g4-tB7">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="cxc-Hy-A8F" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" image="Map_Icon" id="Xg2-uS-hDw"/>
+                    <tabBarItem key="tabBarItem" title="Bars" image="Map_Icon" id="Xg2-uS-hDw"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="emp-RN-18e">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -827,11 +847,11 @@
             </objects>
             <point key="canvasLocation" x="170" y="-646"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Navigation Controller - Profile-->
         <scene sceneID="aUi-F2-Zr5">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="BsO-qZ-Xte" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="" image="ProfileIcon" id="9Ap-tB-x6P"/>
+                    <tabBarItem key="tabBarItem" title="Profile" image="ProfileIcon" id="9Ap-tB-x6P"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="iEH-Mc-S1Z">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -846,11 +866,11 @@
             </objects>
             <point key="canvasLocation" x="189" y="738"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Navigation Controller - Chat-->
         <scene sceneID="rkT-ig-V4e">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="1cf-gW-tII" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="" image="Chat_Icon3" id="5AM-e4-BMJ"/>
+                    <tabBarItem key="tabBarItem" title="Chat" image="Chat_Icon3" id="5AM-e4-BMJ"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="zl4-WX-tDK">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>

@@ -15,21 +15,21 @@
 #import "ChatTableViewCell.h"
 
 @interface ChatBoxViewController ()<UITextFieldDelegate, UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource, SWRevealViewControllerDelegate>
-@property (weak, nonatomic) IBOutlet UITextField *chatTextField;
 @property PFUser *chatingUser;
 @property MCPeerID *chattingUserPeerID;
 @property AppDelegate *appDelegate;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property NSArray *sortedArray;
 @property ChatTableViewCell *customCell;
 @property CGFloat viewy;
-@property (weak, nonatomic) IBOutlet UIView *chatFieldView;
 @property BOOL isUserInteration;
-@property (weak, nonatomic) IBOutlet UIButton *listOfUsersButton;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIView *chatFieldView;
+@property (weak, nonatomic) IBOutlet UITextField *chatTextField;
 @property (weak, nonatomic) IBOutlet UIView *sendView;
-
+@property (weak, nonatomic) IBOutlet UIButton *findPubChattersButton;
 @property (weak, nonatomic) IBOutlet UIButton *sendButton;
-
+@property (weak, nonatomic) IBOutlet UILabel *barLabel;
+-(void)userEnteredBar:(NSNotification *)notification;
 -(void)didReceiveDataWithNotification: (NSNotification *)notification;
 -(void)sendMyMessage;
 
@@ -41,11 +41,16 @@
 {
     [super viewDidLoad];
     self.revealViewController.delegate = self;
-    [self.listOfUsersButton addTarget:self.revealViewController action:@selector(revealToggle:) forControlEvents:UIControlEventTouchUpInside];
+    [self.findPubChattersButton addTarget:self.revealViewController action:@selector(revealToggle:) forControlEvents:UIControlEventTouchUpInside];
+
     self.sortedArray = [NSArray new];
     self.fetchedResultsController.delegate = self;
     self.fetchedResultsController = [[NSFetchedResultsController alloc]init];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"chatBox"
+                                                       object:nil
+                                                     userInfo:@{@"toBeaconRegionManager": @"whatBarAmIIn"}];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didReceiveDataWithNotification:)
@@ -55,6 +60,10 @@
                                              selector:@selector(didReceivePeerToChatWithNotification:)
                                                  name:@"PeerToChatWith"
                                                object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self
+                                            selector:@selector(userEnteredBar:)
+                                                name:@"userEnteredBar"
+                                              object:nil];
     self.chatTextField.delegate = self;
     [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     [self.view resignFirstResponder];
@@ -111,9 +120,7 @@
 //notification for receiving a text
 - (void)didReceiveDataWithNotification:(NSNotification *)notification
 {
-    NSLog(@"notification in chatbox on receive a text");
     NSString *notificationDisplayName =[[[notification userInfo]objectForKey:@"peerID"] displayName];
-    //if the data is coming from the person you're chatting with then add it to the text view
     if ([self.chattingUserPeerID.displayName isEqual:notificationDisplayName]) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self fetch];
@@ -129,6 +136,11 @@
     self.chatingUser = [[notification userInfo]objectForKey:@"user"];
     self.navigationItem.title = [self.chatingUser objectForKey:@"name"];
     [self fetch];
+}
+
+- (void)userEnteredBar: (NSNotification *)notification
+{
+    self.barLabel.text = [[notification userInfo] objectForKey:@"barName"];
 }
 
 #pragma mark - FetchedResultsController Helper Methods
@@ -223,7 +235,7 @@
         if ([message.isMyMessage isEqual: @0]) {
             [cell.leftLabel setText:message.text];
             cell.leftLabel.textAlignment = NSTextAlignmentLeft;
-            cell.leftLabel.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
+            cell.leftLabel.backgroundColor = [[UIColor accentColor] colorWithAlphaComponent:0.9];
             cell.leftLabel.lineBreakMode = NSLineBreakByWordWrapping;
             cell.leftLabel.hidden = NO;
             cell.rightLabel.hidden = YES;
@@ -360,12 +372,16 @@
     if (self.appDelegate.mcManager.session.connectedPeers.count > 0) {
         if(self.chattingUserPeerID)
         {
-            [self sendMyMessage];
+            if (self.chatTextField.text && self.chatTextField.text.length > 0) {
+                [self sendMyMessage];
+            }
         }
         else
         {
             self.chattingUserPeerID = self.appDelegate.mcManager.session.connectedPeers[0];
-            [self sendMyMessage];
+            if (self.chatTextField.text && self.chatTextField.text.length > 0) {
+                [self sendMyMessage];
+            }
         }
     }
     else
@@ -386,14 +402,23 @@
     self.sendButton.layer.borderWidth = 1.0f;
     self.sendButton.layer.borderColor= [[UIColor buttonColor]CGColor];
 
-    self.listOfUsersButton.titleLabel.font = [UIFont systemFontOfSize:20];
-    [self.listOfUsersButton setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
-    [self.listOfUsersButton setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
-    [self.listOfUsersButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+    self.barLabel.font = [UIFont systemFontOfSize:20];
+    self.barLabel.textColor = [UIColor accentColor];
     self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
     self.navigationController.navigationBar.alpha = 1.0;
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.separatorColor = [UIColor clearColor];
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"river"]];
+
+    [self.findPubChattersButton setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
+    [self.findPubChattersButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+    [self.findPubChattersButton setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
+    self.findPubChattersButton.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
+    self.findPubChattersButton.layer.cornerRadius = 5.0f;
+    self.findPubChattersButton.layer.masksToBounds = YES;
+    self.findPubChattersButton.layer.borderWidth = 1.0f;
+    self.findPubChattersButton.layer.borderColor= [[UIColor buttonColor]CGColor];
+
+
 }
 @end

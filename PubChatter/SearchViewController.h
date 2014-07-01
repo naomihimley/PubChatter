@@ -11,7 +11,6 @@
 
 @interface SearchViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *rateBarButton;
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 @end

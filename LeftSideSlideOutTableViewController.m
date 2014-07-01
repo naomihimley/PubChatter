@@ -24,6 +24,7 @@
 @property NSArray *parseUsers;
 @property NSDictionary *userSendingInvitation;
 @property UIButton *selectedChatButton;
+@property NSString *barString;
 
 @end
 
@@ -40,37 +41,37 @@
 
     self.cellArray = [NSMutableArray array];
 
+    [self.appDelegate.mcManager setupPeerAndSessionWithDisplayName:[[PFUser currentUser]objectForKey:@"username"]];
     [self.appDelegate.mcManager advertiseSelf:YES];
     [self.appDelegate.mcManager startBrowsingForPeers];
 
     [self.tableView setBackgroundView: [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"river"]]];
 
-    if ([PFUser currentUser])
-    {
+//    [[NSNotificationCenter defaultCenter]addObserver:self
+//                                            selector:@selector(peerDidChangeStateWithNotification:) name:@"MCDidChangeStateNotification"
+//                                              object:nil];
+//
+//    [[NSNotificationCenter defaultCenter]addObserver:self
+//                                            selector:@selector(receivedNotificationOfUserAdvertising:)
+//                                                name:@"MCFoundAdvertisingPeer"
+//                                              object:nil];
+//
+//    [[NSNotificationCenter defaultCenter]addObserver:self
+//                                            selector:@selector(peerStoppedAdvertising:)
+//                                                name:@"MCPeerStopAdvertising"
+//                                              object:nil];
+//
+//    [[NSNotificationCenter defaultCenter]addObserver:self
+//                                            selector:@selector(receivedChatDataFromPeer:) name:@"MCDidReceiveDataNotification"
+//                                              object:nil];
+//
+//    [[NSNotificationCenter defaultCenter]addObserver:self
+//                                            selector:@selector(peerDidChangeStateWithNotification:) name:@"MCDidChangeStateNotification"
+//                                              object:nil];
+//
+//    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(barUserIsIn:) name:@"userEnteredBar" object:nil];
 
-    }
-
-    [[NSNotificationCenter defaultCenter]addObserver:self
-                                            selector:@selector(peerDidChangeStateWithNotification:) name:@"MCDidChangeStateNotification"
-                                              object:nil];
-
-    [[NSNotificationCenter defaultCenter]addObserver:self
-                                            selector:@selector(receivedNotificationOfUserAdvertising:)
-                                                name:@"MCFoundAdvertisingPeer"
-                                              object:nil];
-
-    [[NSNotificationCenter defaultCenter]addObserver:self
-                                            selector:@selector(peerStoppedAdvertising:)
-                                                name:@"MCPeerStopAdvertising"
-                                              object:nil];
-
-    [[NSNotificationCenter defaultCenter]addObserver:self
-                                            selector:@selector(receivedChatDataFromPeer:) name:@"MCDidReceiveDataNotification"
-                                              object:nil];
-
-    [[NSNotificationCenter defaultCenter]addObserver:self
-                                            selector:@selector(peerDidChangeStateWithNotification:) name:@"MCDidChangeStateNotification"
-                                              object:nil];
+    [self startListeningForNotificationsAndSendNotification];
 
     self.tableView.backgroundColor = [UIColor whiteColor];
 }
@@ -334,6 +335,18 @@
 
 }
 
+#pragma mark - Notification catcher for Beacon giving bar name
+
+-(void)barUserIsIn:(NSNotification *)notification
+{
+    self.barString = [[notification userInfo] objectForKey:@"barName"];
+
+    self.navigationItem.title = self.barString;
+
+}
+
+#pragma mark - Prepare for segue
+
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     OPPViewController *oppVC = segue.destinationViewController;
@@ -343,6 +356,37 @@
     PFUser *selectedUser = [dictionary objectForKey:@"user"];
     
     oppVC.user = selectedUser;
+}
+
+#pragma mark - Notification listeners
+
+-(void)startListeningForNotificationsAndSendNotification
+{
+    [[NSNotificationCenter defaultCenter]addObserver:self
+                                            selector:@selector(peerDidChangeStateWithNotification:) name:@"MCDidChangeStateNotification"
+                                              object:nil];
+
+    [[NSNotificationCenter defaultCenter]addObserver:self
+                                            selector:@selector(receivedNotificationOfUserAdvertising:)
+                                                name:@"MCFoundAdvertisingPeer"
+                                              object:nil];
+
+    [[NSNotificationCenter defaultCenter]addObserver:self
+                                            selector:@selector(peerStoppedAdvertising:)
+                                                name:@"MCPeerStopAdvertising"
+                                              object:nil];
+
+    [[NSNotificationCenter defaultCenter]addObserver:self
+                                            selector:@selector(receivedChatDataFromPeer:) name:@"MCDidReceiveDataNotification"
+                                              object:nil];
+
+    [[NSNotificationCenter defaultCenter]addObserver:self
+                                            selector:@selector(peerDidChangeStateWithNotification:) name:@"MCDidChangeStateNotification"
+                                              object:nil];
+
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(barUserIsIn:) name:@"userEnteredBar" object:nil];
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"chatBox" object:nil userInfo:nil];
 }
 
 #pragma mark - depricated method for when a peer invites another peer to a session
