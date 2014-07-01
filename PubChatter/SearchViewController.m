@@ -117,6 +117,7 @@
             MKCoordinateRegion region = MKCoordinateRegionMake(centerCoordinate, self.mapSpan);
             [self.mapView setRegion:region animated:YES];
             NSLog(@"setting map region");
+            NSLog(@"Mapview delegate %@", self.mapView.delegate);
             self.mapView.delegate = self;
             self.mapView.showsUserLocation = YES;
             self.currentLocationButtonOutlet.enabled = YES;
@@ -237,7 +238,6 @@
         if (connectionError) {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unable to retrieve data due to poor network connection" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             [alert show];
-            NSLog(@"connection error");
             [self.activityIndicatorOutlet stopAnimating];
             self.activityIndicatorOutlet.hidden = YES;
             self.redrawAreaButtonOutlet.enabled = YES;
@@ -267,7 +267,6 @@
                     NSURL *placeholderURL = [[NSBundle mainBundle] URLForResource:@"placeholder" withExtension:@"png"];
                     NSString *placeholderURLString = [NSString stringWithContentsOfURL:placeholderURL encoding:NSASCIIStringEncoding error:nil];
                     yelpBar.businessImageURL = placeholderURLString;
-                    NSLog(@"%@", placeholderURLString);
                 }
                 yelpBar.businessImageURL = [dictionary objectForKey:@"image_url"];
                 yelpBar.businessRatingImageURL = [dictionary objectForKey:@"rating_img_url_small"];
@@ -357,7 +356,6 @@
                          NSLog(@"This was a search");
                          if (placemarks.count == 0) {
                              // Address pulled from Yelp is bad and MapKit couldn't find a placemark, so attempt a natural language query based on YelpBar's name.
-                             NSLog(@"Bad Yelp address string");
                              NSMutableArray *searchquery = [NSMutableArray arrayWithArray:self.barLocations];
                              [self performLanguageQuery:searchquery];
                              NSLog(@"Bad Yelp address string");
@@ -567,6 +565,7 @@ calloutAccessoryControlTapped:(UIControl *)control
 
 - (void)mapViewDidFinishRenderingMap:(MKMapView *)mapView fullyRendered:(BOOL)fullyRendered
 {
+    NSLog(@"This should never run before setting map");
     if (self.initialMapLoad) {
     self.activityIndicatorOutlet.hidden = NO;
     self.redrawActivated = YES;
