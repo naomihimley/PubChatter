@@ -222,9 +222,9 @@
     }
 }
 
-#pragma mark - Action for Button sending invitation
+#pragma mark - Action for Button selecting peer to chat with
 
-- (IBAction)onButtonTappedSendInvitation:(id)sender
+- (IBAction)onButtonTappedSelectPeerToChatWith:(id)sender
 {
     ChatButton *button = (ChatButton *)sender;
 

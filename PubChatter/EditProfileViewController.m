@@ -8,6 +8,7 @@
 
 #import "EditProfileViewController.h"
 #import <Parse/Parse.h>
+#import "UIColor+DesignColors.h"
 
 @interface EditProfileViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, UIPickerViewDataSource,UIPickerViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *nameTextField;
@@ -60,12 +61,45 @@
 
 - (void)setTextFields
 {
+    self.nameTextField.textColor = [UIColor whiteColor];
+    self.ageLabel.textColor = [UIColor whiteColor];
+    self.favoriteDrinkLabel.textColor = [UIColor whiteColor];
+
+    self.nameTextField.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
+    self.ageLabel.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
+    self.favoriteDrinkLabel.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
+    self.bioTextView.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
+    self.pickerBackgroundView.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
+
+    self.nameTextField.layer.masksToBounds = YES;
+    self.nameTextField.layer.cornerRadius = 5.0f;
+    self.nameTextField.layer.borderWidth = 1.0f;
+    self.nameTextField.layer.borderColor = [[UIColor whiteColor]CGColor];
+    self.ageLabel.layer.masksToBounds = YES;
+    self.ageLabel.layer.cornerRadius = 5.0f;
+    self.ageLabel.layer.borderWidth = 1.0f;
+    self.ageLabel.layer.borderColor = [[UIColor whiteColor]CGColor];
+    self.favoriteDrinkLabel.layer.masksToBounds = YES;
+    self.favoriteDrinkLabel.layer.cornerRadius = 5.0f;
+    self.favoriteDrinkLabel.layer.borderWidth = 1.0f;
+    self.favoriteDrinkLabel.layer.borderColor = [[UIColor whiteColor]CGColor];
+    self.bioTextView.layer.masksToBounds = YES;
+    self.bioTextView.layer.cornerRadius = 5.0f;
+    self.bioTextView.layer.borderWidth = 1.0f;
+    self.bioTextView.layer.borderColor = [[UIColor whiteColor]CGColor];
+    self.pickerBackgroundView.layer.masksToBounds = YES;
+    self.pickerBackgroundView.layer.cornerRadius = 5.0f;
+    self.pickerBackgroundView.layer.borderWidth = 1.0f;
+    self.pickerBackgroundView.layer.borderColor = [[UIColor whiteColor]CGColor];
+
+
+
     PFFile *file = [[PFUser currentUser]objectForKey:@"picture"];
     [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
      {
-         self.pictureView.layer.cornerRadius = self.pictureView.bounds.size.width /2;
-         self.pictureView.clipsToBounds = YES;
-         self.pictureView.layer.borderWidth = 0;
+//         self.pictureView.clipsToBounds = YES;
+         self.pictureView.layer.borderWidth = 1.0f;
+         self.pictureView.layer.borderColor = [[UIColor whiteColor]CGColor];
          self.pictureView.image = [UIImage imageWithData:data];
      }];
     self.nameTextField.text = [[PFUser currentUser]objectForKey:@"name"];
@@ -123,6 +157,7 @@
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"I am a %@ interested in %@", self.genderString, self.interestedString]];
     [attrString addAttribute: NSFontAttributeName value: boldFont range: NSMakeRange(7, self.genderString.length)];
     [attrString addAttribute: NSFontAttributeName value: boldFont range: NSMakeRange(7 + self.genderString.length + 15,self.interestedString.length)];
+    [attrString addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, attrString.length)];
     self.genderLabel.attributedText = attrString;
 }
 - (void)createUserProfileImage
@@ -198,9 +233,6 @@
 }
 - (IBAction)onDoneButtonPressed:(id)sender
 {
-//    NSData *imgData = UIImagePNGRepresentation(self.profileImageTaken);
-//    PFFile *imgFile = [PFFile fileWithData:imgData];
-//    [[PFUser currentUser]setObject:imgFile forKey:@"picture"];
 
     if (![self.nameTextField.text isEqualToString:@""])
     {
