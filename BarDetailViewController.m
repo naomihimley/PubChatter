@@ -29,6 +29,7 @@
 @property (strong, nonatomic)  UILabel *backgroundView;
 @property (strong, nonatomic)  UILabel *imageEdge;
 @property (strong, nonatomic)  UILabel *yelpReviewersSayLabel;
+@property (weak, nonatomic) IBOutlet UIView *ratingBackgroundView;
 
 
 @property Bar *bar;
@@ -45,26 +46,6 @@
     [super viewDidLoad];
 
     self.scrollView.delegate = self;
-
-    self.barNameLabel.text = self.barFromSourceVC.name;
-    self.barAddressLabel.text = self.barFromSourceVC.address;
-    self.aboutBarTextView.text = [NSString stringWithFormat:@"Yelp reviewers say...%@", self.barFromSourceVC.aboutBusiness];
-    self.aboutBarTextView.editable = NO;
-    NSString *milesFromUser = [NSString stringWithFormat:@"%.02f miles", self.barFromSourceVC.distanceFromUser * 0.000621371];
-    self.distanceFromUserLabel.text = milesFromUser;
-
-
-
-
-    NSData *bizImageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:self.barFromSourceVC.businessImageURL]];
-    self.barImageView.image = [UIImage imageWithData:bizImageData];
-
-    NSData *ratingImageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:self.barFromSourceVC.businessRatingImageURL]];
-    self.ratingImageView.image = [UIImage imageWithData:ratingImageData];
-
-    self.categoriesLabel.text = [NSString stringWithFormat:@"Category: %@\nOffers: %@", self.barFromSourceVC.categories, self.barFromSourceVC.offers];
-
-    self.barRatingLabel.text = [NSString stringWithFormat:@"%@ has not been rated", self.barFromSourceVC.name];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -118,11 +99,6 @@
 
     [self addViewsToScrollView];
 }
-
-//-(void)viewWillAppear:(BOOL)animated
-//{
-
-//}
 
 -(void)addViewsToScrollView {
 
@@ -258,18 +234,24 @@
 //    [self setStyle];
 }
 
+-(void)setPubChatInfoLabel
+{
+    // Set background view look
+    self.ratingBackgroundView.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.95f];    self.ratingBackgroundView.layer.cornerRadius = 5.0f;
+    self.backgroundView.layer.borderColor = [[UIColor whiteColor] CGColor];
+    self.backgroundView.layer.borderWidth = 1.0f;
+}
+
 - (void)onTelephoneButtonPressed:(id)sender
 {
     self.telephoneOutlet.titleLabel.textColor = [UIColor whiteColor];
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@", self.barFromSourceVC.telephone]]];
-
 }
 
 -(void)seeOnYelp:(id)sender
 {
     self.goToWebsiteButtonOutlet.titleLabel.textColor = [UIColor whiteColor];
     [self performSegueWithIdentifier:@"websegue" sender:self];
-
 }
 
 
