@@ -40,6 +40,7 @@
 
     self.cellArray = [NSMutableArray array];
 
+    [self.appDelegate.mcManager advertiseSelf:YES];
     [self.appDelegate.mcManager startBrowsingForPeers];
 
     [self.tableView setBackgroundView: [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"river"]]];
@@ -394,6 +395,19 @@
 
 }
 
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    OPPViewController *oppVC = segue.destinationViewController;
+    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+    
+    NSDictionary *dictionary = [self.users objectAtIndex:indexPath.row];
+    PFUser *selectedUser = [dictionary objectForKey:@"user"];
+    
+    oppVC.user = selectedUser;
+}
+
+#pragma mark - depricated method for when a peer invites another peer to a session
+
 //-(void)receivedInvitationForConnection:(NSNotification *)notification
 //{
 ////    self.userSendingInvitation = nil;
@@ -449,16 +463,5 @@
 //    }
 
 //}
-
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    OPPViewController *oppVC = segue.destinationViewController;
-    NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-    
-    NSDictionary *dictionary = [self.users objectAtIndex:indexPath.row];
-    PFUser *selectedUser = [dictionary objectForKey:@"user"];
-    
-    oppVC.user = selectedUser;
-}
 
 @end

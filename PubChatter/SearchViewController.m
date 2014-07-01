@@ -94,7 +94,7 @@
     [[self.appDelegate beaconRegionManager]canUserUseApp];
 
     [self.appDelegate.mcManager setupPeerAndSessionWithDisplayName:[[PFUser currentUser]objectForKey:@"username"]];
-    [self.appDelegate.mcManager advertiseSelf:YES];
+//    [self.appDelegate.mcManager advertiseSelf:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -714,7 +714,7 @@ calloutAccessoryControlTapped:(UIControl *)control
     self.tableView.backgroundColor = [UIColor clearColor];
     self.view.backgroundColor = [UIColor clearColor];
     self.toggleControlOutlet.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.9];
-    self.toggleControlOutlet.tintColor = [UIColor textColor];
+    self.toggleControlOutlet.tintColor = [UIColor buttonColor];
     self.redrawAreaButtonOutlet.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.9];
     [self.redrawAreaButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
     self.redrawAreaButtonOutlet.layer.borderWidth = 1.0f;
