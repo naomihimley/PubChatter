@@ -28,13 +28,12 @@
 @property (strong, nonatomic)  UILabel *barRatingLabel;
 @property (strong, nonatomic)  UILabel *backgroundView;
 @property (strong, nonatomic)  UILabel *imageEdge;
+@property (strong, nonatomic)  UILabel *ratingViewEdge;
 @property (strong, nonatomic)  UILabel *yelpReviewersSayLabel;
 @property (weak, nonatomic) IBOutlet UIView *ratingBackgroundView;
 
-
 @property Bar *bar;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
-
 
 @end
 
@@ -44,8 +43,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
     self.scrollView.delegate = self;
+    [self setPubChatInfoLabel];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -237,9 +236,17 @@
 -(void)setPubChatInfoLabel
 {
     // Set background view look
-    self.ratingBackgroundView.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.95f];    self.ratingBackgroundView.layer.cornerRadius = 5.0f;
-    self.backgroundView.layer.borderColor = [[UIColor whiteColor] CGColor];
-    self.backgroundView.layer.borderWidth = 1.0f;
+    self.ratingBackgroundView.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.95f];
+    self.ratingBackgroundView.layer.cornerRadius = 5.0f;
+
+    // Set edge look.
+    self.ratingViewEdge = [[UILabel alloc] init];
+    self.ratingViewEdge.frame = CGRectMake(self.ratingBackgroundView.frame.origin.x - 1, self.ratingBackgroundView.frame.origin.y - 1, self.ratingBackgroundView.frame.size.width + 2, self.ratingBackgroundView.frame.size.height + 2);
+    self.ratingViewEdge.backgroundColor = [UIColor clearColor];
+    self.ratingViewEdge.layer.borderColor = [[UIColor whiteColor] CGColor];
+    self.ratingViewEdge.layer.borderWidth = 1.0f;
+    self.ratingViewEdge.layer.cornerRadius = 5.0f;
+    [self.view addSubview:self.ratingViewEdge];
 }
 
 - (void)onTelephoneButtonPressed:(id)sender
