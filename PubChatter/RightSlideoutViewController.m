@@ -32,6 +32,9 @@
     self.sliderOutlet.minimumValue = 0;
     self.sliderOutlet.maximumValue = 5;
     self.sliderOutlet.value = 0;
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"chatBox"
+                                                       object:nil
+                                                     userInfo:@{@"toBeaconRegionManager": @"whatBarAmIIn"}];
     [[NSNotificationCenter defaultCenter]addObserver:self
                                             selector:@selector(userEnteredBar:)
                                                 name:@"userEnteredBar"
@@ -49,7 +52,6 @@
 
 - (void)userEnteredBar: (NSNotification *)notification
 {
-    NSLog(@"user entered bar notification in ratings");
     NSString *barName = [[notification userInfo] objectForKey:@"barName"];
     if ([barName isEqualToString:@"PubChat"])
     {

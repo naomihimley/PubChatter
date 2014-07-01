@@ -120,9 +120,7 @@
 //notification for receiving a text
 - (void)didReceiveDataWithNotification:(NSNotification *)notification
 {
-    NSLog(@"notification in chatbox on receive a text");
     NSString *notificationDisplayName =[[[notification userInfo]objectForKey:@"peerID"] displayName];
-    //if the data is coming from the person you're chatting with then add it to the text view
     if ([self.chattingUserPeerID.displayName isEqual:notificationDisplayName]) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self fetch];
@@ -142,7 +140,6 @@
 
 - (void)userEnteredBar: (NSNotification *)notification
 {
-    NSLog(@"user entered bar notification in chatbox");
     self.barLabel.text = [[notification userInfo] objectForKey:@"barName"];
 }
 
