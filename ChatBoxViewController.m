@@ -65,6 +65,8 @@
 {
     [super viewWillAppear:animated];
     self.isUserInteration = YES;
+    self.tableView.userInteractionEnabled = YES;
+    self.tabBarController.tabBar.userInteractionEnabled = YES;
     if (!self.chattingUserPeerID) {
         self.navigationItem.title = @"Not Chatting";
     }
