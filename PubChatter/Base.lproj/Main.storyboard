@@ -845,6 +845,25 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="river" translatesAutoresizingMaskIntoConstraints="NO" id="82m-O8-zCJ">
+                                <rect key="frame" x="0.0" y="58" width="320" height="453"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DVU-q1-dqu">
+                                <rect key="frame" x="12" y="284" width="294" height="210"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H8C-dH-a2c">
+                                        <rect key="frame" x="1" y="-11" width="293" height="162"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <outlet property="dataSource" destination="TZQ-pU-qhq" id="5xC-tL-NIa"/>
+                                            <outlet property="delegate" destination="TZQ-pU-qhq" id="OjP-QJ-xPX"/>
+                                        </connections>
+                                    </pickerView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="age" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0VN-Do-nYD">
                                 <rect key="frame" x="12" y="114" width="169" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -891,14 +910,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H8C-dH-a2c">
-                                <rect key="frame" x="13" y="279" width="293" height="162"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <connections>
-                                    <outlet property="dataSource" destination="TZQ-pU-qhq" id="5xC-tL-NIa"/>
-                                    <outlet property="delegate" destination="TZQ-pU-qhq" id="OjP-QJ-xPX"/>
-                                </connections>
-                            </pickerView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yU4-6t-sGP">
                                 <rect key="frame" x="5" y="281" width="311" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -927,6 +938,7 @@
                         <outlet property="genderLabel" destination="yU4-6t-sGP" id="3kY-Ea-O57"/>
                         <outlet property="genderPicker" destination="H8C-dH-a2c" id="MBl-F4-hf5"/>
                         <outlet property="nameTextField" destination="sEc-px-6MR" id="eii-HO-Goh"/>
+                        <outlet property="pickerBackgroundView" destination="DVU-q1-dqu" id="Onc-gs-TPf"/>
                         <outlet property="pictureView" destination="rGn-hW-EJF" id="fQd-XC-FlQ"/>
                     </connections>
                 </viewController>

@@ -19,6 +19,7 @@
 @property UIImage *profileImageTaken;
 @property (weak, nonatomic) IBOutlet UIPickerView *genderPicker;
 @property (weak, nonatomic) IBOutlet UILabel *genderLabel;
+@property (weak, nonatomic) IBOutlet UIView *pickerBackgroundView;
 @property NSArray *genderArray;
 @property NSArray *interestedArray;
 @property NSString *genderString;
