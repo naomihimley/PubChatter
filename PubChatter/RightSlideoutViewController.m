@@ -10,6 +10,7 @@
 #import <Parse/Parse.h>
 #import "Rating.h"
 #import "Bar.h"
+#import "UIColor+DesignColors.h"
 
 @interface RightSlideoutViewController ()
 
@@ -17,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *rateBarButtonOutlet;
 @property Bar *bar;
 @property Rating *rating;
+@property (weak, nonatomic) IBOutlet UILabel *inABarLabel;
 
 @end
 
@@ -37,6 +39,7 @@
     self.rateBarButtonOutlet.enabled = NO;
     self.sliderOutlet.enabled = NO;
     [self checkIfUserisInBar];
+    [self style];
 }
 
 -(void)checkIfUserisInBar
@@ -45,16 +48,16 @@
     [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
     [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if ([objects firstObject]) {
-            NSLog(@"A");
             self.bar = [objects firstObject];
-            [self.rateBarButtonOutlet setTitle:[NSString stringWithFormat:@"Rate %@", [self.bar valueForKey:@"barName"]] forState:UIControlStateNormal];
+            self.inABarLabel.text = [NSString stringWithFormat:@"%@", [self.bar valueForKey:@"barName"]];
+            [self.rateBarButtonOutlet setTitle:[NSString stringWithFormat:@"Rate"] forState:UIControlStateNormal];
             self.rateBarButtonOutlet.enabled = YES;
             self.sliderOutlet.enabled = YES;
             [self checkIfUserHasRatedBar];
         }
         else
         {
-            NSLog(@"B");
+            self.inABarLabel.text = @"Not in a Bar";
             [self.rateBarButtonOutlet setTitle:@"Rate" forState:UIControlStateNormal];
             self.sliderOutlet.enabled = NO;
             self.rateBarButtonOutlet.enabled = NO;
@@ -91,13 +94,22 @@
         [barRating setObject:rating forKey:@"rating"];
         [barRating setObject:[PFUser currentUser] forKey:@"user"];
         [barRating setObject:self.bar forKey:@"bar"];
-
         [barRating saveInBackground];
-
-        NSLog(@"%@", rating);
-        NSLog(@"%@", [self.bar objectForKey:@"name"]);
     }
 }
-
+- (void)style
+{
+    self.inABarLabel.textColor = [UIColor nameColor];
+    [self.sliderOutlet setMinimumTrackTintColor:[UIColor nameColor]];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"river"]];
+    [self.rateBarButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+    [self.rateBarButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
+    [self.rateBarButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
+    self.rateBarButtonOutlet.layer.cornerRadius = 5.0f;
+    self.rateBarButtonOutlet.layer.masksToBounds = YES;
+    self.rateBarButtonOutlet.layer.borderWidth = 1.0f;
+    self.rateBarButtonOutlet.layer.borderColor= [[UIColor buttonColor]CGColor];
+    self.rateBarButtonOutlet.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.8];
+}
 
 @end

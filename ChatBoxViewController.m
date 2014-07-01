@@ -163,17 +163,15 @@
     NSIndexPath* ip = [NSIndexPath indexPathForRow:lastRowNumber inSection:0];
     [self.tableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
-
-# pragma mark - TableViewDelegate methods
-
+#pragma mark - ScrollView Method
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [self.view endEditing:YES];
 }
 
+# pragma mark - TableViewDelegate methods
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //how it was before
         if (!self.customCell)
         {
             self.customCell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
@@ -212,6 +210,10 @@
     cell.backgroundColor = [UIColor clearColor];
     cell.leftLabel.textColor = [UIColor whiteColor];
     cell.rightLabel.textColor = [UIColor whiteColor];
+    cell.leftLabel.layer.cornerRadius = 10.0f;
+    cell.leftLabel.layer.masksToBounds = YES;
+    cell.rightLabel.layer.cornerRadius = 10.0f;
+    cell.rightLabel.layer.masksToBounds = YES;
 
     if (self.sortedArray)
     {
@@ -373,6 +375,15 @@
 #pragma  mark - Style Method
 - (void)style
 {
+    self.sendView.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
+    [self.sendButton setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
+    [self.sendButton setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
+    [self.sendButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+    self.sendButton.layer.cornerRadius = 5.0f;
+    self.sendButton.layer.masksToBounds = YES;
+    self.sendButton.layer.borderWidth = 1.0f;
+    self.sendButton.layer.borderColor= [[UIColor buttonColor]CGColor];
+
     self.listOfUsersButton.titleLabel.font = [UIFont systemFontOfSize:20];
     [self.listOfUsersButton setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
     [self.listOfUsersButton setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
