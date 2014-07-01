@@ -20,6 +20,7 @@
 @property UIImage *profileImageTaken;
 @property (weak, nonatomic) IBOutlet UIPickerView *genderPicker;
 @property (weak, nonatomic) IBOutlet UILabel *genderLabel;
+@property (weak, nonatomic) IBOutlet UIButton *editProfileButton;
 @property NSArray *genderArray;
 @property NSArray *interestedArray;
 @property NSString *genderString;
@@ -63,11 +64,13 @@
     self.nameTextField.textColor = [UIColor whiteColor];
     self.ageLabel.textColor = [UIColor whiteColor];
     self.favoriteDrinkLabel.textColor = [UIColor whiteColor];
+    [self.editProfileButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
 
     self.nameTextField.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
     self.ageLabel.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
     self.favoriteDrinkLabel.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
     self.bioTextView.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
+    self.editProfileButton.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
 
     self.nameTextField.layer.masksToBounds = YES;
     self.nameTextField.layer.cornerRadius = 5.0f;
@@ -85,6 +88,10 @@
     self.bioTextView.layer.cornerRadius = 5.0f;
     self.bioTextView.layer.borderWidth = 1.0f;
     self.bioTextView.layer.borderColor = [[UIColor whiteColor]CGColor];
+    self.editProfileButton.layer.masksToBounds = YES;
+    self.editProfileButton.layer.cornerRadius = 5.0f;
+    self.editProfileButton.layer.borderWidth = 1.0f;
+    self.editProfileButton.layer.borderColor = [[UIColor buttonColor] CGColor];
 
     PFFile *file = [[PFUser currentUser]objectForKey:@"picture"];
     [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
