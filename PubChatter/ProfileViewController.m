@@ -9,6 +9,7 @@
 #import "ProfileViewController.h"
 #import "AppDelegate.h"
 #import "UIColor+DesignColors.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface ProfileViewController ()<CLLocationManagerDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, UIScrollViewDelegate>
 @property (strong, nonatomic) UIImage *profileImage;
@@ -19,13 +20,15 @@
 @property (strong, nonatomic) NSString *sexualOrientation;
 @property (strong, nonatomic) NSString *favDrink;
 
-@property (strong, nonatomic) UIView *viewInBackground;
 @property (strong, nonatomic) UITextView *bioTextView;
 @property (strong, nonatomic) UILabel *nameageLabel;
 @property (strong, nonatomic) UILabel *genderLabel;
-@property (strong, nonatomic) UILabel *ageLabel;
 @property (strong, nonatomic) UILabel *interestedLabel;
 @property (strong, nonatomic) UILabel *favDrinkLabel;
+@property (strong, nonatomic) UILabel *aboutMeLabel;
+@property (strong, nonatomic) UILabel *backgroundView;
+@property (strong, nonatomic) UILabel *imageEdge;
+
 
 @property AppDelegate *appDelegate;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -42,7 +45,29 @@
                                              selector:@selector(didreceiveNotification:)
                                                  name:@"userEnteredBar"
                                                object:nil];
+
+    self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    self.scrollView.delegate = self;
+//    [self getParseData];
 }
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    [self.bioTextView removeFromSuperview];
+    [self.nameageLabel removeFromSuperview];
+    [self.genderLabel removeFromSuperview];
+    [self.interestedLabel removeFromSuperview];
+    [self.favDrinkLabel removeFromSuperview];
+    [self.aboutMeLabel removeFromSuperview];
+    [self.backgroundView removeFromSuperview];
+    [self.imageEdge removeFromSuperview];
+
+    [self getParseData];
+}
+
+
 
 -(void)addViewsToScrollView {
 
@@ -53,6 +78,15 @@
     profileImageView.frame = CGRectMake((self.scrollView.frame.size.width/2) -75, verticalOffset, 150, 150);
     profileImageView.image = self.profileImage;
     [self.scrollView addSubview:profileImageView];
+
+    // Add image borderview
+    self.imageEdge = [[UILabel alloc] init];
+    self.imageEdge.frame = CGRectMake((self.scrollView.frame.size.width/2) -76, verticalOffset - 1, 152, 152);
+    self.imageEdge.backgroundColor = [UIColor clearColor];
+    self.imageEdge.layer.borderColor = [[UIColor whiteColor] CGColor];
+    self.imageEdge.layer.borderWidth = 1.0f;
+    [self.scrollView addSubview:self.imageEdge];
+
     verticalOffset = verticalOffset + profileImageView.frame.size.height + 10;
 
     //Add name label
@@ -76,13 +110,13 @@
     verticalOffset = verticalOffset + self.genderLabel.frame.size.height + 10;
 
     //Add about me label
-    UILabel *aboutMeLabel = [[UILabel alloc] init];
-    aboutMeLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 30);
-    aboutMeLabel.text = [NSString stringWithFormat:@"About %@", self.name];
-    aboutMeLabel.textAlignment = NSTextAlignmentCenter;
-    aboutMeLabel.textColor = [UIColor whiteColor];
-    [self.scrollView addSubview:aboutMeLabel];
-    verticalOffset = verticalOffset + aboutMeLabel.frame.size.height;
+    self.aboutMeLabel = [[UILabel alloc] init];
+    self.aboutMeLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 30);
+    self.aboutMeLabel.text = [NSString stringWithFormat:@"About %@", self.name];
+    self.aboutMeLabel.textAlignment = NSTextAlignmentCenter;
+    self.aboutMeLabel.textColor = [UIColor whiteColor];
+    [self.scrollView addSubview:self.aboutMeLabel];
+    verticalOffset = verticalOffset + self.aboutMeLabel.frame.size.height;
 
     //Add bio textView
     self.bioTextView = [[UITextView alloc] init];
@@ -116,24 +150,20 @@
     self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, verticalOffset);
 
     //Add background view
-    UIView *backgroundView = [[UIView alloc] init];
-    backgroundView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, verticalOffset);
-    backgroundView.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.95f];
-
-    [self.scrollView insertSubview:backgroundView atIndex:0];
+    self.backgroundView = [[UILabel alloc] init];
+    self.backgroundView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, verticalOffset);
+    NSLog(@"I ran");
+    self.backgroundView.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.95f];
+    self.backgroundView.layer.cornerRadius = 5.0f;
+    self.backgroundView.layer.borderColor = [[UIColor whiteColor] CGColor];
+    self.backgroundView.layer.borderWidth = 1.0f;
+    [self.scrollView insertSubview:self.backgroundView atIndex:0];
 
     self.scrollView.contentMode = UIViewContentModeScaleAspectFit;
-    self.scrollView.delegate = self;
 
     [self setStyle];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self getParseData];
-    self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-}
 
 -(void)getParseData
 {
@@ -182,8 +212,6 @@
      else
      {
          self.age = @"";
-         NSLog(@"%@", self.age);
-         NSLog(@"%@", [self.age class]);
      }
 
     //Get sexual orientation.
@@ -238,6 +266,8 @@
     //Style nameagelabel
     self.navigationItem.title= @"PubChat";
     self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
+    self.backgroundView.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.95f];
+
 //    self.viewInBackground.opaque = YES;
 //    self.viewInBackground.layer.opacity = 0.9f;
 //    self.viewInBackground.alpha = 0.9f;
