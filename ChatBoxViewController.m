@@ -415,8 +415,9 @@
 
     self.barLabel.font = [UIFont systemFontOfSize:20];
     self.barLabel.textColor = [UIColor accentColor];
-    self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
-    self.navigationController.navigationBar.alpha = 1.0;
+    [self.navigationController.navigationBar setBarTintColor:[UIColor navBarColor]];
+//    self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
+//    self.navigationController.navigationBar.alpha = 1.0;
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.separatorColor = [UIColor clearColor];
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"river"]];

@@ -27,7 +27,9 @@
         self.foundPeersArray = [NSMutableArray array];
         self.fetchedResultsController = [[NSFetchedResultsController alloc]init];
         self.randomNumber = arc4random_uniform(100);
-//        self.shouldInvite = YES;
+        self.shouldInvite = NO;
+
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(makeInviter) name:@"MakeInviter" object:nil];
     }
     return self;
 }
@@ -38,6 +40,14 @@
     self.browser.delegate = nil;
     self.advertiser.delegate = nil;
     self.advertisingUsers = nil;
+}
+
+#pragma mark - Establishing a Inviter
+
+-(void)makeInviter
+{
+    NSLog(@"Received notification to become the inviter");
+    self.shouldInvite = YES;
 }
 
 #pragma mark - MCSession Delegate Methods
@@ -52,7 +62,7 @@
     NSDictionary *dictionary = @{@"peerID": peerID,
                                  @"state": [NSNumber numberWithInt:state]};
     
-    NSLog(@"PEER Changing STATE %@: %i", peerID.displayName, state);
+    NSLog(@"PEER Changing STATE %@: %li", peerID.displayName, state);
 
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidChangeStateNotification"
                                                             object:nil
@@ -60,18 +70,19 @@
 
     //hopefully this just reconnects when all connections are lost, logic may not be sound for multiples
 
-    if(self.session.connectedPeers.count == 0)
-    {
-        [self.session disconnect];
-        [self setupPeerAndSessionWithDisplayName:[[PFUser currentUser]objectForKey:@"username"]];
-        [self advertiseSelf:YES];
-        self.shouldInvite = YES;
+//    if(self.session.connectedPeers.count == 0)
+//    {
+//        [self.session disconnect];
+//        [self setupPeerAndSessionWithDisplayName:[[PFUser currentUser]objectForKey:@"username"]];
+//        [self advertiseSelf:YES];
+//        self.shouldInvite = YES;
+//        NSLog(@"This should tear down the session and then rebuild it");
 //        for (MCPeerID *peerID in self.advertisingUsers)
 //        {
 //            NSLog(@"have no connected peers so will send an invitation");
 //            [self.browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
 //        }
-    }
+//    }
 }
 
 -(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID
@@ -151,30 +162,67 @@
 -(void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void (^)(BOOL, MCSession *))invitationHandler
 {
 
-    self.shouldInvite = NO;
+    NSString *receivedText = [[NSString alloc] initWithData:context encoding:NSUTF8StringEncoding];
 
-    NSLog(@"accepting invite from %@", peerID.displayName);
-        invitationHandler(YES,self.session);
+    NSLog(@"This peer should now be an accepter");
+
+    if (self.shouldInvite == NO)
+    {
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"MCJustAccepts" object:nil userInfo:nil];
+
+        invitationHandler(YES, self.session);
+
+        NSLog(@"self.session %@", self.session);
+    }
+
+
+
+//    int peerNumber = [receivedText intValue];
+//    if (self.shouldInvite == NO)
+//    {
+//        if (self.randomNumber > peerNumber)
+//        {
+//              invitationHandler(YES,self.session);
+//        }
+//
+//    }
+//    else
+//    {
+//        invitationHandler(YES,self.session);
+//    }
+//
+//    self.shouldInvite = NO;
+
+    NSLog(@"self.shouldInvite after receiving invitation %hhd", self.shouldInvite);
+
+
 }
 
 #pragma mark - MCNearbyServiceBrowser Delegate Methods
 
 -(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
 {
+    NSLog(@"I: %@", info);
+
 
     if (self.shouldInvite == YES)
     {
-        //could change this so that it goes through for all peers found when you start advertising and would help fix issue for when the peer your connected to leaves so you won't lose all connections
-//        self.shouldInvite = NO;
-        if (self.session.connectedPeers.count == 0)
-        {
-            NSString *string = [NSString stringWithFormat:@"%i", self.randomNumber];
-            NSLog(@"sending int %@, sending to: %@", string, peerID.displayName);
-            NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
+//        if (peerID.displayName != self.peerID.displayName)
+//        {
+            //could change this so that it goes through for all peers found when you start advertising and would help fix issue for when the peer your connected to leaves so you won't lose all connections
+    //        self.shouldInvite = NO;
+//            if (self.session.connectedPeers.count == 0)
+//            {
+//                self.shouldInvite = NO;
+                NSString *string = [NSString stringWithFormat:@"%i", self.randomNumber];
+                NSLog(@"sending int %@, sending to: %@", string, peerID.displayName);
+                
+                NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
 
-            [browser invitePeer:peerID toSession:self.session withContext:data timeout:30.0];
+                [browser invitePeer:peerID toSession:self.session withContext:data timeout:30.0];
 
-        }
+//            }
+//        }
     }
 
     if (self.advertisingUsers.count == 0 && peerID.displayName != self.peerID.displayName)
@@ -230,7 +278,6 @@
         self.advertiser.delegate = self;
         NSLog(@"starting advertising should only happen once");
         [self.advertiser startAdvertisingPeer];
-        self.shouldInvite = YES;
 
     }
 
@@ -257,6 +304,7 @@
 
 -(void)session:(MCSession *)session didFinishReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID atURL:(NSURL *)localURL withError:(NSError *)error
 {
+    NSLog(@"E: %@", error);
 }
 
 -(void)session:(MCSession *)session didStartReceivingResourceWithName:(NSString *)resourceName fromPeer:(MCPeerID *)peerID withProgress:(NSProgress *)progress

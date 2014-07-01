@@ -266,20 +266,6 @@
     //Style nameagelabel
     self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
     self.backgroundView.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.95f];
-//    self.viewInBackground.opaque = YES;
-//    self.viewInBackground.layer.opacity = 0.9f;
-//    self.viewInBackground.alpha = 0.9f;
-//    [self.viewInBackground setBackgroundColor:[[UIColor backgroundColor]colorWithAlphaComponent:0.9f]];
-//
-//    self.view.backgroundColor = [UIColor blackColor];
-//    self.nameageLabel.textColor = [UIColor nameColor];
-//    self.genderLabel.textColor = [UIColor whiteColor];
-//    self.bioTextView.editable = YES;
-//    self.bioTextView.textColor = [UIColor whiteColor];
-//    self.bioTextView.editable = NO;
-//    self.interestedLabel.textColor = [UIColor whiteColor];
-//    self.favDrinkLabel.textColor = [UIColor whiteColor];
-//    self.bioTextView.backgroundColor = [UIColor clearColor];
 }
 
 @end

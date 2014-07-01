@@ -587,19 +587,36 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="river" translatesAutoresizingMaskIntoConstraints="NO" id="aIc-qB-csd">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="river" translatesAutoresizingMaskIntoConstraints="NO" id="aIc-qB-csd">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Udx-tq-AF0">
-                                <rect key="frame" x="14" y="137" width="292" height="364"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Udx-tq-AF0">
+                                <rect key="frame" x="14" y="153" width="292" height="354"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <connections>
                                     <outlet property="delegate" destination="FmP-9A-1U9" id="pN4-xO-r6B"/>
                                 </connections>
                             </scrollView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d75-L0-qk4">
+                                <rect key="frame" x="14" y="74" width="292" height="69"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="aIc-qB-csd" firstAttribute="leading" secondItem="lN2-WV-myX" secondAttribute="leading" id="3Hf-Rd-HrM"/>
+                            <constraint firstItem="Udx-tq-AF0" firstAttribute="top" secondItem="d75-L0-qk4" secondAttribute="bottom" constant="10" id="ALy-9M-ygu"/>
+                            <constraint firstItem="aIc-qB-csd" firstAttribute="top" secondItem="lN2-WV-myX" secondAttribute="top" id="Emw-kE-K8z"/>
+                            <constraint firstItem="Udx-tq-AF0" firstAttribute="top" secondItem="lN2-WV-myX" secondAttribute="top" constant="153" id="FOR-zU-QK8"/>
+                            <constraint firstItem="d75-L0-qk4" firstAttribute="leading" secondItem="lN2-WV-myX" secondAttribute="leading" constant="14" id="Hs7-Zi-E7h"/>
+                            <constraint firstItem="7Y9-ZQ-Ldt" firstAttribute="top" secondItem="Udx-tq-AF0" secondAttribute="bottom" constant="12" id="Jf2-Rd-hwN"/>
+                            <constraint firstItem="d75-L0-qk4" firstAttribute="top" secondItem="tD9-qP-sv3" secondAttribute="bottom" constant="10" id="Ovo-He-bME"/>
+                            <constraint firstItem="aIc-qB-csd" firstAttribute="centerX" secondItem="Udx-tq-AF0" secondAttribute="centerX" id="cPe-kZ-6xo"/>
+                            <constraint firstItem="Udx-tq-AF0" firstAttribute="trailing" secondItem="d75-L0-qk4" secondAttribute="trailing" id="fYf-tS-2Ly"/>
+                            <constraint firstItem="Udx-tq-AF0" firstAttribute="leading" secondItem="d75-L0-qk4" secondAttribute="leading" id="tod-kD-noQ"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="ri9-tC-IW9">
                         <barButtonItem key="rightBarButtonItem" style="plain" id="JQZ-ie-UpW">
@@ -617,6 +634,7 @@
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
+                        <outlet property="ratingBackgroundView" destination="d75-L0-qk4" id="n05-jG-Xts"/>
                         <outlet property="scrollView" destination="Udx-tq-AF0" id="Jhs-Tk-x7w"/>
                         <segue destination="Wk9-KM-6JR" kind="push" identifier="websegue" id="mna-vh-XIW"/>
                     </connections>

@@ -32,10 +32,10 @@
 
 - (void)chatBox : (NSNotification *)notification
 {
-    NSLog(@"ayyy %@", self.barYoureIn);
     if (!self.barYoureIn) {
         self.barYoureIn = @"PubChat";
     }
+    NSLog(@"chatBox note %@", self.barYoureIn);
     [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": self.barYoureIn}];
 }
 
@@ -128,17 +128,26 @@
                     if (arrayOfUsers.count == 0)
                     {
                         [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
-                        [bar saveInBackground];
+                        [bar save];
                     }
                     else if (arrayOfUsers.count > 0)
                     {
+                        BOOL bewl = NO;
                         for (PFUser *user in arrayOfUsers)
                         {
-                            if (![[user objectForKey:@"username"]isEqual:[PFUser currentUser].username])
+                            if ([[user objectForKey:@"username"]isEqualToString:[PFUser currentUser].username])
                             {
-                                [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
-                                [bar saveInBackground];
+                                //then i am that user.
+                                //set the bool to yes and never save
+                                //If it loops through everyone in the array and I am not there, it will stay NO and I can add the current user.
+                                bewl = YES;
                             }
+                        }
+                        if (bewl == NO)
+                        {
+                            NSLog(@"adding user to old town");
+                            [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
+                            [bar saveInBackground];
                         }
                     }
                 }];
@@ -170,18 +179,25 @@
                     NSArray *arrayOfUsers = [NSArray arrayWithArray:[bar objectForKey:@"usersInBar"]];
                     if (arrayOfUsers.count == 0)
                     {
+                        NSLog(@"adding because bar is empty green door");
                         [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
-                        [bar saveInBackground];
+                        [bar save];
                     }
                     else if (arrayOfUsers.count > 0)
                     {
-                        for (PFUser *userr in arrayOfUsers)
+                        BOOL bewl = NO;
+                        for (PFUser *user in arrayOfUsers)
                         {
-                            if (![[userr objectForKey:@"username"]isEqual:[[PFUser currentUser]objectForKey:@"username"]])
+                            if ([[user objectForKey:@"username"]isEqualToString:[[PFUser currentUser]objectForKey:@"username"]])
                             {
-                                [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
-                                [bar saveInBackground];
+                                bewl = YES;
                             }
+                        }
+                        if (bewl == NO)
+                        {
+                            NSLog(@"adding user to green door");
+                            [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
+                            [bar saveInBackground];
                         }
                     }
                     }];
@@ -214,17 +230,23 @@
                     if (arrayOfUsers.count == 0)
                     {
                         [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
-                        [bar saveInBackground];
+                        [bar save];
                     }
                     else if (arrayOfUsers.count > 0)
                     {
+                        BOOL bewl = NO;
                         for (PFUser *userr in arrayOfUsers)
                         {
-                            if (![[userr objectForKey:@"username"]isEqual:[[PFUser currentUser]objectForKey:@"username"]])
+                            if ([[userr objectForKey:@"username"]isEqual:[[PFUser currentUser]objectForKey:@"username"]])
                             {
-                                [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
-                                [bar saveInBackground];
+                                bewl = YES;
                             }
+                        }
+                        if (bewl == NO)
+                        {
+                            NSLog(@"adding user to Municipal");
+                            [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
+                            [bar saveInBackground];
                         }
                     }
                 }];
