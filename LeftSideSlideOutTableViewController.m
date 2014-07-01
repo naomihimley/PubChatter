@@ -233,6 +233,7 @@
     NSDictionary *dictionary = [self.users objectAtIndex:indexPath.row];
 
     self.selectedChatButton.titleLabel.textColor = [UIColor buttonColor];
+    self.selectedChatButton.layer.borderColor = [[UIColor buttonColor] CGColor];
     self.selectedChatButton = nil;
     [[NSNotificationCenter defaultCenter]postNotificationName:@"PeerToChatWith" object:nil userInfo:dictionary];
     [button setTitleColor:[UIColor accentColor] forState:UIControlStateNormal];
