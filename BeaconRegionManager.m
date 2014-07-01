@@ -12,10 +12,34 @@
 @interface BeaconRegionManager () <CLLocationManagerDelegate>
 
 @property AppDelegate *appDelegate;
+@property NSString *barYoureIn;
 @end
 
 @implementation BeaconRegionManager
--(void)setupCLManager
+-(id)init
+{
+    self = [super init];
+
+    if (self)
+    {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(chatBox:)
+                                                     name:@"chatBox"
+                                                   object:nil];
+    }
+    return self;
+}
+
+- (void)chatBox : (NSNotification *)notification
+{
+    NSLog(@"ayyy %@", self.barYoureIn);
+    if (!self.barYoureIn) {
+        self.barYoureIn = @"PubChat";
+    }
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": self.barYoureIn}];
+}
+
+- (void)setupCLManager
 {
     self.beaconRegionManager = [[CLLocationManager alloc] init];
     self.beaconRegionManager.delegate = self;
@@ -23,6 +47,7 @@
 
 - (void)canUserUseApp
 {
+
     if ([[UIApplication sharedApplication] backgroundRefreshStatus] == UIBackgroundRefreshStatusAvailable)
     {
         self.beaconRegionManager = [[CLLocationManager alloc] init];
@@ -93,6 +118,7 @@
             if (state == CLRegionStateInside)
             {
                 [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"Old Town Ale House"}];
+                self.barYoureIn = @"Old Town Ale House";
                 PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
                 [queryForBar whereKey:@"objectId" equalTo:@"cxmc5pwBsf"];
                 [queryForBar includeKey:@"usersInBar"];
@@ -134,6 +160,7 @@
             if (state == CLRegionStateInside)
             {
                 [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"Green Door"}];
+                self.barYoureIn = @"Green Door";
                 PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
                 [queryForBar whereKey:@"objectId" equalTo:@"CnWKUJftyT"];
                 [queryForBar includeKey:@"usersInBar"];
@@ -176,6 +203,8 @@
             if (state == CLRegionStateInside)
             {
                 [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"Municipal Bar"}];
+                self.barYoureIn = @"Municipal Bar";
+
                 PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
                 [queryForBar whereKey:@"objectId" equalTo:@"qVTGKr4142"];
                 [queryForBar includeKey:@"usersInBar"];
@@ -236,6 +265,7 @@
         //removes User from all bar
         NSLog(@"removing user from all bars didExitRegion");
         [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"PubChat"}];
+        self.barYoureIn = @"PubChat";
         PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
         [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             for (PFObject *bar in objects) {
