@@ -57,6 +57,16 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidChangeStateNotification"
                                                             object:nil
                                                           userInfo:dictionary];
+
+    //hopefully this just reconnects when all connections are lost, logic may not be sound for multiples
+
+    if(self.session.connectedPeers.count == 0)
+    {
+        for (MCPeerID *peerID in self.advertisingUsers) {
+            NSLog(@"have no connected peers so will send an invitation");
+            [self.browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
+        }
+    }
 }
 
 -(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID
@@ -138,27 +148,8 @@
 
     self.shouldInvite = NO;
 
-//    NSString *string = [[NSString alloc] initWithData:context encoding:NSUTF8StringEncoding];
-//    int peersInt = [string intValue];
-
-//    if (self.session.connectedPeers == 0)
-//    {
     NSLog(@"accepting invite from %@", peerID.displayName);
         invitationHandler(YES,self.session);
-//        if (self.randomNumber > peersInt)
-//        {
-//            NSLog(@"My number was larger so I accept: mine %i %@ %i", self.randomNumber, peerID.displayName,  peersInt);
-//            invitationHandler(YES, self.session);
-//        }
-//        else
-//        {
-//            NSLog(@"My number was the lesser to I did not accept: mine %i %@ %i", self.randomNumber,peerID.displayName, peersInt);
-//        }
-//    }
-//    else
-//    {
-////        invitationHandler(YES,self.session);
-//    }
 }
 
 #pragma mark - MCNearbyServiceBrowser Delegate Methods
@@ -168,11 +159,12 @@
 
     if (self.shouldInvite == YES)
     {
+        //could change this so that it goes through for all peers found when you start advertising and would help fix issue for when the peer your connected to leaves so you won't lose all connections
         self.shouldInvite = NO;
         if (self.session.connectedPeers.count == 0)
         {
             NSString *string = [NSString stringWithFormat:@"%i", self.randomNumber];
-            NSLog(@"sending int %@, SHOULD ONLY HAPPEN ONCE", string);
+            NSLog(@"sending int %@, SHOULD ONLY HAPPEN WHEN FIRST BROWSING", string);
             NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
 
             [browser invitePeer:peerID toSession:self.session withContext:data timeout:30.0];
@@ -185,7 +177,6 @@
         [self.foundPeersArray addObject:self.peerID.displayName];
         NSDictionary *dictionary = @{@"peerID": peerID};
 
-//        [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
         [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:dictionary];
     }
     else
@@ -195,26 +186,9 @@
             [self.advertisingUsers addObject:peerID];
             NSDictionary *dictionary = @{@"peerID": peerID};
 
-//            NSLog(@"found Peer and sending invitation because we are not connected");
-
-//            [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
-
             [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:dictionary];
         }
     }
-
-//    for (MCPeerID *peer in self.session.connectedPeers)
-//    {
-//        [peersConnectedTo addObject:peer.displayName];
-//    }
-//
-//    NSLog(@"peersConnectedTo Array in found advertising peers %@", peersConnectedTo);
-//
-//    if (![peersConnectedTo containsObject:peerID.displayName])
-//    {
-//         [browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
-//    }
-
     [self.foundPeersArray addObject:peerID.displayName];
 }
 
