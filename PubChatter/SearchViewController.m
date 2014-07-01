@@ -92,7 +92,6 @@
 //    [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     [self.view resignFirstResponder];
 
-//    [self isUserInBar];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     [[self.appDelegate beaconRegionManager]canUserUseApp];
 
@@ -127,7 +126,7 @@
     }
 }
 
-#pragma  mark - iBeacon methods
+#pragma  mark - Notifications
 
 -(void)userEnteredBar:(NSNotification *)notification
 {
@@ -137,31 +136,11 @@
     if ([barname isEqualToString:@"PubChat"]) {
         self.rateBarButton.hidden = YES;
     }
+    else
+    {
+        self.rateBarButton.hidden = NO;
+    }
 }
-
-// Check if the user is listed as being in a "Bar", add in Parse backend.
-//- (void)isUserInBar
-//{
-//    if ([PFUser currentUser]) {
-//        PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
-//        [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
-//        [queryForBar includeKey:@"usersInBar"];
-//        [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
-//         {
-//             PFObject *bar = [objects firstObject];
-//             if (bar)
-//             {
-//                 self.rateBarButton.customView.hidden = NO;
-//                 self.navigationItem.title = [bar objectForKey:@"barName"];
-//             }
-//             else
-//             {
-//                 self.navigationItem.title = @"PubChat";
-//             }
-//         }];
-//    }
-//}
-
 
 #pragma mark - IBActions
 
@@ -747,6 +726,14 @@ calloutAccessoryControlTapped:(UIControl *)control
     self.redrawAreaButtonOutlet.layer.borderColor = [[UIColor buttonColor]CGColor];
     self.searchBar.backgroundColor = [UIColor backgroundColor];
     self.activityIndicatorOutlet.color = [UIColor backgroundColor];
+    [self.rateBarButton setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
+    [self.rateBarButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+    [self.rateBarButton setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
+    self.rateBarButton.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
+    self.rateBarButton.layer.cornerRadius = 5.0f;
+    self.rateBarButton.layer.masksToBounds = YES;
+    self.rateBarButton.layer.borderWidth = 1.0f;
+    self.rateBarButton.layer.borderColor= [[UIColor buttonColor]CGColor];
 }
 
 #pragma mark - other methods
