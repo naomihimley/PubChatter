@@ -20,7 +20,6 @@
 @property UIImage *profileImageTaken;
 @property (weak, nonatomic) IBOutlet UIPickerView *genderPicker;
 @property (weak, nonatomic) IBOutlet UILabel *genderLabel;
-@property (weak, nonatomic) IBOutlet UIView *pickerBackgroundView;
 @property NSArray *genderArray;
 @property NSArray *interestedArray;
 @property NSString *genderString;
@@ -69,7 +68,6 @@
     self.ageLabel.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
     self.favoriteDrinkLabel.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
     self.bioTextView.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
-    self.pickerBackgroundView.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
 
     self.nameTextField.layer.masksToBounds = YES;
     self.nameTextField.layer.cornerRadius = 5.0f;
@@ -87,17 +85,10 @@
     self.bioTextView.layer.cornerRadius = 5.0f;
     self.bioTextView.layer.borderWidth = 1.0f;
     self.bioTextView.layer.borderColor = [[UIColor whiteColor]CGColor];
-    self.pickerBackgroundView.layer.masksToBounds = YES;
-    self.pickerBackgroundView.layer.cornerRadius = 5.0f;
-    self.pickerBackgroundView.layer.borderWidth = 1.0f;
-    self.pickerBackgroundView.layer.borderColor = [[UIColor whiteColor]CGColor];
-
-
 
     PFFile *file = [[PFUser currentUser]objectForKey:@"picture"];
     [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
      {
-//         self.pictureView.clipsToBounds = YES;
          self.pictureView.layer.borderWidth = 1.0f;
          self.pictureView.layer.borderColor = [[UIColor whiteColor]CGColor];
          self.pictureView.image = [UIImage imageWithData:data];
@@ -267,7 +258,14 @@
 
 -(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row   forComponent:(NSInteger)component
 {
-    if (component == 0) {
+    pickerView.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.9];
+    pickerView.layer.masksToBounds = YES;
+    pickerView.layer.borderWidth = 1.0f;
+    pickerView.layer.borderColor = [[UIColor whiteColor] CGColor];
+    pickerView.layer.cornerRadius = 5.0f;
+
+    if (component == 0)
+    {
         return [self.genderArray objectAtIndex:row];
     }
     else{
@@ -276,8 +274,10 @@
 }
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row   inComponent:(NSInteger)component
 {
+
     NSLog(@"Selected Row %ld", (long)row);
-    switch (component) {
+    switch (component)
+    {
         case 0:
             switch(row)
                 {
@@ -317,6 +317,7 @@
     }
     UIFont *boldFont = [UIFont boldSystemFontOfSize:18.0];
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"I am a %@ interested in %@", self.genderString, self.interestedString]];
+      [attrString addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, attrString.length)];
     [attrString addAttribute: NSFontAttributeName value: boldFont range: NSMakeRange(7, self.genderString.length)];
     [attrString addAttribute: NSFontAttributeName value: boldFont range: NSMakeRange(7 + self.genderString.length + 15,self.interestedString.length)];
     self.genderLabel.attributedText = attrString;
