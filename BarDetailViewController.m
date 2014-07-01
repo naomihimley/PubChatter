@@ -28,6 +28,7 @@
 @property (strong, nonatomic)  UILabel *barRatingLabel;
 @property (strong, nonatomic)  UILabel *backgroundView;
 @property (strong, nonatomic)  UILabel *imageEdge;
+@property (strong, nonatomic)  UILabel *yelpReviewersSayLabel;
 
 
 @property Bar *bar;
@@ -184,7 +185,10 @@
      forControlEvents:UIControlEventTouchUpInside];
         [self.telephoneOutlet setTitle:[NSString stringWithFormat:@"(%@) %@-%@", [self.barFromSourceVC.telephone substringWithRange:NSMakeRange(0, 3)], [self.barFromSourceVC.telephone substringWithRange:NSMakeRange(3, 3)], [self.barFromSourceVC.telephone substringWithRange:NSMakeRange(6, 4)]] forState:UIControlStateNormal];
         self.telephoneOutlet.frame = CGRectMake(10, textLabelsOffset, (self.scrollView.frame.size.width - self.barImageView.frame.size.width - 30), 30);
-        [self.telephoneOutlet setTitleColor:[UIColor accentColor] forState:UIControlStateNormal];
+        [self.telephoneOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+ //       [self.telephoneOutlet setTitleColor:[UIColor whiteColor] forState:uicontrolstat];
+
+
         self.telephoneOutlet.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         [self.scrollView addSubview:self.telephoneOutlet];
 
@@ -196,19 +200,48 @@
                    forControlEvents:UIControlEventTouchUpInside];
     [self.goToWebsiteButtonOutlet setTitle:[NSString stringWithFormat:@"See %@ on Yelp", self.barFromSourceVC.name] forState:UIControlStateNormal];
     self.goToWebsiteButtonOutlet.frame = CGRectMake(10, textLabelsOffset, (self.scrollView.frame.size.width - 20), 30);
-    [self.goToWebsiteButtonOutlet setTitleColor:[UIColor accentColor] forState:UIControlStateNormal];
+    [self.goToWebsiteButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+    [self.goToWebsiteButtonOutlet setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
     self.goToWebsiteButtonOutlet.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [self.scrollView addSubview:self.goToWebsiteButtonOutlet];
 
     textLabelsOffset = textLabelsOffset + self.goToWebsiteButtonOutlet.frame.size.height + 10;
 
+    self.categoriesLabel = [[UILabel alloc] init];
+    self.categoriesLabel.frame = CGRectMake(10, textLabelsOffset, (self.scrollView.frame.size.width - 20), 30);
+    self.categoriesLabel.text = [NSString stringWithFormat:@"Category:  %@\nOffers:  %@", self.barFromSourceVC.categories, self.barFromSourceVC.offers];
+    [self.categoriesLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:12]];
+    self.categoriesLabel.textAlignment = NSTextAlignmentLeft;
+    self.categoriesLabel.numberOfLines = 0;
+    self.categoriesLabel.sizeToFit;
+    self.categoriesLabel.textColor = [UIColor whiteColor];
+    [self.scrollView addSubview:self.categoriesLabel];
 
+    textLabelsOffset = textLabelsOffset + self.categoriesLabel.frame.size.height + 10;
 
+    self.yelpReviewersSayLabel = [[UILabel alloc] init];
+    self.yelpReviewersSayLabel.frame = CGRectMake(10, textLabelsOffset, (self.scrollView.frame.size.width - 20), 30);
+    self.yelpReviewersSayLabel.text = @"Yelp reviewers are saying...";
+    [self.yelpReviewersSayLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12]];
+    self.yelpReviewersSayLabel.textAlignment = NSTextAlignmentLeft;
+    self.yelpReviewersSayLabel.numberOfLines = 0;
+    self.yelpReviewersSayLabel.sizeToFit;
+    self.yelpReviewersSayLabel.textColor = [UIColor accentColor];
+    [self.scrollView addSubview:self.yelpReviewersSayLabel];
 
+    textLabelsOffset = textLabelsOffset + self.yelpReviewersSayLabel.frame.size.height;
 
+    //Add Yelp user comments textview.
+    self.aboutBarTextView = [[UITextView alloc] init];
+    self.aboutBarTextView.frame = CGRectMake(10, textLabelsOffset, (self.scrollView.frame.size.width - 20), 70);
+    self.aboutBarTextView.text = self.barFromSourceVC.aboutBusiness;
+    self.aboutBarTextView.editable = NO;
+    self.aboutBarTextView.textAlignment = NSTextAlignmentLeft;
+    self.aboutBarTextView.textColor = [UIColor whiteColor];
+    self.aboutBarTextView.backgroundColor = [UIColor clearColor];
+    [self.scrollView addSubview:self.aboutBarTextView];
 
-
-
+    textLabelsOffset = textLabelsOffset + self.aboutBarTextView.frame.size.height + 10;
 
     //Add background view
     self.backgroundView = [[UILabel alloc] init];
@@ -219,84 +252,24 @@
     self.backgroundView.layer.borderWidth = 1.0f;
     [self.scrollView insertSubview:self.backgroundView atIndex:0];
 
-
-//
-//    verticalOffset = verticalOffset + profileImageView.frame.size.height + 10;
-//
-//    //Add name label
-//    self.nameageLabel = [[UILabel alloc] init];
-//    self.nameageLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 30);
-//    self.nameageLabel.text = [NSString stringWithFormat:@"%@, %@", self.name, self.age];
-//    self.nameageLabel.textAlignment = NSTextAlignmentCenter;
-//    self.nameageLabel.textColor = [UIColor nameColor];
-//    [self.nameageLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:17]];
-//    [self.scrollView addSubview:self.nameageLabel];
-//    verticalOffset = verticalOffset + self.nameageLabel.frame.size.height + 10;
-//
-//    //Add gender label
-//    self.genderLabel = [[UILabel alloc] init];
-//    self.genderLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 30);
-//    self.genderLabel.text = self.gender;
-//    self.genderLabel.textAlignment = NSTextAlignmentCenter;
-//    self.genderLabel.textColor = [UIColor whiteColor];
-//    [self.genderLabel setFont:[UIFont systemFontOfSize:17.0]];
-//    [self.scrollView addSubview:self.genderLabel];
-//    verticalOffset = verticalOffset + self.genderLabel.frame.size.height + 10;
-//
-//    //Add about me label
-//    self.aboutMeLabel = [[UILabel alloc] init];
-//    self.aboutMeLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 30);
-//    self.aboutMeLabel.text = [NSString stringWithFormat:@"About %@", self.name];
-//    self.aboutMeLabel.textAlignment = NSTextAlignmentCenter;
-//    self.aboutMeLabel.textColor = [UIColor whiteColor];
-//    [self.scrollView addSubview:self.aboutMeLabel];
-//    verticalOffset = verticalOffset + self.aboutMeLabel.frame.size.height;
-//
-//    //Add bio textView
-//    self.bioTextView = [[UITextView alloc] init];
-//    self.bioTextView.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 70);
-//    self.bioTextView.text = self.bioText;
-//    self.bioTextView.editable = NO;
-//    self.bioTextView.textAlignment = NSTextAlignmentCenter;
-//    self.bioTextView.textColor = [UIColor whiteColor];
-//    self.bioTextView.backgroundColor = [UIColor clearColor];
-//    [self.scrollView addSubview:self.bioTextView];
-//    verticalOffset = verticalOffset + self.bioTextView.frame.size.height + 10;
-//
-//    //Add interested label
-//    self.interestedLabel = [[UILabel alloc] init];
-//    self.interestedLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 30);
-//    self.interestedLabel.text = self.sexualOrientation;
-//    self.interestedLabel.textAlignment = NSTextAlignmentCenter;
-//    self.interestedLabel.textColor = [UIColor whiteColor];
-//    [self.scrollView addSubview:self.interestedLabel];
-//    verticalOffset = verticalOffset + self.interestedLabel.frame.size.height + 10;
-//
-//    //Add Favorite drink label
-//    self.favDrinkLabel = [[UILabel alloc] init];
-//    self.favDrinkLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 30);
-//    self.favDrinkLabel.text = [NSString stringWithFormat:@"Favorite drink: %@", self.favDrink];
-//    self.favDrinkLabel.textAlignment = NSTextAlignmentCenter;
-//    self.favDrinkLabel.textColor = [UIColor whiteColor];
-//    [self.scrollView addSubview:self.favDrinkLabel];
-//    verticalOffset = verticalOffset + self.favDrinkLabel.frame.size.height + 15;
-//
-    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, textLabelsOffset);
     self.scrollView.contentMode = UIViewContentModeScaleAspectFit;
+    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, textLabelsOffset);
 
 //    [self setStyle];
 }
 
 - (void)onTelephoneButtonPressed:(id)sender
 {
+    self.telephoneOutlet.titleLabel.textColor = [UIColor whiteColor];
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@", self.barFromSourceVC.telephone]]];
 
-    NSLog(@"I ran");
 }
 
 -(void)seeOnYelp:(id)sender
 {
+    self.goToWebsiteButtonOutlet.titleLabel.textColor = [UIColor whiteColor];
     [self performSegueWithIdentifier:@"websegue" sender:self];
+
 }
 
 
@@ -345,5 +318,7 @@
     detailViewController.mobileURLFromSource = mobileURLString;
     detailViewController.placeNameFromSource = name;
 }
+
+
 
 @end

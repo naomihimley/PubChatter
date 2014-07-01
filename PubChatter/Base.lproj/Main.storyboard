@@ -579,7 +579,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Udx-tq-AF0">
-                                <rect key="frame" x="14" y="137" width="292" height="364"/>
+                                <rect key="frame" x="14" y="148" width="292" height="270"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <connections>
                                     <outlet property="delegate" destination="FmP-9A-1U9" id="pN4-xO-r6B"/>

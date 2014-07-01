@@ -200,6 +200,12 @@
     //Perform a bounded box query
     if (self.redrawActivated && self.initialMapLoad) {
         NSLog(@"Initial mapview load");
+
+        NSLog(@"latitude : %f", latitude);
+        NSLog(@"longitude: %f", longitude);
+        NSLog(@"# results %@", numResults);
+        NSLog(@"sort type :%@", sortType);
+
         self.request = [TDOAuth URLRequestForPath:@"/v2/search" GETParameters:@{@"term": query, @"ll": [NSString stringWithFormat:@"%f,%f", latitude, longitude], @"limit" : numResults, @"sort" : sortType}
                                              host:@"api.yelp.com"
                                       consumerKey:@"LdaQSTTYqZuYXrta5vVAgw"
@@ -208,6 +214,14 @@
                                       tokenSecret:@"ao0diFl7jAe8cDDXnc-O1N-vQm8"];
     }
     else if (self.redrawActivated) {
+
+        NSLog(@"left lower corner latitude : %f", swlatitude);
+        NSLog(@"left lower corner longitude : %f", swlongitude);
+        NSLog(@"right upper corner latitude: %f", nelatitude);
+        NSLog(@"right upper corner longitude %f", nelongitude);
+        NSLog(@"# results %@", numResults);
+        NSLog(@"sort type :%@", sortType);
+
     self.request = [TDOAuth URLRequestForPath:@"/v2/search" GETParameters:@{@"term": query, @"bounds": [NSString stringWithFormat:@"%f,%f|%f,%f", swlatitude, swlongitude, nelatitude, nelongitude], @"limit" : numResults, @"sort" : sortType}
                                   host:@"api.yelp.com"
                            consumerKey:@"LdaQSTTYqZuYXrta5vVAgw"
@@ -217,7 +231,12 @@
     }
 
     //Perform a point query (i.e. query about a center long/lat point).
-    else if (self.searchActivated) {
+    else  {
+        NSLog(@"latitude : %f", latitude);
+        NSLog(@"latitude: %f", longitude);
+        NSLog(@"# results %@", numResults);
+        NSLog(@"sort type :%@", sortType);
+
         self.request = [TDOAuth URLRequestForPath:@"/v2/search" GETParameters:@{@"term": query, @"ll": [NSString stringWithFormat:@"%f,%f", latitude, longitude], @"limit" : numResults, @"sort" : sortType}
                                       host:@"api.yelp.com"
                                consumerKey:@"LdaQSTTYqZuYXrta5vVAgw"
@@ -380,9 +399,7 @@
                          // Grab first placemark in placemarks array.
                          MKPlacemark *placemark = [placemarks firstObject];
                             if (placemark) {
-                             NSLog(@"Placemark found");
                              MKPointAnnotation *barAnnotation = [[MKPointAnnotation alloc] init];
-                             //NSLog(@"Bar annotation: %@", barAnnotation);
                              yelpBar.latitude = placemark.location.coordinate.latitude;
                              yelpBar.longitude = placemark.location.coordinate.longitude;
                              yelpBar.distanceFromUser = [self.userLocation distanceFromLocation:placemark.location];
@@ -395,7 +412,6 @@
                          //Couldn't find a placemark, add yelpBar to array used in natural language query
                             else {
                                 [redrawLanguageQuery addObject:yelpBar];
-                                NSLog(@"No placemark found");
                          }
                      }
                      // When counter equals the number of barLocations in the array, then tableview can be reloaded and buttons set to enabled.
@@ -432,11 +448,10 @@
 
 -(void)performLanguageQuery:(NSMutableArray *)queryArray
 {
-    NSLog(@"Performing natural language query");
     self.secondcounter = 0;
 
     for (YelpBar *yelpBar in queryArray) {
-        NSLog(@"YelpBar name: %@", yelpBar.name);
+        NSLog(@"Language query on: %@", yelpBar.name);
         // Perform natural lanuage query on YelpBar's name property.
 
         // Increment counter every time a YelpBar address is evaluated.
@@ -568,7 +583,6 @@ calloutAccessoryControlTapped:(UIControl *)control
     [self.activityIndicatorOutlet startAnimating];
     [self getMapRect];
 
-        NSLog(@"%f, %f", self.userLocation.coordinate.latitude, self.userLocation.coordinate.longitude);
     [self getYelpJSONFromMapRedraw:self.queryString andSWLatitude:0.0 andSWLongitude:0.0 andNELatitude:0.0 andNELongitude:0.0 andSortType:@"1" andNumResults:@"20" andLongitude:self.userLocation.coordinate.longitude andLatitude:self.userLocation.coordinate.latitude];
         }
     }
@@ -610,7 +624,6 @@ calloutAccessoryControlTapped:(UIControl *)control
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"I ran");
     NSIndexPath *selectedIndexPath = self.tableView.indexPathForSelectedRow;
     self.selectedBar = [self.barLocations objectAtIndex:selectedIndexPath.row];
     [self performSegueWithIdentifier:@"segue" sender:self];
