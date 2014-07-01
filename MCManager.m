@@ -214,6 +214,7 @@
     self.peerID = [[MCPeerID alloc]initWithDisplayName:displayName];
     self.session = [[MCSession alloc]initWithPeer:self.peerID];
     self.session.delegate = self;
+    NSLog(@"setting up the session");
 }
 
 -(void)advertiseSelf:(BOOL)shouldAdvertise
@@ -222,12 +223,14 @@
     {
         self.advertiser = [[MCNearbyServiceAdvertiser alloc]initWithPeer:self.peerID discoveryInfo:nil serviceType:@"pubchatservice"];
         self.advertiser.delegate = self;
+        NSLog(@"starting advertising should only happen once");
         [self.advertiser startAdvertisingPeer];
 
     }
 
     else
     {
+        NSLog(@"should never get called");
         [self.advertiser stopAdvertisingPeer];
         [self.browser stopBrowsingForPeers];
         self.browser = nil;
@@ -237,6 +240,7 @@
 
 -(void)startBrowsingForPeers
 {
+    NSLog(@"starting browsing should happen once");
     self.browser = [[MCNearbyServiceBrowser alloc]initWithPeer:self.peerID serviceType:@"pubchatservice"];
     self.browser.delegate = self;
     [self.browser startBrowsingForPeers];
