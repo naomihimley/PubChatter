@@ -26,7 +26,7 @@
 @property (weak, nonatomic) IBOutlet UIView *chatFieldView;
 @property (weak, nonatomic) IBOutlet UITextField *chatTextField;
 @property (weak, nonatomic) IBOutlet UIView *sendView;
-@property (weak, nonatomic) IBOutlet UIButton *findPubChattersButton;
+@property (strong, nonatomic) IBOutlet UIButton *findPubChattersButton;
 @property (weak, nonatomic) IBOutlet UIButton *sendButton;
 @property (weak, nonatomic) IBOutlet UILabel *barLabel;
 -(void)userEnteredBar:(NSNotification *)notification;
@@ -410,9 +410,13 @@
     self.tableView.separatorColor = [UIColor clearColor];
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"river"]];
 
-    [self.findPubChattersButton setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
-    [self.findPubChattersButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
-    [self.findPubChattersButton setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 120, 33)];
+    label.numberOfLines = 2;
+    label.text = @"Find\nPubChatters";
+    label.textAlignment = NSTextAlignmentCenter;
+    label.font = [UIFont boldSystemFontOfSize:13];
+    [self.findPubChattersButton addSubview:label];
+    label.textColor = [UIColor buttonColor];
     self.findPubChattersButton.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
     self.findPubChattersButton.layer.cornerRadius = 5.0f;
     self.findPubChattersButton.layer.masksToBounds = YES;
