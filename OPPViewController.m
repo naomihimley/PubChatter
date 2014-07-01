@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "ChatBoxViewController.h"
 #import "UIColor+DesignColors.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface OPPViewController ()<UIAlertViewDelegate, UIScrollViewDelegate>
 
@@ -21,13 +22,16 @@
 @property (strong, nonatomic) NSString *sexualOrientation;
 @property (strong, nonatomic) NSString *favDrink;
 
-@property (strong, nonatomic) UIView *viewInBackground;
+@property (strong, nonatomic) UILabel *backgroundView;
+@property (strong, nonatomic) UILabel *imageEdge;
 @property (strong, nonatomic) UITextView *bioTextView;
 @property (strong, nonatomic) UILabel *nameageLabel;
 @property (strong, nonatomic) UILabel *genderLabel;
 @property (strong, nonatomic) UILabel *ageLabel;
 @property (strong, nonatomic) UILabel *interestedLabel;
 @property (strong, nonatomic) UILabel *favDrinkLabel;
+@property (strong, nonatomic) UILabel *aboutMeLabel;
+
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 @property (weak, nonatomic) IBOutlet UINavigationBar *navBar;
@@ -49,11 +53,22 @@
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
 
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(receivedInvitationForConnection:) name:@"MCReceivedInvitation" object:nil];
+    self.scrollView.delegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+
+    [self.bioTextView removeFromSuperview];
+    [self.nameageLabel removeFromSuperview];
+    [self.genderLabel removeFromSuperview];
+    [self.interestedLabel removeFromSuperview];
+    [self.favDrinkLabel removeFromSuperview];
+    [self.aboutMeLabel removeFromSuperview];
+    [self.backgroundView removeFromSuperview];
+    [self.imageEdge removeFromSuperview];
+
     [self getPersonalData];
 }
 
@@ -67,6 +82,15 @@
     profileImageView.frame = CGRectMake((self.scrollView.frame.size.width/2) -75, verticalOffset, 150, 150);
     profileImageView.image = self.profileImage;
     [self.scrollView addSubview:profileImageView];
+
+    // Add image borderview
+    self.imageEdge = [[UILabel alloc] init];
+    self.imageEdge.frame = CGRectMake((self.scrollView.frame.size.width/2) -76, verticalOffset - 1, 152, 152);
+    self.imageEdge.backgroundColor = [UIColor clearColor];
+    self.imageEdge.layer.borderColor = [[UIColor whiteColor] CGColor];
+    self.imageEdge.layer.borderWidth = 1.0f;
+    [self.scrollView addSubview:self.imageEdge];
+
     verticalOffset = verticalOffset + profileImageView.frame.size.height + 10;
 
     //Add name label
@@ -90,13 +114,13 @@
     verticalOffset = verticalOffset + self.genderLabel.frame.size.height + 10;
 
     //Add about me label
-    UILabel *aboutMeLabel = [[UILabel alloc] init];
-    aboutMeLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 30);
-    aboutMeLabel.text = [NSString stringWithFormat:@"About %@", self.name];
-    aboutMeLabel.textAlignment = NSTextAlignmentCenter;
-    aboutMeLabel.textColor = [UIColor whiteColor];
-    [self.scrollView addSubview:aboutMeLabel];
-    verticalOffset = verticalOffset + aboutMeLabel.frame.size.height;
+    self.aboutMeLabel = [[UILabel alloc] init];
+    self.aboutMeLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 30);
+    self.aboutMeLabel.text = [NSString stringWithFormat:@"About %@", self.name];
+    self.aboutMeLabel.textAlignment = NSTextAlignmentCenter;
+    self.aboutMeLabel.textColor = [UIColor whiteColor];
+    [self.scrollView addSubview:self.aboutMeLabel];
+    verticalOffset = verticalOffset + self.aboutMeLabel.frame.size.height;
 
     //Add bio textView
     self.bioTextView = [[UITextView alloc] init];
@@ -121,7 +145,7 @@
     //Add Favorite drink label
     self.favDrinkLabel = [[UILabel alloc] init];
     self.favDrinkLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 30);
-    self.favDrinkLabel.text = self.favDrink;
+    self.favDrinkLabel.text = [NSString stringWithFormat:@"Favorite drink: %@", self.favDrink];
     self.favDrinkLabel.textAlignment = NSTextAlignmentCenter;
     self.favDrinkLabel.textColor = [UIColor whiteColor];
     [self.scrollView addSubview:self.favDrinkLabel];
@@ -130,15 +154,17 @@
     self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, verticalOffset);
 
     //Add background view
-    UIView *backgroundView = [[UIView alloc] init];
-    backgroundView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, verticalOffset);
-    backgroundView.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.95f];
+    self.backgroundView = [[UILabel alloc] init];
+    self.backgroundView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, verticalOffset);
+    self.backgroundView.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.95f];
+    self.backgroundView.layer.cornerRadius = 5.0f;
+    self.backgroundView.layer.borderColor = [[UIColor whiteColor] CGColor];
+    self.backgroundView.layer.borderWidth = 1.0f;
+    [self.scrollView insertSubview:self.backgroundView atIndex:0];
 
-    [self.scrollView insertSubview:backgroundView atIndex:0];
 
     self.scrollView.contentMode = UIViewContentModeScaleAspectFit;
-    self.scrollView.delegate = self;
-    
+
     [self setStyle];
 }
 
