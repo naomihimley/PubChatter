@@ -25,6 +25,7 @@
 @property NSDictionary *userSendingInvitation;
 @property UIButton *selectedChatButton;
 @property NSString *barString;
+@property BOOL isInviter;
 
 @end
 
@@ -47,29 +48,7 @@
 
     [self.tableView setBackgroundView: [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"river"]]];
 
-//    [[NSNotificationCenter defaultCenter]addObserver:self
-//                                            selector:@selector(peerDidChangeStateWithNotification:) name:@"MCDidChangeStateNotification"
-//                                              object:nil];
-//
-//    [[NSNotificationCenter defaultCenter]addObserver:self
-//                                            selector:@selector(receivedNotificationOfUserAdvertising:)
-//                                                name:@"MCFoundAdvertisingPeer"
-//                                              object:nil];
-//
-//    [[NSNotificationCenter defaultCenter]addObserver:self
-//                                            selector:@selector(peerStoppedAdvertising:)
-//                                                name:@"MCPeerStopAdvertising"
-//                                              object:nil];
-//
-//    [[NSNotificationCenter defaultCenter]addObserver:self
-//                                            selector:@selector(receivedChatDataFromPeer:) name:@"MCDidReceiveDataNotification"
-//                                              object:nil];
-//
-//    [[NSNotificationCenter defaultCenter]addObserver:self
-//                                            selector:@selector(peerDidChangeStateWithNotification:) name:@"MCDidChangeStateNotification"
-//                                              object:nil];
-//
-//    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(barUserIsIn:) name:@"userEnteredBar" object:nil];
+    self.isInviter = YES;
 
     [self startListeningForNotificationsAndSendNotification];
 
@@ -84,6 +63,15 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+}
+
+#pragma mark - Make Accepter
+
+-(void)makePeerAccepter
+{
+    self.isInviter = NO;
+
+    NSLog(@"Is now an acceptor");
 }
 
 #pragma mark - Table view data source
@@ -233,6 +221,18 @@
 
     NSDictionary *dictionary = [self.users objectAtIndex:indexPath.row];
 
+    MCPeerID *peerID = [dictionary objectForKey:@"peerID"];
+
+    if (self.isInviter == YES)
+    {
+        NSLog(@"This peer should now be the Inviter");
+        
+         [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30.0];
+
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"MakeInviter" object:nil userInfo:nil];
+
+        NSLog(@" session from inviter %@", self.appDelegate.mcManager.session);
+    }
     self.selectedChatButton.titleLabel.textColor = [UIColor buttonColor];
     self.selectedChatButton.layer.borderColor = [[UIColor buttonColor] CGColor];
     self.selectedChatButton = nil;
@@ -385,6 +385,8 @@
                                               object:nil];
 
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(barUserIsIn:) name:@"userEnteredBar" object:nil];
+
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(makePeerAccepter) name:@"MCJustAccepts" object:nil];
 
     [[NSNotificationCenter defaultCenter] postNotificationName:@"chatBox" object:nil userInfo:nil];
 }
