@@ -564,15 +564,17 @@ calloutAccessoryControlTapped:(UIControl *)control
 }
 
 - (void)mapViewDidFinishRenderingMap:(MKMapView *)mapView fullyRendered:(BOOL)fullyRendered
-{    NSLog(@"Map finished loading");
+{
+    if (fullyRendered) {
+    NSLog(@"Map finished loading");
     if (self.initialMapLoad) {
     self.activityIndicatorOutlet.hidden = NO;
     self.redrawActivated = YES;
     [self.activityIndicatorOutlet startAnimating];
-    NSLog(@"Map finished loading");
     [self getMapRect];
     [self getYelpJSONFromMapRedraw:@"bar" andSWLatitude:self.SWBoundsLatitude andSWLongitude:self.SWBoundsLongitude andNELatitude:self.NEBoundsLatitude andNELongitude:self.NEBoundsLongitude andSortType:@"1" andNumResults:@"20" andLongitude:0.0 andLatitude:0.0];
         self.initialMapLoad = NO;
+        }
     }
 }
 
