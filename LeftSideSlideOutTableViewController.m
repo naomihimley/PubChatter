@@ -49,7 +49,6 @@
     self.isInviter = YES;
 
     [self startListeningForNotificationsAndSendNotification];
-    self.tableView.separatorColor = [UIColor clearColor];
 
     self.tableView.backgroundColor = [UIColor whiteColor];
 }
@@ -113,7 +112,7 @@
     cell.layer.masksToBounds = YES;
     cell.layer.borderWidth = 0.25f;
     cell.layer.borderColor = [[UIColor whiteColor]CGColor];
-    
+
 
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
@@ -156,8 +155,6 @@
     PFFile *imageFile = [user objectForKey:@"picture"];
     [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
         cell.userImage.layer.masksToBounds = YES;
-        cell.userImage.layer.borderWidth = 1.0f;
-        cell.userImage.layer.borderColor = [[UIColor accentColor]CGColor];
         cell.userImage.image = [UIImage imageWithData:data];
     }];
     return cell;
