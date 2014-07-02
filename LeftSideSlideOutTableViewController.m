@@ -49,7 +49,6 @@
     self.isInviter = YES;
 
     [self startListeningForNotificationsAndSendNotification];
-    self.tableView.separatorColor = [UIColor clearColor];
 
     self.tableView.backgroundColor = [UIColor whiteColor];
 }
@@ -106,14 +105,14 @@
     [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
 
     cell.chatButton.layer.cornerRadius = 5.0f;
-    cell.chatButton.layer.borderWidth = 1.0f;
+    cell.chatButton.layer.borderWidth = 2.0f;
     cell.chatButton.layer.borderColor= [[UIColor buttonColor]CGColor];
     cell.chatButton.shouldInvite = YES;
 
     cell.layer.masksToBounds = YES;
     cell.layer.borderWidth = 0.25f;
     cell.layer.borderColor = [[UIColor whiteColor]CGColor];
-    
+
 
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
@@ -156,8 +155,6 @@
     PFFile *imageFile = [user objectForKey:@"picture"];
     [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
         cell.userImage.layer.masksToBounds = YES;
-        cell.userImage.layer.borderWidth = 1.0f;
-        cell.userImage.layer.borderColor = [[UIColor accentColor]CGColor];
         cell.userImage.image = [UIImage imageWithData:data];
     }];
     return cell;

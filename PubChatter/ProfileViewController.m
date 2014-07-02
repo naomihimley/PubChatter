@@ -154,9 +154,6 @@
     self.backgroundView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, verticalOffset);
     NSLog(@"I ran");
     self.backgroundView.backgroundColor = [UIColor clearColor];
-//    self.backgroundView.layer.cornerRadius = 5.0f;
-//    self.backgroundView.layer.borderColor = [[UIColor whiteColor] CGColor];
-//    self.backgroundView.layer.borderWidth = 1.0f;
     [self.scrollView insertSubview:self.backgroundView atIndex:0];
 
     self.scrollView.contentMode = UIViewContentModeScaleAspectFit;
@@ -263,7 +260,6 @@
 {
     //Style nameagelabel
     self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
-    self.backgroundView.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.95f];
 }
 
 @end
