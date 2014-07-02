@@ -39,7 +39,6 @@
     [super viewDidLoad];
     self.scrollView.alwaysBounceVertical = YES;
     self.scrollView.delegate = self;
-
     NSString *Man = @"Man";
     NSAttributedString *manString = [[NSAttributedString alloc] initWithString:Man attributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
     NSString *Woman = @"Woman";
@@ -88,43 +87,15 @@
 
 - (void)setTextFields
 {
-    self.nameTextField.textColor = [UIColor whiteColor];
-    self.ageLabel.textColor = [UIColor whiteColor];
-    self.favoriteDrinkLabel.textColor = [UIColor whiteColor];
-    [self.editProfileButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
-
-    self.nameTextField.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
-    self.ageLabel.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
-    self.favoriteDrinkLabel.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
-    self.bioTextView.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
-    self.editProfileButton.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
-
-    self.nameTextField.layer.masksToBounds = YES;
-    self.nameTextField.layer.cornerRadius = 5.0f;
-    self.nameTextField.layer.borderWidth = 1.0f;
-    self.nameTextField.layer.borderColor = [[UIColor whiteColor]CGColor];
-    self.ageLabel.layer.masksToBounds = YES;
-    self.ageLabel.layer.cornerRadius = 5.0f;
-    self.ageLabel.layer.borderWidth = 1.0f;
-    self.ageLabel.layer.borderColor = [[UIColor whiteColor]CGColor];
-    self.favoriteDrinkLabel.layer.masksToBounds = YES;
-    self.favoriteDrinkLabel.layer.cornerRadius = 5.0f;
-    self.favoriteDrinkLabel.layer.borderWidth = 1.0f;
-    self.favoriteDrinkLabel.layer.borderColor = [[UIColor whiteColor]CGColor];
-    self.bioTextView.layer.masksToBounds = YES;
-    self.bioTextView.layer.cornerRadius = 5.0f;
-    self.bioTextView.layer.borderWidth = 1.0f;
-    self.bioTextView.layer.borderColor = [[UIColor whiteColor]CGColor];
-    self.editProfileButton.layer.masksToBounds = YES;
-    self.editProfileButton.layer.cornerRadius = 5.0f;
-    self.editProfileButton.layer.borderWidth = 1.0f;
-    self.editProfileButton.layer.borderColor = [[UIColor buttonColor] CGColor];
+    self.nameTextField.textColor = [UIColor navBarColor];
+    self.ageLabel.textColor = [UIColor navBarColor];
+    self.favoriteDrinkLabel.textColor = [UIColor navBarColor];
+    self.bioTextView.backgroundColor = [UIColor whiteColor];
+    self.bioTextView.textColor = [UIColor navBarColor];
 
     PFFile *file = [[PFUser currentUser]objectForKey:@"picture"];
     [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
      {
-         self.pictureView.layer.borderWidth = 1.0f;
-         self.pictureView.layer.borderColor = [[UIColor whiteColor]CGColor];
          self.pictureView.image = [UIImage imageWithData:data];
      }];
     self.nameTextField.text = [[PFUser currentUser]objectForKey:@"name"];
@@ -163,8 +134,6 @@
         self.genderString = [[self.genderArray objectAtIndex:2] lowercaseString];
         [self.genderPicker selectRow:2 inComponent:0 animated:YES];
     }
-
-
     if ([[[PFUser currentUser]objectForKey: @"sexualOrientation"] isEqualToNumber:@0]) {
         self.interestedString = [[self.interestedArray objectAtIndex:1] lowercaseString];
         [self.genderPicker selectRow:1 inComponent:1 animated:YES];
@@ -185,6 +154,7 @@
     [attrString addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, attrString.length)];
     self.genderLabel.attributedText = attrString;
 }
+
 - (void)createUserProfileImage
 {
     CGSize scale = CGSizeMake(150, 150);
@@ -255,8 +225,8 @@
 - (IBAction)onEditButtonPressed:(id)sender
 {
     [self presentViewController:self.cameraController animated:NO completion:^{}];
-
 }
+
 - (IBAction)onDoneButtonPressed:(id)sender
 {
 
@@ -293,12 +263,7 @@
 
 -(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row   forComponent:(NSInteger)component
 {
-//    pickerView.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.9];
-//    pickerView.layer.masksToBounds = YES;
-//    pickerView.layer.borderWidth = 1.0f;
-//    pickerView.layer.borderColor = [[UIColor whiteColor] CGColor];
-//    pickerView.layer.cornerRadius = 5.0f;
-
+    pickerView.backgroundColor = [UIColor clearColor];
     if (component == 0)
     {
         return [self.genderAttStringArray objectAtIndex:row];
@@ -360,12 +325,7 @@
 
 - (NSAttributedString *)pickerView:(UIPickerView *)pickerView attributedTitleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    pickerView.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.9];
-    pickerView.layer.masksToBounds = YES;
-    pickerView.layer.borderWidth = 1.0f;
-    pickerView.layer.borderColor = [[UIColor whiteColor] CGColor];
-    pickerView.layer.cornerRadius = 5.0f;
-    
+    pickerView.backgroundColor = [UIColor clearColor];
     if (component == 0)
     {
         return [self.genderAttStringArray objectAtIndex:row];
