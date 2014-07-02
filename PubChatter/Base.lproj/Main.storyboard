@@ -86,7 +86,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="72" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="ePF-5u-znW">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="72" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="ePF-5u-znW">
                                 <rect key="frame" x="0.0" y="96" width="320" height="364"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -94,11 +94,11 @@
                                     <constraint firstAttribute="width" constant="320" id="mch-EM-fMY"/>
                                 </constraints>
                                 <prototypes>
-                                    <tableViewCell userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Cell" id="qf1-u4-MBD" customClass="ChatTableViewCell">
-                                        <rect key="frame" x="0.0" y="86" width="320" height="72"/>
+                                    <tableViewCell userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Cell" rowHeight="66" id="qf1-u4-MBD" customClass="ChatTableViewCell">
+                                        <rect key="frame" x="0.0" y="86" width="320" height="66"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qf1-u4-MBD" id="jhn-QF-O1v">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="71"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="65"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="87S-5X-NqK">
@@ -107,13 +107,13 @@
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="200" id="2Fd-tC-F62"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="87S-5X-NqK" secondAttribute="trailing" constant="100" id="AKj-Df-X4S"/>
-                                                <constraint firstAttribute="bottom" secondItem="87S-5X-NqK" secondAttribute="bottom" constant="26" id="Mpp-je-j9J"/>
+                                                <constraint firstAttribute="bottom" secondItem="87S-5X-NqK" secondAttribute="bottom" constant="20" id="Mpp-je-j9J"/>
                                                 <constraint firstItem="87S-5X-NqK" firstAttribute="top" secondItem="jhn-QF-O1v" secondAttribute="top" constant="20" id="OPp-Ff-6DE"/>
                                                 <constraint firstItem="87S-5X-NqK" firstAttribute="leading" secondItem="jhn-QF-O1v" secondAttribute="leading" constant="20" id="oAG-ve-t2t"/>
                                             </constraints>
@@ -122,11 +122,11 @@
                                             <outlet property="leftLabel" destination="87S-5X-NqK" id="Iqz-w4-eth"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell2" id="gMN-XI-4Cw" customClass="ChatTableViewCell">
-                                        <rect key="frame" x="0.0" y="158" width="320" height="72"/>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Cell2" rowHeight="66" id="gMN-XI-4Cw" customClass="ChatTableViewCell">
+                                        <rect key="frame" x="0.0" y="152" width="320" height="66"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gMN-XI-4Cw" id="ALN-z4-fVK">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="71"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="65"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="ZMQ-xD-wlM">
@@ -135,13 +135,13 @@
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="200" id="mvS-l2-FBi"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="ZMQ-xD-wlM" secondAttribute="trailing" constant="20" id="HIc-Cc-Yit"/>
-                                                <constraint firstAttribute="bottom" secondItem="ZMQ-xD-wlM" secondAttribute="bottom" constant="23" id="X49-Gw-vft"/>
+                                                <constraint firstAttribute="bottom" secondItem="ZMQ-xD-wlM" secondAttribute="bottom" constant="17" id="X49-Gw-vft"/>
                                                 <constraint firstItem="ZMQ-xD-wlM" firstAttribute="top" secondItem="ALN-z4-fVK" secondAttribute="top" constant="23" id="lZn-4n-tFR"/>
                                                 <constraint firstItem="ZMQ-xD-wlM" firstAttribute="leading" secondItem="ALN-z4-fVK" secondAttribute="leading" constant="100" id="laG-iI-dzw"/>
                                             </constraints>
@@ -195,7 +195,7 @@
                             <constraint firstItem="ePF-5u-znW" firstAttribute="top" secondItem="bc5-8k-tS4" secondAttribute="top" constant="96" id="9Lx-f6-Cim"/>
                             <constraint firstAttribute="bottom" secondItem="4wy-6y-CN3" secondAttribute="bottom" constant="49" id="TVy-Wq-QwZ"/>
                             <constraint firstItem="ePF-5u-znW" firstAttribute="leading" secondItem="bc5-8k-tS4" secondAttribute="leading" id="fLK-s3-rKI"/>
-                            <constraint firstItem="4wy-6y-CN3" firstAttribute="top" secondItem="ePF-5u-znW" secondAttribute="bottom" id="i0L-sO-aaP"/>
+                            <constraint firstItem="4wy-6y-CN3" firstAttribute="top" secondItem="ePF-5u-znW" secondAttribute="bottom" constant="7" id="i0L-sO-aaP"/>
                             <constraint firstItem="4wy-6y-CN3" firstAttribute="leading" secondItem="bc5-8k-tS4" secondAttribute="leading" id="nY7-gr-zmT"/>
                         </constraints>
                     </view>
