@@ -10,11 +10,12 @@
 #import <Parse/Parse.h>
 #import "UIColor+DesignColors.h"
 
-@interface EditProfileViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, UIPickerViewDataSource,UIPickerViewDelegate>
+@interface EditProfileViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, UIPickerViewDataSource,UIPickerViewDelegate, UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *nameTextField;
 @property (nonatomic, strong) UIImagePickerController *cameraController;
 @property (weak, nonatomic) IBOutlet UITextField *ageLabel;
 @property (weak, nonatomic) IBOutlet UITextField *favoriteDrinkLabel;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UITextView *bioTextView;
 @property (weak, nonatomic) IBOutlet UIImageView *pictureView;
 @property UIImage *profileImageTaken;
@@ -25,6 +26,8 @@
 @property NSArray *interestedArray;
 @property NSString *genderString;
 @property NSString *interestedString;
+@property NSArray *genderAttStringArray;
+@property NSArray *interestedAttStringArray;
 
 @end
 
@@ -34,8 +37,26 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.scrollView.alwaysBounceVertical = YES;
+    self.scrollView.delegate = self;
+
+    NSString *Man = @"Man";
+    NSAttributedString *manString = [[NSAttributedString alloc] initWithString:Man attributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+    NSString *Woman = @"Woman";
+    NSAttributedString *womanString = [[NSAttributedString alloc] initWithString:Woman attributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+    NSString *Other = @"Other";
+    NSAttributedString *otherString = [[NSAttributedString alloc] initWithString:Other attributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+    NSString *Men = @"Men";
+    NSAttributedString *menString = [[NSAttributedString alloc] initWithString:Men attributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+    NSString *Women = @"Women";
+    NSAttributedString *womenString = [[NSAttributedString alloc] initWithString:Women attributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+
+    self.genderAttStringArray = [[NSArray alloc] initWithObjects:womanString, manString, otherString, nil];
+    self.interestedAttStringArray = [[NSArray alloc] initWithObjects:womenString, menString, otherString, nil];
+
     self.genderArray = [[NSArray alloc] initWithObjects:@"Woman", @"Man", @"Other", nil];
-    self.interestedArray = [[NSArray alloc] initWithObjects:@"Women", @"Men", @"Other", nil];
+    self.interestedArray = [[NSArray alloc] initWithObjects:@"women", @"men", @"other", nil];
+
     self.bioTextView.delegate = self;
     self.nameTextField.clearButtonMode = UITextFieldViewModeAlways;
     self.ageLabel.clearButtonMode = UITextFieldViewModeAlways;
@@ -51,6 +72,14 @@
     {
         self.cameraController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     }
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+//    [self.scrollView setContentSize:CGSizeMake(320, self.pictureView.frame.origin.y + 25)];
+    self.scrollView.contentMode = UIViewContentModeScaleAspectFit;
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -223,6 +252,7 @@
      }];
 }
 
+
 #pragma mark - IBAction Button Pressed Methods
 - (IBAction)onEditButtonPressed:(id)sender
 {
@@ -265,18 +295,18 @@
 
 -(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row   forComponent:(NSInteger)component
 {
-    pickerView.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.9];
-    pickerView.layer.masksToBounds = YES;
-    pickerView.layer.borderWidth = 1.0f;
-    pickerView.layer.borderColor = [[UIColor whiteColor] CGColor];
-    pickerView.layer.cornerRadius = 5.0f;
+//    pickerView.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.9];
+//    pickerView.layer.masksToBounds = YES;
+//    pickerView.layer.borderWidth = 1.0f;
+//    pickerView.layer.borderColor = [[UIColor whiteColor] CGColor];
+//    pickerView.layer.cornerRadius = 5.0f;
 
     if (component == 0)
     {
-        return [self.genderArray objectAtIndex:row];
+        return [self.genderAttStringArray objectAtIndex:row];
     }
     else{
-        return [self.interestedArray objectAtIndex:row];
+        return [self.interestedAttStringArray objectAtIndex:row];
     }
 }
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row   inComponent:(NSInteger)component
@@ -328,6 +358,27 @@
     [attrString addAttribute: NSFontAttributeName value: boldFont range: NSMakeRange(7, self.genderString.length)];
     [attrString addAttribute: NSFontAttributeName value: boldFont range: NSMakeRange(7 + self.genderString.length + 15,self.interestedString.length)];
     self.genderLabel.attributedText = attrString;
+}
+
+- (NSAttributedString *)pickerView:(UIPickerView *)pickerView attributedTitleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    pickerView.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.9];
+    pickerView.layer.masksToBounds = YES;
+    pickerView.layer.borderWidth = 1.0f;
+    pickerView.layer.borderColor = [[UIColor whiteColor] CGColor];
+    pickerView.layer.cornerRadius = 5.0f;
+    
+    if (component == 0)
+    {
+        return [self.genderAttStringArray objectAtIndex:row];
+    }
+    else{
+        return [self.interestedAttStringArray objectAtIndex:row];
+    }
+//    NSAttributedString *attString = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+//
+//    return attString;
+
 }
 
 

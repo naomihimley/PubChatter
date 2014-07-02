@@ -28,9 +28,13 @@
 @property (strong, nonatomic)  UILabel *barRatingLabel;
 @property (strong, nonatomic)  UILabel *backgroundView;
 @property (strong, nonatomic)  UILabel *imageEdge;
-@property (strong, nonatomic)  UILabel *ratingViewEdge;
 @property (strong, nonatomic)  UILabel *yelpReviewersSayLabel;
-@property (weak, nonatomic) IBOutlet UIView *ratingBackgroundView;
+
+
+@property (strong, nonatomic)  UILabel *ratingViewEdge;
+@property (strong, nonatomic)  UILabel *numberOfUsersInBarLabel;
+@property (strong, nonatomic)  NSString *numberOfUsersInBarString;
+@property (strong, nonatomic)  UIView *ratingBackgroundView;
 
 @property Bar *bar;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -44,44 +48,12 @@
 {
     [super viewDidLoad];
     self.scrollView.delegate = self;
-    [self setPubChatInfoLabel];
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
-    PFQuery *query = [PFQuery queryWithClassName:@"Bar"];
-    [query whereKey:@"yelpID" equalTo:self.barFromSourceVC.yelpID];
-    [query includeKey:@"usersInBar"];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (objects) {
-            NSArray *array = [[objects firstObject] objectForKey:@"usersInBar"];
-            NSInteger pubChattersInBar = array.count;
-            self.pubChattersCountLabel.text = [NSString stringWithFormat:@"%lu PubChatters at %@", (long)pubChattersInBar, self.barFromSourceVC.name];
-            NSMutableArray *menInBar = [[NSMutableArray alloc] init];
-            for (PFObject *object in array) {
-                if ([[object objectForKey:@"gender"] isEqualToNumber:@1]) {
-                    [menInBar addObject:object];
-                }
-            }
-            NSInteger malePubChattersInBar = menInBar.count;
-            NSInteger femalePubChattersInBar = pubChattersInBar - malePubChattersInBar;
-            if (pubChattersInBar > 0) {
-                CGFloat maleRatio = malePubChattersInBar/pubChattersInBar;
-                CGFloat femaleRatio = femalePubChattersInBar/pubChattersInBar;
-            self.ratioLabel.text = [NSString stringWithFormat:@"%.0f percent men  %.0f percent women", maleRatio *100, femaleRatio *100];
-            }
-        }
-    }];
+    [self getNumberofUserInBar];
 
-    PFQuery *query2 = [PFQuery queryWithClassName:@"Bar"];
-    [query2 whereKey:@"yelpID" equalTo:self.barFromSourceVC.yelpID];
-    [query2 findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if ([objects firstObject]) {
-            self.bar = [objects firstObject];
-            NSLog(@"bar : %@", self.bar);
-            [self getRating];
-        }
-    }];
     [self.barNameLabel removeFromSuperview];
     [self.barAddressLabel removeFromSuperview];
     [self.distanceFromUserLabel removeFromSuperview];
@@ -95,6 +67,11 @@
     [self.ratioLabel removeFromSuperview];
     [self.backgroundView removeFromSuperview];
     [self.imageEdge removeFromSuperview];
+
+    [self.numberOfUsersInBarLabel removeFromSuperview];
+    [self.ratingViewEdge removeFromSuperview];
+    [self.ratingBackgroundView removeFromSuperview];
+
 
     [self addViewsToScrollView];
 }
@@ -235,9 +212,13 @@
 
 -(void)setPubChatInfoLabel
 {
+    CGFloat verticalOffset = 5.0;
+
     // Set background view look
+    self.ratingBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(15, 73, 290, 72)];
     self.ratingBackgroundView.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.95f];
     self.ratingBackgroundView.layer.cornerRadius = 5.0f;
+    [self.view addSubview:self.ratingBackgroundView];
 
     // Set edge look.
     self.ratingViewEdge = [[UILabel alloc] init];
@@ -247,6 +228,18 @@
     self.ratingViewEdge.layer.borderWidth = 1.0f;
     self.ratingViewEdge.layer.cornerRadius = 5.0f;
     [self.view addSubview:self.ratingViewEdge];
+
+    // Set number of users in bar look.
+    self.numberOfUsersInBarLabel = [[UILabel alloc] init];
+    self.numberOfUsersInBarLabel.frame = CGRectMake((self.ratingBackgroundView.frame.size.width/2) - ((self.ratingBackgroundView.frame.size.width - 20)/2), verticalOffset, self.ratingBackgroundView.frame.size.width - 20, 30);
+    [self.numberOfUsersInBarLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:14]];
+    self.numberOfUsersInBarLabel.text = self.numberOfUsersInBarString;
+    self.numberOfUsersInBarLabel.textAlignment = NSTextAlignmentCenter;
+    self.numberOfUsersInBarLabel.numberOfLines = 0;
+    [self.numberOfUsersInBarLabel sizeThatFits:CGSizeZero];
+    [self.numberOfUsersInBarLabel clipsToBounds];
+    self.numberOfUsersInBarLabel.textColor = [UIColor whiteColor];
+    [self.ratingBackgroundView addSubview:self.numberOfUsersInBarLabel];
 }
 
 - (void)onTelephoneButtonPressed:(id)sender
@@ -264,14 +257,36 @@
 
 - (IBAction)onRefreshButtonPushed:(id)sender
 {
+    [self getNumberofUserInBar];
+}
+
+-(void)getNumberofUserInBar
+{
+    NSLog(@"Performing query");
     PFQuery *query = [PFQuery queryWithClassName:@"Bar"];
     [query whereKey:@"yelpID" equalTo:self.barFromSourceVC.yelpID];
     [query includeKey:@"usersInBar"];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (![objects isEqual:nil]) {
-            NSArray *array = [[objects firstObject] objectForKey:@"usersInBar"];
-            self.pubChattersCountLabel.text = [NSString stringWithFormat:@"%lu pubChatters in %@", (unsigned long)array.count, self.barFromSourceVC.name];
+            if (objects.count > 0) {
+                NSArray *array = [[objects firstObject] objectForKey:@"usersInBar"];
+                NSInteger pubChattersInBar = array.count;
+                self.numberOfUsersInBarString = [NSString stringWithFormat:@"%ld PubChat users in %@", (long)pubChattersInBar, self.barFromSourceVC.name];
+                NSLog(@"Chatters present");
+            }
+
+        else {
+            self.numberOfUsersInBarString = [NSString stringWithFormat:@"No PubChat users in %@", self.barFromSourceVC.name];
+            NSLog(@"No chatters present");
+            }
         }
+
+        else {
+        self.numberOfUsersInBarString = [NSString stringWithFormat:@"PubChat not available in %@", self.barFromSourceVC.name];
+            NSLog(@"Bar not found");
+        }
+
+        [self setPubChatInfoLabel];
     }];
 }
 
@@ -289,7 +304,7 @@
             total += number;
         }
             if (count > 0) {
-                self.barRatingLabel.text = [NSString stringWithFormat:@"Pubchatter rating: %ld", total/count];
+                self.barRatingLabel.text = [NSString stringWithFormat:@"Pubchatter rating: %d", total/count];
             }
             else {
                 self.barRatingLabel.text = [NSString stringWithFormat:@"%@ has not been rated", self.barFromSourceVC.name];
@@ -307,6 +322,32 @@
     detailViewController.mobileURLFromSource = mobileURLString;
     detailViewController.placeNameFromSource = name;
 }
+
+//NSMutableArray *menInBar = [[NSMutableArray alloc] init];
+//for (PFObject *object in array) {
+//    if ([[object objectForKey:@"gender"] isEqualToNumber:@1]) {
+//        [menInBar addObject:object];
+//    }
+//}
+//NSInteger malePubChattersInBar = menInBar.count;
+//NSInteger femalePubChattersInBar = pubChattersInBar - malePubChattersInBar;
+//if (pubChattersInBar > 0) {
+//    CGFloat maleRatio = malePubChattersInBar/pubChattersInBar;
+//    CGFloat femaleRatio = femalePubChattersInBar/pubChattersInBar;
+//    self.ratioLabel.text = [NSString stringWithFormat:@"%.0f percent men  %.0f percent women", maleRatio *100, femaleRatio *100];
+//}
+//}
+//}];
+//
+//PFQuery *query2 = [PFQuery queryWithClassName:@"Bar"];
+//[query2 whereKey:@"yelpID" equalTo:self.barFromSourceVC.yelpID];
+//[query2 findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+//    if ([objects firstObject]) {
+//        self.bar = [objects firstObject];
+//        NSLog(@"bar : %@", self.bar);
+//        [self getRating];
+//    }
+//}];
 
 
 
