@@ -28,8 +28,11 @@
         self.fetchedResultsController = [[NSFetchedResultsController alloc]init];
         self.randomNumber = arc4random_uniform(100);
         self.shouldInvite = NO;
+        self.connectedArray = [NSMutableArray array];
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(makeInviter) name:@"MakeInviter" object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(applicationDidEnterBackground:) name:@"UIApplicationEnteredBackground" object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(applicationWillEnterForeground:) name:@"UIApplicationEnteredForeground" object:nil];
     }
     return self;
 }
@@ -67,6 +70,10 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidChangeStateNotification"
                                                             object:nil
                                                         userInfo:dictionary];
+    if (state == MCSessionStateConnected)
+    {
+        [self.connectedArray addObject:peerID.displayName];
+    }
 
     //hopefully this just reconnects when all connections are lost, logic may not be sound for multiples
 
@@ -207,22 +214,16 @@
 
     if (self.shouldInvite == YES)
     {
-//        if (peerID.displayName != self.peerID.displayName)
-//        {
-            //could change this so that it goes through for all peers found when you start advertising and would help fix issue for when the peer your connected to leaves so you won't lose all connections
-    //        self.shouldInvite = NO;
-//            if (self.session.connectedPeers.count == 0)
-//            {
-//                self.shouldInvite = NO;
-                NSString *string = [NSString stringWithFormat:@"%i", self.randomNumber];
-                NSLog(@"sending int %@, sending to: %@", string, peerID.displayName);
-                
-                NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
+        if (![self.connectedArray containsObject:peerID.displayName])
+        {
 
-                [browser invitePeer:peerID toSession:self.session withContext:data timeout:30.0];
+            NSString *string = [NSString stringWithFormat:@"%i", self.randomNumber];
+            NSLog(@"sending int %@, sending to: %@", string, peerID.displayName);
+            
+            NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
 
-//            }
-//        }
+            [browser invitePeer:peerID toSession:self.session withContext:data timeout:30.0];
+        }
     }
 
     if (self.advertisingUsers.count == 0 && peerID.displayName != self.peerID.displayName)
@@ -297,6 +298,33 @@
     self.browser = [[MCNearbyServiceBrowser alloc]initWithPeer:self.peerID serviceType:@"pubchatservice"];
     self.browser.delegate = self;
     [self.browser startBrowsingForPeers];
+}
+
+-(void)teardownSession
+{
+    [self.session disconnect];
+    self.session.delegate = nil;
+    self.session = nil;
+}
+
+#pragma mark - Notifications of change of state of the application
+
+-(void)applicationDidEnterBackground:(NSNotification *)notification
+{
+    self.backgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        NSLog(@"Background time expired; killing multipeer session");
+        [self teardownSession];
+        [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskId];
+        self.backgroundTaskId= UIBackgroundTaskInvalid;
+    }];
+}
+
+- (void)applicationWillEnterForeground:(NSNotification *)notification
+{
+    if (self.backgroundTaskId != UIBackgroundTaskInvalid) {
+        [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskId];
+        self.backgroundTaskId = UIBackgroundTaskInvalid;
+    }
 }
 
 #pragma mark - Unused Delegate Methods

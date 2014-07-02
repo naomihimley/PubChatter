@@ -21,6 +21,8 @@
 @property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
 @property int randomNumber;
 @property BOOL shouldInvite;
+@property UIBackgroundTaskIdentifier backgroundTaskId;
+@property NSMutableArray *connectedArray;
 
 -(void)setupPeerAndSessionWithDisplayName: (NSString *)displayName;
 -(void)advertiseSelf: (BOOL)shouldAdvertise;
