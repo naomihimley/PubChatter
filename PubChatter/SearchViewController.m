@@ -627,6 +627,8 @@ calloutAccessoryControlTapped:(UIControl *)control
     NSIndexPath *selectedIndexPath = self.tableView.indexPathForSelectedRow;
     self.selectedBar = [self.barLocations objectAtIndex:selectedIndexPath.row];
     [self performSegueWithIdentifier:@"segue" sender:self];
+
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
