@@ -396,7 +396,13 @@
     }
     else
     {
-        NSLog(@"connected peers array is zero,because YOUR state is disconnected should we have an alert?");
+        NSLog(@"connected peers array is zero,because YOUR state is disconnected");
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"You have lost your connection"
+                                                           message:nil
+                                                          delegate:self
+                                                 cancelButtonTitle:@"OK"
+                                                 otherButtonTitles:nil, nil];
+        [alertView show];
     }
 }
 

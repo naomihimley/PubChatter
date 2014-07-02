@@ -44,6 +44,9 @@
 -(void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    NSLog(@"view did appear");
+    self.sliderOutlet.enabled = NO;
+    self.rateBarButtonOutlet.enabled = NO;
     [self checkIfUserisInBar];
     [self style];
 }
@@ -55,17 +58,10 @@
     if ([barName isEqualToString:@"PubChat"])
     {
         self.inABarLabel.text = @"Not in a Bar";
-        [self.rateBarButtonOutlet setTitle:@"Rate" forState:UIControlStateNormal];
-        self.sliderOutlet.enabled = NO;
-        self.rateBarButtonOutlet.enabled = NO;
     }
     else
     {
         self.inABarLabel.text = barName;
-        [self.rateBarButtonOutlet setTitle:[NSString stringWithFormat:@"Rate"] forState:UIControlStateNormal];
-//        self.rateBarButtonOutlet.enabled = YES;
-//        self.sliderOutlet.enabled = YES;
-//        [self checkIfUserHasRatedBar];
     }
 }
 
@@ -76,7 +72,7 @@
     [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if ([objects firstObject]) {
             self.bar = [objects firstObject];
-//            self.inABarLabel.text = [NSString stringWithFormat:@"%@", [self.bar valueForKey:@"barName"]];
+            NSLog(@"they are in this bar: %@", self.bar);
             [self.rateBarButtonOutlet setTitle:[NSString stringWithFormat:@"Rate"] forState:UIControlStateNormal];
             self.rateBarButtonOutlet.enabled = YES;
             self.sliderOutlet.enabled = YES;
