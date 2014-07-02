@@ -44,8 +44,6 @@
 -(void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    self.rateBarButtonOutlet.enabled = NO;
-    self.sliderOutlet.enabled = NO;
     [self checkIfUserisInBar];
     [self style];
 }
@@ -65,9 +63,9 @@
     {
         self.inABarLabel.text = barName;
         [self.rateBarButtonOutlet setTitle:[NSString stringWithFormat:@"Rate"] forState:UIControlStateNormal];
-        self.rateBarButtonOutlet.enabled = YES;
-        self.sliderOutlet.enabled = YES;
-        [self checkIfUserHasRatedBar];
+//        self.rateBarButtonOutlet.enabled = YES;
+//        self.sliderOutlet.enabled = YES;
+//        [self checkIfUserHasRatedBar];
     }
 }
 
@@ -91,6 +89,8 @@
             self.sliderOutlet.enabled = NO;
             self.rateBarButtonOutlet.enabled = NO;
         }
+        self.rateBarButtonOutlet.enabled = NO;
+        self.sliderOutlet.enabled = NO;
     }];
 }
 
