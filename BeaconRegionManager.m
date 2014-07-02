@@ -36,7 +36,6 @@
     if (!self.barYoureIn) {
         self.barYoureIn = @"PubChat";
     }
-    NSLog(@"chatBox note %@", self.barYoureIn);
     [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": self.barYoureIn}];
 }
 
@@ -137,7 +136,6 @@
                     }
                     if (amIAlreadyThere == NO)
                     {
-                        NSLog(@"adding user to old town");
                         [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                         [bar saveInBackground];
                         [self.beaconRegionManager stopMonitoringForRegion:self.oldTownRegion];
@@ -154,7 +152,6 @@
             }
             else if (state == CLRegionStateOutside)
             {
-                NSLog(@"outside of oldTown");
                 PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
                 [queryForBar whereKey:@"objectId" equalTo:@"cxmc5pwBsf"];
                 [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
@@ -197,7 +194,6 @@
                     }
                     if (amIAlreadyThere == NO)
                     {
-                        NSLog(@"adding user to green door");
                         [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                         [bar saveInBackground];
                         [self.beaconRegionManager stopMonitoringForRegion:self.oldTownRegion];
@@ -214,7 +210,6 @@
             }
             else if (state == CLRegionStateOutside)
             {
-                NSLog(@"outside of green door");
                 PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
                 [queryForBar whereKey:@"objectId" equalTo:@"CnWKUJftyT"];
                 [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
@@ -256,7 +251,6 @@
                     }
                     if (amIAlreadyThere == NO)
                     {
-                        NSLog(@"adding user to Municipal");
                         [bar addObject:[PFUser currentUser] forKey:@"usersInBar"];
                         [bar saveInBackground];
                         [self.beaconRegionManager stopMonitoringForRegion:self.oldTownRegion];
@@ -273,7 +267,6 @@
             }
             else if (state == CLRegionStateOutside)
             {
-                NSLog(@"outside of municipal");
                 PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
                 [queryForBar whereKey:@"objectId" equalTo:@"qVTGKr4142"];
                 [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
@@ -297,7 +290,6 @@
 }
 - (void)restartMonitoringForRegion
 {
-    NSLog(@"restartMonitoring for all regions");
     self.timerBool = NO;
     [self.beaconRegionManager startMonitoringForRegion:self.greenDoorRegion];
     [self.beaconRegionManager startMonitoringForRegion:self.municipalRegion];
@@ -305,7 +297,6 @@
 }
 - (void)restartTheBool
 {
-    NSLog(@"restarting the Bool");
     self.timerBool = YES;
 }
 
@@ -328,22 +319,22 @@
     if ([region.identifier isEqualToString:@"GreenDoor"]||[region.identifier isEqualToString:@"Municipal"] || [region.identifier isEqualToString:@"OldTown"])
     {
         //removes User from all bar
-        NSLog(@"removing user from all bars didExitRegion");
         [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": @"PubChat"}];
         self.barYoureIn = @"PubChat";
         PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
         [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             for (PFObject *bar in objects) {
                 [bar removeObject:[PFUser currentUser] forKey:@"usersInBar"];
-                [bar saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                    NSLog(@"start monitoring again. back from block");
-                    [self.beaconRegionManager startMonitoringForRegion:self.greenDoorRegion];
-                    [self.beaconRegionManager startMonitoringForRegion:self.municipalRegion];
-                    [self.beaconRegionManager startMonitoringForRegion:self.oldTownRegion];
-                }];
+                [bar saveInBackground];
                 [self.beaconRegionManager stopMonitoringForRegion:self.oldTownRegion];
                 [self.beaconRegionManager stopMonitoringForRegion:self.greenDoorRegion];
                 [self.beaconRegionManager stopMonitoringForRegion:self.municipalRegion];
+                if (self.timerBool)
+                {
+                    self.timerBool = NO;
+                    [self performSelector:@selector(restartMonitoringForRegion) withObject:nil afterDelay:20];
+                    [self performSelector:@selector(restartTheBool) withObject:nil afterDelay:21];
+                }
             }
         }];
     }
