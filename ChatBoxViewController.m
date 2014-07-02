@@ -105,7 +105,7 @@
 {
 
         [UIView animateWithDuration:0.25 animations:^{
-            self.view.center = CGPointMake(self.view.center.x, self.view.center.y - 160);
+            self.view.center = CGPointMake(self.view.center.x, self.view.center.y - 167);
         }];
 }
 
@@ -261,7 +261,6 @@
 }
 
 #pragma mark - Reveal Delegate Method
-
 - (void)revealController:(SWRevealViewController *)revealController didMoveToPosition:(FrontViewPosition)position
 {
     if (self.isUserInteration == YES)
@@ -409,7 +408,7 @@
 #pragma  mark - Style Method
 - (void)style
 {
-    self.sendView.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
+    self.sendView.backgroundColor = [UIColor clearColor];
     [self.sendButton setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
     [self.sendButton setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
     [self.sendButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
