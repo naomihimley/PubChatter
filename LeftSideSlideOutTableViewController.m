@@ -94,7 +94,7 @@
 
     cell.userNameLabel.textColor = [UIColor nameColor];
     cell.genderLabel.textColor = [UIColor whiteColor];
-    cell.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.5];
+    cell.backgroundColor = [UIColor clearColor];
     cell.chatButton.backgroundColor = [UIColor clearColor];
 
     cell.userNameLabel.text = [user objectForKey:@"name"];

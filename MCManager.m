@@ -74,22 +74,6 @@
     {
         [self.connectedArray addObject:peerID.displayName];
     }
-
-    //hopefully this just reconnects when all connections are lost, logic may not be sound for multiples
-
-//    if(self.session.connectedPeers.count == 0)
-//    {
-//        [self.session disconnect];
-//        [self setupPeerAndSessionWithDisplayName:[[PFUser currentUser]objectForKey:@"username"]];
-//        [self advertiseSelf:YES];
-//        self.shouldInvite = YES;
-//        NSLog(@"This should tear down the session and then rebuild it");
-//        for (MCPeerID *peerID in self.advertisingUsers)
-//        {
-//            NSLog(@"have no connected peers so will send an invitation");
-//            [self.browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
-//        }
-//    }
 }
 
 -(void)session:(MCSession *)session didReceiveData:(NSData *)data fromPeer:(MCPeerID *)peerID
@@ -181,24 +165,6 @@
 
         NSLog(@"self.session %@", self.session);
     }
-
-
-
-//    int peerNumber = [receivedText intValue];
-//    if (self.shouldInvite == NO)
-//    {
-//        if (self.randomNumber > peerNumber)
-//        {
-//              invitationHandler(YES,self.session);
-//        }
-//
-//    }
-//    else
-//    {
-//        invitationHandler(YES,self.session);
-//    }
-//
-//    self.shouldInvite = NO;
 
     NSLog(@"self.shouldInvite after receiving invitation %hhd", self.shouldInvite);
 
