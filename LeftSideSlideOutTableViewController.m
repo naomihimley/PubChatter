@@ -49,7 +49,6 @@
     self.isInviter = YES;
 
     [self startListeningForNotificationsAndSendNotification];
-    [self.navigationController.navigationBar setBarTintColor:[UIColor navBarColor]];
     self.tableView.separatorColor = [UIColor clearColor];
 
     self.tableView.backgroundColor = [UIColor whiteColor];
