@@ -40,9 +40,6 @@
     self.scrollView.alwaysBounceVertical = YES;
     self.scrollView.delegate = self;
 
-    [self.navigationController.navigationBar setBarTintColor:[UIColor navBarColor]];
-    [self.navigationController.navigationBar setAlpha:0.5];
-
     NSString *Man = @"Man";
     NSAttributedString *manString = [[NSAttributedString alloc] initWithString:Man attributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
     NSString *Woman = @"Woman";

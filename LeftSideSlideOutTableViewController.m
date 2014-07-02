@@ -35,8 +35,6 @@
 {
 
     [super viewDidLoad];
-    self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
-    self.navigationController.navigationBar.alpha = 1.0;
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     self.users = [NSMutableArray array];
 
