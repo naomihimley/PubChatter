@@ -225,6 +225,7 @@
 
     if (self.isInviter == YES)
     {
+        self.isInviter = NO;
         NSLog(@"This peer should now be the Inviter");
         
          [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30.0];

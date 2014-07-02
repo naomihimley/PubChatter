@@ -66,7 +66,7 @@
 
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidChangeStateNotification"
                                                             object:nil
-                                                          userInfo:dictionary];
+                                                        userInfo:dictionary];
 
     //hopefully this just reconnects when all connections are lost, logic may not be sound for multiples
 
