@@ -105,7 +105,7 @@
     [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
 
     cell.chatButton.layer.cornerRadius = 5.0f;
-    cell.chatButton.layer.borderWidth = 1.0f;
+    cell.chatButton.layer.borderWidth = 2.0f;
     cell.chatButton.layer.borderColor= [[UIColor buttonColor]CGColor];
     cell.chatButton.shouldInvite = YES;
 
