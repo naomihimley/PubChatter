@@ -615,7 +615,7 @@ calloutAccessoryControlTapped:(UIControl *)control
     [cell.imageView sd_setImageWithURL:[NSURL URLWithString:yelpBar.businessImageURL]
                       placeholderImage:[UIImage imageNamed:@"placeholder2"]];
     [cell layoutSubviews];
-    cell.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.9];
+    cell.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.5];
     cell.barNameLabel.textColor = [UIColor nameColor];
     cell.barDistanceLabel.textColor = [UIColor whiteColor];
 
@@ -763,6 +763,12 @@ calloutAccessoryControlTapped:(UIControl *)control
     self.rateBarButton.layer.masksToBounds = YES;
     self.rateBarButton.layer.borderWidth = 1.0f;
     self.rateBarButton.layer.borderColor= [[UIColor buttonColor]CGColor];
+    
+    [self.tabBarController.tabBar setTintColor:[UIColor navBarColor]];
+    [self.tabBarController.tabBar setBackgroundColor:[UIColor navBarColor]];
+    self.tabBarController.tabBar.translucent = YES;
+
+
 }
 
 #pragma mark - other methods

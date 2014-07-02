@@ -40,6 +40,9 @@
     self.scrollView.alwaysBounceVertical = YES;
     self.scrollView.delegate = self;
 
+    [self.navigationController.navigationBar setBarTintColor:[UIColor navBarColor]];
+    [self.navigationController.navigationBar setAlpha:0.5];
+
     NSString *Man = @"Man";
     NSAttributedString *manString = [[NSAttributedString alloc] initWithString:Man attributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
     NSString *Woman = @"Woman";
@@ -77,9 +80,7 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-//    [self.scrollView setContentSize:CGSizeMake(320, self.pictureView.frame.origin.y + 25)];
     self.scrollView.contentMode = UIViewContentModeScaleAspectFit;
-
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -375,10 +376,6 @@
     else{
         return [self.interestedAttStringArray objectAtIndex:row];
     }
-//    NSAttributedString *attString = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
-//
-//    return attString;
-
 }
 
 

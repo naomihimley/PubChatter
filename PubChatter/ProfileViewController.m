@@ -206,8 +206,6 @@
     {
         NSNumber *age = [[PFUser currentUser]objectForKey:@"age"];
         self.age = [NSString stringWithFormat:@"%@", age];
-        NSLog(@"%@", self.age);
-        NSLog(@"%@", [self.age class]);
     }
      else
      {
