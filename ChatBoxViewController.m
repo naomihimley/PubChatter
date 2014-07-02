@@ -74,6 +74,7 @@
 {
     [super viewWillAppear:animated];
     self.isUserInteration = YES;
+    NSLog(@"View Will Appear is user interaction %i", self.isUserInteration);
     self.tableView.userInteractionEnabled = YES;
     self.tabBarController.tabBar.userInteractionEnabled = YES;
     if (!self.chattingUserPeerID) {
@@ -186,28 +187,31 @@
 # pragma mark - TableViewDelegate methods
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (!self.customCell) {
-        self.customCell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
-    }
+    //how it was:
+//    if (!self.customCell)
+//    {
+//        self.customCell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+//    }
+//    Message *message = [self.sortedArray objectAtIndex:indexPath.row];
+//    [self.customCell.leftLabel setText:message.text];
+//    NSLog(@"what the message is: %@", message.text);
+//    [self.customCell layoutIfNeeded];
+//    CGFloat height = [self.customCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+//    return height;
+    ChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
     Message *message = [self.sortedArray objectAtIndex:indexPath.row];
-    if ([message.isMyMessage isEqual: @0]) {
-        [self.customCell.leftLabel setText:message.text];
-        self.customCell.leftLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    }
-    else
-    {
-        [self.customCell.rightLabel setText:message.text];
-        self.customCell.rightLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    }
-    [self.customCell layoutIfNeeded];
-    CGFloat height = [self.customCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
-    return height;
+    [cell.leftLabel  setText:message.text];
+    NSLog(@"what the message is: %@", message.text);
+    [cell layoutSubviews];
+//    [cell layoutIfNeeded];
+    CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+    return height + 10;
 }
 
-//- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    return 70;
-//}
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 70;
+}
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -232,7 +236,7 @@
             cell.rightLabel.layer.cornerRadius = 10.0f;
             cell.rightLabel.layer.masksToBounds = YES;
             cell.leftLabel.backgroundColor = [[UIColor accentColor] colorWithAlphaComponent:0.9];
-            cell.leftLabel.lineBreakMode = NSLineBreakByWordWrapping;
+//            cell.leftLabel.lineBreakMode = NSLineBreakByWordWrapping;
             cell.leftLabel.hidden = NO;
             cell.rightLabel.hidden = YES;
             return cell;
@@ -250,7 +254,7 @@
             cell.rightLabel.layer.cornerRadius = 10.0f;
             cell.rightLabel.layer.masksToBounds = YES;
             cell.rightLabel.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
-            cell.rightLabel.lineBreakMode = NSLineBreakByWordWrapping;
+//            cell.rightLabel.lineBreakMode = NSLineBreakByWordWrapping;
             cell.rightLabel.hidden = NO;
             cell.leftLabel.hidden = YES;
 
@@ -269,6 +273,7 @@
 
 - (void)revealController:(SWRevealViewController *)revealController didMoveToPosition:(FrontViewPosition)position
 {
+    NSLog(@"is user interaction %i", self.isUserInteration);
     if (self.isUserInteration)
     {
         self.tableView.userInteractionEnabled = NO;
@@ -415,8 +420,9 @@
 
     self.barLabel.font = [UIFont systemFontOfSize:20];
     self.barLabel.textColor = [UIColor accentColor];
-    self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
-    self.navigationController.navigationBar.alpha = 1.0;
+    [self.navigationController.navigationBar setBarTintColor:[UIColor navBarColor]];
+//    self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
+//    self.navigationController.navigationBar.alpha = 1.0;
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.separatorColor = [UIColor clearColor];
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"river"]];

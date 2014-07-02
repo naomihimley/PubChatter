@@ -32,13 +32,13 @@
     self.sliderOutlet.minimumValue = 0;
     self.sliderOutlet.maximumValue = 5;
     self.sliderOutlet.value = 0;
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"chatBox"
-                                                       object:nil
-                                                     userInfo:@{@"toBeaconRegionManager": @"whatBarAmIIn"}];
     [[NSNotificationCenter defaultCenter]addObserver:self
                                             selector:@selector(userEnteredBar:)
                                                 name:@"userEnteredBar"
                                               object:nil];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"chatBox"
+                                                       object:nil
+                                                     userInfo:@{@"toBeaconRegionManager": @"whatBarAmIIn"}];
 }
 
 -(void) viewDidAppear:(BOOL)animated
@@ -52,6 +52,7 @@
 
 - (void)userEnteredBar: (NSNotification *)notification
 {
+    NSLog(@"rating notification %@", [[notification userInfo] objectForKey:@"barName"]);
     NSString *barName = [[notification userInfo] objectForKey:@"barName"];
     if ([barName isEqualToString:@"PubChat"])
     {
