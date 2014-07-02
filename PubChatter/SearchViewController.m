@@ -767,7 +767,7 @@ calloutAccessoryControlTapped:(UIControl *)control
 
     //Set tab bar style
     [self.tabBarController.tabBar setTintColor:[UIColor whiteColor]];
-    self.tabBarController.tabBar.translucent = YES;
+//    self.tabBarController.tabBar.translucent = YES;
 
     //Set nav bar style
 //    [self.navigationController.navigationBar setBackgroundImage:[UIImage new]
