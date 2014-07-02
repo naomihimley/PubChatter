@@ -908,9 +908,10 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="dJ9-VB-Gjm" sceneMemberID="viewController">
                     <toolbarItems/>
                     <nil key="simulatedBottomBarMetrics"/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" id="PNo-nt-K7P">
+                    <tabBar key="tabBar" alpha="0.74999999999999978" contentMode="scaleToFill" id="PNo-nt-K7P">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.078431372549019607" green="0.18431372549019609" blue="0.34901960784313724" alpha="1" colorSpace="calibratedRGB"/>
                     </tabBar>
                     <connections>
                         <segue destination="cxc-Hy-A8F" kind="relationship" relationship="viewControllers" id="GDU-6u-vCc"/>
@@ -1028,6 +1029,7 @@
         <image name="location-icon" width="58" height="58"/>
         <image name="river" width="320" height="568"/>
     </resources>
+    <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

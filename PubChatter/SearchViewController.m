@@ -64,6 +64,7 @@
                                                  name:@"userEnteredBar"
                                                object:nil];
 
+
     // Do set up work, set querystring, mapspan, and begin looking for user location.
     self.activityIndicatorOutlet.hidden = YES;
     self.didCheckForBeaconMonitoring = NO;
@@ -763,12 +764,19 @@ calloutAccessoryControlTapped:(UIControl *)control
     self.rateBarButton.layer.masksToBounds = YES;
     self.rateBarButton.layer.borderWidth = 1.0f;
     self.rateBarButton.layer.borderColor= [[UIColor buttonColor]CGColor];
-    
-    [self.tabBarController.tabBar setTintColor:[UIColor navBarColor]];
-    [self.tabBarController.tabBar setBackgroundColor:[UIColor navBarColor]];
+
+    //Set tab bar style
+    [self.tabBarController.tabBar setTintColor:[UIColor whiteColor]];
     self.tabBarController.tabBar.translucent = YES;
 
-
+    //Set nav bar style
+//    [self.navigationController.navigationBar setBackgroundImage:[UIImage new]
+//                                                  forBarMetrics:UIBarMetricsDefault];
+//    self.navigationController.navigationBar.shadowImage = [UIImage new];
+//    self.navigationController.navigationBar.translucent = YES;
+ //   self.navigationController.navigationBar.tintColor = [UIColor navBarColor];
+//    self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
+ //   self.navigationController.navigationBar.alpha = 0.1f;
 }
 
 #pragma mark - other methods
@@ -783,5 +791,7 @@ calloutAccessoryControlTapped:(UIControl *)control
         [alert show];
     }
 }
+
+
 
 @end

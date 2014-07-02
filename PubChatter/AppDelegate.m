@@ -11,6 +11,7 @@
 #import "Rating.h"
 #import "Bar.h"
 #import "LoginViewController.h"
+#import "UIColor+DesignColors.h"
 
 NSManagedObjectContext *moc;
 
@@ -30,22 +31,11 @@ NSManagedObjectContext *moc;
     [Rating registerSubclass];
     [Bar registerSubclass];
 
-    
-
     [PFFacebookUtils initializeFacebook];
 
-    //should this be here?
-    // Naoimi - I put this method in the searchVC and it gets called after the initial loading of the Map.
-
-//    if (![CLLocationManager isMonitoringAvailableForClass:[CLBeaconRegion class]])
-//    {
-//        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Unable To Monitor Location" message:@"Only works on iOS 5 and later" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-//        [alert show];
-//    }
     moc = self.managedObjectContext;
 
     return YES;
-
 }
 
 - (BOOL)application:(UIApplication *)application
