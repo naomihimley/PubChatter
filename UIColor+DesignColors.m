@@ -41,17 +41,16 @@
 
 + (UIColor *)navBarColor
 {
-    CGFloat red = 20.0/255.0;
-    CGFloat green = 47.0/255.0;
-    CGFloat blue = 89.0/255.0;
+    CGFloat red = 35.0/255.0;
+    CGFloat green = 30.0/255.0;
+    CGFloat blue = 29.0/255.0;
     return [UIColor colorWithRed:red green:green blue:blue alpha:1];}
 
 + (UIColor *)nameColor
 {
-
-    CGFloat red = 221.0/255.0;
-    CGFloat green = 222.0/255.0;
-    CGFloat blue = 21.0/255.0;
+    CGFloat red = 255.0/255.0;
+    CGFloat green = 255.0/255.0;
+    CGFloat blue = 255.0/255.0;
     return [UIColor colorWithRed:red green:green blue:blue alpha:1];
 }
 

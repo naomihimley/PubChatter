@@ -418,7 +418,7 @@
     self.sendButton.layer.borderColor= [[UIColor buttonColor]CGColor];
 
     self.barLabel.font = [UIFont systemFontOfSize:20];
-    self.barLabel.textColor = [UIColor accentColor];
+    self.barLabel.textColor = [UIColor whiteColor];
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.separatorColor = [UIColor clearColor];
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"river"]];
@@ -430,7 +430,6 @@
     label.font = [UIFont boldSystemFontOfSize:13];
     [self.findPubChattersButton addSubview:label];
     label.textColor = [UIColor buttonColor];
-    self.findPubChattersButton.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
     self.findPubChattersButton.layer.cornerRadius = 5.0f;
     self.findPubChattersButton.layer.masksToBounds = YES;
     self.findPubChattersButton.layer.borderWidth = 1.0f;
