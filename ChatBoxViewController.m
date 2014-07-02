@@ -74,7 +74,7 @@
 {
     [super viewWillAppear:animated];
     self.isUserInteration = YES;
-    NSLog(@"View Will Appear is user interaction %i", self.isUserInteration);
+    NSLog(@"view will appear is user interaction %i", self.isUserInteration);
     self.tableView.userInteractionEnabled = YES;
     self.tabBarController.tabBar.userInteractionEnabled = YES;
     if (!self.chattingUserPeerID) {
@@ -201,7 +201,6 @@
     ChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
     Message *message = [self.sortedArray objectAtIndex:indexPath.row];
     [cell.leftLabel  setText:message.text];
-    NSLog(@"what the message is: %@", message.text);
     [cell layoutSubviews];
 //    [cell layoutIfNeeded];
     CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
@@ -229,14 +228,10 @@
             [cell.leftLabel setText:message.text];
             cell.leftLabel.textAlignment = NSTextAlignmentLeft;
             cell.backgroundColor = [UIColor clearColor];
-            cell.leftLabel.textColor = [UIColor whiteColor];
-            cell.rightLabel.textColor = [UIColor whiteColor];
+            cell.leftLabel.textColor = [UIColor backgroundColor];
             cell.leftLabel.layer.cornerRadius = 10.0f;
             cell.leftLabel.layer.masksToBounds = YES;
-            cell.rightLabel.layer.cornerRadius = 10.0f;
-            cell.rightLabel.layer.masksToBounds = YES;
-            cell.leftLabel.backgroundColor = [[UIColor accentColor] colorWithAlphaComponent:0.9];
-//            cell.leftLabel.lineBreakMode = NSLineBreakByWordWrapping;
+            cell.leftLabel.backgroundColor = [[UIColor textColor] colorWithAlphaComponent:0.9];
             cell.leftLabel.hidden = NO;
             cell.rightLabel.hidden = YES;
             return cell;
@@ -247,14 +242,10 @@
             [cell.rightLabel setText:message.text];
             cell.rightLabel.textAlignment = NSTextAlignmentRight;
             cell.backgroundColor = [UIColor clearColor];
-            cell.leftLabel.textColor = [UIColor whiteColor];
             cell.rightLabel.textColor = [UIColor whiteColor];
-            cell.leftLabel.layer.cornerRadius = 10.0f;
-            cell.leftLabel.layer.masksToBounds = YES;
             cell.rightLabel.layer.cornerRadius = 10.0f;
             cell.rightLabel.layer.masksToBounds = YES;
             cell.rightLabel.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
-//            cell.rightLabel.lineBreakMode = NSLineBreakByWordWrapping;
             cell.rightLabel.hidden = NO;
             cell.leftLabel.hidden = YES;
 
@@ -273,17 +264,20 @@
 
 - (void)revealController:(SWRevealViewController *)revealController didMoveToPosition:(FrontViewPosition)position
 {
-    NSLog(@"is user interaction %i", self.isUserInteration);
-    if (self.isUserInteration)
+    if (self.isUserInteration == YES)
     {
+        NSLog(@"setting to disabled");
         self.tableView.userInteractionEnabled = NO;
         self.tabBarController.tabBar.userInteractionEnabled = NO;
+        self.sendView.userInteractionEnabled = NO;
         self.isUserInteration = NO;
     }
     else
     {
+        NSLog(@"enabled");
         self.tableView.userInteractionEnabled = YES;
         self.tabBarController.tabBar.userInteractionEnabled = YES;
+        self.sendView.userInteractionEnabled = YES;
         self.isUserInteration = YES;
     }
 }

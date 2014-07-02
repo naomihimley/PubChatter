@@ -32,9 +32,9 @@
 + (UIColor *)textColor
 {
 
-    CGFloat red = 0.0/255.0;
-    CGFloat green = 0.0/255.0;
-    CGFloat blue = 0.0/255.0;
+    CGFloat red = 218/255.0;
+    CGFloat green = 218.0/255.0;
+    CGFloat blue = 216.0/255.0;
 
     return [UIColor colorWithRed:red green:green blue:blue alpha:1];
 }
