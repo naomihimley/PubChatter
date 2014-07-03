@@ -142,7 +142,6 @@
     NSInteger age = [[[PFUser currentUser]objectForKey: @"age"] integerValue];
     if (age > 1) {
         self.ageLabel.text = [NSString stringWithFormat: @"%@",[[PFUser currentUser]objectForKey: @"age"]];
-        NSLog(@"I ran");
     }
     else {
         self.ageLabel.text = nil;
