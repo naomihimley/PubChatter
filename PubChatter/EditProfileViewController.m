@@ -97,6 +97,8 @@
     [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
      {
          self.pictureView.image = [UIImage imageWithData:data];
+         self.pictureView.layer.masksToBounds = YES;
+         self.pictureView.layer.cornerRadius = 5.0f;
      }];
     self.nameTextField.text = [[PFUser currentUser]objectForKey:@"name"];
     if ([[PFUser currentUser]objectForKey: @"bio"])

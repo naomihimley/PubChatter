@@ -71,21 +71,22 @@
 
 
 -(void)addViewsToScrollView {
-
     CGFloat verticalOffset = 10.0;
 
     //Add imageview
     UIImageView *profileImageView = [[UIImageView alloc] init];
     profileImageView.frame = CGRectMake((self.scrollView.frame.size.width/2) -75, verticalOffset, 150, 150);
     profileImageView.image = self.profileImage;
+    profileImageView.layer.masksToBounds = YES;
+    profileImageView.layer.cornerRadius = 5.0f;
     [self.scrollView addSubview:profileImageView];
 
     // Add image borderview
     self.imageEdge = [[UILabel alloc] init];
     self.imageEdge.frame = CGRectMake((self.scrollView.frame.size.width/2) -76, verticalOffset - 1, 152, 152);
     self.imageEdge.backgroundColor = [UIColor clearColor];
-    self.imageEdge.layer.borderColor = [[UIColor whiteColor] CGColor];
-    self.imageEdge.layer.borderWidth = 1.0f;
+//    self.imageEdge.layer.borderColor = [[UIColor whiteColor] CGColor];
+//    self.imageEdge.layer.borderWidth = 1.0f;
     [self.scrollView addSubview:self.imageEdge];
 
     verticalOffset = verticalOffset + profileImageView.frame.size.height + 10;
