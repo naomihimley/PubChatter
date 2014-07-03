@@ -1085,7 +1085,7 @@
         <image name="Chat_Received_Icon" width="20" height="20"/>
         <image name="Map_Icon" width="30" height="30"/>
         <image name="ProfileIcon" width="30" height="30"/>
-        <image name="location-icon" width="22" height="22"/>
+        <image name="location-icon" width="58" height="58"/>
         <image name="river" width="320" height="568"/>
     </resources>
     <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
