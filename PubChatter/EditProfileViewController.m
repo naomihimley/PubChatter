@@ -56,6 +56,10 @@
     self.genderArray = [[NSArray alloc] initWithObjects:@"Woman", @"Man", @"Other", nil];
     self.interestedArray = [[NSArray alloc] initWithObjects:@"women", @"men", @"other", nil];
 
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
+    [self.view addGestureRecognizer:tap];
+
+    self.view.backgroundColor = [UIColor clearColor];
     self.bioTextView.delegate = self;
     self.nameTextField.clearButtonMode = UITextFieldViewModeAlways;
     self.ageLabel.clearButtonMode = UITextFieldViewModeAlways;
@@ -97,6 +101,8 @@
     [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
      {
          self.pictureView.image = [UIImage imageWithData:data];
+         self.pictureView.layer.masksToBounds = YES;
+         self.pictureView.layer.cornerRadius = 5.0f;
      }];
     self.nameTextField.text = [[PFUser currentUser]objectForKey:@"name"];
     if ([[PFUser currentUser]objectForKey: @"bio"])
@@ -335,6 +341,10 @@
     }
 }
 
+-(void)dismissKeyboard
+{
+    [self.view endEditing:YES];
+}
 
 
 

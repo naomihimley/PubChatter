@@ -21,6 +21,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor clearColor];
     self.imageView.image = [UIImage imageNamed:@"river"];
     [self.activityIndicator startAnimating];
 }

@@ -40,6 +40,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.isUserInteration = YES;
     self.revealViewController.delegate = self;
     [self.findPubChattersButton addTarget:self.revealViewController action:@selector(revealToggle:) forControlEvents:UIControlEventTouchUpInside];
 
@@ -73,9 +74,6 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.isUserInteration = YES;
-    NSLog(@"view will appear is user interaction %i", self.isUserInteration);
-    self.tableView.userInteractionEnabled = YES;
     self.tabBarController.tabBar.userInteractionEnabled = YES;
     if (!self.chattingUserPeerID) {
         self.navigationItem.title = @"Not Chatting";
@@ -139,6 +137,7 @@
     [self fetch];
 }
 
+//from iBeacon info of when you entered, also gets sent when exited bar and sends 'PubChat' as the barName
 - (void)userEnteredBar: (NSNotification *)notification
 {
     self.barLabel.text = [[notification userInfo] objectForKey:@"barName"];
@@ -423,16 +422,15 @@
     self.tableView.separatorColor = [UIColor clearColor];
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"river"]];
 
-    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 120, 33)];
-    label.numberOfLines = 2;
-    label.text = @"Find\nPubChatters";
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 60, 33)];
+    label.text = @"icon";
     label.textAlignment = NSTextAlignmentCenter;
     label.font = [UIFont boldSystemFontOfSize:13];
     [self.findPubChattersButton addSubview:label];
     label.textColor = [UIColor buttonColor];
     self.findPubChattersButton.layer.cornerRadius = 5.0f;
     self.findPubChattersButton.layer.masksToBounds = YES;
-    self.findPubChattersButton.layer.borderWidth = 1.0f;
+    self.findPubChattersButton.layer.borderWidth = 2.0f;
     self.findPubChattersButton.layer.borderColor= [[UIColor buttonColor]CGColor];
 
 

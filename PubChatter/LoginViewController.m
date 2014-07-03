@@ -44,48 +44,51 @@
     NSLog(@"%@", self.signUpController);
 
     UIColor *green = [UIColor buttonColor];
-    UIColor *purple = [UIColor backgroundColor];
-
-    [self.logInView.logInButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+    UIColor *white = [UIColor whiteColor];
+    UIColor *black = [UIColor blackColor];
+    UIColor *clear = [UIColor clearColor];
 
     //Set background picture.
     [self.logInView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"river"]]];
 
     //Set username field attributes.
-    self.logInView.usernameField.backgroundColor = green;
+    self.logInView.usernameField.backgroundColor = white;
     self.logInView.usernameField.layer.opacity = 0.6f;
-    self.logInView.usernameField.textColor = purple;
-    self.logInView.usernameField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"User Name" attributes:@{NSForegroundColorAttributeName: purple}];
+    self.logInView.usernameField.textColor = black;
+    self.logInView.usernameField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"User Name" attributes:@{NSForegroundColorAttributeName: black}];
     self.logInView.usernameField.layer.cornerRadius = 5.0f;
-    self.logInView.usernameField.layer.borderWidth = 1.0f;
-    self.logInView.usernameField.layer.borderColor = [purple CGColor];
+    self.logInView.usernameField.layer.borderWidth = 2.0f;
+    self.logInView.usernameField.layer.borderColor = [black CGColor];
 
     //Set password field attributes.
-    self.logInView.passwordField.backgroundColor = green;
+    self.logInView.passwordField.backgroundColor = white;
     self.logInView.passwordField.layer.opacity = 0.6f;
-    self.logInView.passwordField.textColor = purple;
-    self.logInView.passwordField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Password" attributes:@{NSForegroundColorAttributeName: purple}];
+    self.logInView.passwordField.textColor = black;
+    self.logInView.passwordField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Password" attributes:@{NSForegroundColorAttributeName: black}];
     self.logInView.passwordField.layer.cornerRadius = 5.0f;
-    self.logInView.passwordField.layer.borderWidth = 1.0f;
-    self.logInView.passwordField.layer.borderColor = [purple CGColor];
+    self.logInView.passwordField.layer.borderWidth = 2.0f;
+    self.logInView.passwordField.layer.borderColor = [black CGColor];
 
     //Set login dismiss button to unviewable
     self.logInView.dismissButton.alpha = 0.0;
 
     //Set login button
     [self.logInView.logInButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal];
-    [self.logInView.logInButton setBackgroundColor:purple];
+    [self.logInView.logInButton setBackgroundColor:clear];
+    [self.logInView.logInButton setBackgroundImage:[UIImage new] forState:UIControlStateHighlighted];
     self.logInView.logInButton.layer.opacity = 0.9f;
-    self.logInView.logInButton.layer.borderWidth = 1.0f;
+    self.logInView.logInButton.layer.borderWidth = 2.0f;
     self.logInView.logInButton.layer.cornerRadius = 5.0;
     self.logInView.logInButton.layer.borderColor = [green CGColor];
     [self.logInView.logInButton setTitleColor:green forState:UIControlStateNormal];
+    [self.logInView.logInButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
 
     //Set signup button
     [self.logInView.signUpButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal];
-    [self.logInView.signUpButton setBackgroundColor:purple];
-    self.logInView.signUpButton.layer.opacity = 0.9f;
-    self.logInView.signUpButton.layer.borderWidth = 1.0f;
+    [self.logInView.signUpButton setBackgroundColor:clear];
+    [self.logInView.signUpButton setBackgroundImage:[UIImage new] forState:UIControlStateHighlighted];
+    [self.logInView.signUpButton setBackgroundColor:clear];
+    self.logInView.signUpButton.layer.borderWidth = 2.0f;
     self.logInView.signUpButton.layer.cornerRadius = 5.0;
     self.logInView.signUpButton.layer.borderColor = [green CGColor];
     [self.logInView.signUpButton setTitleColor:green forState:UIControlStateNormal];
@@ -97,14 +100,13 @@
     //Set logo
     self.logInView.logo = nil;
 
-
     //Set signup control style.
 
     //Set signup button
     [self.signUpController.signUpView.signUpButton setBackgroundImage:[UIImage new] forState:UIControlStateNormal];
-    [self.signUpController.signUpView.signUpButton setBackgroundColor:purple];
-    self.signUpController.signUpView.signUpButton.layer.opacity = 0.9f;
-    self.signUpController.signUpView.signUpButton.layer.borderWidth = 1.0f;
+    [self.signUpController.signUpView.signUpButton setBackgroundImage:[UIImage new] forState:UIControlStateHighlighted];
+    [self.signUpController.signUpView.signUpButton setBackgroundColor:clear];
+    self.signUpController.signUpView.signUpButton.layer.borderWidth = 2.0f;
     self.signUpController.signUpView.signUpButton.layer.cornerRadius = 5.0;
     self.signUpController.signUpView.signUpButton.layer.borderColor = [green CGColor];
     [self.signUpController.signUpView.signUpButton setTitleColor:green forState:UIControlStateNormal];
@@ -113,25 +115,34 @@
     [self.signUpController.signUpView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"river"]]];
 
     //Set username field attributes.
-    self.signUpController.signUpView.usernameField.backgroundColor = green;
+    self.signUpController.signUpView.usernameField.backgroundColor = white;
     self.signUpController.signUpView.usernameField.layer.opacity = 0.6f;
-    self.signUpController.signUpView.usernameField.textColor = purple;
-    self.signUpController.signUpView.usernameField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"User Name" attributes:@{NSForegroundColorAttributeName: purple}];
+    self.signUpController.signUpView.usernameField.textColor = black;
+    self.signUpController.signUpView.usernameField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"User Name" attributes:@{NSForegroundColorAttributeName: black}];
     self.signUpController.signUpView.usernameField.layer.cornerRadius = 5.0f;
-    self.signUpController.signUpView.usernameField.layer.borderWidth = 1.0f;
-    self.signUpController.signUpView.usernameField.layer.borderColor = [purple CGColor];
+    self.signUpController.signUpView.usernameField.layer.borderWidth = 2.0f;
+    self.signUpController.signUpView.usernameField.layer.borderColor = [black CGColor];
+
+    //Set email field attributes.
+    self.signUpController.signUpView.emailField.backgroundColor = white;
+    self.signUpController.signUpView.emailField.layer.opacity = 0.6f;
+    self.signUpController.signUpView.emailField.textColor = black;
+    self.signUpController.signUpView.emailField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Email" attributes:@{NSForegroundColorAttributeName: black}];
+    self.signUpController.signUpView.emailField.layer.cornerRadius = 5.0f;
+    self.signUpController.signUpView.emailField.layer.borderWidth = 2.0f;
+    self.signUpController.signUpView.emailField.layer.borderColor = [black CGColor];
 
     //Set password field attributes.
-    self.signUpController.signUpView.passwordField.backgroundColor = green;
+    self.signUpController.signUpView.passwordField.backgroundColor = white;
     self.signUpController.signUpView.passwordField.layer.opacity = 0.6f;
-    self.signUpController.signUpView.passwordField.textColor = purple;
-    self.signUpController.signUpView.passwordField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Password" attributes:@{NSForegroundColorAttributeName: purple}];
+    self.signUpController.signUpView.passwordField.textColor = white;
+    self.signUpController.signUpView.passwordField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Password" attributes:@{NSForegroundColorAttributeName: black}];
     self.signUpController.signUpView.passwordField.layer.cornerRadius = 5.0f;
-    self.signUpController.signUpView.passwordField.layer.borderWidth = 1.0f;
-    self.signUpController.signUpView.passwordField.layer.borderColor = [purple CGColor];
+    self.signUpController.signUpView.passwordField.layer.borderWidth = 2.0f;
+    self.signUpController.signUpView.passwordField.layer.borderColor = [black CGColor];
 
     //Set login dismiss button to unviewable
-    self.signUpController.signUpView.dismissButton.alpha = 0.0;
+    self.signUpController.signUpView.dismissButton.alpha = 1.0;
 
     //Set logo
     self.signUpController.signUpView.logo = nil;

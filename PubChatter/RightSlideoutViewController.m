@@ -51,9 +51,10 @@
     [self style];
 }
 
+#pragma mark - Notifications
+//iBeacon Notification, sends the BarName on region entry and 'PubChat' on region exit
 - (void)userEnteredBar: (NSNotification *)notification
 {
-    NSLog(@"rating notification %@", [[notification userInfo] objectForKey:@"barName"]);
     NSString *barName = [[notification userInfo] objectForKey:@"barName"];
     if ([barName isEqualToString:@"PubChat"])
     {
@@ -65,6 +66,7 @@
     }
 }
 
+#pragma mark - Parse Methods
 -(void)checkIfUserisInBar
 {
     PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
@@ -72,10 +74,11 @@
     [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if ([objects firstObject]) {
             self.bar = [objects firstObject];
-            NSLog(@"they are in this bar: %@", self.bar);
+            NSLog(@"they are in this bar: %@", [self.bar objectForKey:@"barName"]);
             [self.rateBarButtonOutlet setTitle:[NSString stringWithFormat:@"Rate"] forState:UIControlStateNormal];
             self.rateBarButtonOutlet.enabled = YES;
             self.sliderOutlet.enabled = YES;
+            self.inABarLabel.text = [self.bar objectForKey:@"barName"];
             [self checkIfUserHasRatedBar];
         }
         else
@@ -102,6 +105,7 @@
     }];
 }
 
+#pragma mark - Button Pressed Methods
 - (IBAction)onRateButtonPressed:(id)sender
 {
     if (self.rating) {
@@ -122,6 +126,8 @@
         [barRating saveInBackground];
     }
 }
+
+#pragma mark - Style Method
 - (void)style
 {
     self.inABarLabel.textColor = [UIColor nameColor];
