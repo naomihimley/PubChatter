@@ -165,6 +165,7 @@
 -(void)receivedNotificationOfUserAdvertising:(NSNotification *)notification
 {
     MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
+    NSLog(@"user found advertising");
 
     if (!self.parseUsers)
     {
@@ -249,18 +250,20 @@
         if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
         {
             MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
-//            NSDictionary *userDictionary = [NSDictionary new];
+            NSDictionary *userDictionary = [NSDictionary new];
+
+            NSLog(@"peer changed state notification came through");
 
             for (NSDictionary *dictionary in self.users)
             {
                 if ([dictionary objectForKey:@"peerID"] == peerID)
                 {
-                    [self.users removeObject: peerID];
-                    [self.tableView reloadData];
+                    userDictionary = dictionary;
 
                 }
             }
-            //originally had the reload and remove object here
+            [self.users removeObject: peerID];
+            [self.tableView reloadData];
 
             NSLog(@"Connect peers after changing state to notConnected %@", self.appDelegate.mcManager.session.connectedPeers);
         }
@@ -323,7 +326,6 @@
     MCPeerID *peerID = [[notification userInfo] objectForKey:@"peerID"];
 
     NSDictionary *userDictionary = [NSDictionary new];
-//    ListOfUsersTableViewCell *cell = [ListOfUsersTableViewCell new];
 
     for (NSDictionary *dictionary in self.users)
     {
@@ -350,12 +352,13 @@
 {
     if (self.appDelegate.mcManager.session == nil)
     {
-        [self.users removeAllObjects];
         [self.appDelegate.mcManager setupPeerAndSessionWithDisplayName:[[PFUser currentUser]objectForKey:@"username"]];
         [self.appDelegate.mcManager advertiseSelf:YES];
         [self.appDelegate.mcManager.browser startBrowsingForPeers];
         self.isInviter = YES;
         [self.tableView reloadData];
+
+        NSLog(@"self.parseUsers %@", self.parseUsers);
     }
     
 

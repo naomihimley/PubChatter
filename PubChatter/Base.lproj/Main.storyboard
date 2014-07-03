@@ -493,7 +493,7 @@
                                     <outlet property="delegate" destination="vXZ-lx-hvc" id="adz-wF-D4D"/>
                                 </connections>
                             </tableView>
-                            <segmentedControl opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="qoU-W5-RLD">
+                            <segmentedControl opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="qoU-W5-RLD">
                                 <rect key="frame" x="11" y="117" width="298" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -505,7 +505,7 @@
                                     <action selector="onToggleMapListViewPressed:" destination="vXZ-lx-hvc" eventType="valueChanged" id="HjR-4D-vdI"/>
                                 </connections>
                             </segmentedControl>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search for bars" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ARx-s6-4aO">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search for bars" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ARx-s6-4aO">
                                 <rect key="frame" x="11" y="72" width="221" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -530,22 +530,8 @@
                                     <action selector="onCancelButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="k2o-a6-QoZ"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZoH-dO-wJL">
-                                <rect key="frame" x="0.0" y="436" width="30" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="dy2-5m-RSX"/>
-                                    <constraint firstAttribute="width" constant="30" id="ffA-ON-ZJM"/>
-                                </constraints>
-                                <state key="normal" image="location-icon">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="snapToCurrentLocation:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="vXU-JI-Dxg"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pSX-FI-4XA">
-                                <rect key="frame" x="11" y="480" width="298" height="30"/>
+                                <rect key="frame" x="50" y="480" width="259" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="Find Bars Here">
@@ -556,11 +542,28 @@
                                     <action selector="onRedrawRegionButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="a2h-Co-vNb"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZoH-dO-wJL">
+                                <rect key="frame" x="11" y="481" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="30" id="1mN-0f-MVB"/>
+                                    <constraint firstAttribute="height" constant="30" id="V1D-2e-pHZ"/>
+                                </constraints>
+                                <state key="normal" image="location-icon">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="snapToCurrentLocation:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="vXU-JI-Dxg"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="pSX-FI-4XA" secondAttribute="bottom" constant="58" id="HBH-Yg-pfM"/>
-                            <constraint firstAttribute="bottom" secondItem="ZoH-dO-wJL" secondAttribute="bottom" constant="102" id="tVc-Vt-Qwn"/>
+                            <constraint firstItem="ZoH-dO-wJL" firstAttribute="leading" secondItem="qoU-W5-RLD" secondAttribute="leading" id="A2v-HM-M6m"/>
+                            <constraint firstItem="ZoH-dO-wJL" firstAttribute="leading" secondItem="ARx-s6-4aO" secondAttribute="leading" id="Otu-sx-sKl"/>
+                            <constraint firstAttribute="bottom" secondItem="ZoH-dO-wJL" secondAttribute="bottom" constant="57" id="ZzH-XI-Kzu"/>
+                            <constraint firstAttribute="bottom" secondItem="pSX-FI-4XA" secondAttribute="bottom" constant="58" id="iu3-Ni-3bO"/>
+                            <constraint firstItem="ZoH-dO-wJL" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="11" id="tuM-av-ngR"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Nfg-J9-79T">
@@ -791,7 +794,7 @@
                                         </constraints>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lYH-I7-q8D">
-                                        <rect key="frame" x="202" y="12" width="108" height="109"/>
+                                        <rect key="frame" x="202" y="13" width="108" height="107"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <state key="normal">
@@ -846,18 +849,18 @@
                                     <constraint firstItem="rGn-hW-EJF" firstAttribute="leading" secondItem="0VN-Do-nYD" secondAttribute="trailing" constant="5" id="0rh-7R-eE5"/>
                                     <constraint firstAttribute="trailing" secondItem="Ukb-IM-q0g" secondAttribute="trailing" constant="13" id="2Ue-Yq-mqR"/>
                                     <constraint firstItem="0VN-Do-nYD" firstAttribute="centerY" secondItem="rGn-hW-EJF" secondAttribute="centerY" id="4rj-cX-Tgc"/>
-                                    <constraint firstItem="lYH-I7-q8D" firstAttribute="top" secondItem="L7q-PV-aaq" secondAttribute="top" constant="12" id="5ok-ac-yVS"/>
+                                    <constraint firstItem="lYH-I7-q8D" firstAttribute="top" secondItem="L7q-PV-aaq" secondAttribute="top" constant="13" id="5ok-ac-yVS"/>
                                     <constraint firstItem="87D-rv-00Z" firstAttribute="trailing" secondItem="0VN-Do-nYD" secondAttribute="trailing" id="6Mt-cV-Ef8"/>
                                     <constraint firstItem="yU4-6t-sGP" firstAttribute="leading" secondItem="L7q-PV-aaq" secondAttribute="leading" constant="4" id="Ckt-xw-G8D"/>
                                     <constraint firstAttribute="trailing" secondItem="rGn-hW-EJF" secondAttribute="trailing" constant="8" id="CtE-dc-2Gt"/>
                                     <constraint firstItem="87D-rv-00Z" firstAttribute="bottom" secondItem="rGn-hW-EJF" secondAttribute="bottom" id="EyQ-hG-AU6"/>
                                     <constraint firstItem="Soh-Ji-mSv" firstAttribute="leading" secondItem="L7q-PV-aaq" secondAttribute="leading" constant="15" id="GYY-W0-WJt"/>
                                     <constraint firstItem="H8C-dH-a2c" firstAttribute="top" secondItem="yU4-6t-sGP" secondAttribute="top" id="JJQ-aL-ExU"/>
-                                    <constraint firstItem="Ukb-IM-q0g" firstAttribute="top" secondItem="lYH-I7-q8D" secondAttribute="bottom" constant="39" id="LYv-s2-Z7L"/>
+                                    <constraint firstItem="Ukb-IM-q0g" firstAttribute="top" secondItem="lYH-I7-q8D" secondAttribute="bottom" constant="40" id="LYv-s2-Z7L"/>
                                     <constraint firstItem="0VN-Do-nYD" firstAttribute="leading" secondItem="L7q-PV-aaq" secondAttribute="leading" constant="13" id="Q9c-YV-PZA"/>
                                     <constraint firstItem="H8C-dH-a2c" firstAttribute="leading" secondItem="87D-rv-00Z" secondAttribute="leading" id="Rb4-3o-RvX"/>
                                     <constraint firstItem="87D-rv-00Z" firstAttribute="leading" secondItem="0VN-Do-nYD" secondAttribute="leading" id="SGZ-Gi-2Ox"/>
-                                    <constraint firstItem="lYH-I7-q8D" firstAttribute="bottom" secondItem="rGn-hW-EJF" secondAttribute="bottom" id="Ty7-sb-8Qf"/>
+                                    <constraint firstItem="lYH-I7-q8D" firstAttribute="bottom" secondItem="rGn-hW-EJF" secondAttribute="bottom" constant="-1" id="Ty7-sb-8Qf"/>
                                     <constraint firstItem="sEc-px-6MR" firstAttribute="top" secondItem="L7q-PV-aaq" secondAttribute="top" constant="9" id="WeC-6W-0ni"/>
                                     <constraint firstAttribute="bottom" secondItem="H8C-dH-a2c" secondAttribute="bottom" constant="27" id="YGe-hu-Cpj"/>
                                     <constraint firstItem="Soh-Ji-mSv" firstAttribute="top" secondItem="87D-rv-00Z" secondAttribute="bottom" constant="16" id="bYn-No-Cb3"/>
@@ -1082,7 +1085,7 @@
         <image name="Chat_Received_Icon" width="20" height="20"/>
         <image name="Map_Icon" width="30" height="30"/>
         <image name="ProfileIcon" width="30" height="30"/>
-        <image name="location-icon" width="58" height="58"/>
+        <image name="location-icon" width="22" height="22"/>
         <image name="river" width="320" height="568"/>
     </resources>
     <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
