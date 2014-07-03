@@ -56,7 +56,8 @@
     self.cancelButtonOutlet.layer.masksToBounds = YES;
     self.cancelButtonOutlet.layer.borderWidth = 2.0f;
     self.cancelButtonOutlet.layer.borderColor= [[UIColor buttonColor]CGColor];
-    
+
+
     NSString *Man = @"Man";
     NSAttributedString *manString = [[NSAttributedString alloc] initWithString:Man attributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
     NSString *Woman = @"Woman";
@@ -114,8 +115,6 @@
     self.favoriteDrinkLabel.textColor = [UIColor navBarColor];
     self.bioTextView.backgroundColor = [UIColor whiteColor];
     self.bioTextView.textColor = [UIColor navBarColor];
-
-
 
     PFFile *file = [[PFUser currentUser]objectForKey:@"picture"];
 
@@ -282,24 +281,27 @@
     NSLog(@"%@", [[PFUser currentUser]objectForKey:@"favoriteDrink"]);
 
 
-    if ([self.genderString isEqualToString:@"Man"]) {
+    if ([self.genderString isEqualToString:@"man"]) {
         [[PFUser currentUser]setObject:@1 forKey:@"gender"];
         }
-        else if ([self.genderString isEqualToString:@"Woman"]) {
+        else if ([self.genderString isEqualToString:@"woman"]) {
             [[PFUser currentUser]setObject:@0 forKey:@"gender"];
         }
-        else if ([self.genderString isEqualToString:@"Other"]) {
+        else if ([self.genderString isEqualToString:@"other"]) {
         [[PFUser currentUser]setObject:@2 forKey:@"gender"];
         }
 
     if ([self.interestedString isEqualToString:@"men"]) {
         [[PFUser currentUser]setObject:@0 forKey:@"sexualOrientation"];
+        NSLog(@"%@", self.interestedString);
         }
         else if ([self.interestedString isEqualToString:@"women"]) {
         [[PFUser currentUser]setObject:@1 forKey:@"sexualOrientation"];
+            NSLog(@"%@", self.interestedString);
         }
         else if ([self.interestedString isEqualToString:@"other"]){
         [[PFUser currentUser]setObject:@2 forKey:@"sexualOrientation"];
+            NSLog(@"%@", self.interestedString);
         }
 
         [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
@@ -361,12 +363,16 @@
             {
             case 0:
                 self.interestedString = [[self.interestedArray objectAtIndex:0] lowercaseString];
+                    NSLog(@"%@", self.interestedString);
                 break;
             case 1:
                 self.interestedString = [[self.interestedArray objectAtIndex:1] lowercaseString];
+                    NSLog(@"%@", self.interestedString);
                 break;
             case 2:
                     self.interestedString = [[self.interestedArray objectAtIndex:2] lowercaseString];
+                    NSLog(@"%@", self.interestedString);
+
                 break;
             }
         default:
@@ -396,9 +402,6 @@
 {
     [self.view endEditing:YES];
 }
-
-
-
 
 
 @end

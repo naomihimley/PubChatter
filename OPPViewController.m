@@ -255,19 +255,7 @@
     [self.backButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
     [self.backButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
     [self.backButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
-    self.backButtonOutlet.layer.cornerRadius = 5.0f;
-    self.backButtonOutlet.layer.masksToBounds = YES;
-    self.backButtonOutlet.layer.borderWidth = 2.0f;
-    self.backButtonOutlet.layer.borderColor= [[UIColor buttonColor]CGColor];
-
-//    self.navigationItem.title= @"PubChat";
     self.fakeNavBar.backgroundColor = [UIColor clearColor];
-
-    //Create topLabel to make navBar look correct size
-//    UILabel *topLabel = [[UILabel alloc]init];
-//    topLabel.frame = CGRectMake(0, 0, 320, 30);
-//    topLabel.backgroundColor = [UIColor clearColor];
-//    [self.view addSubview:topLabel];
 
 }
 

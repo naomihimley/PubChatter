@@ -96,6 +96,11 @@
     //Add name label
     self.nameageLabel = [[UILabel alloc] init];
     self.nameageLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 30);
+    if (self.name.length < 1) {
+        self.name = @"Name";
+    if (self.age.length < 1)
+        self.age = @"Age";
+    }
     self.nameageLabel.text = [NSString stringWithFormat:@"%@, %@", self.name, self.age];
     self.nameageLabel.textAlignment = NSTextAlignmentCenter;
     self.nameageLabel.textColor = [UIColor nameColor];
@@ -107,6 +112,11 @@
     //Add gender label
     self.genderLabel = [[UILabel alloc] init];
     self.genderLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 30);
+    self.genderLabel.text = self.gender;
+
+    if (self.gender.length < 1) {
+        self.gender = @"Gender:";
+    }
     self.genderLabel.text = self.gender;
     self.genderLabel.textAlignment = NSTextAlignmentCenter;
     self.genderLabel.textColor = [UIColor whiteColor];
@@ -127,6 +137,9 @@
     //Add bio textView
     self.bioTextView = [[UITextView alloc] init];
     self.bioTextView.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 70);
+    if (self.bioText.length < 1) {
+        self.bioText = @"No bio provided";
+    }
     self.bioTextView.text = self.bioText;
     self.bioTextView.editable = NO;
     self.bioTextView.textAlignment = NSTextAlignmentCenter;
@@ -138,6 +151,9 @@
     //Add interested label
     self.interestedLabel = [[UILabel alloc] init];
     self.interestedLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 30);
+    if (self.sexualOrientation.length < 1) {
+        self.sexualOrientation = @"Interested In:";
+    }
     self.interestedLabel.text = self.sexualOrientation;
     [self.interestedLabel setFont:[UIFont systemFontOfSize:16.0]];
     self.interestedLabel.textAlignment = NSTextAlignmentCenter;
@@ -148,6 +164,9 @@
     //Add Favorite drink label
     self.favDrinkLabel = [[UILabel alloc] init];
     self.favDrinkLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 30);
+    if (self.favDrink.length < 1) {
+        self.favDrink = @"";
+    }
     self.favDrinkLabel.text = [NSString stringWithFormat:@"Favorite drink: %@", self.favDrink];
     self.favDrinkLabel.textAlignment = NSTextAlignmentCenter;
     self.favDrinkLabel.textColor = [UIColor whiteColor];
@@ -174,6 +193,12 @@
     self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, verticalOffset);
     self.scrollView.contentMode = UIViewContentModeScaleAspectFit;
     [self setStyle];
+
+    NSLog(@"label: %@", self.nameageLabel.text);
+    NSLog(@"label: %@", self.genderLabel.text);
+    NSLog(@"label: %@", self.favDrinkLabel.text);
+    NSLog(@"label: %@", self.interestedLabel.text);
+    NSLog(@"label: %@", self.bioTextView.text);
 }
 
 -(void)logUserOut:(id)sender
@@ -254,6 +279,11 @@
      {
          self.sexualOrientation = @"Interested in: Other";
      }
+    NSLog(@"string: %@", self.name);
+    NSLog(@"string: %@", self.gender);
+    NSLog(@"string: %@", self.favDrink);
+    NSLog(@"string: %@", self.sexualOrientation);
+    NSLog(@"string: %@", self.bioText);
 
     if ([[PFUser currentUser]objectForKey:@"picture"] != nil) {
         PFFile *file = [[PFUser currentUser]objectForKey:@"picture"];
@@ -281,6 +311,7 @@
 {
     //Style nameagelabel
     self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
+    self.view.backgroundColor = [UIColor clearColor];
 }
 
 @end
