@@ -263,8 +263,6 @@
             }
             [self.users removeObject: peerID];
 
-            [self.appDelegate.mcManager.foundPeersArray removeObjectAtIndex:[self.appDelegate.mcManager.foundPeersArray indexOfObject:peerID.displayName]];
-
             [self.tableView reloadData];
 
             if (self.appDelegate.mcManager.session.connectedPeers.count == 0)

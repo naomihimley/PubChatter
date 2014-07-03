@@ -96,7 +96,7 @@
 
     if (state == MCSessionStateNotConnected)
     {
-        [self.foundPeersArray removeObjectAtIndex:[self.foundPeersArray indexOfObject:peerID.displayName]];
+        [self.foundPeersArray removeObject:peerID.displayName];
         [self.connectedArray removeObject:peerID.displayName];
     }
 }
