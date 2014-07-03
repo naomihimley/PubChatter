@@ -37,6 +37,7 @@
 @property (strong, nonatomic)  NSString *numberOfUsersInBarString;
 @property (strong, nonatomic)  NSString *ratingString;
 @property (strong, nonatomic)  UIView *ratingBackgroundView;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @property Bar *bar;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -50,11 +51,13 @@
 {
     [super viewDidLoad];
     self.scrollView.delegate = self;
-    self.view.backgroundColor = [UIColor clearColor];
+    self.view.backgroundColor = [UIColor blackColor];
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
+    self.activityIndicator.hidden = NO;
+    [self.activityIndicator startAnimating];
     [self.navigationController.navigationBar setTintColor:[UIColor buttonColor]];
     [self.refreshButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
     [self.refreshButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
@@ -249,6 +252,8 @@
     [self.barRatingLabel clipsToBounds];
     self.barRatingLabel.textColor = [UIColor whiteColor];
     [self.ratingBackgroundView addSubview:self.barRatingLabel];
+    self.activityIndicator.hidden = YES;
+    [self.activityIndicator stopAnimating];
 }
 
 - (void)onTelephoneButtonPressed:(id)sender
@@ -280,17 +285,14 @@
                 NSArray *array = [[objects firstObject] objectForKey:@"usersInBar"];
                 NSInteger pubChattersInBar = array.count;
                 self.numberOfUsersInBarString = [NSString stringWithFormat:@"%ld PubChat users in %@", (long)pubChattersInBar, self.barFromSourceVC.name];
-                NSLog(@"Chatters present");
             }
 
         else {
             self.numberOfUsersInBarString = [NSString stringWithFormat:@"No PubChat users in %@", self.barFromSourceVC.name];
-            NSLog(@"No chatters present");
             }
         }
         else {
         self.numberOfUsersInBarString = [NSString stringWithFormat:@"No PubChat users in %@", self.barFromSourceVC.name];
-            NSLog(@"Bar not found");
         }
         [self findBar];
     }];

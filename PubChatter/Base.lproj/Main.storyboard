@@ -625,6 +625,10 @@
                                     <outlet property="delegate" destination="FmP-9A-1U9" id="pN4-xO-r6B"/>
                                 </connections>
                             </scrollView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Wnl-wi-wNs">
+                                <rect key="frame" x="142" y="265" width="37" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -651,6 +655,7 @@
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="Wnl-wi-wNs" id="wUX-e6-fQn"/>
                         <outlet property="refreshButtonOutlet" destination="GfC-RT-jIR" id="LlT-PQ-QCu"/>
                         <outlet property="scrollView" destination="Udx-tq-AF0" id="Jhs-Tk-x7w"/>
                         <segue destination="Wk9-KM-6JR" kind="push" identifier="websegue" id="mna-vh-XIW"/>
