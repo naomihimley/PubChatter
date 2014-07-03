@@ -81,9 +81,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-
         return self.users.count;
-
 }
 
 
@@ -285,7 +283,9 @@
             if (self.appDelegate.mcManager.session.connectedPeers.count == 0)
             {
                 self.isInviter = YES;
-                NSLog(@"should be able to invite now");
+//                [self tearDownSession];
+                [self becameActive:nil];
+                NSLog(@"should be able to invite now, tearing down and rebuilding");
             }
 
             NSLog(@"Connect peers after changing state to notConnected %@", self.appDelegate.mcManager.session.connectedPeers);
@@ -295,7 +295,6 @@
     MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
 
     NSDictionary *userDictionary = [NSDictionary new];
-//    ListOfUsersTableViewCell *cell = [ListOfUsersTableViewCell new];
 
     for (NSDictionary *dictionary in self.users)
     {
@@ -304,23 +303,6 @@
             userDictionary = dictionary;
         }
     }
-
-//    for (ListOfUsersTableViewCell *userCell in self.cellArray)
-//    {
-//        if ([userCell.cellUserDisplayName isEqual:peerID.displayName])
-//        {
-//            cell = userCell;
-//        }
-//    }
-
-//        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
-//        {
-//
-//        }
-//        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
-//        {
-
-//    }
 }
 
 # pragma mark - Stopped Advertising method catcher
@@ -388,11 +370,34 @@
         self.isInviter = YES;
         [self.tableView reloadData];
 
-        NSLog(@"self.parseUsers %@", self.parseUsers);
+        NSLog(@"Should have finished rebuilding the session %@", self.appDelegate.mcManager.session);
     }
     
 
 }
+
+//-(void)tearDownSession
+//{
+//    [self.appDelegate.mcManager.session disconnect];
+//    self.appDelegate.mcManager.session.delegate = nil;
+//    self.appDelegate.mcManager.session = nil;
+//
+//    [self.appDelegate.mcManager advertiseSelf:NO];
+//    self.appDelegate.mcManager.advertiser.delegate = nil;
+//    self.appDelegate.mcManager.advertiser = nil;
+//
+//    self.appDelegate.mcManager.browser.delegate = nil;
+//    self.appDelegate.mcManager.browser = nil;
+//
+//    self.appDelegate.mcManager.peerID = nil;
+//
+//    self.appDelegate.mcManager.shouldInvite = NO;
+//    [self.appDelegate.mcManager.foundPeersArray removeAllObjects];
+//    [self.appDelegate.mcManager.connectedArray removeAllObjects];
+//    [self.appDelegate.mcManager.advertisingUsers removeAllObjects];
+//
+//    NSLog(@"tearingDown session due to lack of no connected users %@", self.appDelegate.mcManager.session);
+//}
 
 #pragma mark - Prepare for segue
 

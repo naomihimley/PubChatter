@@ -76,19 +76,24 @@
 
 //        NSLog(@"connectedArray before loop %@", self.connectedArray);
 //
+//        NSMutableArray *restraintArray = [NSMutableArray arrayWithArray:self.advertisingUsers];
+
 //        if (self.shouldInvite == YES)
 //        {
 //            for (NSString *displayName in self.foundPeersArray)
 //            {
-//                if (![displayName isEqual:self.peerID.displayName])
+//                if ([restraintArray containsObject:displayName])
 //                {
-//                    if (![self.connectedArray containsObject:displayName])
+//                    [restraintArray removeObject:displayName];
+//                    if (![displayName isEqual:self.peerID.displayName])
 //                    {
-//                        NSLog(@"displayName of peer who made it through %@", displayName);
-//                        NSLog(@"displayName of found advertising peers %@, connectedArray %@", self.foundPeersArray, self.connectedArray);
-//                        [self.browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
+//                        if (![self.connectedArray containsObject:displayName])
+//                        {
+//                            NSLog(@"displayName of peer who made it through %@", displayName);
+//                            NSLog(@"displayName of found advertising peers %@, connectedArray %@", self.foundPeersArray, self.connectedArray);
+//                            [self.browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
+//                        }
 //                    }
-////
 //                }
 //            }
 //        }
@@ -96,7 +101,18 @@
 
     if (state == MCSessionStateNotConnected)
     {
-        [self.foundPeersArray removeObject:peerID.displayName];
+
+//        [self.foundPeersArray removeObject:peerID.displayName];
+        NSMutableArray *array = [NSMutableArray arrayWithArray:self.foundPeersArray];
+
+        for (NSString *displayname in array)
+        {
+            if ([displayname isEqual:peerID.displayName])
+            {
+                NSLog(@"removing user from foundPeersArray %@", displayname);
+                [self.foundPeersArray removeObject:peerID.displayName];
+            }
+        }
         [self.connectedArray removeObject:peerID.displayName];
     }
 }
@@ -132,6 +148,7 @@
                                                                              sectionNameKeyPath:nil
                                                                                       cacheName:nil];
         [self.fetchedResultsController performFetch:nil];
+
         //got the Peer who sent you the message
         NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
         Peer *peer = [array firstObject];
@@ -143,7 +160,7 @@
         if ([moc save:nil]) {
             [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidReceiveDataNotification"
                                                                 object:nil
-                                                              userInfo:dictionary];
+                                                             userInfo:dictionary];
         }
     }
 }
@@ -195,7 +212,7 @@
 -(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
 {
     NSLog(@"found peer advertising %@", peerID);
-    
+
     if (self.shouldInvite == YES)
     {
         if (![self.connectedArray containsObject:peerID.displayName])
@@ -207,23 +224,11 @@
 
             [browser invitePeer:peerID toSession:self.session withContext:data timeout:30.0];
         }
-    }
 
-    if (self.advertisingUsers.count == 0 && peerID.displayName != self.peerID.displayName)
-    {
-        [self.advertisingUsers addObject:peerID];
-        [self.foundPeersArray addObject:self.peerID.displayName];
-        NSDictionary *dictionary = @{@"peerID": peerID};
-
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer"
-                                                           object:nil
-                                                         userInfo:dictionary];
-    }
-    else
-    {
-        if (![self.foundPeersArray containsObject:peerID.displayName])
+        if (self.advertisingUsers.count == 0 && peerID.displayName != self.peerID.displayName)
         {
-            [self.advertisingUsers addObject:peerID];
+            [self.advertisingUsers addObject:peerID.displayName];
+            [self.foundPeersArray addObject:self.peerID.displayName];
             NSDictionary *dictionary = @{@"peerID": peerID};
 
             [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer"
@@ -231,12 +236,22 @@
                                                              userInfo:dictionary];
         }
     }
+
+    if (![self.foundPeersArray containsObject:peerID.displayName])
+    {
+        [self.advertisingUsers addObject:peerID.displayName];
+        NSDictionary *dictionary = @{@"peerID": peerID};
+
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer"
+                                                           object:nil
+                                                         userInfo:dictionary];
+    }
     [self.foundPeersArray addObject:peerID.displayName];
 }
 
 -(void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID
 {
-    [self.advertisingUsers removeObject:peerID];
+    [self.advertisingUsers removeObject:peerID.displayName];
 
     NSDictionary *dictionary = @{@"peerID": peerID};
     NSLog(@"peer stopped advertising %@", peerID.displayName);
@@ -267,7 +282,6 @@
                                                              serviceType:@"pubchatservice"];
         self.advertiser.delegate = self;
         [self.advertiser startAdvertisingPeer];
-
     }
 
     else
@@ -313,8 +327,6 @@
 {
     self.backgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
         NSLog(@"Background time expired; killing multipeer session");
-        NSLog(@"Background stuff happened");
-        [self teardownSession];
         [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskId];
         self.backgroundTaskId= UIBackgroundTaskInvalid;
     }];

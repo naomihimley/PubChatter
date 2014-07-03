@@ -22,7 +22,6 @@
 @property NSArray *sortedArray;
 @property ChatTableViewCell *customCell;
 @property CGFloat viewy;
-@property BOOL isUserInteration;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *chatFieldView;
 @property (weak, nonatomic) IBOutlet UITextField *chatTextField;
@@ -42,7 +41,6 @@
 {
     [super viewDidLoad];
     self.sendView.userInteractionEnabled = NO;
-    self.isUserInteration = YES;
     self.revealViewController.delegate = self;
     [self.findPubChattersButton addTarget:self.revealViewController action:@selector(revealToggle:) forControlEvents:UIControlEventTouchUpInside];
 
@@ -253,24 +251,19 @@
 #pragma mark - Reveal Delegate Method
 - (void)revealController:(SWRevealViewController *)revealController didMoveToPosition:(FrontViewPosition)position
 {
-    if (self.isUserInteration == YES)
+    if (position == 4 || position == 2)
     {
-        NSLog(@"setting to disabled");
         self.tableView.userInteractionEnabled = NO;
         self.tabBarController.tabBar.userInteractionEnabled = NO;
         self.sendView.userInteractionEnabled = NO;
-        self.isUserInteration = NO;
     }
-    else
+    else if (position == 3)
     {
-        NSLog(@"enabled");
         self.tableView.userInteractionEnabled = YES;
         self.tabBarController.tabBar.userInteractionEnabled = YES;
         self.sendView.userInteractionEnabled = YES;
-        self.isUserInteration = YES;
     }
 }
-
 
 #pragma mark - Helper method implementations
 
@@ -289,6 +282,10 @@
                                                error:&error];
         if (error)
         {
+            //setting the tableView to empty because connection has been lost
+            self.navigationItem.title = @"Not Chatting";
+            self.sortedArray = [NSArray new];
+            [self.tableView reloadData];
 //            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Connection to User has been lost"
 //                                                               message:nil
 //                                                              delegate:self
@@ -346,21 +343,17 @@
         request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", peerID.displayName];
         request.predicate = predicate;
-
         self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
         [self.fetchedResultsController performFetch:nil];
         NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
         if (array.count < 1)
         {
-            NSLog(@"not returning any fetched results in CHATBOX");
             return NO;
         }
-        NSLog(@"the fetch returned something in CHATBOX");
         return YES;
     }
     else
     {
-        NSLog(@"the peer id was null IN CHATBOX");
         return NO;
     }
 }
@@ -387,6 +380,9 @@
     else
     {
         NSLog(@"connected peers array: %@", self.appDelegate.mcManager.session.connectedPeers);
+        self.navigationItem.title = @"Not Chatting";
+        self.sortedArray = [NSArray new];
+        [self.tableView reloadData];
 //        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"You have lost your connection"
 //                                                           message:nil
 //                                                          delegate:self
@@ -417,7 +413,7 @@
 
     UIImage *icon = [UIImage imageNamed:@"UserListIcon"];
     UIImageView *iconView = [[UIImageView alloc]initWithImage:icon];
-    iconView.frame = CGRectMake((self.findPubChattersButton.frame.size.width/2) - 17.5, (self.findPubChattersButton.frame.size.height/2) - 17.5, 35, 35);
+    iconView.frame = CGRectMake((self.findPubChattersButton.frame.size.width/2) - 15, (self.findPubChattersButton.frame.size.height/2) - 15, 30, 30);
     [self.findPubChattersButton addSubview:iconView];
     [self.findPubChattersButton setBackgroundColor:[UIColor clearColor]];
 
