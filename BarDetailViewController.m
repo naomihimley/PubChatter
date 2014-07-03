@@ -59,10 +59,6 @@
     [self.refreshButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
     [self.refreshButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
     [self.refreshButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
-    self.refreshButtonOutlet.layer.cornerRadius = 5.0f;
-    self.refreshButtonOutlet.layer.masksToBounds = YES;
-    self.refreshButtonOutlet.layer.borderWidth = 2.0f;
-    self.refreshButtonOutlet.layer.borderColor= [[UIColor buttonColor]CGColor];
 
     [self.barNameLabel removeFromSuperview];
     [self.barAddressLabel removeFromSuperview];
