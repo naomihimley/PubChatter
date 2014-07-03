@@ -54,9 +54,6 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
-    [self getNumberofUserInBar];
-    [self findBar];
-
     [self.barNameLabel removeFromSuperview];
     [self.barAddressLabel removeFromSuperview];
     [self.distanceFromUserLabel removeFromSuperview];
@@ -72,11 +69,11 @@
     [self.imageEdge removeFromSuperview];
 
     [self.numberOfUsersInBarLabel removeFromSuperview];
-    [self.ratingViewEdge removeFromSuperview];
     [self.ratingBackgroundView removeFromSuperview];
 
-
     [self addViewsToScrollView];
+    [self getNumberofUserInBar];
+
 }
 
 -(void)addViewsToScrollView {
@@ -213,7 +210,7 @@
 
 -(void)setPubChatInfoLabel
 {
-    CGFloat verticalOffset = 5.0;
+    CGFloat verticalOffset = 0.0;
 
     // Set background view look
     self.ratingBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(15, 73, 290, 72)];
@@ -237,15 +234,15 @@
 
     // Set bar rating.
     self.barRatingLabel = [[UILabel alloc] init];
-    self.numberOfUsersInBarLabel.frame = CGRectMake((self.ratingBackgroundView.frame.size.width/2) - ((self.ratingBackgroundView.frame.size.width - 20)/2), verticalOffset, self.ratingBackgroundView.frame.size.width - 20, 30);
-    [self.numberOfUsersInBarLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:16]];
-    self.numberOfUsersInBarLabel.text = self.numberOfUsersInBarString;
-    self.numberOfUsersInBarLabel.textAlignment = NSTextAlignmentCenter;
-    self.numberOfUsersInBarLabel.numberOfLines = 0;
-    [self.numberOfUsersInBarLabel sizeThatFits:CGSizeZero];
-    [self.numberOfUsersInBarLabel clipsToBounds];
-    self.numberOfUsersInBarLabel.textColor = [UIColor whiteColor];
-    [self.ratingBackgroundView addSubview:self.numberOfUsersInBarLabel];
+    self.barRatingLabel.frame = CGRectMake((self.ratingBackgroundView.frame.size.width/2) - ((self.ratingBackgroundView.frame.size.width - 20)/2), verticalOffset, self.ratingBackgroundView.frame.size.width - 20, 30);
+    [self.barRatingLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:16]];
+    self.barRatingLabel.text = self.ratingString;
+    self.barRatingLabel.textAlignment = NSTextAlignmentCenter;
+    self.barRatingLabel.numberOfLines = 0;
+    [self.barRatingLabel sizeThatFits:CGSizeZero];
+    [self.barRatingLabel clipsToBounds];
+    self.barRatingLabel.textColor = [UIColor whiteColor];
+    [self.ratingBackgroundView addSubview:self.barRatingLabel];
 }
 
 - (void)onTelephoneButtonPressed:(id)sender
@@ -285,12 +282,11 @@
             NSLog(@"No chatters present");
             }
         }
-
         else {
-        self.numberOfUsersInBarString = [NSString stringWithFormat:@"PubChat not available in %@", self.barFromSourceVC.name];
+        self.numberOfUsersInBarString = [NSString stringWithFormat:@"No PubChat users in %@", self.barFromSourceVC.name];
             NSLog(@"Bar not found");
         }
-        [self setPubChatInfoLabel];
+        [self findBar];
     }];
 }
 
@@ -303,11 +299,11 @@
           if (objects.firstObject) {
               self.bar = objects.firstObject;
               NSLog(@"You are in %@", self.bar);
-              [self getRating];
           }
           else {
               NSLog(@"This is not a PubChat bar");
           }
+          [self getRating];
       }];
 }
 
@@ -343,7 +339,6 @@
         else {
             self.ratingString = [NSString stringWithFormat:@"%@ has not been rated", self.bar];
         }
-
         [self setPubChatInfoLabel];
         }];
     }
