@@ -28,6 +28,8 @@
 @property NSString *interestedString;
 @property NSArray *genderAttStringArray;
 @property NSArray *interestedAttStringArray;
+@property (weak, nonatomic) IBOutlet UIButton *doneButtonOutlet;
+@property (weak, nonatomic) IBOutlet UIButton *cancelButtonOutlet;
 
 @end
 
@@ -39,6 +41,21 @@
     [super viewDidLoad];
     self.scrollView.alwaysBounceVertical = YES;
     self.scrollView.delegate = self;
+    [self.doneButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
+    [self.doneButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+    [self.doneButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
+    self.doneButtonOutlet.layer.cornerRadius = 5.0f;
+    self.doneButtonOutlet.layer.masksToBounds = YES;
+    self.doneButtonOutlet.layer.borderWidth = 2.0f;
+    self.doneButtonOutlet.layer.borderColor= [[UIColor buttonColor]CGColor];
+    [self.cancelButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
+    [self.cancelButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+    [self.cancelButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
+    self.cancelButtonOutlet.layer.cornerRadius = 5.0f;
+    self.cancelButtonOutlet.layer.masksToBounds = YES;
+    self.cancelButtonOutlet.layer.borderWidth = 2.0f;
+    self.cancelButtonOutlet.layer.borderColor= [[UIColor buttonColor]CGColor];
+    
     NSString *Man = @"Man";
     NSAttributedString *manString = [[NSAttributedString alloc] initWithString:Man attributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
     NSString *Woman = @"Woman";

@@ -26,6 +26,7 @@
 @property (strong, nonatomic) UILabel *favDrinkLabel;
 @property (strong, nonatomic) UILabel *aboutMeLabel;
 @property (strong, nonatomic) UIButton *logoutButton;
+@property (weak, nonatomic) IBOutlet UIButton *editButtonOutlet;
 
 
 @property AppDelegate *appDelegate;
@@ -39,6 +40,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.editButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+    [self.editButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
+    [self.editButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
+    self.editButtonOutlet.layer.cornerRadius = 5.0f;
+    self.editButtonOutlet.layer.masksToBounds = YES;
+    self.editButtonOutlet.layer.borderWidth = 2.0f;
+    self.editButtonOutlet.layer.borderColor= [[UIColor buttonColor]CGColor];
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didreceiveNotification:)
                                                  name:@"userEnteredBar"
