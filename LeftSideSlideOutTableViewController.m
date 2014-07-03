@@ -94,24 +94,22 @@
     cell.userNameLabel.textColor = [UIColor nameColor];
     cell.genderLabel.textColor = [UIColor whiteColor];
     cell.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.5];
-    cell.chatButton.backgroundColor = [UIColor clearColor];
+    cell.chatButton.backgroundColor = [[UIColor buttonColor]colorWithAlphaComponent:0.5];
 
     cell.userNameLabel.text = [user objectForKey:@"name"];
     cell.chatButton.tag = indexPath.row;
     [self.cellArray addObject:cell];
     cell.tag = [self.users indexOfObject:dictionary];
     cell.cellUserDisplayName = peerID.displayName;
-    [cell.chatButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
-    [cell.chatButton setTitle:@"Chat" forState:UIControlStateNormal];
+    [cell.chatButton setTitle:@"" forState:UIControlStateNormal];
 
-    cell.chatButton.layer.cornerRadius = 5.0f;
-    cell.chatButton.layer.borderWidth = 2.0f;
-    cell.chatButton.layer.borderColor= [[UIColor buttonColor]CGColor];
     cell.chatButton.shouldInvite = YES;
 
     cell.layer.masksToBounds = YES;
     cell.layer.borderWidth = 0.25f;
     cell.layer.borderColor = [[UIColor whiteColor]CGColor];
+
+    cell.chatReceivedImage.image = [UIImage imageNamed:@"StartChatIcon"];
 
 
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -237,7 +235,7 @@
     [[NSNotificationCenter defaultCenter]postNotificationName:@"PeerToChatWith" object:nil userInfo:dictionary];
     [button setTitleColor:[UIColor accentColor] forState:UIControlStateNormal];
     button.layer.borderColor = [[UIColor accentColor] CGColor];
-    [cell.chatReceivedImage setHidden:YES];
+    cell.chatReceivedImage.image = [UIImage imageNamed:@"StartChatIcon"];
     self.selectedChatButton = button;
 }
 
