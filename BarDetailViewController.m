@@ -34,6 +34,7 @@
 @property (strong, nonatomic)  UILabel *ratingViewEdge;
 @property (strong, nonatomic)  UILabel *numberOfUsersInBarLabel;
 @property (strong, nonatomic)  NSString *numberOfUsersInBarString;
+@property (strong, nonatomic)  NSString *ratingString;
 @property (strong, nonatomic)  UIView *ratingBackgroundView;
 
 @property Bar *bar;
@@ -179,7 +180,7 @@
     self.yelpReviewersSayLabel.textAlignment = NSTextAlignmentLeft;
     self.yelpReviewersSayLabel.numberOfLines = 0;
     [self.yelpReviewersSayLabel sizeToFit];
-    self.yelpReviewersSayLabel.textColor = [UIColor accentColor];
+    self.yelpReviewersSayLabel.textColor = [UIColor whiteColor];
     [self.scrollView addSubview:self.yelpReviewersSayLabel];
 
     textLabelsOffset = textLabelsOffset + self.yelpReviewersSayLabel.frame.size.height;
@@ -219,19 +220,24 @@
     self.ratingBackgroundView.layer.cornerRadius = 5.0f;
     [self.view addSubview:self.ratingBackgroundView];
 
-    // Set edge look.
-    self.ratingViewEdge = [[UILabel alloc] init];
-    self.ratingViewEdge.frame = CGRectMake(self.ratingBackgroundView.frame.origin.x - 1, self.ratingBackgroundView.frame.origin.y - 1, self.ratingBackgroundView.frame.size.width + 2, self.ratingBackgroundView.frame.size.height + 2);
-    self.ratingViewEdge.backgroundColor = [UIColor clearColor];
-//    self.ratingViewEdge.layer.borderColor = [[UIColor whiteColor] CGColor];
-//    self.ratingViewEdge.layer.borderWidth = 1.0f;
-//    self.ratingViewEdge.layer.cornerRadius = 5.0f;
-    [self.view addSubview:self.ratingViewEdge];
-
     // Set number of users in bar look.
     self.numberOfUsersInBarLabel = [[UILabel alloc] init];
     self.numberOfUsersInBarLabel.frame = CGRectMake((self.ratingBackgroundView.frame.size.width/2) - ((self.ratingBackgroundView.frame.size.width - 20)/2), verticalOffset, self.ratingBackgroundView.frame.size.width - 20, 30);
-    [self.numberOfUsersInBarLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:14]];
+    [self.numberOfUsersInBarLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:20]];
+    self.numberOfUsersInBarLabel.text = self.numberOfUsersInBarString;
+    self.numberOfUsersInBarLabel.textAlignment = NSTextAlignmentCenter;
+    self.numberOfUsersInBarLabel.numberOfLines = 0;
+    [self.numberOfUsersInBarLabel sizeThatFits:CGSizeZero];
+    [self.numberOfUsersInBarLabel clipsToBounds];
+    self.numberOfUsersInBarLabel.textColor = [UIColor whiteColor];
+    [self.ratingBackgroundView addSubview:self.numberOfUsersInBarLabel];
+
+    verticalOffset = verticalOffset + self.numberOfUsersInBarLabel.frame.size.height + 10;
+
+    // Set bar rating.
+    self.barRatingLabel = [[UILabel alloc] init];
+    self.numberOfUsersInBarLabel.frame = CGRectMake((self.ratingBackgroundView.frame.size.width/2) - ((self.ratingBackgroundView.frame.size.width - 20)/2), verticalOffset, self.ratingBackgroundView.frame.size.width - 20, 30);
+    [self.numberOfUsersInBarLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:16]];
     self.numberOfUsersInBarLabel.text = self.numberOfUsersInBarString;
     self.numberOfUsersInBarLabel.textAlignment = NSTextAlignmentCenter;
     self.numberOfUsersInBarLabel.numberOfLines = 0;
@@ -249,7 +255,6 @@
 
 -(void)seeOnYelp:(id)sender
 {
-    self.goToWebsiteButtonOutlet.titleLabel.textColor = [UIColor whiteColor];
     [self performSegueWithIdentifier:@"websegue" sender:self];
 }
 
@@ -261,7 +266,7 @@
 
 -(void)getNumberofUserInBar
 {
-    NSLog(@"Performing query");
+    NSLog(@"Performing query for number of users in bar");
     PFQuery *query = [PFQuery queryWithClassName:@"Bar"];
     [query whereKey:@"yelpID" equalTo:self.barFromSourceVC.yelpID];
     [query includeKey:@"usersInBar"];
@@ -284,32 +289,43 @@
         self.numberOfUsersInBarString = [NSString stringWithFormat:@"PubChat not available in %@", self.barFromSourceVC.name];
             NSLog(@"Bar not found");
         }
-
         [self setPubChatInfoLabel];
+//        [self getRating];
     }];
 }
 
--(void)getRating
-{
-    PFQuery *query = [PFQuery queryWithClassName:@"Rating"];
-    [query includeKey:@"bar"];
-    [query whereKey:@"bar" equalTo:self.bar];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-
-        NSInteger count = objects.count;
-        NSInteger total = 0;
-        for (PFObject *object in objects) {
-            NSInteger number =  [[object valueForKey:@"rating"] intValue];
-            total += number;
-        }
-            if (count > 0) {
-                self.barRatingLabel.text = [NSString stringWithFormat:@"Pubchatter rating: %d", total/count];
-            }
-            else {
-                self.barRatingLabel.text = [NSString stringWithFormat:@"%@ has not been rated", self.barFromSourceVC.name];
-            }
-    }];
-}
+//-(void)getRating
+//{
+//    NSLog(@"Performing rating query");
+//
+//    if (self.bar) {
+//        NSLog(@"Bar Found");
+//    PFQuery *query = [PFQuery queryWithClassName:@"Rating"];
+//    [query includeKey:@"bar"];
+//    [query whereKey:@"bar" equalTo:self.bar];
+//    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+//        if (objects.count > 0) {
+//            NSInteger count = objects.count;
+//            NSInteger total = 0;
+//            for (PFObject *object in objects) {
+//                NSInteger number =  [[object valueForKey:@"rating"] intValue];
+//                total += number;
+//            }
+//            NSLog(@"There is at least one rating");
+//            self.ratingString = [NSString stringWithFormat:@"Pubchatter rating: %d", total/count];
+//        }
+//
+//
+//
+//            if (count > 0) {
+//                self.barRatingLabel.text = [NSString stringWithFormat:@"Pubchatter rating: %d", total/count];
+//            }
+//            else {
+//                self.barRatingLabel.text = [NSString stringWithFormat:@"%@ has not been rated", self.barFromSourceVC.name];
+//            }
+//        }];
+//    }
+//}
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
