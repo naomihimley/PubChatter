@@ -51,6 +51,10 @@
     [self startListeningForNotificationsAndSendNotification];
 
     self.tableView.backgroundColor = [UIColor clearColor];
+
+    self.navigationItem.title = @"Chatters Chatting";
+
+     
 }
 
 -(void)dealloc
@@ -77,7 +81,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.users.count;
+
+        return self.users.count;
+
 }
 
 
@@ -89,6 +95,8 @@
     MCPeerID *peerID = [dictionary objectForKey:@"peerID"];
 
     PFUser *user = [dictionary objectForKey:@"user"];
+
+
 
     cell.userNameLabel.textColor = [UIColor nameColor];
     cell.genderLabel.textColor = [UIColor whiteColor];
@@ -156,6 +164,7 @@
     [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
         cell.userImage.layer.masksToBounds = YES;
         cell.userImage.image = [UIImage imageWithData:data];
+        cell.textLabel.text = @"";
     }];
     return cell;
 }
@@ -247,23 +256,27 @@
         if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
         {
             MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
-            NSDictionary *userDictionary = [NSDictionary new];
+
 
             NSLog(@"peer changed state notification came through");
-
-            for (NSDictionary *dictionary in self.users)
-            {
-                MCPeerID *peer = [dictionary objectForKey:@"peerID"];
-
-                if (peer.displayName == peerID.displayName)
+            dispatch_async(dispatch_get_main_queue(), ^{
+                for (NSDictionary *dictionary in self.users)
                 {
-                    NSLog(@"peerID of peer who lost connection %@", peerID.displayName);
-                    userDictionary = dictionary;
-                }
-            }
-            [self.users removeObject: peerID];
+                    NSDictionary *userDictionary = [NSDictionary new];
+                    MCPeerID *peer = [dictionary objectForKey:@"peerID"];
 
-            [self.tableView reloadData];
+                    if (peer.displayName == peerID.displayName)
+                    {
+                        NSLog(@"1.peerID of peer who lost connection %@", peerID.displayName);
+                        userDictionary = dictionary;
+                    }
+                }
+                [self.users removeObject: peerID];
+                
+                [self.tableView reloadData];
+                NSLog(@"reload of tableView has went through");
+            });
+
 
             if (self.appDelegate.mcManager.session.connectedPeers.count == 0)
             {
