@@ -41,6 +41,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.sendView.userInteractionEnabled = NO;
     self.isUserInteration = YES;
     self.revealViewController.delegate = self;
     [self.findPubChattersButton addTarget:self.revealViewController action:@selector(revealToggle:) forControlEvents:UIControlEventTouchUpInside];
@@ -131,6 +132,7 @@
 //notification from when you click the "CHAT" button in the drawer
 - (void)didReceivePeerToChatWithNotification: (NSNotification *)notification
 {
+    self.sendView.userInteractionEnabled = YES;
     self.chattingUserPeerID = [[notification userInfo]objectForKey:@"peerID"];
     self.chatingUser = [[notification userInfo]objectForKey:@"user"];
     self.navigationItem.title = [self.chatingUser objectForKey:@"name"];
@@ -177,6 +179,7 @@
     NSIndexPath* ip = [NSIndexPath indexPathForRow:lastRowNumber inSection:0];
     [self.tableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
+
 #pragma mark - ScrollView Method
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
@@ -186,22 +189,10 @@
 # pragma mark - TableViewDelegate methods
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //how it was:
-//    if (!self.customCell)
-//    {
-//        self.customCell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
-//    }
-//    Message *message = [self.sortedArray objectAtIndex:indexPath.row];
-//    [self.customCell.leftLabel setText:message.text];
-//    NSLog(@"what the message is: %@", message.text);
-//    [self.customCell layoutIfNeeded];
-//    CGFloat height = [self.customCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
-//    return height;
     ChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
     Message *message = [self.sortedArray objectAtIndex:indexPath.row];
     [cell.leftLabel  setText:message.text];
     [cell layoutSubviews];
-//    [cell layoutIfNeeded];
     CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
     return height + 10;
 }
@@ -254,7 +245,7 @@
     else
     {
     ChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
-    cell.leftLabel.text = @"this shouldnt happen";
+    cell.leftLabel.text = @"error";
     return cell;
     }
 }
@@ -298,12 +289,13 @@
                                                error:&error];
         if (error)
         {
-            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Connection to User has been lost"
-                                                               message:nil
-                                                              delegate:self
-                                                     cancelButtonTitle:@"OK"
-                                                     otherButtonTitles:nil, nil];
-            [alertView show];
+//            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Connection to User has been lost"
+//                                                               message:nil
+//                                                              delegate:self
+//                                                     cancelButtonTitle:@"OK"
+//                                                     otherButtonTitles:nil, nil];
+//            [alertView show];
+            NSLog(@"ERROR: %@", error);
         }
 
         else
@@ -394,13 +386,13 @@
     }
     else
     {
-        NSLog(@"connected peers array is zero,because YOUR state is disconnected");
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"You have lost your connection"
-                                                           message:nil
-                                                          delegate:self
-                                                 cancelButtonTitle:@"OK"
-                                                 otherButtonTitles:nil, nil];
-        [alertView show];
+        NSLog(@"connected peers array: %@", self.appDelegate.mcManager.session.connectedPeers);
+//        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"You have lost your connection"
+//                                                           message:nil
+//                                                          delegate:self
+//                                                 cancelButtonTitle:@"OK"
+//                                                 otherButtonTitles:nil, nil];
+//        [alertView show];
     }
 }
 
@@ -428,11 +420,6 @@
     iconView.frame = CGRectMake((self.findPubChattersButton.frame.size.width/2) - 17.5, (self.findPubChattersButton.frame.size.height/2) - 17.5, 35, 35);
     [self.findPubChattersButton addSubview:iconView];
     [self.findPubChattersButton setBackgroundColor:[UIColor clearColor]];
-//    self.findPubChattersButton.layer.cornerRadius = 5.0f;
-//    self.findPubChattersButton.layer.masksToBounds = YES;
-//    self.findPubChattersButton.layer.borderWidth = 2.0f;
-//    self.findPubChattersButton.layer.borderColor= [[UIColor buttonColor]CGColor];
-
 
 }
 @end

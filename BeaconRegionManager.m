@@ -48,7 +48,7 @@
 
 - (void)canUserUseApp
 {
-
+    //users can still use our app depending on
     if ([[UIApplication sharedApplication] backgroundRefreshStatus] == UIBackgroundRefreshStatusAvailable)
     {
         self.beaconRegionManager = [[CLLocationManager alloc] init];
@@ -64,7 +64,8 @@
                                              cancelButtonTitle:@"OK"
                                              otherButtonTitles:nil];
         [alert show];
-    }else if([[UIApplication sharedApplication] backgroundRefreshStatus] == UIBackgroundRefreshStatusRestricted)
+    }
+    else if([[UIApplication sharedApplication] backgroundRefreshStatus] == UIBackgroundRefreshStatusRestricted)
     {
         NSLog(@"Background updates are unavailable and the user cannot enable them again. For example, this status can occur when parental controls are in effect for the current user.");
     }
