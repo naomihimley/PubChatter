@@ -194,6 +194,8 @@
 
 -(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
 {
+    NSLog(@"found peer advertising %@", peerID);
+    
     if (self.shouldInvite == YES)
     {
         if (![self.connectedArray containsObject:peerID.displayName])
