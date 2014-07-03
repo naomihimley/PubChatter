@@ -48,11 +48,6 @@
     self.editButtonOutlet.layer.borderWidth = 2.0f;
     self.editButtonOutlet.layer.borderColor= [[UIColor buttonColor]CGColor];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didreceiveNotification:)
-                                                 name:@"userEnteredBar"
-                                               object:nil];
-
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     self.scrollView.delegate = self;
 }
@@ -258,12 +253,6 @@
 - (IBAction)unwindSegueToProfileViewController:(UIStoryboardSegue *)sender
 {
 
-}
-#pragma mark - NSNotification Center
--(void)didreceiveNotification:(NSNotification *)notification
-{
-    NSLog(@"notification in profile vc %@",[notification.userInfo objectForKey:@"barName"]);
-    self.navigationItem.title = [notification.userInfo objectForKey:@"barName"];
 }
 
 #pragma mark - Styling method

@@ -85,14 +85,11 @@
     self.locationManager.delegate = self;
     self.searchActivated = NO;
     self.redrawActivated = NO;
+    self.rateBarButton.hidden = YES;
 
     // Set drawerview actions
     self.revealViewController.delegate = self;
-//    self.rateBarButton.customView.hidden = YES;
-//    self.rateBarButton.tintColor = [UIColor blueColor];
-
     [self.rateBarButton addTarget:self.revealViewController action:@selector(rightRevealToggle:) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     [self.view resignFirstResponder];
 
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -133,10 +130,9 @@
 
 -(void)userEnteredBar:(NSNotification *)notification
 {
-    NSLog(@"search vc notification %@",[notification.userInfo objectForKey:@"barName"]);
-    self.navigationItem.title = [notification.userInfo objectForKey:@"barName"];
     NSString *barname = [notification.userInfo objectForKey:@"barName"];
-    if ([barname isEqualToString:@"PubChat"]) {
+    if ([barname isEqualToString:@"PubChat"])
+    {
         self.rateBarButton.hidden = YES;
     }
     else

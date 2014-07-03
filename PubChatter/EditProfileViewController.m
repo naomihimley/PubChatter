@@ -268,6 +268,25 @@
         [[PFUser currentUser]setObject:self.favoriteDrinkLabel.text forKey:@"favoriteDrink"];
     }
 
+    if ([self.genderString isEqualToString:@"Man"]) {
+        [[PFUser currentUser]setObject:@1 forKey:@"gender"];
+    }
+    else if ([self.genderString isEqualToString:@"Woman"]) {
+        [[PFUser currentUser]setObject:@0 forKey:@"gender"];
+    }
+    else if ([self.genderString isEqualToString:@"Other"]) {
+        [[PFUser currentUser]setObject:@2 forKey:@"gender"];
+    }
+
+    if ([self.interestedString isEqualToString:@"men"]) {
+        [[PFUser currentUser]setObject:@0 forKey:@"sexualOrientation"];
+    }
+    else if ([self.interestedString isEqualToString:@"women"]) {
+        [[PFUser currentUser]setObject:@1 forKey:@"sexualOrientation"];
+    }
+    else if ([self.interestedString isEqualToString:@"other"]){
+        [[PFUser currentUser]setObject:@2 forKey:@"sexualOrientation"];
+    }
     [[PFUser currentUser] saveInBackground];
     [self.navigationController popToRootViewControllerAnimated:NO];
 }
@@ -306,15 +325,12 @@
                 {
             case 0:
                 self.genderString = [[self.genderArray objectAtIndex:0] lowercaseString];
-                [[PFUser currentUser]setObject:@0 forKey:@"gender"];
                 break;
             case 1:
                 self.genderString = [[self.genderArray objectAtIndex:1] lowercaseString];
-                [[PFUser currentUser]setObject:@1 forKey:@"gender"];
                 break;
             case 2:
                 self.genderString = [[self.genderArray objectAtIndex:2] lowercaseString];
-                [[PFUser currentUser]setObject:@2 forKey:@"gender"];
                 break;
             break;
                 }
@@ -324,15 +340,12 @@
             {
             case 0:
                 self.interestedString = [[self.interestedArray objectAtIndex:0] lowercaseString];
-                [[PFUser currentUser]setObject:@1 forKey:@"sexualOrientation"];
                 break;
             case 1:
                 self.interestedString = [[self.interestedArray objectAtIndex:1] lowercaseString];
-                [[PFUser currentUser]setObject:@0 forKey:@"sexualOrientation"];
                 break;
             case 2:
                     self.interestedString = [[self.interestedArray objectAtIndex:2] lowercaseString];
-                    [[PFUser currentUser]setObject:@2 forKey:@"sexualOrientation"];
                 break;
             }
         default:
