@@ -43,16 +43,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    NSLog(@"ProfileVC Load");
-
     [self.editButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
     [self.editButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
     [self.editButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
-    self.editButtonOutlet.layer.cornerRadius = 5.0f;
-    self.editButtonOutlet.layer.masksToBounds = YES;
-    self.editButtonOutlet.layer.borderWidth = 2.0f;
-    self.editButtonOutlet.layer.borderColor= [[UIColor buttonColor]CGColor];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     self.scrollView.delegate = self;
 }
@@ -67,17 +60,7 @@
     [self.aboutMeLabel removeFromSuperview];
     [self.bioTextView removeFromSuperview];
 
-    NSLog(@"I ran");
     [self getParseData];
-
-    // Possible alertview, if the user doesn't have a name????
-//    NSLog(@"User's name: %@", [[PFUser currentUser] objectForKey:@"name"]);
-//    NSString *usersname = [[PFUser currentUser] objectForKey:@"name"];
-//    if (usersname.length < 1) {
-//        NSLog(@"%@", [[PFUser currentUser] objectForKey:@"name"]);
-//        UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"Select the edit button to complete your profile" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-//        [alert show];
-//    }
 }
 
 
@@ -194,19 +177,13 @@
     self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, verticalOffset);
     self.scrollView.contentMode = UIViewContentModeScaleAspectFit;
     [self setStyle];
-
-    NSLog(@"label: %@", self.nameageLabel.text);
-    NSLog(@"label: %@", self.genderLabel.text);
-    NSLog(@"label: %@", self.favDrinkLabel.text);
-    NSLog(@"label: %@", self.interestedLabel.text);
-    NSLog(@"label: %@", self.bioTextView.text);
 }
 
 -(void)logUserOut:(id)sender
 {
+    [[self.appDelegate beaconRegionManager]logout];
     self.logoutButton.titleLabel.textColor = [UIColor whiteColor];
     [PFUser logOut];
-    //logout of parse
     [self performSegueWithIdentifier:@"logoutSegue" sender:self];
 }
 
@@ -234,12 +211,10 @@
     if ([[PFUser currentUser]objectForKey:@"favoriteDrink"] != nil)
     {
         self.favDrink = [[PFUser currentUser]objectForKey:@"favoriteDrink"];
-        NSLog(@"%@", self.favDrink);
     }
     else
     {
         self.favDrink = @"No drink info";
-        NSLog(@"No drink value returned");
     }
 
     //Get gender.
@@ -280,11 +255,6 @@
      {
          self.sexualOrientation = @"Interested in: Other";
      }
-    NSLog(@"string: %@", self.name);
-    NSLog(@"string: %@", self.gender);
-    NSLog(@"string: %@", self.favDrink);
-    NSLog(@"string: %@", self.sexualOrientation);
-    NSLog(@"string: %@", self.bioText);
 
     if ([[PFUser currentUser]objectForKey:@"picture"] != nil) {
         PFFile *file = [[PFUser currentUser]objectForKey:@"picture"];
