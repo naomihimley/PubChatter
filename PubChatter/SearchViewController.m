@@ -647,7 +647,7 @@ calloutAccessoryControlTapped:(UIControl *)control
     [cell.imageView sd_setImageWithURL:[NSURL URLWithString:yelpBar.businessImageURL]
                       placeholderImage:[UIImage imageNamed:@"placeholder2"]];
     [cell layoutSubviews];
-    cell.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.5];
+    cell.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.5f];
     cell.barNameLabel.textColor = [UIColor nameColor];
     cell.barDistanceLabel.textColor = [UIColor whiteColor];
 
