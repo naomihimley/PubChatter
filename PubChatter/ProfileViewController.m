@@ -97,7 +97,6 @@
     self.genderLabel = [[UILabel alloc] init];
     self.genderLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 30);
     self.genderLabel.text = self.gender;
-
     if (self.gender.length < 1) {
         self.gender = @"Gender:";
     }
