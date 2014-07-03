@@ -81,14 +81,16 @@
     UIImageView *profileImageView = [[UIImageView alloc] init];
     profileImageView.frame = CGRectMake((self.scrollView.frame.size.width/2) -75, verticalOffset, 150, 150);
     profileImageView.image = self.profileImage;
+    profileImageView.layer.masksToBounds = YES;
+    profileImageView.layer.cornerRadius = 5.0f;
     [self.scrollView addSubview:profileImageView];
 
     // Add image borderview
     self.imageEdge = [[UILabel alloc] init];
     self.imageEdge.frame = CGRectMake((self.scrollView.frame.size.width/2) -76, verticalOffset - 1, 152, 152);
     self.imageEdge.backgroundColor = [UIColor clearColor];
-    self.imageEdge.layer.borderColor = [[UIColor whiteColor] CGColor];
-    self.imageEdge.layer.borderWidth = 1.0f;
+//    self.imageEdge.layer.borderColor = [[UIColor whiteColor] CGColor];
+//    self.imageEdge.layer.borderWidth = 1.0f;
     [self.scrollView addSubview:self.imageEdge];
 
     verticalOffset = verticalOffset + profileImageView.frame.size.height + 10;
@@ -156,10 +158,10 @@
     //Add background view
     self.backgroundView = [[UILabel alloc] init];
     self.backgroundView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, verticalOffset);
-    self.backgroundView.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.95f];
-    self.backgroundView.layer.cornerRadius = 5.0f;
-    self.backgroundView.layer.borderColor = [[UIColor whiteColor] CGColor];
-    self.backgroundView.layer.borderWidth = 1.0f;
+    self.backgroundView.backgroundColor = [UIColor clearColor];
+//    self.backgroundView.layer.cornerRadius = 5.0f;
+//    self.backgroundView.layer.borderColor = [[UIColor whiteColor] CGColor];
+//    self.backgroundView.layer.borderWidth = 1.0f;
     [self.scrollView insertSubview:self.backgroundView atIndex:0];
 
 
@@ -275,20 +277,14 @@
     //Style nameagelabel
     self.navigationItem.title= @"PubChat";
     self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
-    //    self.viewInBackground.opaque = YES;
-    //    self.viewInBackground.layer.opacity = 0.9f;
-    //    self.viewInBackground.alpha = 0.9f;
-    //    [self.viewInBackground setBackgroundColor:[[UIColor backgroundColor]colorWithAlphaComponent:0.9f]];
-    //
-    //    self.view.backgroundColor = [UIColor blackColor];
-    //    self.nameageLabel.textColor = [UIColor nameColor];
-    //    self.genderLabel.textColor = [UIColor whiteColor];
-    //    self.bioTextView.editable = YES;
-    //    self.bioTextView.textColor = [UIColor whiteColor];
-    //    self.bioTextView.editable = NO;
-    //    self.interestedLabel.textColor = [UIColor whiteColor];
-    //    self.favDrinkLabel.textColor = [UIColor whiteColor];
-    //    self.bioTextView.backgroundColor = [UIColor clearColor];
+
+    //Create topLabel to make navBar look correct size
+    UILabel *topLabel = [[UILabel alloc]init];
+    topLabel.frame = CGRectMake(0, 0, 320, 30);
+    topLabel.backgroundColor = [UIColor navBarColor];
+    [self.view addSubview:topLabel];
+
+    [self.navBar setTintColor:[UIColor navBarColor]];
 }
 
 

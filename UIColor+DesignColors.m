@@ -14,9 +14,9 @@
 + (UIColor *)backgroundColor
 {
 
-    CGFloat red = 56.0/255.0;
-    CGFloat green = 65.0/255.0;
-    CGFloat blue = 115.0/255.0;
+    CGFloat red = 70.0/255.0;
+    CGFloat green = 70.0/255.0;
+    CGFloat blue = 70.0/255.0;
     return [UIColor colorWithRed:red green:green blue:blue alpha:1];
 }
 
