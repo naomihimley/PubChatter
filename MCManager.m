@@ -97,6 +97,7 @@
     if (state == MCSessionStateNotConnected)
     {
         [self.foundPeersArray removeObject:peerID.displayName];
+        [self.connectedArray removeObject:peerID.displayName];
     }
 }
 
@@ -108,7 +109,6 @@
     if (![self doesConversationExist:peerID])
     {
         //first text
-        NSLog(@"received first text manager");
         Peer *peer = [NSEntityDescription insertNewObjectForEntityForName:@"Peer" inManagedObjectContext:moc];
         Message *message = [NSEntityDescription insertNewObjectForEntityForName:@"Message" inManagedObjectContext:moc];
         message.text = receivedText;
@@ -127,7 +127,10 @@
         request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", peerID.displayName];
         request.predicate = predicate;
-        self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
+        self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request
+                                                                           managedObjectContext:moc
+                                                                             sectionNameKeyPath:nil
+                                                                                      cacheName:nil];
         [self.fetchedResultsController performFetch:nil];
         //got the Peer who sent you the message
         NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
@@ -138,7 +141,6 @@
         message.timeStamp = [NSDate date];
         [peer addMessagesObject:message];
         if ([moc save:nil]) {
-            NSLog(@"adding received message in didReceiveData");
             [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidReceiveDataNotification"
                                                                 object:nil
                                                               userInfo:dictionary];
@@ -154,7 +156,9 @@
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", peerID.displayName];
         request.predicate = predicate;
 
-        self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
+        self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request
+                                                                           managedObjectContext:moc
+                                                                             sectionNameKeyPath:nil cacheName:nil];
         [self.fetchedResultsController performFetch:nil];
         NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
         if (array.count < 1)
@@ -174,13 +178,13 @@
 -(void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void (^)(BOOL, MCSession *))invitationHandler
 {
 
-//    NSString *receivedText = [[NSString alloc] initWithData:context encoding:NSUTF8StringEncoding];
-
     NSLog(@"This peer should now be an accepter");
 
     if (self.shouldInvite == NO)
     {
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"MCJustAccepts" object:nil userInfo:nil];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"MCJustAccepts"
+                                                           object:nil
+                                                         userInfo:nil];
 
         invitationHandler(YES, self.session);
     }
@@ -190,16 +194,12 @@
 
 -(void)browser:(MCNearbyServiceBrowser *)browser foundPeer:(MCPeerID *)peerID withDiscoveryInfo:(NSDictionary *)info
 {
-    NSLog(@"I: %@", info);
-
-
     if (self.shouldInvite == YES)
     {
         if (![self.connectedArray containsObject:peerID.displayName])
         {
 
             NSString *string = [NSString stringWithFormat:@"%i", self.randomNumber];
-            NSLog(@"sending int %@, sending to: %@", string, peerID.displayName);
             
             NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
 
@@ -213,7 +213,9 @@
         [self.foundPeersArray addObject:self.peerID.displayName];
         NSDictionary *dictionary = @{@"peerID": peerID};
 
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:dictionary];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer"
+                                                           object:nil
+                                                         userInfo:dictionary];
     }
     else
     {
@@ -222,7 +224,9 @@
             [self.advertisingUsers addObject:peerID];
             NSDictionary *dictionary = @{@"peerID": peerID};
 
-            [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer" object:nil userInfo:dictionary];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"MCFoundAdvertisingPeer"
+                                                               object:nil
+                                                             userInfo:dictionary];
         }
     }
     [self.foundPeersArray addObject:peerID.displayName];
@@ -235,7 +239,9 @@
 
     NSDictionary *dictionary = @{@"peerID": peerID};
     NSLog(@"peer stopped advertising %@", peerID.displayName);
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"MCPeerStopAdvertising" object:nil userInfo:dictionary];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"MCPeerStopAdvertising"
+                                                       object:nil
+                                                     userInfo:dictionary];
 }
 -(void)browser:(MCNearbyServiceBrowser *)browser didNotStartBrowsingForPeers:(NSError *)error
 {
@@ -249,23 +255,22 @@
     self.peerID = [[MCPeerID alloc]initWithDisplayName:displayName];
     self.session = [[MCSession alloc]initWithPeer:self.peerID];
     self.session.delegate = self;
-    NSLog(@"setting up the session");
 }
 
 -(void)advertiseSelf:(BOOL)shouldAdvertise
 {
     if (shouldAdvertise)
     {
-        self.advertiser = [[MCNearbyServiceAdvertiser alloc]initWithPeer:self.peerID discoveryInfo:nil serviceType:@"pubchatservice"];
+        self.advertiser = [[MCNearbyServiceAdvertiser alloc]initWithPeer:self.peerID
+                                                           discoveryInfo:nil
+                                                             serviceType:@"pubchatservice"];
         self.advertiser.delegate = self;
-        NSLog(@"starting advertising should only happen once");
         [self.advertiser startAdvertisingPeer];
 
     }
 
     else
     {
-        NSLog(@"should get called at teardown");
         [self.advertiser stopAdvertisingPeer];
         [self.browser stopBrowsingForPeers];
         self.browser = nil;
@@ -275,7 +280,6 @@
 
 -(void)startBrowsingForPeers
 {
-    NSLog(@"starting browsing should happen only at startup");
     self.browser = [[MCNearbyServiceBrowser alloc]initWithPeer:self.peerID serviceType:@"pubchatservice"];
     self.browser.delegate = self;
     [self.browser startBrowsingForPeers];
@@ -293,14 +297,13 @@
 
     self.browser.delegate = nil;
     self.browser = nil;
-    NSLog(@"tearing down session");
 
     self.peerID = nil;
 
     self.shouldInvite = NO;
     [self.foundPeersArray removeAllObjects];
-
-    NSLog(@"self.session = %@, self.advertiser = %@, self.browser = %@", self.session, self.advertiser, self.browser);
+    [self.connectedArray removeAllObjects];
+    [self.advertisingUsers removeAllObjects];
 }
 
 #pragma mark - Notifications of change of state of the application
