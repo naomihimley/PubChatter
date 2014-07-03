@@ -789,7 +789,7 @@ calloutAccessoryControlTapped:(UIControl *)control
     [self.rateBarButton setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
     [self.rateBarButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
     [self.rateBarButton setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
-    self.rateBarButton.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
+    self.rateBarButton.backgroundColor = [UIColor clearColor];
     self.rateBarButton.layer.cornerRadius = 5.0f;
     self.rateBarButton.layer.masksToBounds = YES;
     self.rateBarButton.layer.borderWidth = 1.0f;
