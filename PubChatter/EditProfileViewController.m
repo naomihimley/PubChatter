@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UITextView *bioTextView;
 @property (weak, nonatomic) IBOutlet UIImageView *pictureView;
 @property UIImage *profileImageTaken;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIPickerView *genderPicker;
 @property (weak, nonatomic) IBOutlet UILabel *genderLabel;
 @property (weak, nonatomic) IBOutlet UIButton *editProfileButton;
@@ -250,6 +251,9 @@
 
 - (IBAction)onDoneButtonPressed:(id)sender
 {
+    self.activityIndicator.hidden = NO;
+    [self.activityIndicator startAnimating];
+
     if (self.nameTextField.text != nil) {
         [[PFUser currentUser] setObject:self.nameTextField.text forKey:@"name"];
     }
@@ -287,6 +291,9 @@
         }
 
         [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+
+            self.activityIndicator.hidden = YES;
+            [self.activityIndicator stopAnimating];
             [self.navigationController popToRootViewControllerAnimated:NO];
         }];
 }
