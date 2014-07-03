@@ -712,14 +712,23 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="oSW-J4-SVr">
-                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="N74-nf-soR">
-                            <connections>
-                                <segue destination="TZQ-pU-qhq" kind="push" identifier="editSegue" id="D2R-hq-afK"/>
-                            </connections>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="ILm-Te-sLl">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="8KS-Y5-jes">
+                                <rect key="frame" x="233" y="5" width="71" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="Edit">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="TZQ-pU-qhq" kind="push" id="mSf-xe-X0e"/>
+                                </connections>
+                            </button>
                         </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
+                        <outlet property="editButtonOutlet" destination="8KS-Y5-jes" id="VY6-PZ-vlT"/>
                         <outlet property="scrollView" destination="MMU-Ya-M0I" id="z9Q-Mw-oEs"/>
                         <segue destination="EOh-Wb-ZEa" kind="push" identifier="logoutSegue" id="X0e-Nc-mIb"/>
                     </connections>
@@ -872,15 +881,34 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" id="N7X-eO-CDj">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="JYp-r5-61V">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="0Jk-wF-iJy">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Ps7-cc-Jrp">
+                                <rect key="frame" x="16" y="5" width="71" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="Cancel">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="aRE-1Z-NQe" kind="unwind" unwindAction="unwindSegueToProfileViewController:" id="bgc-U0-rqQ"/>
+                                </connections>
+                            </button>
                             <connections>
-                                <segue destination="aRE-1Z-NQe" kind="unwind" unwindAction="unwindSegueToProfileViewController:" id="jwq-WV-5li"/>
+                                <segue destination="aRE-1Z-NQe" kind="unwind" unwindAction="unwindSegueToProfileViewController:" id="zUC-QP-MVL"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="2fP-UK-DKh">
-                            <connections>
-                                <action selector="onDoneButtonPressed:" destination="TZQ-pU-qhq" id="WqF-Uz-BG1"/>
-                            </connections>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="MQz-uW-nTC">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="5jh-Qn-Acl">
+                                <rect key="frame" x="233" y="5" width="71" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="Done">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onDoneButtonPressed:" destination="TZQ-pU-qhq" eventType="touchUpInside" id="qaH-OY-g0z"/>
+                                </connections>
+                            </button>
                         </barButtonItem>
                     </navigationItem>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
@@ -889,6 +917,8 @@
                     <connections>
                         <outlet property="ageLabel" destination="0VN-Do-nYD" id="3MV-Pl-g8H"/>
                         <outlet property="bioTextView" destination="Ukb-IM-q0g" id="1mo-ee-tQJ"/>
+                        <outlet property="cancelButtonOutlet" destination="Ps7-cc-Jrp" id="COS-2T-9Qg"/>
+                        <outlet property="doneButtonOutlet" destination="5jh-Qn-Acl" id="ofd-48-TsB"/>
                         <outlet property="editProfileButton" destination="lYH-I7-q8D" id="JaV-hv-SoS"/>
                         <outlet property="favoriteDrinkLabel" destination="87D-rv-00Z" id="Cmq-pE-UMo"/>
                         <outlet property="genderLabel" destination="yU4-6t-sGP" id="3kY-Ea-O57"/>
@@ -901,7 +931,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sFg-Wv-DEK" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="aRE-1Z-NQe" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1621" y="725"/>
+            <point key="canvasLocation" x="1691" y="745"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="1Xb-9t-3l3">

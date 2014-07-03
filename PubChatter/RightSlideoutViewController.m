@@ -138,7 +138,7 @@
     [self.rateBarButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
     self.rateBarButtonOutlet.layer.cornerRadius = 5.0f;
     self.rateBarButtonOutlet.layer.masksToBounds = YES;
-    self.rateBarButtonOutlet.layer.borderWidth = 1.0f;
+    self.rateBarButtonOutlet.layer.borderWidth = 2.0f;
     self.rateBarButtonOutlet.layer.borderColor= [[UIColor buttonColor]CGColor];
     self.rateBarButtonOutlet.backgroundColor = [[UIColor backgroundColor]colorWithAlphaComponent:0.8];
 }
