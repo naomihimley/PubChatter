@@ -276,6 +276,7 @@
                 NSArray *array = [[objects firstObject] objectForKey:@"usersInBar"];
                 NSInteger pubChattersInBar = array.count;
                 self.numberOfUsersInBarString = [NSString stringWithFormat:@"%ld PubChat users in %@", (long)pubChattersInBar, self.barFromSourceVC.name];
+                [self getRating];
                 NSLog(@"Chatters present");
             }
 
@@ -290,7 +291,6 @@
             NSLog(@"Bar not found");
         }
         [self setPubChatInfoLabel];
-        [self getRating];
     }];
 }
 
