@@ -19,7 +19,6 @@
 @property (strong, nonatomic) NSString *age;
 @property (strong, nonatomic) NSString *sexualOrientation;
 @property (strong, nonatomic) NSString *favDrink;
-
 @property (strong, nonatomic) UITextView *bioTextView;
 @property (strong, nonatomic) UILabel *nameageLabel;
 @property (strong, nonatomic) UILabel *genderLabel;
@@ -28,6 +27,7 @@
 @property (strong, nonatomic) UILabel *aboutMeLabel;
 @property (strong, nonatomic) UILabel *backgroundView;
 @property (strong, nonatomic) UILabel *imageEdge;
+@property (strong, nonatomic) UIButton *logoutButton;
 
 
 @property AppDelegate *appDelegate;
@@ -54,7 +54,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
+    self.view.backgroundColor = [UIColor clearColor];
     [self.bioTextView removeFromSuperview];
     [self.nameageLabel removeFromSuperview];
     [self.genderLabel removeFromSuperview];
@@ -63,6 +63,7 @@
     [self.aboutMeLabel removeFromSuperview];
     [self.backgroundView removeFromSuperview];
     [self.imageEdge removeFromSuperview];
+    [self.logoutButton removeFromSuperview];
 
     [self getParseData];
 }
@@ -147,20 +148,37 @@
     [self.scrollView addSubview:self.favDrinkLabel];
     verticalOffset = verticalOffset + self.favDrinkLabel.frame.size.height + 15;
 
-    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, verticalOffset);
+    //Add logout button
+    self.logoutButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [self.logoutButton addTarget:self
+                          action:@selector(logUserOut:)
+                forControlEvents:UIControlEventTouchUpInside];
+    [self.logoutButton setTitle:@"Logout" forState:UIControlStateNormal];
+    self.logoutButton.frame = CGRectMake((self.scrollView.frame.size.width /2) - 40, verticalOffset, 80, 30);
+    [self.logoutButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+    [self.logoutButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+    [self.scrollView addSubview:self.logoutButton];
+    verticalOffset = verticalOffset + self.logoutButton.frame.size.height + 15;
 
     //Add background view
     self.backgroundView = [[UILabel alloc] init];
     self.backgroundView.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, verticalOffset);
-    NSLog(@"I ran");
     self.backgroundView.backgroundColor = [UIColor clearColor];
     [self.scrollView insertSubview:self.backgroundView atIndex:0];
 
+    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, verticalOffset);
     self.scrollView.contentMode = UIViewContentModeScaleAspectFit;
-
     [self setStyle];
 }
 
+-(void)logUserOut:(id)sender
+{
+    self.logoutButton.titleLabel.textColor = [UIColor whiteColor];
+    [PFUser logOut];
+    //logout of parse
+    NSLog(@"logout button workin");
+    [self performSegueWithIdentifier:@"logoutSegue" sender:self];
+}
 
 -(void)getParseData
 {
@@ -247,12 +265,6 @@
 {
     NSLog(@"notification in profile vc %@",[notification.userInfo objectForKey:@"barName"]);
     self.navigationItem.title = [notification.userInfo objectForKey:@"barName"];
-}
-
-- (IBAction)onLogOutButtonTapped:(id)sender
-{
-    [PFUser logOut];
-    [self.tabBarController setSelectedIndex:0];
 }
 
 #pragma mark - Styling method

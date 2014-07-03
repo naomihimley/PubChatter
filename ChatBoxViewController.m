@@ -432,7 +432,7 @@
     label.textColor = [UIColor buttonColor];
     self.findPubChattersButton.layer.cornerRadius = 5.0f;
     self.findPubChattersButton.layer.masksToBounds = YES;
-    self.findPubChattersButton.layer.borderWidth = 1.0f;
+    self.findPubChattersButton.layer.borderWidth = 2.0f;
     self.findPubChattersButton.layer.borderColor= [[UIColor buttonColor]CGColor];
 
 
