@@ -98,7 +98,13 @@
     self.logInView.externalLogInLabel.textColor = [UIColor whiteColor];
 
     //Set logo
-    self.logInView.logo = nil;
+
+    [self.logInView setLogo:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Compass"]]];
+    self.logInView.logo.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
+   // [self.logInView setLogo:[[UIImageView alloc] initWithImage:[UIImage new]]];
+  //  [self.logInView.logo setBackgroundColor:[UIColor buttonColor]];
+
+
 
     //Set signup control style.
 
@@ -145,7 +151,7 @@
     self.signUpController.signUpView.dismissButton.alpha = 1.0;
 
     //Set logo
-    self.signUpController.signUpView.logo = nil;
+//    self.signUpController.signUpView.logo = ;
 }
 
 -(void)viewDidLoad

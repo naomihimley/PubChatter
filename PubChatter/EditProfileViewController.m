@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UITextView *bioTextView;
 @property (weak, nonatomic) IBOutlet UIImageView *pictureView;
 @property UIImage *profileImageTaken;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIPickerView *genderPicker;
 @property (weak, nonatomic) IBOutlet UILabel *genderLabel;
 @property (weak, nonatomic) IBOutlet UIButton *editProfileButton;
@@ -56,7 +57,7 @@
     self.cancelButtonOutlet.layer.masksToBounds = YES;
     self.cancelButtonOutlet.layer.borderWidth = 2.0f;
     self.cancelButtonOutlet.layer.borderColor= [[UIColor buttonColor]CGColor];
-
+    self.activityIndicator.hidden = YES;
 
     NSString *Man = @"Man";
     NSAttributedString *manString = [[NSAttributedString alloc] initWithString:Man attributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
@@ -260,6 +261,9 @@
 
 - (IBAction)onDoneButtonPressed:(id)sender
 {
+    self.activityIndicator.hidden = NO;
+    [self.activityIndicator startAnimating];
+
     if (self.nameTextField.text != nil) {
         [[PFUser currentUser] setObject:self.nameTextField.text forKey:@"name"];
     }
@@ -306,6 +310,8 @@
 
         [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             NSLog(@"User data saved");
+            self.activityIndicator.hidden = YES;
+            [self.activityIndicator stopAnimating];
             [self.navigationController popToRootViewControllerAnimated:NO];
         }];
 }
