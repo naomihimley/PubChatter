@@ -98,7 +98,13 @@
     self.logInView.externalLogInLabel.textColor = [UIColor whiteColor];
 
     //Set logo
-    self.logInView.logo = nil;
+
+    [self.logInView setLogo:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Compass"]]];
+    self.logInView.logo.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
+   // [self.logInView setLogo:[[UIImageView alloc] initWithImage:[UIImage new]]];
+  //  [self.logInView.logo setBackgroundColor:[UIColor buttonColor]];
+
+
 
     //Set signup control style.
 
@@ -145,7 +151,7 @@
     self.signUpController.signUpView.dismissButton.alpha = 1.0;
 
     //Set logo
-    self.signUpController.signUpView.logo = nil;
+//    self.signUpController.signUpView.logo = ;
 }
 
 -(void)viewDidLoad
@@ -202,8 +208,8 @@
     if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
     [self updateFacebookData];
     }
-    [self performSegueWithIdentifier:@"next" sender:self];
-//    [self dismissViewControllerAnimated:YES completion:nil];
+//    [self performSegueWithIdentifier:@"next" sender:self];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 // Sent to the delegate when the log in attempt fails.
@@ -230,10 +236,9 @@
 }
 
 - (void)signUpViewController:(PFSignUpViewController *)signUpController didSignUpUser:(PFUser *)user {
-    [self performSegueWithIdentifier:@"next" sender:self];
+//    [self performSegueWithIdentifier:@"next" sender:self];
 
-
-    //[self dismissModalViewControllerAnimated:YES]; // Dismiss the PFSignUpViewController
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil]; // Dismiss the PFSignUpViewController
 }
 
 // Retrieves Facebook data and populates the Parse database accordingly.

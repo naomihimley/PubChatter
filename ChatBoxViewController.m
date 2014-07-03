@@ -22,7 +22,6 @@
 @property NSArray *sortedArray;
 @property ChatTableViewCell *customCell;
 @property CGFloat viewy;
-@property BOOL isUserInteration;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *chatFieldView;
 @property (weak, nonatomic) IBOutlet UITextField *chatTextField;
@@ -41,7 +40,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.isUserInteration = YES;
+    self.sendView.userInteractionEnabled = NO;
     self.revealViewController.delegate = self;
     [self.findPubChattersButton addTarget:self.revealViewController action:@selector(revealToggle:) forControlEvents:UIControlEventTouchUpInside];
 
@@ -131,6 +130,7 @@
 //notification from when you click the "CHAT" button in the drawer
 - (void)didReceivePeerToChatWithNotification: (NSNotification *)notification
 {
+    self.sendView.userInteractionEnabled = YES;
     self.chattingUserPeerID = [[notification userInfo]objectForKey:@"peerID"];
     self.chatingUser = [[notification userInfo]objectForKey:@"user"];
     self.navigationItem.title = [self.chatingUser objectForKey:@"name"];
@@ -177,6 +177,7 @@
     NSIndexPath* ip = [NSIndexPath indexPathForRow:lastRowNumber inSection:0];
     [self.tableView scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
+
 #pragma mark - ScrollView Method
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
@@ -186,22 +187,10 @@
 # pragma mark - TableViewDelegate methods
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //how it was:
-//    if (!self.customCell)
-//    {
-//        self.customCell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
-//    }
-//    Message *message = [self.sortedArray objectAtIndex:indexPath.row];
-//    [self.customCell.leftLabel setText:message.text];
-//    NSLog(@"what the message is: %@", message.text);
-//    [self.customCell layoutIfNeeded];
-//    CGFloat height = [self.customCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
-//    return height;
     ChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
     Message *message = [self.sortedArray objectAtIndex:indexPath.row];
     [cell.leftLabel  setText:message.text];
     [cell layoutSubviews];
-//    [cell layoutIfNeeded];
     CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
     return height + 10;
 }
@@ -254,7 +243,7 @@
     else
     {
     ChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
-    cell.leftLabel.text = @"this shouldnt happen";
+    cell.leftLabel.text = @"error";
     return cell;
     }
 }
@@ -262,24 +251,19 @@
 #pragma mark - Reveal Delegate Method
 - (void)revealController:(SWRevealViewController *)revealController didMoveToPosition:(FrontViewPosition)position
 {
-    if (self.isUserInteration == YES)
+    if (position == 4 || position == 2)
     {
-        NSLog(@"setting to disabled");
         self.tableView.userInteractionEnabled = NO;
         self.tabBarController.tabBar.userInteractionEnabled = NO;
         self.sendView.userInteractionEnabled = NO;
-        self.isUserInteration = NO;
     }
-    else
+    else if (position == 3)
     {
-        NSLog(@"enabled");
         self.tableView.userInteractionEnabled = YES;
         self.tabBarController.tabBar.userInteractionEnabled = YES;
         self.sendView.userInteractionEnabled = YES;
-        self.isUserInteration = YES;
     }
 }
-
 
 #pragma mark - Helper method implementations
 
@@ -298,12 +282,17 @@
                                                error:&error];
         if (error)
         {
-            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Connection to User has been lost"
-                                                               message:nil
-                                                              delegate:self
-                                                     cancelButtonTitle:@"OK"
-                                                     otherButtonTitles:nil, nil];
-            [alertView show];
+            //setting the tableView to empty because connection has been lost
+            self.navigationItem.title = @"Not Chatting";
+            self.sortedArray = [NSArray new];
+            [self.tableView reloadData];
+//            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Connection to User has been lost"
+//                                                               message:nil
+//                                                              delegate:self
+//                                                     cancelButtonTitle:@"OK"
+//                                                     otherButtonTitles:nil, nil];
+//            [alertView show];
+            NSLog(@"ERROR: %@", error);
         }
 
         else
@@ -354,21 +343,17 @@
         request.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"peerID" ascending:YES]];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"peerID == %@", peerID.displayName];
         request.predicate = predicate;
-
         self.fetchedResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:request managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
         [self.fetchedResultsController performFetch:nil];
         NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
         if (array.count < 1)
         {
-            NSLog(@"not returning any fetched results in CHATBOX");
             return NO;
         }
-        NSLog(@"the fetch returned something in CHATBOX");
         return YES;
     }
     else
     {
-        NSLog(@"the peer id was null IN CHATBOX");
         return NO;
     }
 }
@@ -394,13 +379,16 @@
     }
     else
     {
-        NSLog(@"connected peers array is zero,because YOUR state is disconnected");
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"You have lost your connection"
-                                                           message:nil
-                                                          delegate:self
-                                                 cancelButtonTitle:@"OK"
-                                                 otherButtonTitles:nil, nil];
-        [alertView show];
+        NSLog(@"connected peers array: %@", self.appDelegate.mcManager.session.connectedPeers);
+        self.navigationItem.title = @"Not Chatting";
+        self.sortedArray = [NSArray new];
+        [self.tableView reloadData];
+//        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"You have lost your connection"
+//                                                           message:nil
+//                                                          delegate:self
+//                                                 cancelButtonTitle:@"OK"
+//                                                 otherButtonTitles:nil, nil];
+//        [alertView show];
     }
 }
 
@@ -425,14 +413,9 @@
 
     UIImage *icon = [UIImage imageNamed:@"UserListIcon"];
     UIImageView *iconView = [[UIImageView alloc]initWithImage:icon];
-    iconView.frame = CGRectMake((self.findPubChattersButton.frame.size.width/2) - 17.5, (self.findPubChattersButton.frame.size.height/2) - 17.5, 35, 35);
+    iconView.frame = CGRectMake((self.findPubChattersButton.frame.size.width/2) - 15, (self.findPubChattersButton.frame.size.height/2) - 15, 30, 30);
     [self.findPubChattersButton addSubview:iconView];
     [self.findPubChattersButton setBackgroundColor:[UIColor clearColor]];
-//    self.findPubChattersButton.layer.cornerRadius = 5.0f;
-//    self.findPubChattersButton.layer.masksToBounds = YES;
-//    self.findPubChattersButton.layer.borderWidth = 2.0f;
-//    self.findPubChattersButton.layer.borderColor= [[UIColor buttonColor]CGColor];
-
 
 }
 @end

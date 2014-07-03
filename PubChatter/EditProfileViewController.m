@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UITextView *bioTextView;
 @property (weak, nonatomic) IBOutlet UIImageView *pictureView;
 @property UIImage *profileImageTaken;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UIPickerView *genderPicker;
 @property (weak, nonatomic) IBOutlet UILabel *genderLabel;
 @property (weak, nonatomic) IBOutlet UIButton *editProfileButton;
@@ -45,18 +46,9 @@
     [self.doneButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
     [self.doneButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
     [self.doneButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
-    self.doneButtonOutlet.layer.cornerRadius = 5.0f;
-    self.doneButtonOutlet.layer.masksToBounds = YES;
-    self.doneButtonOutlet.layer.borderWidth = 2.0f;
-    self.doneButtonOutlet.layer.borderColor= [[UIColor buttonColor]CGColor];
     [self.cancelButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
     [self.cancelButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
     [self.cancelButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
-    self.cancelButtonOutlet.layer.cornerRadius = 5.0f;
-    self.cancelButtonOutlet.layer.masksToBounds = YES;
-    self.cancelButtonOutlet.layer.borderWidth = 2.0f;
-    self.cancelButtonOutlet.layer.borderColor= [[UIColor buttonColor]CGColor];
-
 
     NSString *Man = @"Man";
     NSAttributedString *manString = [[NSAttributedString alloc] initWithString:Man attributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
@@ -209,7 +201,6 @@
          if (!error) {
              [[PFUser currentUser] setObject:imageFile forKey:@"picture"];
                 [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                    NSLog(@"Image saved to Parse");
                     self.doneButtonOutlet.enabled = YES;
                 }];
             }
@@ -260,6 +251,9 @@
 
 - (IBAction)onDoneButtonPressed:(id)sender
 {
+    self.activityIndicator.hidden = NO;
+    [self.activityIndicator startAnimating];
+
     if (self.nameTextField.text != nil) {
         [[PFUser currentUser] setObject:self.nameTextField.text forKey:@"name"];
     }
@@ -276,11 +270,6 @@
     if (self.favoriteDrinkLabel.text != nil) {
         [[PFUser currentUser]setObject:self.favoriteDrinkLabel.text forKey:@"favoriteDrink"];
     }
-
-    NSLog(@"%@", self.favoriteDrinkLabel.text);
-    NSLog(@"%@", [[PFUser currentUser]objectForKey:@"favoriteDrink"]);
-
-
     if ([self.genderString isEqualToString:@"man"]) {
         [[PFUser currentUser]setObject:@1 forKey:@"gender"];
         }
@@ -293,19 +282,18 @@
 
     if ([self.interestedString isEqualToString:@"men"]) {
         [[PFUser currentUser]setObject:@0 forKey:@"sexualOrientation"];
-        NSLog(@"%@", self.interestedString);
         }
         else if ([self.interestedString isEqualToString:@"women"]) {
         [[PFUser currentUser]setObject:@1 forKey:@"sexualOrientation"];
-            NSLog(@"%@", self.interestedString);
         }
         else if ([self.interestedString isEqualToString:@"other"]){
         [[PFUser currentUser]setObject:@2 forKey:@"sexualOrientation"];
-            NSLog(@"%@", self.interestedString);
         }
 
         [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            NSLog(@"User data saved");
+
+            self.activityIndicator.hidden = YES;
+            [self.activityIndicator stopAnimating];
             [self.navigationController popToRootViewControllerAnimated:NO];
         }];
 }
@@ -337,10 +325,6 @@
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row   inComponent:(NSInteger)component
 {
-
-    NSLog(@"Selected Row %ld", (long)row);
-
-
     switch (component)
     {
         case 0:
@@ -363,16 +347,12 @@
             {
             case 0:
                 self.interestedString = [[self.interestedArray objectAtIndex:0] lowercaseString];
-                    NSLog(@"%@", self.interestedString);
                 break;
             case 1:
                 self.interestedString = [[self.interestedArray objectAtIndex:1] lowercaseString];
-                    NSLog(@"%@", self.interestedString);
                 break;
             case 2:
                     self.interestedString = [[self.interestedArray objectAtIndex:2] lowercaseString];
-                    NSLog(@"%@", self.interestedString);
-
                 break;
             }
         default:
