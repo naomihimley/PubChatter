@@ -27,6 +27,8 @@
 @property (strong, nonatomic) UILabel *aboutMeLabel;
 @property (strong, nonatomic) UIButton *logoutButton;
 @property (weak, nonatomic) IBOutlet UIButton *editButtonOutlet;
+@property BOOL userHasProfile;
+@property (strong, nonatomic) UILabel *completeProfile;
 
 
 @property AppDelegate *appDelegate;
@@ -40,6 +42,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
     [self.editButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
     [self.editButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
     [self.editButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
@@ -47,9 +50,10 @@
     self.editButtonOutlet.layer.masksToBounds = YES;
     self.editButtonOutlet.layer.borderWidth = 2.0f;
     self.editButtonOutlet.layer.borderColor= [[UIColor buttonColor]CGColor];
-
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     self.scrollView.delegate = self;
+    [self checkForUser];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -63,10 +67,51 @@
     [self.favDrinkLabel removeFromSuperview];
     [self.aboutMeLabel removeFromSuperview];
     [self.logoutButton removeFromSuperview];
+    [self.completeProfile removeFromSuperview];
 
-    [self getParseData];
+    if ([[PFUser currentUser] objectForKey:@"name"] == nil)
+    {
+
+    }
+
+    else
+    {
+        [self getParseData];
+        NSLog(@"Running after login");
+    }
+
 }
 
+-(void)checkForUser
+{
+    NSLog(@"name: %@", [[PFUser currentUser] objectForKey:@"name"]);
+
+    if ([[PFUser currentUser] objectForKey:@"name"] == nil)
+            {
+        self.userHasProfile = NO;
+        NSLog(@"No Name for User");
+        [self performSegueWithIdentifier:@"editsegue" sender:self];
+
+        //Add Favorite drink label
+        self.completeProfile = [[UILabel alloc] init];
+        self.completeProfile.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, 10.0, 280, 80);
+        self.completeProfile.text = @"Complete Your Profile\n...and begin PubChatting";
+        self.completeProfile.numberOfLines = 2;
+        self.completeProfile.textAlignment = NSTextAlignmentCenter;
+        self.completeProfile.textColor = [UIColor whiteColor];
+        [self.completeProfile setFont:[UIFont systemFontOfSize:20.0]];
+        [self.scrollView addSubview:self.completeProfile];
+
+            }
+    else {
+        self.userHasProfile = YES;
+        NSLog(@"User has profile name");
+        if (self.userHasProfile) {
+            [self getParseData];
+            NSLog(@"Getting the parse data");
+        }
+    }
+}
 
 
 -(void)addViewsToScrollView {
@@ -176,9 +221,14 @@
 
 -(void)getParseData
 {
-
     //Get name text.
     self.name = [[PFUser currentUser]objectForKey:@"name"];
+
+    NSLog(@"%@", self.name);
+
+    if ([self.name isEqualToString:@""]) {
+        self.name = @"Please Complete Your Profile";
+    }
 
     //Get bio text.
     if ([[PFUser currentUser]objectForKey:@"bio"]) {
