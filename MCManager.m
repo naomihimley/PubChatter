@@ -96,7 +96,7 @@
 
     if (state == MCSessionStateNotConnected)
     {
-        [self.foundPeersArray removeObject:peerID.displayName];
+        [self.foundPeersArray removeObjectAtIndex:[self.foundPeersArray indexOfObject:peerID.displayName]];
         [self.connectedArray removeObject:peerID.displayName];
     }
 }
@@ -235,7 +235,6 @@
 -(void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID
 {
     [self.advertisingUsers removeObject:peerID];
-//    [self.foundPeersArray removeObjectAtIndex:[self.foundPeersArray indexOfObject:peerID.displayName]];
 
     NSDictionary *dictionary = @{@"peerID": peerID};
     NSLog(@"peer stopped advertising %@", peerID.displayName);
