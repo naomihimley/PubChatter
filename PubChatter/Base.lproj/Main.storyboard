@@ -210,7 +210,7 @@
                     <navigationItem key="navigationItem" id="mKX-Di-BUn">
                         <barButtonItem key="leftBarButtonItem" style="plain" id="MkT-SN-RWI">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="xzr-2O-CCt">
-                                <rect key="frame" x="16" y="4" width="120" height="35"/>
+                                <rect key="frame" x="16" y="-1" width="45" height="45"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal">
@@ -967,7 +967,7 @@
         <scene sceneID="UBQ-g4-tB7">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="cxc-Hy-A8F" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Bars" image="Map_Icon" id="Xg2-uS-hDw"/>
+                    <tabBarItem key="tabBarItem" title="Bars" image="Compass" id="Xg2-uS-hDw"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="emp-RN-18e">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1005,7 +1005,7 @@
         <scene sceneID="rkT-ig-V4e">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="1cf-gW-tII" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Chat" image="Chat_Icon3" id="5AM-e4-BMJ"/>
+                    <tabBarItem key="tabBarItem" title="Chat" image="StartChatIcon" id="5AM-e4-BMJ"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="zl4-WX-tDK">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1080,8 +1080,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Chat_Icon3" width="30" height="30"/>
-        <image name="Map_Icon" width="30" height="30"/>
+        <image name="Compass" width="35" height="35"/>
         <image name="ProfileIcon" width="30" height="30"/>
         <image name="StartChatIcon" width="25" height="25"/>
         <image name="location-icon" width="22" height="22"/>

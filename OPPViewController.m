@@ -32,10 +32,8 @@
 @property (weak, nonatomic) IBOutlet UIView *fakeNavBar;
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
-//@property (weak, nonatomic) IBOutlet UINavigationBar *navBar;
 @property AppDelegate *appDelegate;
 @property (weak, nonatomic) IBOutlet UIButton *backButtonOutlet;
-
 -(void)receivedInvitationForConnection: (NSNotification *)notification;
 
 @end
