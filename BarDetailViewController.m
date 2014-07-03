@@ -276,6 +276,7 @@
                 NSArray *array = [[objects firstObject] objectForKey:@"usersInBar"];
                 NSInteger pubChattersInBar = array.count;
                 self.numberOfUsersInBarString = [NSString stringWithFormat:@"%ld PubChat users in %@", (long)pubChattersInBar, self.barFromSourceVC.name];
+                [self getRating];
                 NSLog(@"Chatters present");
             }
 
@@ -290,42 +291,46 @@
             NSLog(@"Bar not found");
         }
         [self setPubChatInfoLabel];
-//        [self getRating];
     }];
 }
 
-//-(void)getRating
-//{
-//    NSLog(@"Performing rating query");
-//
-//    if (self.bar) {
-//        NSLog(@"Bar Found");
-//    PFQuery *query = [PFQuery queryWithClassName:@"Rating"];
-//    [query includeKey:@"bar"];
-//    [query whereKey:@"bar" equalTo:self.bar];
-//    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-//        if (objects.count > 0) {
-//            NSInteger count = objects.count;
-//            NSInteger total = 0;
-//            for (PFObject *object in objects) {
-//                NSInteger number =  [[object valueForKey:@"rating"] intValue];
-//                total += number;
-//            }
-//            NSLog(@"There is at least one rating");
-//            self.ratingString = [NSString stringWithFormat:@"Pubchatter rating: %d", total/count];
-//        }
-//
-//
-//
-//            if (count > 0) {
-//                self.barRatingLabel.text = [NSString stringWithFormat:@"Pubchatter rating: %d", total/count];
-//            }
-//            else {
-//                self.barRatingLabel.text = [NSString stringWithFormat:@"%@ has not been rated", self.barFromSourceVC.name];
-//            }
-//        }];
-//    }
-//}
+-(void)getRating
+{
+    NSLog(@"Performing rating query");
+    if (self.bar) {
+        NSLog(@"Bar Found");
+    PFQuery *query = [PFQuery queryWithClassName:@"Rating"];
+    [query includeKey:@"bar"];
+    [query whereKey:@"bar" equalTo:self.bar];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (objects) {
+            if (objects.count > 0) {
+            NSInteger count = objects.count;
+            NSInteger total = 0;
+            for (PFObject *object in objects) {
+                NSInteger number =  [[object valueForKey:@"rating"] intValue];
+                total += number;
+            }
+            NSLog(@"There is at least one rating");
+            self.ratingString = [NSString stringWithFormat:@"Pubchatter rating: %d", total/count];
+            NSLog(@"Rating: %d", total/count);
+            }
+
+        else
+        {
+            self.ratingString = [NSString stringWithFormat:@"%@ has not been rated", self.bar];
+            NSLog(@"%@ has not been rated", self.bar);
+        }
+
+        }
+        else {
+            self.ratingString = [NSString stringWithFormat:@"%@ has not been rated", self.bar];
+        }
+
+        [self setPubChatInfoLabel];
+        }];
+    }
+}
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
@@ -338,31 +343,7 @@
     detailViewController.placeNameFromSource = name;
 }
 
-//NSMutableArray *menInBar = [[NSMutableArray alloc] init];
-//for (PFObject *object in array) {
-//    if ([[object objectForKey:@"gender"] isEqualToNumber:@1]) {
-//        [menInBar addObject:object];
-//    }
-//}
-//NSInteger malePubChattersInBar = menInBar.count;
-//NSInteger femalePubChattersInBar = pubChattersInBar - malePubChattersInBar;
-//if (pubChattersInBar > 0) {
-//    CGFloat maleRatio = malePubChattersInBar/pubChattersInBar;
-//    CGFloat femaleRatio = femalePubChattersInBar/pubChattersInBar;
-//    self.ratioLabel.text = [NSString stringWithFormat:@"%.0f percent men  %.0f percent women", maleRatio *100, femaleRatio *100];
-//}
-//}
-//}];
-//
-//PFQuery *query2 = [PFQuery queryWithClassName:@"Bar"];
-//[query2 whereKey:@"yelpID" equalTo:self.barFromSourceVC.yelpID];
-//[query2 findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-//    if ([objects firstObject]) {
-//        self.bar = [objects firstObject];
-//        NSLog(@"bar : %@", self.bar);
-//        [self getRating];
-//    }
-//}];
+
 
 
 
