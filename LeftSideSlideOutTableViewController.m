@@ -50,7 +50,7 @@
 
     [self startListeningForNotificationsAndSendNotification];
 
-    self.tableView.backgroundColor = [UIColor whiteColor];
+    self.tableView.backgroundColor = [UIColor clearColor];
 }
 
 -(void)dealloc
@@ -332,16 +332,6 @@
 
 }
 
-#pragma mark - Notification catcher for Beacon giving bar name
-
--(void)barUserIsIn:(NSNotification *)notification
-{
-    self.barString = [[notification userInfo] objectForKey:@"barName"];
-
-    self.navigationItem.title = self.barString;
-
-}
-
 #pragma mark - Prepare for segue
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -381,11 +371,8 @@
                                             selector:@selector(peerDidChangeStateWithNotification:) name:@"MCDidChangeStateNotification"
                                               object:nil];
 
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(barUserIsIn:) name:@"userEnteredBar" object:nil];
-
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(makePeerAccepter) name:@"MCJustAccepts" object:nil];
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"chatBox" object:nil userInfo:nil];
 }
 
 @end

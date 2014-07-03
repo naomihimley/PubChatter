@@ -341,7 +341,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="separatorColor" name="alternateSelectedControlTextColor" catalog="System" colorSpace="catalog"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" rowHeight="60" id="pBQ-RT-yxg" customClass="ListOfUsersTableViewCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" rowHeight="60" id="pBQ-RT-yxg" customClass="ListOfUsersTableViewCell">
                                 <rect key="frame" x="0.0" y="86" width="320" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="pBQ-RT-yxg" id="0N2-Aw-p8W">
@@ -421,25 +421,11 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="x0k-DN-OnA">
-                                <rect key="frame" x="0.0" y="150" width="320" height="320"/>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="x0k-DN-OnA">
+                                <rect key="frame" x="0.0" y="110" width="320" height="411"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </mapView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZoH-dO-wJL">
-                                <rect key="frame" x="275" y="150" width="45" height="45"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="AR2-ez-SEs"/>
-                                    <constraint firstAttribute="width" constant="45" id="noB-XV-tpA"/>
-                                </constraints>
-                                <state key="normal" image="location-icon">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="snapToCurrentLocation:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="vXU-JI-Dxg"/>
-                                </connections>
-                            </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="63" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="yRl-4U-zPV">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="63" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="yRl-4U-zPV">
                                 <rect key="frame" x="0.0" y="152" width="343" height="369"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -499,9 +485,10 @@
                                     <outlet property="delegate" destination="vXZ-lx-hvc" id="adz-wF-D4D"/>
                                 </connections>
                             </tableView>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="qoU-W5-RLD">
-                                <rect key="frame" x="20" y="115" width="280" height="29"/>
+                            <segmentedControl opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="qoU-W5-RLD">
+                                <rect key="frame" x="11" y="117" width="298" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <segments>
                                     <segment title="Map"/>
                                     <segment title="List"/>
@@ -510,19 +497,50 @@
                                     <action selector="onToggleMapListViewPressed:" destination="vXZ-lx-hvc" eventType="valueChanged" id="HjR-4D-vdI"/>
                                 </connections>
                             </segmentedControl>
-                            <searchBar contentMode="redraw" text="" placeholder="Search local bars" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DYK-FT-feA">
-                                <rect key="frame" x="0.0" y="64" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ARx-s6-4aO">
+                                <rect key="frame" x="11" y="72" width="221" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
-                            </searchBar>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pSX-FI-4XA">
-                                <rect key="frame" x="20" y="477" width="280" height="36"/>
+                            </textField>
+                            <activityIndicatorView opaque="NO" clipsSubviews="YES" contentMode="center" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="ouS-ZV-dZe">
+                                <rect key="frame" x="139" y="218" width="37" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.5"/>
+                                <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </activityIndicatorView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yTf-Ot-xJb">
+                                <rect key="frame" x="240" y="72" width="69" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title=" Cancel ">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onCancelButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="k2o-a6-QoZ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZoH-dO-wJL">
+                                <rect key="frame" x="0.0" y="436" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="dy2-5m-RSX"/>
+                                    <constraint firstAttribute="width" constant="30" id="ffA-ON-ZJM"/>
+                                </constraints>
+                                <state key="normal" image="location-icon">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="snapToCurrentLocation:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="vXU-JI-Dxg"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pSX-FI-4XA">
+                                <rect key="frame" x="11" y="480" width="298" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="36" id="f2K-aQ-E9c"/>
-                                </constraints>
-                                <state key="normal" title="Find Bars in Region">
+                                <state key="normal" title="Find Bars Here">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -530,36 +548,11 @@
                                     <action selector="onRedrawRegionButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="a2h-Co-vNb"/>
                                 </connections>
                             </button>
-                            <activityIndicatorView opaque="NO" clipsSubviews="YES" contentMode="center" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="ouS-ZV-dZe">
-                                <rect key="frame" x="142" y="233" width="37" height="37"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.43787866709183676" green="0.43787866709183676" blue="0.43787866709183676" alpha="1" colorSpace="calibratedRGB"/>
-                                <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.5"/>
-                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="qoU-W5-RLD" secondAttribute="trailing" constant="20" symbolic="YES" id="7sx-CQ-WDc"/>
-                            <constraint firstItem="ZoH-dO-wJL" firstAttribute="trailing" secondItem="DYK-FT-feA" secondAttribute="trailing" id="A7C-Nq-KIY"/>
-                            <constraint firstItem="ZoH-dO-wJL" firstAttribute="trailing" secondItem="x0k-DN-OnA" secondAttribute="trailing" id="BXk-af-nck"/>
-                            <constraint firstItem="pSX-FI-4XA" firstAttribute="trailing" secondItem="qoU-W5-RLD" secondAttribute="trailing" id="DF7-EO-nf8"/>
-                            <constraint firstItem="yRl-4U-zPV" firstAttribute="top" secondItem="qoU-W5-RLD" secondAttribute="bottom" constant="9" id="FyX-kg-w6z"/>
-                            <constraint firstItem="qoU-W5-RLD" firstAttribute="centerX" secondItem="DYK-FT-feA" secondAttribute="centerX" id="J08-ox-5HB"/>
-                            <constraint firstItem="yRl-4U-zPV" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="NV9-PY-IfD"/>
-                            <constraint firstItem="x0k-DN-OnA" firstAttribute="top" secondItem="qoU-W5-RLD" secondAttribute="bottom" constant="7" id="Oeb-hc-bVw"/>
-                            <constraint firstAttribute="trailing" secondItem="yRl-4U-zPV" secondAttribute="trailing" constant="-23" id="Rdf-yI-eLS"/>
-                            <constraint firstItem="x0k-DN-OnA" firstAttribute="leading" secondItem="yRl-4U-zPV" secondAttribute="leading" id="Tdd-Zc-ycE"/>
-                            <constraint firstItem="qoU-W5-RLD" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" symbolic="YES" id="VRj-Xo-ZZa"/>
-                            <constraint firstItem="DYK-FT-feA" firstAttribute="leading" secondItem="x0k-DN-OnA" secondAttribute="leading" id="YZq-qD-TWp"/>
-                            <constraint firstAttribute="bottom" secondItem="yRl-4U-zPV" secondAttribute="bottom" constant="47" id="ZwU-jZ-WBP"/>
-                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="pSX-FI-4XA" secondAttribute="bottom" constant="6" id="b8D-xE-QR7"/>
-                            <constraint firstItem="DYK-FT-feA" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" id="hQb-cW-Leo"/>
-                            <constraint firstItem="pSX-FI-4XA" firstAttribute="top" secondItem="x0k-DN-OnA" secondAttribute="bottom" constant="7" id="oac-mz-c5I"/>
-                            <constraint firstItem="pSX-FI-4XA" firstAttribute="leading" secondItem="qoU-W5-RLD" secondAttribute="leading" id="q7r-GW-Q9r"/>
-                            <constraint firstItem="ouS-ZV-dZe" firstAttribute="top" secondItem="qoU-W5-RLD" secondAttribute="bottom" constant="90" id="res-qZ-cfP"/>
-                            <constraint firstItem="qoU-W5-RLD" firstAttribute="top" secondItem="DYK-FT-feA" secondAttribute="bottom" constant="7" id="sOl-zW-3aH"/>
-                            <constraint firstItem="qoU-W5-RLD" firstAttribute="centerX" secondItem="ouS-ZV-dZe" secondAttribute="centerX" id="vpf-IM-Jar"/>
-                            <constraint firstItem="x0k-DN-OnA" firstAttribute="top" secondItem="ZoH-dO-wJL" secondAttribute="top" id="wr9-dg-c9q"/>
+                            <constraint firstAttribute="bottom" secondItem="pSX-FI-4XA" secondAttribute="bottom" constant="58" id="HBH-Yg-pfM"/>
+                            <constraint firstAttribute="bottom" secondItem="ZoH-dO-wJL" secondAttribute="bottom" constant="102" id="tVc-Vt-Qwn"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Nfg-J9-79T">
@@ -576,11 +569,12 @@
                     </navigationItem>
                     <connections>
                         <outlet property="activityIndicatorOutlet" destination="ouS-ZV-dZe" id="8FU-3c-rCX"/>
+                        <outlet property="cancelButtonOutlet" destination="yTf-Ot-xJb" id="7iW-Ya-qXH"/>
                         <outlet property="currentLocationButtonOutlet" destination="ZoH-dO-wJL" id="tpo-zj-xJ8"/>
                         <outlet property="mapView" destination="x0k-DN-OnA" id="fXJ-Q8-CWo"/>
                         <outlet property="rateBarButton" destination="3Yb-XK-lNF" id="zfb-sY-2Lb"/>
                         <outlet property="redrawAreaButtonOutlet" destination="pSX-FI-4XA" id="Fcc-Nj-q07"/>
-                        <outlet property="searchBar" destination="DYK-FT-feA" id="HbD-W8-kUD"/>
+                        <outlet property="searchBar" destination="ARx-s6-4aO" id="q2e-60-6Oe"/>
                         <outlet property="tableView" destination="yRl-4U-zPV" id="37b-6B-isQ"/>
                         <outlet property="toggleControlOutlet" destination="qoU-W5-RLD" id="wDG-cE-i3P"/>
                         <segue destination="FmP-9A-1U9" kind="push" identifier="segue" id="rCl-3c-IE9"/>
