@@ -111,9 +111,11 @@
             {
                 NSLog(@"removing user from foundPeersArray %@", displayname);
                 [self.foundPeersArray removeObject:peerID.displayName];
+                [self.advertisingUsers addObject:peerID.displayName];
             }
         }
         [self.connectedArray removeObject:peerID.displayName];
+        [self.advertisingUsers removeObject:peerID.displayName];
     }
 }
 
@@ -251,7 +253,23 @@
 
 -(void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID
 {
-    [self.advertisingUsers removeObject:peerID.displayName];
+//    [self.advertisingUsers removeObject:peerID.displayName];
+    if (![self.connectedArray containsObject:peerID.displayName])
+    {
+        [self.advertisingUsers removeObject:peerID.displayName];
+
+        NSMutableArray *array = [NSMutableArray arrayWithArray:self.foundPeersArray];
+
+        for (NSString *displayname in array)
+        {
+            if ([displayname isEqual:peerID.displayName])
+            {
+                NSLog(@"removing user from foundPeersArray %@", displayname);
+                [self.foundPeersArray removeObject:peerID.displayName];
+                [self.advertisingUsers addObject:peerID.displayName];
+            }
+        }
+    }
 
     NSDictionary *dictionary = @{@"peerID": peerID};
     NSLog(@"peer stopped advertising %@", peerID.displayName);
