@@ -55,6 +55,7 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [self getNumberofUserInBar];
+    [self findBar];
 
     [self.barNameLabel removeFromSuperview];
     [self.barAddressLabel removeFromSuperview];
@@ -276,7 +277,6 @@
                 NSArray *array = [[objects firstObject] objectForKey:@"usersInBar"];
                 NSInteger pubChattersInBar = array.count;
                 self.numberOfUsersInBarString = [NSString stringWithFormat:@"%ld PubChat users in %@", (long)pubChattersInBar, self.barFromSourceVC.name];
-                [self getRating];
                 NSLog(@"Chatters present");
             }
 
@@ -294,11 +294,28 @@
     }];
 }
 
+-(void)findBar
+{
+    NSLog(@"Performing query to find the bar");
+    PFQuery *query = [PFQuery queryWithClassName:@"Bar"];
+    [query whereKey:@"yelpID" equalTo:self.barFromSourceVC.yelpID];
+      [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+          if (objects.firstObject) {
+              self.bar = objects.firstObject;
+              NSLog(@"You are in %@", self.bar);
+              [self getRating];
+          }
+          else {
+              NSLog(@"This is not a PubChat bar");
+          }
+      }];
+}
+
 -(void)getRating
 {
     NSLog(@"Performing rating query");
     if (self.bar) {
-        NSLog(@"Bar Found");
+        NSLog(@"Where you are %@", self.bar);
     PFQuery *query = [PFQuery queryWithClassName:@"Rating"];
     [query includeKey:@"bar"];
     [query whereKey:@"bar" equalTo:self.bar];
@@ -312,8 +329,8 @@
                 total += number;
             }
             NSLog(@"There is at least one rating");
-            self.ratingString = [NSString stringWithFormat:@"Pubchatter rating: %d", total/count];
-            NSLog(@"Rating: %d", total/count);
+            self.ratingString = [NSString stringWithFormat:@"Pubchatter rating: %ld", total/count];
+            NSLog(@"Rating: %ld", total/count);
             }
 
         else
