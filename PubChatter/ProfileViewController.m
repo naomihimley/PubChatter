@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "UIColor+DesignColors.h"
 #import <QuartzCore/QuartzCore.h>
+#import "BarDetailViewController.h"
 
 @interface ProfileViewController ()<CLLocationManagerDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, UIScrollViewDelegate>
 @property (strong, nonatomic) UIImage *profileImage;
@@ -54,7 +55,6 @@
     self.editButtonOutlet.layer.borderColor= [[UIColor buttonColor]CGColor];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     self.scrollView.delegate = self;
-
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -67,16 +67,17 @@
     [self.aboutMeLabel removeFromSuperview];
     [self.bioTextView removeFromSuperview];
 
-    if ([[PFUser currentUser] objectForKey:@"name"] == nil)
-    {
-        //Add complete profile label
-        [self performSegueWithIdentifier:@"editsegue" sender:self];
-    }
-    else
-    {
-        NSLog(@"I ran");
-        [self getParseData];
-    }
+    NSLog(@"I ran");
+    [self getParseData];
+
+    // Possible alertview, if the user doesn't have a name????
+//    NSLog(@"User's name: %@", [[PFUser currentUser] objectForKey:@"name"]);
+//    NSString *usersname = [[PFUser currentUser] objectForKey:@"name"];
+//    if (usersname.length < 1) {
+//        NSLog(@"%@", [[PFUser currentUser] objectForKey:@"name"]);
+//        UIAlertView *alert  = [[UIAlertView alloc] initWithTitle:@"Select the edit button to complete your profile" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+//        [alert show];
+//    }
 }
 
 

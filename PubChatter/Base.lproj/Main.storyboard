@@ -266,7 +266,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lpv-rG-bl3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2047" y="1148"/>
+            <point key="canvasLocation" x="-2115" y="920"/>
         </scene>
         <!--Reveal View Controller-->
         <scene sceneID="Miv-5f-fCY">
@@ -732,7 +732,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="TZQ-pU-qhq" kind="push" identifier="editsegue" id="mSf-xe-X0e"/>
+                                    <segue destination="TZQ-pU-qhq" kind="push" id="1mk-jg-Gdk"/>
                                 </connections>
                             </button>
                         </barButtonItem>
@@ -942,7 +942,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sFg-Wv-DEK" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="aRE-1Z-NQe" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1691" y="745"/>
+            <point key="canvasLocation" x="1554" y="563"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="1Xb-9t-3l3">
@@ -1035,13 +1035,10 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="KUh-Ac-1xt"/>
-                    <connections>
-                        <segue destination="unr-Eu-85D" kind="modal" identifier="next" id="OCk-mp-ig6"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Ut-BM-T1u" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1409" y="-269"/>
+            <point key="canvasLocation" x="-1869" y="-81"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="b8n-zk-nmF">
@@ -1093,7 +1090,4 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
-    <inferredMetricsTieBreakers>
-        <segue reference="iIA-I2-AMM"/>
-    </inferredMetricsTieBreakers>
 </document>

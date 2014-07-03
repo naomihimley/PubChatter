@@ -202,8 +202,8 @@
     if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
     [self updateFacebookData];
     }
-    [self performSegueWithIdentifier:@"next" sender:self];
-//    [self dismissViewControllerAnimated:YES completion:nil];
+//    [self performSegueWithIdentifier:@"next" sender:self];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 // Sent to the delegate when the log in attempt fails.
@@ -230,10 +230,9 @@
 }
 
 - (void)signUpViewController:(PFSignUpViewController *)signUpController didSignUpUser:(PFUser *)user {
-    [self performSegueWithIdentifier:@"next" sender:self];
+//    [self performSegueWithIdentifier:@"next" sender:self];
 
-
-    //[self dismissModalViewControllerAnimated:YES]; // Dismiss the PFSignUpViewController
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil]; // Dismiss the PFSignUpViewController
 }
 
 // Retrieves Facebook data and populates the Parse database accordingly.
