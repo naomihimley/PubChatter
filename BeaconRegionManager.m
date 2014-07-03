@@ -33,7 +33,8 @@
 
 - (void)chatBox : (NSNotification *)notification
 {
-    if (!self.barYoureIn) {
+    if (!self.barYoureIn)
+    {
         self.barYoureIn = @"PubChat";
     }
     [[NSNotificationCenter defaultCenter]postNotificationName:@"userEnteredBar" object:nil userInfo:@{@"barName": self.barYoureIn}];

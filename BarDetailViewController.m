@@ -21,6 +21,7 @@
 @property (strong, nonatomic)  UIImageView *ratingImageView;
 @property (strong, nonatomic)  UIButton *goToWebsiteButtonOutlet;
 @property (strong, nonatomic)  UIButton *telephoneOutlet;
+@property (weak, nonatomic) IBOutlet UIButton *refreshButtonOutlet;
 @property (strong, nonatomic)  UITextView *aboutBarTextView;
 @property (strong, nonatomic)  UILabel *categoriesLabel;
 @property (strong, nonatomic)  UILabel *pubChattersCountLabel;
@@ -54,6 +55,15 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
+    [self.navigationController.navigationBar setTintColor:[UIColor buttonColor]];
+    [self.refreshButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
+    [self.refreshButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
+    [self.refreshButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+    self.refreshButtonOutlet.layer.cornerRadius = 5.0f;
+    self.refreshButtonOutlet.layer.masksToBounds = YES;
+    self.refreshButtonOutlet.layer.borderWidth = 2.0f;
+    self.refreshButtonOutlet.layer.borderColor= [[UIColor buttonColor]CGColor];
+
     [self.barNameLabel removeFromSuperview];
     [self.barAddressLabel removeFromSuperview];
     [self.distanceFromUserLabel removeFromSuperview];

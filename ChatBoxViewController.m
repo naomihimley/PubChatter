@@ -425,13 +425,13 @@
 
     UIImage *icon = [UIImage imageNamed:@"UserListIcon"];
     UIImageView *iconView = [[UIImageView alloc]initWithImage:icon];
-    iconView.frame = CGRectMake((self.findPubChattersButton.frame.size.width/2) - 22.5, (self.findPubChattersButton.frame.size.height/2) - 22.5, 45, 45);
+    iconView.frame = CGRectMake((self.findPubChattersButton.frame.size.width/2) - 17.5, (self.findPubChattersButton.frame.size.height/2) - 17.5, 35, 35);
     [self.findPubChattersButton addSubview:iconView];
-    [self.findPubChattersButton setBackgroundColor:[UIColor buttonColor]];
-    self.findPubChattersButton.layer.cornerRadius = 5.0f;
-    self.findPubChattersButton.layer.masksToBounds = YES;
-    self.findPubChattersButton.layer.borderWidth = 2.0f;
-    self.findPubChattersButton.layer.borderColor= [[UIColor buttonColor]CGColor];
+    [self.findPubChattersButton setBackgroundColor:[UIColor clearColor]];
+//    self.findPubChattersButton.layer.cornerRadius = 5.0f;
+//    self.findPubChattersButton.layer.masksToBounds = YES;
+//    self.findPubChattersButton.layer.borderWidth = 2.0f;
+//    self.findPubChattersButton.layer.borderColor= [[UIColor buttonColor]CGColor];
 
 
 }
