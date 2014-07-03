@@ -421,12 +421,12 @@
     self.tableView.separatorColor = [UIColor clearColor];
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"river"]];
 
-    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 60, 33)];
-    label.text = @"icon";
-    label.textAlignment = NSTextAlignmentCenter;
-    label.font = [UIFont boldSystemFontOfSize:13];
-    [self.findPubChattersButton addSubview:label];
-    label.textColor = [UIColor buttonColor];
+
+    UIImage *icon = [UIImage imageNamed:@"UserListIcon"];
+    UIImageView *iconView = [[UIImageView alloc]initWithImage:icon];
+    iconView.frame = CGRectMake((self.findPubChattersButton.frame.size.width/2) - 22.5, (self.findPubChattersButton.frame.size.height/2) - 22.5, 45, 45);
+    [self.findPubChattersButton addSubview:iconView];
+    [self.findPubChattersButton setBackgroundColor:[UIColor buttonColor]];
     self.findPubChattersButton.layer.cornerRadius = 5.0f;
     self.findPubChattersButton.layer.masksToBounds = YES;
     self.findPubChattersButton.layer.borderWidth = 2.0f;
