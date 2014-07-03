@@ -97,13 +97,56 @@
     self.logInView.signUpLabel.textColor = [UIColor whiteColor];
     self.logInView.externalLogInLabel.textColor = [UIColor whiteColor];
 
-    //Set logo
 
-    [self.logInView setLogo:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Compass"]]];
-    self.logInView.logo.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
-   // [self.logInView setLogo:[[UIImageView alloc] initWithImage:[UIImage new]]];
-  //  [self.logInView.logo setBackgroundColor:[UIColor buttonColor]];
+    // Logo sizing for signup viewcontroller
+    CGFloat horizspacing15 = 180;
+    [self.signUpController.signUpView setLogo:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"app_icon"]]];
+    self.signUpController.signUpView.logo.frame = CGRectMake(self.view.frame.origin.x + (horizspacing15/2), self.view.frame.origin.y + 5, self.view.frame.size.width - horizspacing15, self.view.frame.size.height - 450);
+    self.signUpController.signUpView.logo.layer.borderWidth = 2.0f;
+    self.signUpController.signUpView.logo.layer.borderColor = [[UIColor buttonColor] CGColor];
+    self.signUpController.signUpView.logo.layer.cornerRadius = 5.0f;
+    self.signUpController.signUpView.logo.clipsToBounds = YES;
 
+    // Pubchat label
+    CGFloat horizspacing10 = 80;
+    UILabel *labelSU = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.origin.x + (horizspacing10/2), self.view.frame.origin.y + 154, self.view.frame.size.width - horizspacing10, self.view.frame.size.height - 520)];
+    labelSU.backgroundColor = [UIColor blackColor];
+    labelSU.textColor = [UIColor buttonColor];
+    labelSU.layer.cornerRadius = 5.0f;
+    labelSU.layer.borderWidth = 2.0f;
+    labelSU.layer.borderColor = [[UIColor blackColor] CGColor];
+    labelSU.clipsToBounds = YES;
+    labelSU.textAlignment = NSTextAlignmentCenter;
+    [labelSU setFont:[UIFont fontWithName:@"HelveticaNeue" size:40]];
+    labelSU.text = @"PubChat";
+    [self.view addSubview:labelSU];
+
+    // Pubchat label edge
+    UIView *labeledgeSU = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.origin.x + (horizspacing10/2), self.view.frame.origin.y + 154, self.view.frame.size.width - horizspacing10, self.view.frame.size.height - 520)];
+    labeledgeSU.backgroundColor = [UIColor clearColor];
+    labeledgeSU.layer.cornerRadius = 5.0f;
+    labeledgeSU.layer.borderWidth = 2.0f;
+    labeledgeSU.layer.borderColor = [[UIColor buttonColor] CGColor];
+    labeledgeSU.clipsToBounds = YES;
+    [self.view addSubview:labeledgeSU];
+//
+//    // Logo sizing
+    CGFloat horizspacing11 = 180;
+    [self.logInView setLogo:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"app_icon"]]];
+    self.logInView.logo.frame = CGRectMake(self.view.frame.origin.x + (horizspacing11/2), self.view.frame.origin.y + 30, self.view.frame.size.width - horizspacing11, self.view.frame.size.height - 450);
+    self.logInView.logo.layer.borderWidth = 2.0f;
+    self.logInView.layer.borderColor = [[UIColor buttonColor] CGColor];
+    self.logInView.logo.layer.cornerRadius = 5.0f;
+    self.logInView.logo.clipsToBounds = YES;
+    self.logInView.layer.borderColor = [[UIColor buttonColor] CGColor];
+
+    //Icon edge;
+    UIView *borderView11 = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.origin.x + (horizspacing11/2) -2, self.view.frame.origin.y + 30 -2, self.view.frame.size.width - horizspacing11 + 1, self.view.frame.size.height - 450 +1)];
+    borderView11.layer.cornerRadius = 5.0f;
+    borderView11.clipsToBounds = YES;
+    borderView11.layer.borderWidth = 2.0f;
+    borderView11.layer.borderColor = [[UIColor buttonColor] CGColor];
+    [self.view addSubview:borderView11];
 
 
     //Set signup control style.
@@ -149,9 +192,6 @@
 
     //Set login dismiss button to unviewable
     self.signUpController.signUpView.dismissButton.alpha = 1.0;
-
-    //Set logo
-//    self.signUpController.signUpView.logo = ;
 }
 
 -(void)viewDidLoad
