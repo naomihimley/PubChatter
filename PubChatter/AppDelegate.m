@@ -22,6 +22,7 @@ NSManagedObjectContext *moc;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    NSLog(@"application did finish launching with options");
     [Parse setApplicationId:@"B8JvVtX5W4w0OwlMSLzLQZBvW3j8xbHQ7bElMK47"
                   clientKey:@"v9ld8HOcNGdn3xIzeFZ9WS9KofND8Y4rsEzH6mwU"];
 
@@ -49,11 +50,14 @@ NSManagedObjectContext *moc;
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    NSLog(@"application did become active");
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"UIApplicationBecameActive" object:nil];
     [FBAppCall handleDidBecomeActiveWithSession:[PFFacebookUtils session]];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
+    NSLog(@"app resigning active");
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }

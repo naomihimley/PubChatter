@@ -413,7 +413,7 @@
     [self.sendButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
     self.sendButton.layer.cornerRadius = 5.0f;
     self.sendButton.layer.masksToBounds = YES;
-    self.sendButton.layer.borderWidth = 1.0f;
+    self.sendButton.layer.borderWidth = 2.0f;
     self.sendButton.layer.borderColor= [[UIColor buttonColor]CGColor];
 
     self.barLabel.font = [UIFont systemFontOfSize:20];

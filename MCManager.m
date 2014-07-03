@@ -65,7 +65,7 @@
     NSDictionary *dictionary = @{@"peerID": peerID,
                                  @"state": [NSNumber numberWithInt:state]};
     
-    NSLog(@"PEER Changing STATE %@: %li", peerID.displayName, state);
+    NSLog(@"PEER Changing STATE %@: %i", peerID.displayName, state);
 
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MCDidChangeStateNotification"
                                                             object:nil
@@ -73,6 +73,30 @@
     if (state == MCSessionStateConnected)
     {
         [self.connectedArray addObject:peerID.displayName];
+
+//        NSLog(@"connectedArray before loop %@", self.connectedArray);
+//
+//        if (self.shouldInvite == YES)
+//        {
+//            for (NSString *displayName in self.foundPeersArray)
+//            {
+//                if (![displayName isEqual:self.peerID.displayName])
+//                {
+//                    if (![self.connectedArray containsObject:displayName])
+//                    {
+//                        NSLog(@"displayName of peer who made it through %@", displayName);
+//                        NSLog(@"displayName of found advertising peers %@, connectedArray %@", self.foundPeersArray, self.connectedArray);
+//                        [self.browser invitePeer:peerID toSession:self.session withContext:nil timeout:30.0];
+//                    }
+////
+//                }
+//            }
+//        }
+    }
+
+    if (state == MCSessionStateNotConnected)
+    {
+        [self.foundPeersArray removeObject:peerID.displayName];
     }
 }
 
@@ -135,15 +159,12 @@
         NSMutableArray *array = (NSMutableArray *)[self.fetchedResultsController fetchedObjects];
         if (array.count < 1)
         {
-            NSLog(@"convo does not exist");
             return NO;
         }
-        NSLog(@"convo exists");
         return YES;
     }
     else
     {
-        NSLog(@"the peer id was null");
         return NO;
     }
 }
@@ -153,7 +174,7 @@
 -(void)advertiser:(MCNearbyServiceAdvertiser *)advertiser didReceiveInvitationFromPeer:(MCPeerID *)peerID withContext:(NSData *)context invitationHandler:(void (^)(BOOL, MCSession *))invitationHandler
 {
 
-    NSString *receivedText = [[NSString alloc] initWithData:context encoding:NSUTF8StringEncoding];
+//    NSString *receivedText = [[NSString alloc] initWithData:context encoding:NSUTF8StringEncoding];
 
     NSLog(@"This peer should now be an accepter");
 
@@ -162,13 +183,7 @@
         [[NSNotificationCenter defaultCenter]postNotificationName:@"MCJustAccepts" object:nil userInfo:nil];
 
         invitationHandler(YES, self.session);
-
-        NSLog(@"self.session %@", self.session);
     }
-
-    NSLog(@"self.shouldInvite after receiving invitation %hhd", self.shouldInvite);
-
-
 }
 
 #pragma mark - MCNearbyServiceBrowser Delegate Methods
@@ -216,7 +231,7 @@
 -(void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID
 {
     [self.advertisingUsers removeObject:peerID];
-    [self.foundPeersArray removeObjectAtIndex:[self.foundPeersArray indexOfObject:peerID.displayName]];
+//    [self.foundPeersArray removeObjectAtIndex:[self.foundPeersArray indexOfObject:peerID.displayName]];
 
     NSDictionary *dictionary = @{@"peerID": peerID};
     NSLog(@"peer stopped advertising %@", peerID.displayName);
@@ -250,7 +265,7 @@
 
     else
     {
-        NSLog(@"should never get called");
+        NSLog(@"should get called at teardown");
         [self.advertiser stopAdvertisingPeer];
         [self.browser stopBrowsingForPeers];
         self.browser = nil;
@@ -260,7 +275,7 @@
 
 -(void)startBrowsingForPeers
 {
-    NSLog(@"starting browsing should happen once");
+    NSLog(@"starting browsing should happen only at startup");
     self.browser = [[MCNearbyServiceBrowser alloc]initWithPeer:self.peerID serviceType:@"pubchatservice"];
     self.browser.delegate = self;
     [self.browser startBrowsingForPeers];
@@ -271,6 +286,21 @@
     [self.session disconnect];
     self.session.delegate = nil;
     self.session = nil;
+
+    [self advertiseSelf:NO];
+    self.advertiser.delegate = nil;
+    self.advertiser = nil;
+
+    self.browser.delegate = nil;
+    self.browser = nil;
+    NSLog(@"tearing down session");
+
+    self.peerID = nil;
+
+    self.shouldInvite = NO;
+    [self.foundPeersArray removeAllObjects];
+
+    NSLog(@"self.session = %@, self.advertiser = %@, self.browser = %@", self.session, self.advertiser, self.browser);
 }
 
 #pragma mark - Notifications of change of state of the application
@@ -279,6 +309,7 @@
 {
     self.backgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
         NSLog(@"Background time expired; killing multipeer session");
+        NSLog(@"Background stuff happened");
         [self teardownSession];
         [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskId];
         self.backgroundTaskId= UIBackgroundTaskInvalid;
