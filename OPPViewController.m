@@ -30,11 +30,11 @@
 @property (strong, nonatomic) UILabel *favDrinkLabel;
 @property (strong, nonatomic) UILabel *aboutMeLabel;
 @property (weak, nonatomic) IBOutlet UIView *fakeNavBar;
-
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property AppDelegate *appDelegate;
 @property (weak, nonatomic) IBOutlet UIButton *backButtonOutlet;
 -(void)receivedInvitationForConnection: (NSNotification *)notification;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @end
 
@@ -43,7 +43,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor clearColor];
     self.chatArray = [NSMutableArray array];
     self.chatDictionaryArray = [NSMutableArray array];
     
@@ -56,7 +55,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
+    self.activityIndicator.hidden = NO;
+    [self.activityIndicator startAnimating];
     [self.bioTextView removeFromSuperview];
     [self.nameageLabel removeFromSuperview];
     [self.genderLabel removeFromSuperview];
@@ -68,6 +68,7 @@
 
 
 -(void)addViewsToScrollView {
+    [self setStyle];
 
     CGFloat verticalOffset = 10.0;
 
@@ -145,7 +146,8 @@
     self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, verticalOffset);
     self.scrollView.contentMode = UIViewContentModeScaleAspectFit;
 
-    [self setStyle];
+    self.activityIndicator.hidden = YES;
+    [self.activityIndicator stopAnimating];
 }
 
 -(void)getPersonalData
@@ -252,6 +254,7 @@
 #pragma mark - Styling method
 -(void)setStyle
 {
+    self.view.backgroundColor = [UIColor blackColor];
     [self.backButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
     [self.backButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
     [self.backButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];

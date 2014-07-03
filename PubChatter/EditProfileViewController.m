@@ -41,6 +41,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.activityIndicator.hidden = YES;
     self.scrollView.alwaysBounceVertical = YES;
     self.scrollView.delegate = self;
     [self.doneButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
@@ -70,7 +71,7 @@
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
 
-    self.view.backgroundColor = [UIColor clearColor];
+    self.view.backgroundColor = [UIColor blackColor];
     self.bioTextView.delegate = self;
     self.nameTextField.clearButtonMode = UITextFieldViewModeAlways;
     self.ageLabel.clearButtonMode = UITextFieldViewModeAlways;
