@@ -27,8 +27,6 @@
 @property (strong, nonatomic) UILabel *aboutMeLabel;
 @property (strong, nonatomic) UIButton *logoutButton;
 @property (weak, nonatomic) IBOutlet UIButton *editButtonOutlet;
-@property BOOL userHasProfile;
-@property BOOL firstRun;
 
 @property (strong, nonatomic) UILabel *completeProfile;
 
@@ -45,30 +43,33 @@
 {
     [super viewDidLoad];
 
+    NSLog(@"ProfileVC Load");
+
     [self.editButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
     [self.editButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
     [self.editButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
     self.editButtonOutlet.layer.cornerRadius = 5.0f;
     self.editButtonOutlet.layer.masksToBounds = YES;
-    self.firstRun = YES;
-    NSLog(@"View did load : %d", self.firstRun);
     self.editButtonOutlet.layer.borderWidth = 2.0f;
     self.editButtonOutlet.layer.borderColor= [[UIColor buttonColor]CGColor];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     self.scrollView.delegate = self;
 
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:YES];
+    [self.nameageLabel removeFromSuperview];
+    [self.genderLabel removeFromSuperview];
+    [self.interestedLabel removeFromSuperview];
+    [self.favDrinkLabel removeFromSuperview];
+    [self.aboutMeLabel removeFromSuperview];
+    [self.bioTextView removeFromSuperview];
+
     if ([[PFUser currentUser] objectForKey:@"name"] == nil)
     {
         //Add complete profile label
-        self.completeProfile = [[UILabel alloc] init];
-        self.completeProfile.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, 10.0, 280, 80);
-        self.completeProfile.text = @"Complete Your Profile\n...and begin PubChatting";
-        self.completeProfile.numberOfLines = 2;
-        self.completeProfile.textAlignment = NSTextAlignmentCenter;
-        self.completeProfile.textColor = [UIColor whiteColor];
-        [self.completeProfile setFont:[UIFont systemFontOfSize:20.0]];
-        [self.scrollView addSubview:self.completeProfile];
-        self.userHasProfile = NO;
         [self performSegueWithIdentifier:@"editsegue" sender:self];
     }
     else
@@ -77,63 +78,6 @@
         [self getParseData];
     }
 }
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-}
-
--(void)viewDidAppear:(BOOL)animated
-{
-//    [self viewDidAppear:YES];
-    NSLog(@"View did appear : %d", self.firstRun);
-
-        if (self.firstRun) {
-            self.firstRun = NO;
-            NSLog(@"I'll run the first time and then never again");
-        }
-        else {
-            NSLog(@"Should run only after the first time");
-            if ([[PFUser currentUser] objectForKey:@"name"] == nil) {
-
-                [self.bioTextView removeFromSuperview];
-                [self.nameageLabel removeFromSuperview];
-                [self.genderLabel removeFromSuperview];
-                [self.interestedLabel removeFromSuperview];
-                [self.favDrinkLabel removeFromSuperview];
-                [self.aboutMeLabel removeFromSuperview];
-                [self.logoutButton removeFromSuperview];
-                [self.completeProfile removeFromSuperview];
-
-                self.completeProfile = [[UILabel alloc] init];
-                self.completeProfile.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, 10.0, 280, 80);
-                self.completeProfile.text = @"Complete Your Profile\n...and begin PubChatting";
-                self.completeProfile.numberOfLines = 2;
-                self.completeProfile.textAlignment = NSTextAlignmentCenter;
-                self.completeProfile.textColor = [UIColor whiteColor];
-                [self.completeProfile setFont:[UIFont systemFontOfSize:20.0]];
-                [self.scrollView addSubview:self.completeProfile];
-            }
-            else
-            {
-                NSLog(@"There is a user");
-                [self.bioTextView removeFromSuperview];
-                [self.nameageLabel removeFromSuperview];
-                [self.genderLabel removeFromSuperview];
-                [self.interestedLabel removeFromSuperview];
-                [self.favDrinkLabel removeFromSuperview];
-                [self.aboutMeLabel removeFromSuperview];
-                [self.logoutButton removeFromSuperview];
-                [self.completeProfile removeFromSuperview];
-                [self getParseData];
-                NSLog(@"Parse");
-
-            }
-        }
-}
-
-
-
 
 
 -(void)addViewsToScrollView {
@@ -243,27 +187,33 @@
 -(void)getParseData
 {
     //Get name text.
-    self.name = [[PFUser currentUser]objectForKey:@"name"];
-
-
-    if ([self.name isEqualToString:@""]) {
-        self.name = @"Please Complete Your Profile";
+    if ([[PFUser currentUser]objectForKey:@"name"] != nil) {
+        self.name = [[PFUser currentUser]objectForKey:@"name"];
+    }
+    else {
+        self.name = @"Name";
     }
 
     //Get bio text.
-    if ([[PFUser currentUser]objectForKey:@"bio"]) {
+    if ([[PFUser currentUser]objectForKey:@"bio"] != nil) {
 
         self.bioText = [[PFUser currentUser]objectForKey:@"bio"];
     }
     else
     {
-        self.bioText = @"";
+        self.bioText = @"No bio info";
     }
 
     //Get favorite drink.
-    if ([[PFUser currentUser]objectForKey:@"favoriteDrink"])
+    if ([[PFUser currentUser]objectForKey:@"favoriteDrink"] != nil)
     {
         self.favDrink = [[PFUser currentUser]objectForKey:@"favoriteDrink"];
+        NSLog(@"%@", self.favDrink);
+    }
+    else
+    {
+        self.favDrink = @"No drink info";
+        NSLog(@"No drink value returned");
     }
 
     //Get gender.
@@ -288,7 +238,7 @@
     }
      else
      {
-         self.age = @"";
+         self.age = @"Age";
      }
 
     //Get sexual orientation.
@@ -302,20 +252,21 @@
      }
      else if ([[[PFUser currentUser]objectForKey:@"sexualOrientation"] isEqual:@2])
      {
-         self.sexualOrientation = @"Bisexual";
-     }
-     else
-     {
-         self.sexualOrientation = @"";
+         self.sexualOrientation = @"Interested in: Other";
      }
 
-    //Get user image.
-    PFFile *file = [[PFUser currentUser]objectForKey:@"picture"];
-    [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
-     {
-         self.profileImage = [UIImage imageWithData:data];
-         [self addViewsToScrollView];
-     }];
+    if ([[PFUser currentUser]objectForKey:@"picture"] != nil) {
+        PFFile *file = [[PFUser currentUser]objectForKey:@"picture"];
+        [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
+         {
+             self.profileImage = [UIImage imageWithData:data];
+             [self addViewsToScrollView];
+         }];
+        }
+    else {
+        self.profileImage = [UIImage imageNamed:@"profile-placeholder"];
+        [self addViewsToScrollView];
+    }
 }
 
 #pragma mark - Segue Methods

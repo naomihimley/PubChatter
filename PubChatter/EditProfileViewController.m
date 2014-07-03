@@ -30,8 +30,6 @@
 @property NSArray *interestedAttStringArray;
 @property (weak, nonatomic) IBOutlet UIButton *doneButtonOutlet;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButtonOutlet;
-@property BOOL didSelectAGender;
-@property BOOL didSelectASexualPreference;
 
 
 @end
@@ -42,8 +40,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.didSelectAGender = NO;
-    self.didSelectASexualPreference = NO;
     self.scrollView.alwaysBounceVertical = YES;
     self.scrollView.delegate = self;
     [self.doneButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
@@ -119,14 +115,22 @@
     self.bioTextView.backgroundColor = [UIColor whiteColor];
     self.bioTextView.textColor = [UIColor navBarColor];
 
-    PFFile *file = [[PFUser currentUser]objectForKey:@"picture"];
-    [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
-     {
-         self.pictureView.image = [UIImage imageWithData:data];
-         self.pictureView.layer.masksToBounds = YES;
-         self.pictureView.layer.cornerRadius = 5.0f;
-     }];
 
+
+    PFFile *file = [[PFUser currentUser]objectForKey:@"picture"];
+
+    if (file) {
+        [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
+         {
+             self.pictureView.image = [UIImage imageWithData:data];
+             self.pictureView.layer.masksToBounds = YES;
+             self.pictureView.layer.cornerRadius = 5.0f;
+         }];
+    }
+    
+    else {
+        self.pictureView.image = [UIImage imageNamed:@"profile-placeholder"];
+    }
 
     self.nameTextField.text = [[PFUser currentUser]objectForKey:@"name"];
 
@@ -149,6 +153,10 @@
     if ([[PFUser currentUser]objectForKey: @"favoriteDrink"]) {
         self.favoriteDrinkLabel.text = [[PFUser currentUser]objectForKey: @"favoriteDrink"];
     }
+
+    else {
+        self.favoriteDrinkLabel.text = nil;
+        }
     
     if ([[[PFUser currentUser]objectForKey: @"gender"] isEqualToNumber:@1]) {
         self.genderString = [[self.genderArray objectAtIndex:1] lowercaseString];
@@ -191,6 +199,7 @@
     UIImage * resizedImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
 
+    self.pictureView.image = resizedImage;
 
     NSData *imageData = UIImagePNGRepresentation(resizedImage);
     PFFile *imageFile = [PFFile fileWithData:imageData];
@@ -252,7 +261,7 @@
 
 - (IBAction)onDoneButtonPressed:(id)sender
 {
-    if (self.nameTextField.text !=nil) {
+    if (self.nameTextField.text != nil) {
         [[PFUser currentUser] setObject:self.nameTextField.text forKey:@"name"];
     }
 
@@ -260,12 +269,18 @@
         NSNumber  *ageNum = [NSNumber numberWithInteger: [self.ageLabel.text integerValue]];
         [[PFUser currentUser]setObject:ageNum forKey:@"age"];
     }
+
     if (self.bioTextView.text != nil) {
         [[PFUser currentUser]setObject:self.bioTextView.text forKey:@"bio"];
     }
+
     if (self.favoriteDrinkLabel.text != nil) {
         [[PFUser currentUser]setObject:self.favoriteDrinkLabel.text forKey:@"favoriteDrink"];
     }
+
+    NSLog(@"%@", self.favoriteDrinkLabel.text);
+    NSLog(@"%@", [[PFUser currentUser]objectForKey:@"favoriteDrink"]);
+
 
     if ([self.genderString isEqualToString:@"Man"]) {
         [[PFUser currentUser]setObject:@1 forKey:@"gender"];
@@ -287,44 +302,10 @@
         [[PFUser currentUser]setObject:@2 forKey:@"sexualOrientation"];
         }
 
-    NSLog(@"gender: %@", self.genderString);
-    NSLog(@"interested %@", self.interestedString);
-
-    if ([[PFUser currentUser] objectForKey:@"picture"] == nil) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You must select a profile image" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alert show];
-    }
-
-    else if (self.nameTextField.text.length < 1) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You must choose a name for your profile" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alert show];
-    }
-
-    else if (self.ageLabel.text.length < 1) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You must indicate your age for your profile" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
-    }
-    else if (self.didSelectAGender == NO) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You must indicate your gender for your profile" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
-    }
-
-    else if (self.didSelectASexualPreference == NO) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You must indicate a sexual preference for your profile" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
-    }
-    else if (self.bioTextView.text.length < 2) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please write a little about yourself in the Bio text box" message:nil delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
-    }
-    else {
-        NSLog(@"bio text %@", self.bioTextView.text);
-
         [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             NSLog(@"User data saved");
             [self.navigationController popToRootViewControllerAnimated:NO];
         }];
-    }
 }
 
 // returns the number of 'columns' to display.
@@ -356,7 +337,6 @@
 {
 
     NSLog(@"Selected Row %ld", (long)row);
-    self.didSelectAGender = YES;
 
 
     switch (component)
@@ -366,15 +346,12 @@
                 {
             case 0:
                 self.genderString = [[self.genderArray objectAtIndex:0] lowercaseString];
-                        self.didSelectAGender = YES;
                 break;
             case 1:
                 self.genderString = [[self.genderArray objectAtIndex:1] lowercaseString];
-                        self.didSelectAGender = YES;
                 break;
             case 2:
                 self.genderString = [[self.genderArray objectAtIndex:2] lowercaseString];
-                        self.didSelectAGender = YES;
                 break;
             break;
                 }
@@ -384,15 +361,12 @@
             {
             case 0:
                 self.interestedString = [[self.interestedArray objectAtIndex:0] lowercaseString];
-                    self.didSelectASexualPreference = YES;
                 break;
             case 1:
                 self.interestedString = [[self.interestedArray objectAtIndex:1] lowercaseString];
-                    self.didSelectASexualPreference = YES;
                 break;
             case 2:
                     self.interestedString = [[self.interestedArray objectAtIndex:2] lowercaseString];
-                    self.didSelectASexualPreference = YES;
                 break;
             }
         default:
