@@ -93,7 +93,7 @@
 
     cell.userNameLabel.textColor = [UIColor nameColor];
     cell.genderLabel.textColor = [UIColor whiteColor];
-    cell.backgroundColor = [UIColor clearColor];
+    cell.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.5];
     cell.chatButton.backgroundColor = [UIColor clearColor];
 
     cell.userNameLabel.text = [user objectForKey:@"name"];
@@ -244,12 +244,25 @@
 
 -(void)peerDidChangeStateWithNotification:(NSNotification *)notification
 {
-    if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
+    if ([[[notification userInfo]objectForKey:@"state"]intValue] != MCSessionStateConnecting)
     {
-        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
+        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
         {
-            NSLog(@"Connect peers after changing state to connected %@", self.appDelegate.mcManager.session.connectedPeers);
+            MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
+//            NSDictionary *userDictionary = [NSDictionary new];
 
+            for (NSDictionary *dictionary in self.users)
+            {
+                if ([dictionary objectForKey:@"peerID"] == peerID)
+                {
+                    [self.users removeObject: peerID];
+                    [self.tableView reloadData];
+
+                }
+            }
+            //originally had the reload and remove object here
+
+            NSLog(@"Connect peers after changing state to notConnected %@", self.appDelegate.mcManager.session.connectedPeers);
         }
     }
 
@@ -289,18 +302,18 @@
 
 -(void)peerStoppedAdvertising:(NSNotification *)notificaion
 {
-    MCPeerID *peerID = [[notificaion userInfo]objectForKey:@"peerID"];
-    NSDictionary *userDictionary = [NSDictionary new];
-
-    for (NSDictionary *dictionary in self.users)
-    {
-        if ([dictionary objectForKey:@"peerID"] == peerID)
-        {
-            userDictionary = dictionary;
-        }
-    }
-    [self.users removeObject:userDictionary];
-    [self.tableView reloadData];
+//    MCPeerID *peerID = [[notificaion userInfo]objectForKey:@"peerID"];
+//    NSDictionary *userDictionary = [NSDictionary new];
+//
+//    for (NSDictionary *dictionary in self.users)
+//    {
+//        if ([dictionary objectForKey:@"peerID"] == peerID)
+//        {
+//            userDictionary = dictionary;
+//        }
+//    }
+//    [self.users removeObject:userDictionary];
+//    [self.tableView reloadData];
 }
 
 #pragma mark - Private method for handling a peer sending a text
@@ -329,6 +342,22 @@
             });
         }
     }
+}
+
+#pragma mark - Recreating the session after app has terminated
+
+-(void)becameActive: (NSNotification *)notification
+{
+    if (self.appDelegate.mcManager.session == nil)
+    {
+        [self.users removeAllObjects];
+        [self.appDelegate.mcManager setupPeerAndSessionWithDisplayName:[[PFUser currentUser]objectForKey:@"username"]];
+        [self.appDelegate.mcManager advertiseSelf:YES];
+        [self.appDelegate.mcManager.browser startBrowsingForPeers];
+        self.isInviter = YES;
+        [self.tableView reloadData];
+    }
+    
 
 }
 
@@ -371,7 +400,15 @@
                                             selector:@selector(peerDidChangeStateWithNotification:) name:@"MCDidChangeStateNotification"
                                               object:nil];
 
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(makePeerAccepter) name:@"MCJustAccepts" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self
+                                            selector:@selector(makePeerAccepter)
+                                                name:@"MCJustAccepts"
+                                              object:nil];
+
+    [[NSNotificationCenter defaultCenter]addObserver:self
+                                            selector:@selector(becameActive:)
+                                                name:@"UIApplicationBecameActive"
+                                              object:nil];
 
 }
 
