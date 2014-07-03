@@ -225,12 +225,12 @@
     self.numberOfUsersInBarLabel.text = self.numberOfUsersInBarString;
     self.numberOfUsersInBarLabel.textAlignment = NSTextAlignmentCenter;
     self.numberOfUsersInBarLabel.numberOfLines = 0;
-    [self.numberOfUsersInBarLabel sizeThatFits:CGSizeZero];
+    [self.numberOfUsersInBarLabel sizeToFit];
     [self.numberOfUsersInBarLabel clipsToBounds];
     self.numberOfUsersInBarLabel.textColor = [UIColor whiteColor];
     [self.ratingBackgroundView addSubview:self.numberOfUsersInBarLabel];
 
-    verticalOffset = verticalOffset + self.numberOfUsersInBarLabel.frame.size.height + 10;
+    verticalOffset = verticalOffset + self.numberOfUsersInBarLabel.frame.size.height;
 
     // Set bar rating.
     self.barRatingLabel = [[UILabel alloc] init];
@@ -341,6 +341,12 @@
         }
         [self setPubChatInfoLabel];
         }];
+    }
+
+    else {
+        self.numberOfUsersInBarString = [NSString stringWithFormat:@"No PubChat users in %@", self.barFromSourceVC.name];
+        self.ratingString = [NSString stringWithFormat:@"%@ has not been rated", self.barFromSourceVC.name];
+        [self setPubChatInfoLabel];
     }
 }
 
