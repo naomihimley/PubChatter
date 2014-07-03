@@ -29,14 +29,14 @@
 @property (strong, nonatomic) UILabel *interestedLabel;
 @property (strong, nonatomic) UILabel *favDrinkLabel;
 @property (strong, nonatomic) UILabel *aboutMeLabel;
+@property (weak, nonatomic) IBOutlet UIView *fakeNavBar;
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
-
-@property (weak, nonatomic) IBOutlet UINavigationBar *navBar;
+//@property (weak, nonatomic) IBOutlet UINavigationBar *navBar;
 @property AppDelegate *appDelegate;
+@property (weak, nonatomic) IBOutlet UIButton *backButtonOutlet;
 
 -(void)receivedInvitationForConnection: (NSNotification *)notification;
-
 
 @end
 
@@ -254,17 +254,23 @@
 #pragma mark - Styling method
 -(void)setStyle
 {
-    //Style nameagelabel
-    self.navigationItem.title= @"PubChat";
-    self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
+    [self.backButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
+    [self.backButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+    [self.backButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
+    self.backButtonOutlet.layer.cornerRadius = 5.0f;
+    self.backButtonOutlet.layer.masksToBounds = YES;
+    self.backButtonOutlet.layer.borderWidth = 2.0f;
+    self.backButtonOutlet.layer.borderColor= [[UIColor buttonColor]CGColor];
+
+//    self.navigationItem.title= @"PubChat";
+    self.fakeNavBar.backgroundColor = [UIColor clearColor];
 
     //Create topLabel to make navBar look correct size
-    UILabel *topLabel = [[UILabel alloc]init];
-    topLabel.frame = CGRectMake(0, 0, 320, 30);
-    topLabel.backgroundColor = [UIColor navBarColor];
-    [self.view addSubview:topLabel];
+//    UILabel *topLabel = [[UILabel alloc]init];
+//    topLabel.frame = CGRectMake(0, 0, 320, 30);
+//    topLabel.backgroundColor = [UIColor clearColor];
+//    [self.view addSubview:topLabel];
 
-    [self.navBar setTintColor:[UIColor navBarColor]];
 }
 
 

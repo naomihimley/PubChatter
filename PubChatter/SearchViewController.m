@@ -792,7 +792,7 @@ calloutAccessoryControlTapped:(UIControl *)control
     self.rateBarButton.backgroundColor = [UIColor clearColor];
     self.rateBarButton.layer.cornerRadius = 5.0f;
     self.rateBarButton.layer.masksToBounds = YES;
-    self.rateBarButton.layer.borderWidth = 1.0f;
+    self.rateBarButton.layer.borderWidth = 2.0f;
     self.rateBarButton.layer.borderColor= [[UIColor buttonColor]CGColor];
     [self.tabBarController.tabBar setTintColor:[UIColor whiteColor]];
     [self.cancelButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
@@ -801,7 +801,11 @@ calloutAccessoryControlTapped:(UIControl *)control
     self.cancelButtonOutlet.layer.cornerRadius = 5.0f;
 
     self.searchBackGroundView.alpha = 0.0f;
- //   self.searchBackGroundView.alpha = .8;
+//    self.currentLocationButtonOutlet.backgroundColor = [UIColor whiteColor];
+    self.currentLocationButtonOutlet.layer.borderWidth = 2.0f;
+    self.currentLocationButtonOutlet.layer.cornerRadius = 5.0f;
+    self.currentLocationButtonOutlet.layer.borderColor = [[UIColor blackColor] CGColor];
+
 }
 
 #pragma mark - other methods
