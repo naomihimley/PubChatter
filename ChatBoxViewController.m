@@ -13,6 +13,7 @@
 #import "SWRevealViewController.h"
 #import "UIColor+DesignColors.h"
 #import "ChatTableViewCell.h"
+#import "ChatLabel.h"
 
 @interface ChatBoxViewController ()<UITextFieldDelegate, UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource, SWRevealViewControllerDelegate>
 @property PFUser *chatingUser;
