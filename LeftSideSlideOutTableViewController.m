@@ -50,9 +50,9 @@
 
     [self startListeningForNotificationsAndSendNotification];
 
-    self.tableView.backgroundColor = [UIColor clearColor];
+    self.tableView.backgroundColor = [UIColor blackColor];
 
-    self.navigationItem.title = @"Chatters Chatting";
+    self.navigationItem.title = @"Chatters Available";
 
      
 }
@@ -174,7 +174,7 @@
 -(void)receivedNotificationOfUserAdvertising:(NSNotification *)notification
 {
     MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
-    NSLog(@"user found advertising");
+    NSLog(@"user found advertising %@", peerID.displayName);
 
     if (!self.parseUsers)
     {
@@ -184,6 +184,10 @@
             if (!error)
             {
                 self.parseUsers = [NSArray arrayWithArray:objects];
+            }
+            else
+            {
+                NSLog(@"parseQuery error in listVC %@", error);
             }
             [self findUsers:peerID];
 
@@ -260,9 +264,9 @@
 
             NSLog(@"peer changed state notification came through");
             dispatch_async(dispatch_get_main_queue(), ^{
+                NSDictionary *userDictionary = [NSDictionary new];
                 for (NSDictionary *dictionary in self.users)
                 {
-                    NSDictionary *userDictionary = [NSDictionary new];
                     MCPeerID *peer = [dictionary objectForKey:@"peerID"];
 
                     if (peer.displayName == peerID.displayName)
@@ -271,10 +275,10 @@
                         userDictionary = dictionary;
                     }
                 }
-                [self.users removeObject: peerID];
-                
+                [self.users removeObject:userDictionary];
+                [self.appDelegate.mcManager.foundPeersArray removeObject:peerID.displayName];
                 [self.tableView reloadData];
-                NSLog(@"reload of tableView has went through");
+                NSLog(@"reload of tableView has went through after user went to not Connected");
             });
 
 
@@ -291,7 +295,7 @@
     MCPeerID *peerID = [[notification userInfo]objectForKey:@"peerID"];
 
     NSDictionary *userDictionary = [NSDictionary new];
-    ListOfUsersTableViewCell *cell = [ListOfUsersTableViewCell new];
+//    ListOfUsersTableViewCell *cell = [ListOfUsersTableViewCell new];
 
     for (NSDictionary *dictionary in self.users)
     {
@@ -301,22 +305,22 @@
         }
     }
 
-    for (ListOfUsersTableViewCell *userCell in self.cellArray)
-    {
-        if ([userCell.cellUserDisplayName isEqual:peerID.displayName])
-        {
-            cell = userCell;
-        }
-    }
+//    for (ListOfUsersTableViewCell *userCell in self.cellArray)
+//    {
+//        if ([userCell.cellUserDisplayName isEqual:peerID.displayName])
+//        {
+//            cell = userCell;
+//        }
+//    }
 
-        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
-        {
+//        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
+//        {
+//
+//        }
+//        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
+//        {
 
-        }
-        if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
-        {
-
-    }
+//    }
 }
 
 # pragma mark - Stopped Advertising method catcher

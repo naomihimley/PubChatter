@@ -36,6 +36,8 @@ NSManagedObjectContext *moc;
 
     moc = self.managedObjectContext;
 
+    self.window.backgroundColor = [UIColor blackColor];
+
     return YES;
 }
 
