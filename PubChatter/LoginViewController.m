@@ -118,7 +118,7 @@
     self.signUpController.signUpView.usernameField.backgroundColor = white;
     self.signUpController.signUpView.usernameField.layer.opacity = 0.6f;
     self.signUpController.signUpView.usernameField.textColor = black;
-    self.signUpController.signUpView.usernameField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"User Name" attributes:@{NSForegroundColorAttributeName: black}];
+    self.signUpController.signUpView.usernameField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Username" attributes:@{NSForegroundColorAttributeName: black}];
     self.signUpController.signUpView.usernameField.layer.cornerRadius = 5.0f;
     self.signUpController.signUpView.usernameField.layer.borderWidth = 2.0f;
     self.signUpController.signUpView.usernameField.layer.borderColor = [black CGColor];
@@ -135,7 +135,7 @@
     //Set password field attributes.
     self.signUpController.signUpView.passwordField.backgroundColor = white;
     self.signUpController.signUpView.passwordField.layer.opacity = 0.6f;
-    self.signUpController.signUpView.passwordField.textColor = white;
+    self.signUpController.signUpView.passwordField.textColor = black;
     self.signUpController.signUpView.passwordField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Password" attributes:@{NSForegroundColorAttributeName: black}];
     self.signUpController.signUpView.passwordField.layer.cornerRadius = 5.0f;
     self.signUpController.signUpView.passwordField.layer.borderWidth = 2.0f;
@@ -148,13 +148,12 @@
     self.signUpController.signUpView.logo = nil;
 }
 
-- (void)viewDidLoad
+-(void)viewDidLoad
 {
     [super viewDidLoad];
     NSLog(@"viewDidLoad ran");
-
-
 }
+
 
 // Sent to the delegate to determine whether the log in request should be submitted to the server.
 - (BOOL)logInViewController:(PFLogInViewController *)logInController shouldBeginLogInWithUsername:(NSString *)username password:(NSString *)password {
@@ -200,7 +199,9 @@
 - (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user
 {
     // Checks if user is logged in with Facebook and updates the Parse database accordingly.
+    if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
     [self updateFacebookData];
+    }
     [self performSegueWithIdentifier:@"next" sender:self];
 //    [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -216,8 +217,6 @@
     NSLog(@"Failed to log in...");
 }
 
-
-
 // Sent to the delegate when the log in screen is dismissed.
 - (void)logInViewControllerDidCancelLogIn:(PFLogInViewController *)logInController
 {
@@ -228,6 +227,13 @@
     self.signUpController = signUpViewController;
     self.delegate = self;
     [self setFacebookPermissions:[NSArray arrayWithObjects:@"public_profile", @"user_about_me", @"user_birthday", @"user_relationship_details", nil]];
+}
+
+- (void)signUpViewController:(PFSignUpViewController *)signUpController didSignUpUser:(PFUser *)user {
+    [self performSegueWithIdentifier:@"next" sender:self];
+
+
+    //[self dismissModalViewControllerAnimated:YES]; // Dismiss the PFSignUpViewController
 }
 
 // Retrieves Facebook data and populates the Parse database accordingly.
@@ -257,7 +263,6 @@
                         [[PFUser currentUser]setObject:@2 forKey:@"gender"];
                     }
                 }
-
 
                 // Save profile picture to Parse backend from Facebook.
                 if (userData[@"id"]) {
@@ -314,6 +319,7 @@
         }];
     }
 }
+
 
 
 

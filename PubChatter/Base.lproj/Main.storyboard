@@ -731,7 +731,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="TZQ-pU-qhq" kind="push" id="mSf-xe-X0e"/>
+                                    <segue destination="TZQ-pU-qhq" kind="push" identifier="editsegue" id="mSf-xe-X0e"/>
                                 </connections>
                             </button>
                         </barButtonItem>
