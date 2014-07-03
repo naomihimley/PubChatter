@@ -417,7 +417,7 @@
 
     UIImage *icon = [UIImage imageNamed:@"UserListIcon"];
     UIImageView *iconView = [[UIImageView alloc]initWithImage:icon];
-    iconView.frame = CGRectMake((self.findPubChattersButton.frame.size.width/2) - 17.5, (self.findPubChattersButton.frame.size.height/2) - 17.5, 35, 35);
+    iconView.frame = CGRectMake((self.findPubChattersButton.frame.size.width/2) - 15, (self.findPubChattersButton.frame.size.height/2) - 15, 30, 30);
     [self.findPubChattersButton addSubview:iconView];
     [self.findPubChattersButton setBackgroundColor:[UIColor clearColor]];
 
