@@ -146,10 +146,14 @@
                           action:@selector(logUserOut:)
                 forControlEvents:UIControlEventTouchUpInside];
     [self.logoutButton setTitle:@"Logout" forState:UIControlStateNormal];
-    self.logoutButton.frame = CGRectMake((self.scrollView.frame.size.width /2) - 40, verticalOffset, 80, 30);
+    self.logoutButton.frame = CGRectMake((self.scrollView.frame.size.width /2) - 75, verticalOffset, 150, 30);
     [self.logoutButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
     [self.logoutButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+    self.logoutButton.layer.borderWidth = 2.0f;
+    self.logoutButton.layer.cornerRadius = 5.0f;
+    self.logoutButton.layer.borderColor = [[UIColor buttonColor] CGColor];
     [self.scrollView addSubview:self.logoutButton];
+
     verticalOffset = verticalOffset + self.logoutButton.frame.size.height + 15;
 
     self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, verticalOffset);
