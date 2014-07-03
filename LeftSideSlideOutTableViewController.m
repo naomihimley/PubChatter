@@ -89,8 +89,6 @@
 
     PFUser *user = [dictionary objectForKey:@"user"];
 
-    [cell.chatReceivedImage setHidden:YES];
-
     cell.userNameLabel.textColor = [UIColor nameColor];
     cell.genderLabel.textColor = [UIColor whiteColor];
     cell.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.5];
@@ -229,12 +227,8 @@
 
         NSLog(@" session from inviter %@", self.appDelegate.mcManager.session);
     }
-    self.selectedChatButton.titleLabel.textColor = [UIColor buttonColor];
-    self.selectedChatButton.layer.borderColor = [[UIColor buttonColor] CGColor];
     self.selectedChatButton = nil;
     [[NSNotificationCenter defaultCenter]postNotificationName:@"PeerToChatWith" object:nil userInfo:dictionary];
-    [button setTitleColor:[UIColor accentColor] forState:UIControlStateNormal];
-    button.layer.borderColor = [[UIColor accentColor] CGColor];
     cell.chatReceivedImage.image = [UIImage imageNamed:@"StartChatIcon"];
     self.selectedChatButton = button;
 }
@@ -291,7 +285,6 @@
         if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateConnected)
         {
 
-
         }
         if ([[[notification userInfo]objectForKey:@"state"]intValue] == MCSessionStateNotConnected)
         {
@@ -338,7 +331,7 @@
         if ([userCell.cellUserDisplayName isEqual:peerID.displayName])
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [userCell.chatReceivedImage setHidden:NO];
+                userCell.chatReceivedImage.image = [UIImage imageNamed:@"ReceivedChatIcon"];
             });
         }
     }

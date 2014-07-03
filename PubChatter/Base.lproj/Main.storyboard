@@ -386,8 +386,8 @@
                                                 <action selector="onButtonTappedSelectPeerToChatWith:" destination="2zl-ft-bxb" eventType="touchUpInside" id="sTv-mF-OD2"/>
                                             </connections>
                                         </button>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Chat_Received_Icon" translatesAutoresizingMaskIntoConstraints="NO" id="hEu-aj-iy8">
-                                            <rect key="frame" x="224" y="7" width="17" height="17"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="StartChatIcon" translatesAutoresizingMaskIntoConstraints="NO" id="hEu-aj-iy8">
+                                            <rect key="frame" x="193" y="5" width="50" height="48"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
                                     </subviews>
@@ -1082,9 +1082,9 @@
     </scenes>
     <resources>
         <image name="Chat_Icon3" width="30" height="30"/>
-        <image name="Chat_Received_Icon" width="20" height="20"/>
         <image name="Map_Icon" width="30" height="30"/>
         <image name="ProfileIcon" width="30" height="30"/>
+        <image name="StartChatIcon" width="25" height="25"/>
         <image name="location-icon" width="22" height="22"/>
         <image name="river" width="320" height="568"/>
     </resources>
