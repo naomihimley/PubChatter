@@ -67,8 +67,9 @@
 
 -(void)makePeerAccepter
 {
-    self.isInviter = NO;
-
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.isInviter = NO;
+    });
     NSLog(@"Is now an acceptor");
 }
 
@@ -253,14 +254,22 @@
             for (NSDictionary *dictionary in self.users)
             {
                 MCPeerID *peer = [dictionary objectForKey:@"peerID"];
+
                 if (peer.displayName == peerID.displayName)
                 {
+                    NSLog(@"peerID of peer who lost connection %@", peerID.displayName);
                     userDictionary = dictionary;
-
                 }
             }
             [self.users removeObject: peerID];
+
             [self.tableView reloadData];
+
+            if (self.appDelegate.mcManager.session.connectedPeers.count == 0)
+            {
+                self.isInviter = YES;
+                NSLog(@"should be able to invite now");
+            }
 
             NSLog(@"Connect peers after changing state to notConnected %@", self.appDelegate.mcManager.session.connectedPeers);
         }

@@ -88,8 +88,6 @@
             self.sliderOutlet.enabled = NO;
             self.rateBarButtonOutlet.enabled = NO;
         }
-        self.rateBarButtonOutlet.enabled = NO;
-        self.sliderOutlet.enabled = NO;
     }];
 }
 
