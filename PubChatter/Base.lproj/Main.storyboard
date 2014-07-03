@@ -963,11 +963,11 @@
             </objects>
             <point key="canvasLocation" x="236" y="725"/>
         </scene>
-        <!--Navigation Controller - Bars-->
+        <!--Navigation Controller - Search-->
         <scene sceneID="UBQ-g4-tB7">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="cxc-Hy-A8F" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Bars" image="Compass" id="Xg2-uS-hDw"/>
+                    <tabBarItem key="tabBarItem" title="Search" image="Compass" id="Xg2-uS-hDw"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="emp-RN-18e">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
