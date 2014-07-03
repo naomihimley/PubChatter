@@ -92,7 +92,7 @@
     cell.userNameLabel.textColor = [UIColor nameColor];
     cell.genderLabel.textColor = [UIColor whiteColor];
     cell.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.5];
-    cell.chatButton.backgroundColor = [[UIColor buttonColor]colorWithAlphaComponent:0.5];
+    cell.chatButton.backgroundColor = [UIColor buttonColor];
 
     cell.userNameLabel.text = [user objectForKey:@"name"];
     cell.chatButton.tag = indexPath.row;
@@ -102,6 +102,9 @@
     [cell.chatButton setTitle:@"" forState:UIControlStateNormal];
 
     cell.chatButton.shouldInvite = YES;
+
+    cell.chatButton.layer.masksToBounds = YES;
+    cell.chatButton.layer.cornerRadius = 5.0f;
 
     cell.layer.masksToBounds = YES;
     cell.layer.borderWidth = 0.25f;
@@ -224,13 +227,14 @@
          [self.appDelegate.mcManager.browser invitePeer:peerID toSession:self.appDelegate.mcManager.session withContext:nil timeout:30.0];
 
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MakeInviter" object:nil userInfo:nil];
-
-        NSLog(@" session from inviter %@", self.appDelegate.mcManager.session);
     }
+
+    self.selectedChatButton.backgroundColor = [UIColor buttonColor];
     self.selectedChatButton = nil;
     [[NSNotificationCenter defaultCenter]postNotificationName:@"PeerToChatWith" object:nil userInfo:dictionary];
     cell.chatReceivedImage.image = [UIImage imageNamed:@"StartChatIcon"];
     self.selectedChatButton = button;
+    self.selectedChatButton.backgroundColor = [UIColor accentColor];
 }
 
 #pragma mark - Private method for handling the changing of peer's state
@@ -248,7 +252,8 @@
 
             for (NSDictionary *dictionary in self.users)
             {
-                if ([dictionary objectForKey:@"peerID"] == peerID)
+                MCPeerID *peer = [dictionary objectForKey:@"peerID"];
+                if (peer.displayName == peerID.displayName)
                 {
                     userDictionary = dictionary;
 
@@ -296,18 +301,26 @@
 
 -(void)peerStoppedAdvertising:(NSNotification *)notificaion
 {
-//    MCPeerID *peerID = [[notificaion userInfo]objectForKey:@"peerID"];
-//    NSDictionary *userDictionary = [NSDictionary new];
-//
-//    for (NSDictionary *dictionary in self.users)
-//    {
-//        if ([dictionary objectForKey:@"peerID"] == peerID)
-//        {
-//            userDictionary = dictionary;
-//        }
-//    }
-//    [self.users removeObject:userDictionary];
-//    [self.tableView reloadData];
+    MCPeerID *peerID = [[notificaion userInfo]objectForKey:@"peerID"];
+    NSDictionary *userDictionary = [NSDictionary new];
+
+    for (NSDictionary *dictionary in self.users)
+    {
+        if (![self.appDelegate.mcManager.connectedArray containsObject:peerID.displayName])
+        {
+            NSLog(@"should be moving towards removing a user");
+            NSLog(@"displayname %@", peerID.displayName);
+            MCPeerID *peer = [dictionary objectForKey:@"peerID"];
+
+            if (peer.displayName == peerID.displayName)
+            {
+                NSLog(@"Should remove a user");
+                userDictionary = dictionary;
+            }
+        }
+    }
+    [self.users removeObject:userDictionary];
+    [self.tableView reloadData];
 }
 
 #pragma mark - Private method for handling a peer sending a text
