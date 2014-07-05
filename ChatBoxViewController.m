@@ -68,8 +68,6 @@
     [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     [self.view resignFirstResponder];
     self.viewy = self.view.frame.origin.y;
-
-    [self.tableView reloadData];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -111,7 +109,6 @@
 {
     [UIView animateWithDuration:0.25 animations:^{
         self.view.frame = CGRectMake(self.view.frame.origin.x, self.viewy, self.view.frame.size.width, self.view.frame.size.height);
-
     }];
 }
 
@@ -125,7 +122,6 @@
             [self fetch];
         });
     }
-
 }
 
 //notification from when you click the "CHAT" button in the drawer
@@ -164,7 +160,6 @@
         //load an empty tableView because you dont have a conversation started with that person.
         self.sortedArray = [NSArray new];
         [self.tableView reloadData];
-
     }
 }
 
@@ -201,7 +196,6 @@
 {
     return 70;
 }
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -333,6 +327,7 @@
                 [moc save:nil];
                 [self fetch];
             }
+
             else
             {
                 NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
@@ -385,7 +380,6 @@
 # pragma mark - Button Actions
 - (IBAction)onButtonPressedSendChat:(id)sender
 {
-
     if (self.appDelegate.mcManager.session.connectedPeers.count > 0) {
         if(self.chattingUserPeerID)
         {

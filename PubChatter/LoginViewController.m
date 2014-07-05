@@ -97,56 +97,59 @@
     self.logInView.signUpLabel.textColor = [UIColor whiteColor];
     self.logInView.externalLogInLabel.textColor = [UIColor whiteColor];
 
+    self.logInView.logo = nil;
+    self.signUpController.signUpView.logo = nil;
+
 
     // Logo sizing for signup viewcontroller
-    CGFloat horizspacing15 = 180;
-    [self.signUpController.signUpView setLogo:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"app_icon"]]];
-    self.signUpController.signUpView.logo.frame = CGRectMake(self.view.frame.origin.x + (horizspacing15/2), self.view.frame.origin.y + 5, self.view.frame.size.width - horizspacing15, self.view.frame.size.height - 450);
-    self.signUpController.signUpView.logo.layer.borderWidth = 2.0f;
-    self.signUpController.signUpView.logo.layer.borderColor = [[UIColor buttonColor] CGColor];
-    self.signUpController.signUpView.logo.layer.cornerRadius = 5.0f;
-    self.signUpController.signUpView.logo.clipsToBounds = YES;
+//    CGFloat horizspacing15 = 180;
+//    [self.signUpController.signUpView setLogo:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"app_icon"]]];
+//    self.signUpController.signUpView.logo.frame = CGRectMake(self.view.frame.origin.x + (horizspacing15/2), self.view.frame.origin.y + 5, self.view.frame.size.width - horizspacing15, self.view.frame.size.height - 450);
+//    self.signUpController.signUpView.logo.layer.borderWidth = 2.0f;
+//    self.signUpController.signUpView.logo.layer.borderColor = [[UIColor buttonColor] CGColor];
+//    self.signUpController.signUpView.logo.layer.cornerRadius = 5.0f;
+//    self.signUpController.signUpView.logo.clipsToBounds = YES;
 
     // Pubchat label
-    CGFloat horizspacing10 = 80;
-    UILabel *labelSU = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.origin.x + (horizspacing10/2), self.view.frame.origin.y + 154, self.view.frame.size.width - horizspacing10, self.view.frame.size.height - 520)];
-    labelSU.backgroundColor = [UIColor blackColor];
-    labelSU.textColor = [UIColor buttonColor];
-    labelSU.layer.cornerRadius = 5.0f;
-    labelSU.layer.borderWidth = 2.0f;
-    labelSU.layer.borderColor = [[UIColor blackColor] CGColor];
-    labelSU.clipsToBounds = YES;
-    labelSU.textAlignment = NSTextAlignmentCenter;
-    [labelSU setFont:[UIFont fontWithName:@"HelveticaNeue" size:40]];
-    labelSU.text = @"PubChat";
-    [self.view addSubview:labelSU];
+//    CGFloat horizspacing10 = 80;
+//    UILabel *labelSU = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.origin.x + (horizspacing10/2), self.view.frame.origin.y + 154, self.view.frame.size.width - horizspacing10, self.view.frame.size.height - 520)];
+//    labelSU.backgroundColor = [UIColor blackColor];
+//    labelSU.textColor = [UIColor buttonColor];
+//    labelSU.layer.cornerRadius = 5.0f;
+//    labelSU.layer.borderWidth = 2.0f;
+//    labelSU.layer.borderColor = [[UIColor blackColor] CGColor];
+//    labelSU.clipsToBounds = YES;
+//    labelSU.textAlignment = NSTextAlignmentCenter;
+//    [labelSU setFont:[UIFont fontWithName:@"HelveticaNeue" size:40]];
+//    labelSU.text = @"PubChat";
+//    [self.view addSubview:labelSU];
 
     // Pubchat label edge
-    UIView *labeledgeSU = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.origin.x + (horizspacing10/2), self.view.frame.origin.y + 154, self.view.frame.size.width - horizspacing10, self.view.frame.size.height - 520)];
-    labeledgeSU.backgroundColor = [UIColor clearColor];
-    labeledgeSU.layer.cornerRadius = 5.0f;
-    labeledgeSU.layer.borderWidth = 2.0f;
-    labeledgeSU.layer.borderColor = [[UIColor buttonColor] CGColor];
-    labeledgeSU.clipsToBounds = YES;
-    [self.view addSubview:labeledgeSU];
+//    UIView *labeledgeSU = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.origin.x + (horizspacing10/2), self.view.frame.origin.y + 154, self.view.frame.size.width - horizspacing10, self.view.frame.size.height - 520)];
+//    labeledgeSU.backgroundColor = [UIColor clearColor];
+//    labeledgeSU.layer.cornerRadius = 5.0f;
+//    labeledgeSU.layer.borderWidth = 2.0f;
+//    labeledgeSU.layer.borderColor = [[UIColor buttonColor] CGColor];
+//    labeledgeSU.clipsToBounds = YES;
+//    [self.view addSubview:labeledgeSU];
 //
 //    // Logo sizing
-    CGFloat horizspacing11 = 180;
-    [self.logInView setLogo:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"app_icon"]]];
-    self.logInView.logo.frame = CGRectMake(self.view.frame.origin.x + (horizspacing11/2), self.view.frame.origin.y + 30, self.view.frame.size.width - horizspacing11, self.view.frame.size.height - 450);
-    self.logInView.logo.layer.borderWidth = 2.0f;
-    self.logInView.layer.borderColor = [[UIColor buttonColor] CGColor];
-    self.logInView.logo.layer.cornerRadius = 5.0f;
-    self.logInView.logo.clipsToBounds = YES;
-    self.logInView.layer.borderColor = [[UIColor buttonColor] CGColor];
+//    CGFloat horizspacing11 = 180;
+//    [self.logInView setLogo:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"app_icon"]]];
+//    self.logInView.logo.frame = CGRectMake(self.view.frame.origin.x + (horizspacing11/2), self.view.frame.origin.y + 30, self.view.frame.size.width - horizspacing11, self.view.frame.size.height - 450);
+//    self.logInView.logo.layer.borderWidth = 2.0f;
+//    self.logInView.layer.borderColor = [[UIColor buttonColor] CGColor];
+//    self.logInView.logo.layer.cornerRadius = 5.0f;
+//    self.logInView.logo.clipsToBounds = YES;
+//    self.logInView.layer.borderColor = [[UIColor buttonColor] CGColor];
 
     //Icon edge;
-    UIView *borderView11 = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.origin.x + (horizspacing11/2) -2, self.view.frame.origin.y + 30 -2, self.view.frame.size.width - horizspacing11 + 1, self.view.frame.size.height - 450 +1)];
-    borderView11.layer.cornerRadius = 5.0f;
-    borderView11.clipsToBounds = YES;
-    borderView11.layer.borderWidth = 2.0f;
-    borderView11.layer.borderColor = [[UIColor buttonColor] CGColor];
-    [self.view addSubview:borderView11];
+//    UIView *borderView11 = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.origin.x + (horizspacing11/2) -2, self.view.frame.origin.y + 30 -2, self.view.frame.size.width - horizspacing11 + 1, self.view.frame.size.height - 450 +1)];
+//    borderView11.layer.cornerRadius = 5.0f;
+//    borderView11.clipsToBounds = YES;
+//    borderView11.layer.borderWidth = 2.0f;
+//    borderView11.layer.borderColor = [[UIColor buttonColor] CGColor];
+//    [self.view addSubview:borderView11];
 
 
     //Set signup control style.
@@ -281,7 +284,7 @@
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil]; // Dismiss the PFSignUpViewController
 }
 
-// Retrieves Facebook data and populates the Parse database accordingly.
+// Retrieves Facebook data and populates the Parse database accordingly. Checks if user already has data filled out in their account and, if they do, doesn't overwrite with facebook info.
 - (void)updateFacebookData
 {
     if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
@@ -289,77 +292,94 @@
         FBRequest *request = [FBRequest requestForMe];
         // Send request to Facebook
         [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+
             if (!error) {
                 NSDictionary *userData = (NSDictionary *)result;
-                // Set name field in Parse from Facebook.
-                if (userData [@"first_name"]) {
+
+                // Set name field in Parse from Facebook, if not already in parse.
+
+                if (![[PFUser currentUser] objectForKey:@"name"]) {
+                    NSLog(@"Should not run");
+                    if (userData [@"first_name"]) {
                     [[PFUser currentUser]setObject:userData[@"first_name"] forKey:@"name"];
-                }
-
-                // Set gender field in Parse from Facebook.
-                if (userData[@"gender"]) {
-                    if ([userData[@"gender"] isEqualToString:@"male"]) {
-                        [[PFUser currentUser]setObject:@1 forKey:@"gender"];
-                    }
-                    else if ([userData[@"gender"] isEqualToString:@"female"]) {
-                        [[PFUser currentUser]setObject:@0 forKey:@"gender"];
-                    }
-                    else {
-                        [[PFUser currentUser]setObject:@2 forKey:@"gender"];
                     }
                 }
 
-                // Save profile picture to Parse backend from Facebook.
-                if (userData[@"id"]) {
-                    NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", userData[@"id"]]];
-                    PFFile *imageFile = [PFFile fileWithData:[NSData dataWithContentsOfURL:pictureURL]];
-                    [[PFUser currentUser] setObject:imageFile forKey:@"picture"];
+                // Set gender field in Parse from Facebook, if not already in parse.
+                if (![[PFUser currentUser] objectForKey:@"gender"]) {
+                    NSLog(@"Should not run");
+                    if (userData[@"gender"]) {
+                        if ([userData[@"gender"] isEqualToString:@"male"]) {
+                            [[PFUser currentUser]setObject:@1 forKey:@"gender"];
+                        }
+                        else if ([userData[@"gender"] isEqualToString:@"female"]) {
+                            [[PFUser currentUser]setObject:@0 forKey:@"gender"];
+                        }
+                        else {
+                            [[PFUser currentUser]setObject:@2 forKey:@"gender"];
+                        }
+                    }
                 }
 
-                // Set bio from Facebook and set it in the Parse backend.
-                if (userData[@"bio"]) {
-                    [[PFUser currentUser]setObject:userData[@"bio"] forKey:@"bio"];
+                // Save profile picture to Parse backend from Facebook, if not already in parse.
+                if (![[PFUser currentUser] objectForKey:@"picture"]) {
+                    NSLog(@"Should not run");
+                    if (userData[@"id"]) {
+                        NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", userData[@"id"]]];
+                        PFFile *imageFile = [PFFile fileWithData:[NSData dataWithContentsOfURL:pictureURL]];
+                        [[PFUser currentUser] setObject:imageFile forKey:@"picture"];
+                    }
+                }
+
+                // Set bio from Facebook and set it in the Parse backend , if not already in parse.
+                if (![[PFUser currentUser] objectForKey:@"bio"]) {
+                    NSLog(@"Should not run");
+                    if (userData[@"bio"]) {
+                        [[PFUser currentUser]setObject:userData[@"bio"] forKey:@"bio"];
+                    }
                 }
 
                 // Set age label from Facebook and set age in Parse backend.
-                if (userData[@"birthday"]) {
-                    NSString *birthday = userData[@"birthday"];
-                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                    [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-                    [formatter setLocale:[NSLocale systemLocale]];
-                    [formatter setDateFormat:@"MM/dd/yyyy"];
+                if (![[PFUser currentUser] objectForKey:@"age"]) {
+                    NSLog(@"Should not run");
+                    if (userData[@"birthday"]) {
+                        NSString *birthday = userData[@"birthday"];
+                        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                        [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+                        [formatter setLocale:[NSLocale systemLocale]];
+                        [formatter setDateFormat:@"MM/dd/yyyy"];
 
-                    NSDate *formatted = [formatter dateFromString:birthday];
-                    NSDate *currentDate = [NSDate date];
-
-                    NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-                    NSDateComponents *components = [gregorianCalendar components:NSYearCalendarUnit
+                        NSDate *formatted = [formatter dateFromString:birthday];
+                        NSDate *currentDate = [NSDate date];
+                        NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+                        NSDateComponents *components = [gregorianCalendar components:NSYearCalendarUnit
                                                                         fromDate:formatted
                                                                           toDate:currentDate
                                                                          options:0];
 
                     NSNumber *age = @(components.year);
                     [[PFUser currentUser]setObject:age forKey:@"age"];
-                }
-
-
-                // Get "interested in" from Facebook and set in Parse backend
-                if (userData [@"interested_in"]) {
-                    for (NSString *object in userData[@"interested_in"])
-                    {
-                        if ([object isEqual:@"female"]) {
-                            [[PFUser currentUser]setObject:@1 forKey:@"sexualOrientation"];
-                        }
-                        else if ([object isEqual:@"male"]) {
-                            [[PFUser currentUser]setObject:@0 forKey:@"sexualOrientation"];
-                        }
-                        else {
-                            [[PFUser currentUser]setObject:@2 forKey:@"sexualOrientation"];
-                        }
                     }
                 }
 
-            }
+                // Get "interested in" from Facebook and set in Parse backend
+                if (![[PFUser currentUser] objectForKey:@"sexualOrientation"]) {
+                    NSLog(@"Should not run");
+                    if (userData [@"interested_in"]) {
+                        for (NSString *object in userData[@"interested_in"]) {
+                                if ([object isEqual:@"female"]) {
+                                    [[PFUser currentUser]setObject:@1 forKey:@"sexualOrientation"];
+                                }
+                                else if ([object isEqual:@"male"]) {
+                                    [[PFUser currentUser]setObject:@0 forKey:@"sexualOrientation"];
+                                }
+                                else {
+                                    [[PFUser currentUser]setObject:@2 forKey:@"sexualOrientation"];
+                                }
+                            }
+                        }
+                    }
+                }
             [[PFUser currentUser] saveInBackground];
         }];
     }

@@ -263,6 +263,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0ECB142B19679E7A00F8AF74 /* Model Objects */ = {
+			isa = PBXGroup;
+			children = (
+				0ECEAEE6194F69A000B92C40 /* YelpBar.h */,
+				0ECEAEE7194F69A000B92C40 /* YelpBar.m */,
+				0ECEAF0E19587F4E00B92C40 /* Rating.h */,
+				0ECEAF0F19587F4E00B92C40 /* Rating.m */,
+				0ECEAF11195884E100B92C40 /* Bar.h */,
+				0ECEAF12195884E100B92C40 /* Bar.m */,
+			);
+			name = "Model Objects";
+			sourceTree = "<group>";
+		};
+		0ECB142C19679EDC00F8AF74 /* OAuth Library */ = {
+			isa = PBXGroup;
+			children = (
+				0EB32009194CBDD0005A3B82 /* TDOAuth.h */,
+				0EB3200A194CBDD0005A3B82 /* TDOAuth.m */,
+			);
+			name = "OAuth Library";
+			sourceTree = "<group>";
+		};
 		0ECEAF0419560F9A00B92C40 /* Slideout Drawer VCs */ = {
 			isa = PBXGroup;
 			children = (
@@ -454,27 +476,21 @@
 		B0782C41194BB3700022E6E7 /* PubChatter */ = {
 			isa = PBXGroup;
 			children = (
-				B0623C531959D09E00A9AFD6 /* CoreData */,
-				B0623C4C1959C0E100A9AFD6 /* BeaconManager */,
 				B0782C4A194BB3700022E6E7 /* AppDelegate.h */,
 				B0782C4B194BB3700022E6E7 /* AppDelegate.m */,
 				B0782C4D194BB3700022E6E7 /* Main.storyboard */,
+				B0623C531959D09E00A9AFD6 /* CoreData */,
+				B0623C4C1959C0E100A9AFD6 /* BeaconManager */,
 				0ECEAF0419560F9A00B92C40 /* Slideout Drawer VCs */,
 				0ECEB017195F69F200B92C40 /* SDWebImage */,
 				9BDBE55A194FA3FE0045C05B /* Search/Bar VCs */,
 				9BDBE55C194FA44F0045C05B /* UserProfileVCs */,
 				9BDBE559194FA3D00045C05B /* ChatVCs */,
 				9BDBE55B194FA42C0045C05B /* MCManager */,
-				0ECEAEE6194F69A000B92C40 /* YelpBar.h */,
-				0ECEAEE7194F69A000B92C40 /* YelpBar.m */,
-				0EB32009194CBDD0005A3B82 /* TDOAuth.h */,
-				0EB3200A194CBDD0005A3B82 /* TDOAuth.m */,
-				0ECEAF11195884E100B92C40 /* Bar.h */,
-				0ECEAF12195884E100B92C40 /* Bar.m */,
-				0ECEAF0E19587F4E00B92C40 /* Rating.h */,
-				0ECEAF0F19587F4E00B92C40 /* Rating.m */,
-				9BE718B81965125600F62D8D /* placeholder.png */,
+				0ECB142B19679E7A00F8AF74 /* Model Objects */,
+				0ECB142C19679EDC00F8AF74 /* OAuth Library */,
 				0EC9E01019601ABC0060C5A7 /* oldPlaceholder.png */,
+				9BE718B81965125600F62D8D /* placeholder.png */,
 				B0782C53194BB3700022E6E7 /* Images.xcassets */,
 				B0782C42194BB3700022E6E7 /* Supporting Files */,
 			);

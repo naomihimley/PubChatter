@@ -43,6 +43,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor clearColor];
     [self.editButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
     [self.editButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
     [self.editButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
@@ -281,7 +282,7 @@
 {
     //Style nameagelabel
     self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
-    self.view.backgroundColor = [UIColor clearColor];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"river"]];
 }
 
 @end
