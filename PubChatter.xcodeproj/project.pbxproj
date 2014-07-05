@@ -14,7 +14,6 @@
 		0EB3200B194CBDD0005A3B82 /* TDOAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB3200A194CBDD0005A3B82 /* TDOAuth.m */; };
 		0EB32011194E4AC3005A3B82 /* SearchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB32010194E4AC3005A3B82 /* SearchTableViewCell.m */; };
 		0EC9E01119601ABC0060C5A7 /* oldPlaceholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EC9E01019601ABC0060C5A7 /* oldPlaceholder.png */; };
-		0ECB142A1965309300F8AF74 /* ChatLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECB14291965309300F8AF74 /* ChatLabel.m */; };
 		0ECEAEE8194F69A000B92C40 /* YelpBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAEE7194F69A000B92C40 /* YelpBar.m */; };
 		0ECEAEEB194F6FAC00B92C40 /* BarDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAEEA194F6FAC00B92C40 /* BarDetailViewController.m */; };
 		0ECEAEEE194F8AD200B92C40 /* BarWebpageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAEED194F8AD200B92C40 /* BarWebpageViewController.m */; };
@@ -108,8 +107,6 @@
 		0EB3200F194E4AC3005A3B82 /* SearchTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchTableViewCell.h; sourceTree = "<group>"; };
 		0EB32010194E4AC3005A3B82 /* SearchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchTableViewCell.m; sourceTree = "<group>"; };
 		0EC9E01019601ABC0060C5A7 /* oldPlaceholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = oldPlaceholder.png; sourceTree = "<group>"; };
-		0ECB14281965309300F8AF74 /* ChatLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatLabel.h; path = PubChatter/ChatLabel.h; sourceTree = "<group>"; };
-		0ECB14291965309300F8AF74 /* ChatLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChatLabel.m; path = PubChatter/ChatLabel.m; sourceTree = "<group>"; };
 		0ECEAEE6194F69A000B92C40 /* YelpBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YelpBar.h; sourceTree = "<group>"; };
 		0ECEAEE7194F69A000B92C40 /* YelpBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YelpBar.m; sourceTree = "<group>"; };
 		0ECEAEE9194F6FAC00B92C40 /* BarDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BarDetailViewController.h; path = ../BarDetailViewController.h; sourceTree = "<group>"; };
@@ -327,8 +324,6 @@
 		9BDBE559194FA3D00045C05B /* ChatVCs */ = {
 			isa = PBXGroup;
 			children = (
-				0ECB14281965309300F8AF74 /* ChatLabel.h */,
-				0ECB14291965309300F8AF74 /* ChatLabel.m */,
 				B0D46D1B195F3E64005E7889 /* ChatTableViewCell.h */,
 				B0D46D1C195F3E64005E7889 /* ChatTableViewCell.m */,
 				9BDBE4FE194F47380045C05B /* OPPViewController.h */,
@@ -652,7 +647,6 @@
 				0ECEAF0719560FCA00B92C40 /* SWRevealViewController.m in Sources */,
 				0ECEB03B195F6A2C00B92C40 /* SDImageCache.m in Sources */,
 				9BDBE6151959CB120045C05B /* LeftSideSlideOutTableViewController.m in Sources */,
-				0ECB142A1965309300F8AF74 /* ChatLabel.m in Sources */,
 				0ECEB040195F6A2C00B92C40 /* SDWebImageManager.m in Sources */,
 				0ECEB045195F6A2C00B92C40 /* UIImage+WebP.m in Sources */,
 				B0782C48194BB3700022E6E7 /* main.m in Sources */,

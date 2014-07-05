@@ -15,6 +15,6 @@
 + (UIColor *)navBarColor;
 + (UIColor *)nameColor;
 + (UIColor *)textColor;
-
++(UIColor *)textFieldColor;
 
 @end
