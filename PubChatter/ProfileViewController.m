@@ -54,8 +54,6 @@
     [self.editButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     self.scrollView.delegate = self;
-
-    NSLog(@"name: %@", [[PFUser currentUser] objectForKey:@"name"]);
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -110,9 +108,6 @@
 
     self.verticalOffset = self.verticalOffset + self.profileImageView.frame.size.height + 10;
     }
-
-    NSLog(@"I ran next");
-    NSLog(@"%f", self.verticalOffset);
 
     //Add name label
     self.nameageLabel = [[UILabel alloc] init];
@@ -328,7 +323,6 @@
 
 -(void)getUserPictures:(id)sender
 {
-    NSLog(@"I ran");
     self.pictureButtonPressed = YES;
 
     [self.nameageLabel removeFromSuperview];
