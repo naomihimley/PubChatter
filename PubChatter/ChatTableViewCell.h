@@ -12,6 +12,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *rightLabel;
 @property (weak, nonatomic) IBOutlet UILabel *leftLabel;
 
+//The labels below are used to create some spacing between the right/left Label text and the edge of "message bubble"
 @property (weak, nonatomic) IBOutlet UILabel *rightBorderEdge;
 @property (weak, nonatomic) IBOutlet UILabel *leftBorderEdge;
 

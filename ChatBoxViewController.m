@@ -218,6 +218,7 @@
             ChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
             cell.backgroundColor = [UIColor clearColor];
 
+            //Set text and styling for lefthand message bubble.
             [cell.leftLabel setText:message.text];
             cell.leftLabel.textAlignment = NSTextAlignmentLeft;
             cell.leftLabel.textColor = [UIColor whiteColor];
@@ -227,6 +228,7 @@
             cell.leftLabel.hidden = NO;
             cell.rightLabel.hidden = YES;
 
+            //Set styling for message bubble edge.
             cell.leftBorderEdge.layer.cornerRadius = 15.0f;
             cell.leftBorderEdge.layer.masksToBounds = YES;
             cell.leftBorderEdge.layer.borderWidth = 1.0f;
@@ -241,6 +243,7 @@
             ChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell2"];
             cell.backgroundColor = [UIColor clearColor];
 
+            //Set text and styling for righthand message bubble.
             [cell.rightLabel setText:message.text];
             cell.rightLabel.textAlignment = NSTextAlignmentRight;
             cell.rightLabel.textColor = [UIColor blackColor];
@@ -250,6 +253,7 @@
             cell.rightLabel.hidden = YES;
             cell.rightLabel.hidden = NO;
 
+            //Set styling for right message bubble edge.
             cell.rightBorderEdge.layer.cornerRadius = 15.0f;
             cell.rightBorderEdge.layer.masksToBounds = YES;
             cell.rightBorderEdge.layer.borderWidth = 1.0f;
