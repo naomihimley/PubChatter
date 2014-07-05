@@ -9,6 +9,7 @@
 #import "EditProfileViewController.h"
 #import <Parse/Parse.h>
 #import "UIColor+DesignColors.h"
+#import "CustomCollectionViewCell.h"
 
 @interface EditProfileViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, UIPickerViewDataSource,UIPickerViewDelegate, UIScrollViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *nameTextField;
@@ -28,6 +29,8 @@
 @property NSString *genderString;
 @property NSString *interestedString;
 @property NSArray *genderAttStringArray;
+@property NSMutableArray *imagesArray;
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property NSArray *interestedAttStringArray;
 @property (weak, nonatomic) IBOutlet UIButton *doneButtonOutlet;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButtonOutlet;
@@ -109,21 +112,6 @@
     self.bioTextView.backgroundColor = [UIColor whiteColor];
     self.bioTextView.textColor = [UIColor navBarColor];
 
-    PFFile *file = [[PFUser currentUser]objectForKey:@"picture"];
-
-    if (file) {
-        [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
-         {
-             self.pictureView.image = [UIImage imageWithData:data];
-             self.pictureView.layer.masksToBounds = YES;
-             self.pictureView.layer.cornerRadius = 5.0f;
-         }];
-    }
-    
-    else {
-        self.pictureView.image = [UIImage imageNamed:@"profile-placeholder"];
-    }
-
     self.nameTextField.text = [[PFUser currentUser]objectForKey:@"name"];
 
     if ([[PFUser currentUser]objectForKey: @"bio"])
@@ -181,6 +169,32 @@
     [attrString addAttribute: NSFontAttributeName value: boldFont range: NSMakeRange(7 + self.genderString.length + 15,self.interestedString.length)];
     [attrString addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, attrString.length)];
     self.genderLabel.attributedText = attrString;
+
+
+    self.imagesArray = [NSMutableArray new];
+    NSArray *filesArray = [[PFUser currentUser] objectForKey:@"imagesArray"];
+        if (filesArray) {
+            for (PFFile *imageFile in filesArray) {
+                if (imageFile) {
+                    [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
+                     {
+                         UIImage *image = [UIImage imageWithData:data];
+                         [self.imagesArray addObject:image];
+                     }];
+                }
+            }
+        }
+
+    PFFile *profileFile = [[PFUser currentUser] objectForKey:@"picture"];
+    if (profileFile) {
+        [profileFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
+         {
+             self.pictureView.image = [UIImage imageWithData:data];
+             if (!self.pictureView.image) {
+                 self.pictureView.image = [UIImage imageNamed:@"profile-placeholder"];
+             }
+         }];
+    }
 }
 
 - (void)createUserProfileImage
@@ -382,6 +396,30 @@
 -(void)dismissKeyboard
 {
     [self.view endEditing:YES];
+}
+
+# pragma mark - CollectionView Methods
+
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 1;
+}
+
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return [self.imagesArray count];
+}
+
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    CustomCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+    cell.imageView.image = [self.imagesArray objectAtIndex:indexPath.row];
+    return cell;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
+{
+    return 0.0;
 }
 
 

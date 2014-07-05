@@ -31,8 +31,10 @@
 
     if (![PFUser currentUser]) {
         [self performSegueWithIdentifier:@"loginsegue" sender:self];
+        NSLog(@"Not logged in");
     }
     else {
+        NSLog(@"Logged in");
         [self performSegueWithIdentifier:@"onward" sender:self];
     }
 }

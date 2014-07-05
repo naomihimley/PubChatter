@@ -140,18 +140,23 @@
 
     textLabelsOffset = textLabelsOffset + self.distanceFromUserLabel.frame.size.height + 10;
 
-        self.telephoneOutlet = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        [self.telephoneOutlet addTarget:self
-               action:@selector(onTelephoneButtonPressed:)
-     forControlEvents:UIControlEventTouchUpInside];
+    self.telephoneOutlet = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    self.telephoneOutlet.frame = CGRectMake(10, textLabelsOffset, (self.scrollView.frame.size.width - self.barImageView.frame.size.width - 30), 30);
+    [self.telephoneOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+    self.telephoneOutlet.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+
+    if (self.barFromSourceVC.telephone) {
         [self.telephoneOutlet setTitle:[NSString stringWithFormat:@"(%@) %@-%@", [self.barFromSourceVC.telephone substringWithRange:NSMakeRange(0, 3)], [self.barFromSourceVC.telephone substringWithRange:NSMakeRange(3, 3)], [self.barFromSourceVC.telephone substringWithRange:NSMakeRange(6, 4)]] forState:UIControlStateNormal];
-        self.telephoneOutlet.frame = CGRectMake(10, textLabelsOffset, (self.scrollView.frame.size.width - self.barImageView.frame.size.width - 30), 30);
-        [self.telephoneOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
- //       [self.telephoneOutlet setTitleColor:[UIColor whiteColor] forState:uicontrolstat];
 
-
-        self.telephoneOutlet.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        [self.scrollView addSubview:self.telephoneOutlet];
+        [self.telephoneOutlet addTarget:self
+                                 action:@selector(onTelephoneButtonPressed:)
+                       forControlEvents:UIControlEventTouchUpInside];
+        }
+    else {
+        [self.telephoneOutlet setTitle:@"Tel # unavailable" forState:UIControlStateNormal];
+        self.telephoneOutlet.enabled = NO;
+    }
+    [self.scrollView addSubview:self.telephoneOutlet];
 
     textLabelsOffset = textLabelsOffset + self.telephoneOutlet.frame.size.height + 10;
 

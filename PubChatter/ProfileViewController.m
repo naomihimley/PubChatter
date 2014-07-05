@@ -27,6 +27,11 @@
 @property (strong, nonatomic) UILabel *favDrinkLabel;
 @property (strong, nonatomic) UILabel *aboutMeLabel;
 @property (strong, nonatomic) UIButton *logoutButton;
+@property (strong, nonatomic) UIButton *pictureButton;
+@property (strong, nonatomic) UIImageView *profileImageView;
+@property (strong, nonatomic) UIScrollView *pictureScroll;
+@property BOOL pictureButtonPressed;
+@property CGFloat verticalOffset;
 @property (weak, nonatomic) IBOutlet UIButton *editButtonOutlet;
 
 @property (strong, nonatomic) UILabel *completeProfile;
@@ -49,10 +54,14 @@
     [self.editButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     self.scrollView.delegate = self;
+
+    NSLog(@"name: %@", [[PFUser currentUser] objectForKey:@"name"]);
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    self.pictureButtonPressed = NO;
+
     [super viewWillAppear:YES];
     [self.nameageLabel removeFromSuperview];
     [self.genderLabel removeFromSuperview];
@@ -60,43 +69,70 @@
     [self.favDrinkLabel removeFromSuperview];
     [self.aboutMeLabel removeFromSuperview];
     [self.bioTextView removeFromSuperview];
+    [self.profileImageView removeFromSuperview];
+    [self.logoutButton removeFromSuperview];
+    [self.pictureScroll removeFromSuperview];
 
     [self getParseData];
 }
 
 
 -(void)addViewsToScrollView {
-    CGFloat verticalOffset = 10.0;
 
+    self.verticalOffset = 0.0;
+
+    if (self.pictureButtonPressed) {
+        self.pictureScroll = [[UIScrollView alloc] initWithFrame:CGRectMake(self.scrollView.frame.origin.x, self.verticalOffset, self.scrollView.frame.size.width, self.scrollView.frame.size.width)];
+        self.pictureScroll.backgroundColor = [UIColor blackColor];
+
+        [self.scrollView addSubview:self.pictureScroll];
+        self.verticalOffset = self.verticalOffset + self.pictureScroll.frame.size.height + 10;
+    }
+
+    else {
+        self.verticalOffset = 30.0;
     //Add imageview
-    UIImageView *profileImageView = [[UIImageView alloc] init];
-    profileImageView.frame = CGRectMake((self.scrollView.frame.size.width/2) -100, verticalOffset, 200, 200);
-    profileImageView.image = self.profileImage;
-    profileImageView.layer.cornerRadius = 5.0f;
-    profileImageView.layer.masksToBounds = YES;
-    [self.scrollView addSubview:profileImageView];
+    self.profileImageView = [[UIImageView alloc] init];
+    self.profileImageView.frame = CGRectMake((self.scrollView.frame.size.width/2) - 75, self.verticalOffset, 150, 150);
+    self.profileImageView.image = self.profileImage;
+    self.profileImageView.layer.cornerRadius = 5.0f;
+    self.profileImageView.layer.masksToBounds = YES;
+    [self.scrollView addSubview:self.profileImageView];
 
-    verticalOffset = verticalOffset + profileImageView.frame.size.height + 10;
+    self.pictureButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [self.pictureButton addTarget:self
+                     action:@selector(getUserPictures:)
+           forControlEvents:UIControlEventTouchUpInside];
+    self.pictureButton.frame = CGRectMake((self.scrollView.frame.size.width/2) - 75, self.verticalOffset, 150, 150);
+    [self.pictureButton setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+    [self.pictureButton setBackgroundColor:[UIColor clearColor]];
+    [self.scrollView addSubview:self.pictureButton];
+
+    self.verticalOffset = self.verticalOffset + self.profileImageView.frame.size.height + 10;
+    }
+
+    NSLog(@"I ran next");
+    NSLog(@"%f", self.verticalOffset);
 
     //Add name label
     self.nameageLabel = [[UILabel alloc] init];
-    self.nameageLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 30);
+    self.nameageLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, self.verticalOffset, 280, 30);
     if (self.name.length < 1) {
-        self.name = @"Name";
-    if (self.age.length < 1)
-        self.age = @"Age";
+        self.nameageLabel.text = @"Please Complete Profile";
+        }
+    else {
+        self.nameageLabel.text = [NSString stringWithFormat:@"%@, %@", self.name, self.age];
     }
-    self.nameageLabel.text = [NSString stringWithFormat:@"%@, %@", self.name, self.age];
     self.nameageLabel.textAlignment = NSTextAlignmentCenter;
     self.nameageLabel.textColor = [UIColor nameColor];
     [self.nameageLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:20]];
     [self.scrollView addSubview:self.nameageLabel];
 
-    verticalOffset = verticalOffset + self.nameageLabel.frame.size.height + 10;
+    self.verticalOffset = self.verticalOffset + self.nameageLabel.frame.size.height + 10;
 
     //Add gender label
     self.genderLabel = [[UILabel alloc] init];
-    self.genderLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 30);
+    self.genderLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, self.verticalOffset, 280, 30);
     self.genderLabel.text = self.gender;
     if (self.gender.length < 1) {
         self.gender = @"Gender:";
@@ -106,21 +142,26 @@
     self.genderLabel.textColor = [UIColor whiteColor];
     [self.genderLabel setFont:[UIFont systemFontOfSize:16.0]];
     [self.scrollView addSubview:self.genderLabel];
-    verticalOffset = verticalOffset + self.genderLabel.frame.size.height + 10;
+    self.verticalOffset = self.verticalOffset + self.genderLabel.frame.size.height + 10;
 
     //Add about me label
     self.aboutMeLabel = [[UILabel alloc] init];
-    self.aboutMeLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 30);
-    self.aboutMeLabel.text = [NSString stringWithFormat:@"About %@", self.name];
+    self.aboutMeLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, self.verticalOffset, 280, 30);
+    if ([self.name  isEqual: @"Name"]) {
+        self.aboutMeLabel.text = @"About Me";
+    }
+    else {
+        self.aboutMeLabel.text = [NSString stringWithFormat:@"About %@", self.name];
+    }
     self.aboutMeLabel.textAlignment = NSTextAlignmentCenter;
     [self.aboutMeLabel setFont:[UIFont systemFontOfSize:16.0]];
     self.aboutMeLabel.textColor = [UIColor whiteColor];
     [self.scrollView addSubview:self.aboutMeLabel];
-    verticalOffset = verticalOffset + self.aboutMeLabel.frame.size.height;
+    self.verticalOffset = self.verticalOffset + self.aboutMeLabel.frame.size.height;
 
     //Add bio textView
     self.bioTextView = [[UITextView alloc] init];
-    self.bioTextView.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 70);
+    self.bioTextView.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, self.verticalOffset, 280, 55);
     if (self.bioText.length < 1) {
         self.bioText = @"No bio provided";
     }
@@ -130,11 +171,11 @@
     self.bioTextView.textColor = [UIColor whiteColor];
     self.bioTextView.backgroundColor = [UIColor clearColor];
     [self.scrollView addSubview:self.bioTextView];
-    verticalOffset = verticalOffset + self.bioTextView.frame.size.height + 10;
+    self.verticalOffset = self.verticalOffset + self.bioTextView.frame.size.height + 5;
 
     //Add interested label
     self.interestedLabel = [[UILabel alloc] init];
-    self.interestedLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 30);
+    self.interestedLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, self.verticalOffset, 280, 30);
     if (self.sexualOrientation.length < 1) {
         self.sexualOrientation = @"Interested In:";
     }
@@ -143,11 +184,11 @@
     self.interestedLabel.textAlignment = NSTextAlignmentCenter;
     self.interestedLabel.textColor = [UIColor whiteColor];
     [self.scrollView addSubview:self.interestedLabel];
-    verticalOffset = verticalOffset + self.interestedLabel.frame.size.height + 10;
+    self.verticalOffset = self.verticalOffset + self.interestedLabel.frame.size.height + 10;
 
     //Add Favorite drink label
     self.favDrinkLabel = [[UILabel alloc] init];
-    self.favDrinkLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, verticalOffset, 280, 30);
+    self.favDrinkLabel.frame = CGRectMake((self.scrollView.frame.size.width /2) - 140, self.verticalOffset, 280, 30);
     if (self.favDrink.length < 1) {
         self.favDrink = @"";
     }
@@ -156,7 +197,7 @@
     self.favDrinkLabel.textColor = [UIColor whiteColor];
     [self.favDrinkLabel setFont:[UIFont systemFontOfSize:16.0]];
     [self.scrollView addSubview:self.favDrinkLabel];
-    verticalOffset = verticalOffset + self.favDrinkLabel.frame.size.height + 15;
+    self.verticalOffset = self.verticalOffset + self.favDrinkLabel.frame.size.height + 15;
 
     //Add logout button
     self.logoutButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -164,7 +205,7 @@
                           action:@selector(logUserOut:)
                 forControlEvents:UIControlEventTouchUpInside];
     [self.logoutButton setTitle:@"Logout" forState:UIControlStateNormal];
-    self.logoutButton.frame = CGRectMake((self.scrollView.frame.size.width /2) - 75, verticalOffset, 150, 30);
+    self.logoutButton.frame = CGRectMake((self.scrollView.frame.size.width /2) - 75, self.verticalOffset, 150, 30);
     [self.logoutButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
     [self.logoutButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
     self.logoutButton.layer.borderWidth = 2.0f;
@@ -172,9 +213,9 @@
     self.logoutButton.layer.borderColor = [[UIColor buttonColor] CGColor];
     [self.scrollView addSubview:self.logoutButton];
 
-    verticalOffset = verticalOffset + self.logoutButton.frame.size.height + 15;
+    self.verticalOffset = self.verticalOffset + self.logoutButton.frame.size.height + 15;
 
-    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, verticalOffset);
+    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, self.verticalOffset);
     self.scrollView.contentMode = UIViewContentModeScaleAspectFit;
     [self setStyle];
 }
@@ -283,6 +324,24 @@
     //Style nameagelabel
     self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"river"]];
+}
+
+-(void)getUserPictures:(id)sender
+{
+    NSLog(@"I ran");
+    self.pictureButtonPressed = YES;
+
+    [self.nameageLabel removeFromSuperview];
+    [self.genderLabel removeFromSuperview];
+    [self.interestedLabel removeFromSuperview];
+    [self.favDrinkLabel removeFromSuperview];
+    [self.aboutMeLabel removeFromSuperview];
+    [self.bioTextView removeFromSuperview];
+    [self.profileImageView removeFromSuperview];
+    [self.logoutButton removeFromSuperview];
+    [self.pictureScroll removeFromSuperview];
+
+    [self addViewsToScrollView];
 }
 
 @end

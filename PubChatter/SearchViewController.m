@@ -784,8 +784,6 @@ calloutAccessoryControlTapped:(UIControl *)control
     self.cancelButtonOutlet.layer.borderColor = [[UIColor buttonColor] CGColor];
     self.cancelButtonOutlet.layer.cornerRadius = 5.0f;
 
-//    self.searchBackGroundView.alpha = 0.0f;
-
     //Snap to current location button
     self.currentLocationButtonOutlet.layer.borderWidth = 2.0f;
     self.currentLocationButtonOutlet.layer.cornerRadius = 5.0f;

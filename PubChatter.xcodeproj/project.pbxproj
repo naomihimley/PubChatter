@@ -14,6 +14,7 @@
 		0EB3200B194CBDD0005A3B82 /* TDOAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB3200A194CBDD0005A3B82 /* TDOAuth.m */; };
 		0EB32011194E4AC3005A3B82 /* SearchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EB32010194E4AC3005A3B82 /* SearchTableViewCell.m */; };
 		0EC9E01119601ABC0060C5A7 /* oldPlaceholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 0EC9E01019601ABC0060C5A7 /* oldPlaceholder.png */; };
+		0ECB142F1967D71E00F8AF74 /* CustomCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECB142E1967D71E00F8AF74 /* CustomCollectionViewCell.m */; };
 		0ECEAEE8194F69A000B92C40 /* YelpBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAEE7194F69A000B92C40 /* YelpBar.m */; };
 		0ECEAEEB194F6FAC00B92C40 /* BarDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAEEA194F6FAC00B92C40 /* BarDetailViewController.m */; };
 		0ECEAEEE194F8AD200B92C40 /* BarWebpageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0ECEAEED194F8AD200B92C40 /* BarWebpageViewController.m */; };
@@ -107,6 +108,8 @@
 		0EB3200F194E4AC3005A3B82 /* SearchTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchTableViewCell.h; sourceTree = "<group>"; };
 		0EB32010194E4AC3005A3B82 /* SearchTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchTableViewCell.m; sourceTree = "<group>"; };
 		0EC9E01019601ABC0060C5A7 /* oldPlaceholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = oldPlaceholder.png; sourceTree = "<group>"; };
+		0ECB142D1967D71E00F8AF74 /* CustomCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomCollectionViewCell.h; sourceTree = "<group>"; };
+		0ECB142E1967D71E00F8AF74 /* CustomCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomCollectionViewCell.m; sourceTree = "<group>"; };
 		0ECEAEE6194F69A000B92C40 /* YelpBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YelpBar.h; sourceTree = "<group>"; };
 		0ECEAEE7194F69A000B92C40 /* YelpBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YelpBar.m; sourceTree = "<group>"; };
 		0ECEAEE9194F6FAC00B92C40 /* BarDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BarDetailViewController.h; path = ../BarDetailViewController.h; sourceTree = "<group>"; };
@@ -395,6 +398,8 @@
 				0ECEAF171958BDEA00B92C40 /* LoginViewController.m */,
 				B0782CCF194F850B0022E6E7 /* EditProfileViewController.h */,
 				B0782CD0194F850B0022E6E7 /* EditProfileViewController.m */,
+				0ECB142D1967D71E00F8AF74 /* CustomCollectionViewCell.h */,
+				0ECB142E1967D71E00F8AF74 /* CustomCollectionViewCell.m */,
 				0EB31FFC194BC176005A3B82 /* ProfileViewController.h */,
 				0EB31FFD194BC176005A3B82 /* ProfileViewController.m */,
 			);
@@ -660,6 +665,7 @@
 				0ECEAEE8194F69A000B92C40 /* YelpBar.m in Sources */,
 				B0D46D1A195E1B5E005E7889 /* Message.m in Sources */,
 				0ECEAF1F195D1A8400B92C40 /* InitialViewController.m in Sources */,
+				0ECB142F1967D71E00F8AF74 /* CustomCollectionViewCell.m in Sources */,
 				0ECEAF0719560FCA00B92C40 /* SWRevealViewController.m in Sources */,
 				0ECEB03B195F6A2C00B92C40 /* SDImageCache.m in Sources */,
 				9BDBE6151959CB120045C05B /* LeftSideSlideOutTableViewController.m in Sources */,
