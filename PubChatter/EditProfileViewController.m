@@ -31,6 +31,7 @@
 @property NSString *interestedString;
 @property NSArray *genderAttStringArray;
 @property NSMutableArray *imagesArray;
+@property NSMutableArray *pffilesArray;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property NSArray *interestedAttStringArray;
 @property (weak, nonatomic) IBOutlet UIButton *doneButtonOutlet;
@@ -137,29 +138,28 @@
 
 
     self.imagesArray = [NSMutableArray new];
-    NSArray *filesArray = [[PFUser currentUser] objectForKey:@"imagesArray"];
-        if (filesArray) {
+    self.pffilesArray = [[PFUser currentUser] objectForKey:@"imagesArray"];
+        if (self.pffilesArray) {
             NSInteger counter = 0;
-            for (PFFile *imageFile in filesArray) {
+            for (PFFile *imageFile in self.pffilesArray) {
                 counter += 1;
                     [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
                      {
                          UIImage *image = [UIImage imageWithData:data];
                          [self.imagesArray addObject:image];
 
-                         if (counter == filesArray.count) {
+                         if (counter == self.pffilesArray.count) {
                              [self.collectionView reloadData];
                              [self createAddPhotosButton];
                              NSLog(@"Number of images: %lu", (unsigned long)self.imagesArray.count);
-
                              self.activityIndicator.hidden = YES;
                              [self.activityIndicator stopAnimating];
                          }
                     }];
                 }
             }
-        else {
-
+        else
+        {
             [self.collectionView reloadData];
             [self createAddPhotosButton];
         }
@@ -220,40 +220,24 @@
     else {
             [self.imagesArray addObject:resizedImage];
             NSLog(@"Images array count: %lu", (unsigned long)self.imagesArray.count);
-            NSMutableArray *tempArray = [NSMutableArray new];
-            NSInteger counter = 0;
-            for (UIImage *image in self.imagesArray) {
-                    counter += 1;
-                    NSData *imageData = UIImagePNGRepresentation(image);
-                    PFFile *imageFile = [PFFile fileWithData:imageData];
-                        [imageFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                            if (error) {
-                                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unable to upload image" message:@"Please try again or select a new image" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                                [alert show];
-                            }
-                            else {
-                                NSLog(@"Image was successfully uploaded");
-                                [tempArray addObject:imageFile];
+            NSData *imageData = UIImagePNGRepresentation(resizedImage);
+            PFFile *imageFile = [PFFile fileWithData:imageData];
+            [self.pffilesArray addObject:imageFile];
 
-                                    if (counter == self.imagesArray.count) {
-                                            NSLog(@"%ld should equal %lu", (long)counter, (unsigned long)self.imagesArray.count);
-                                            [[PFUser currentUser] setObject:tempArray forKey:@"imagesArray"];
-                                            [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                                    if (!error) {
-                                        NSLog(@"Images array was successfully saved");
-                                        self.doneButtonOutlet.enabled = YES;
-                                        [self.collectionView reloadData];
-                                        [self createAddPhotosButton];
-                                    }
-                                    else {
-                                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unable to upload image" message:@"Please try again or select a new image" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                                        [alert show];
-                                        }
-                                    }];
-                                }
-                            }
-                        }];
+            [[PFUser currentUser] setObject:self.pffilesArray forKey:@"imagesArray"];
+            [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (!error) {
+                    NSLog(@"Images array was successfully saved");
+                    self.doneButtonOutlet.enabled = YES;
+                    [self.collectionView reloadData];
+                    [self createAddPhotosButton];
                 }
+                else
+                {
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unable to upload image" message:@"Please try again or select a new image" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    [alert show];
+                }
+            }];
         }
 }
 
@@ -317,7 +301,7 @@
     self.addPhotos.layer.borderWidth = 2.0f;
     self.addPhotos.layer.cornerRadius = 5.0f;
     self.addPhotos.layer.borderColor = [[UIColor buttonColor] CGColor];
-    [self.view addSubview:self.addPhotos];
+    [self.scrollView addSubview:self.addPhotos];
     }
     self.activityIndicator.hidden = YES;
     [self.activityIndicator stopAnimating];

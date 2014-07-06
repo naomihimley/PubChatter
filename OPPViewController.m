@@ -82,8 +82,6 @@
 
 
 -(void)addViewsToScrollView {
-    [self setStyle];
-
 
     self.verticalOffset = 0.0;
 
@@ -134,6 +132,7 @@
     [self.scrollView addSubview:self.pictureButton];
 
     self.verticalOffset = self.verticalOffset + self.profileImageView.frame.size.height + 10;
+    }
 
     //Add name label
     self.nameageLabel = [[UILabel alloc] init];
@@ -201,7 +200,8 @@
 
     self.activityIndicator.hidden = YES;
     [self.activityIndicator stopAnimating];
-    }
+    
+    [self setStyle];
 }
 
 -(void)getPersonalData
