@@ -151,7 +151,6 @@
                              [self.collectionView reloadData];
                              [self createAddPhotosButton];
                              NSLog(@"Number of images: %lu", (unsigned long)self.imagesArray.count);
-                             NSLog(@"Number of image files: %lu", filesArray.count);
 
                              self.activityIndicator.hidden = YES;
                              [self.activityIndicator stopAnimating];
@@ -289,6 +288,8 @@
 
 -(void)createAddPhotosButton
 {
+    [self.addPhotos removeFromSuperview];
+
     if (self.imagesArray.count < 5) {
         NSLog(@"I ran");
 
@@ -325,7 +326,7 @@
 -(void)onAddPhotoButtonPressed:(id)sender
 {
     self.profilePic = NO;
-    [self.addPhotos removeFromSuperview];
+    self.addPhotos.enabled = NO;
     [self presentViewController:self.cameraController animated:NO completion:^{}];
 }
 

@@ -13,13 +13,15 @@
 #import "BarDetailViewController.h"
 
 @interface ProfileViewController ()<CLLocationManagerDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, UIScrollViewDelegate>
-@property (strong, nonatomic) UIImage *profileImage;
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSString *gender;
 @property (strong, nonatomic) NSString *bioText;
 @property (strong, nonatomic) NSString *age;
 @property (strong, nonatomic) NSString *sexualOrientation;
 @property (strong, nonatomic) NSString *favDrink;
+@property (strong, nonatomic) NSMutableArray *imagesArray;
+
+@property (strong, nonatomic) UIImage *profileImage;
 @property (strong, nonatomic) UITextView *bioTextView;
 @property (strong, nonatomic) UILabel *nameageLabel;
 @property (strong, nonatomic) UILabel *genderLabel;
@@ -29,16 +31,14 @@
 @property (strong, nonatomic) UIButton *logoutButton;
 @property (strong, nonatomic) UIButton *pictureButton;
 @property (strong, nonatomic) UIImageView *profileImageView;
-@property (strong, nonatomic) UIScrollView *pictureScroll;
+@property (strong, nonatomic) UIImageView *largeImageView;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+
 @property BOOL pictureButtonPressed;
 @property CGFloat verticalOffset;
+@property NSInteger swipeIndex;
 @property (weak, nonatomic) IBOutlet UIButton *editButtonOutlet;
-
-@property (strong, nonatomic) UILabel *completeProfile;
-
-
 @property AppDelegate *appDelegate;
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 -(void)didreceiveNotification:(NSNotification *)notification;
 
@@ -59,6 +59,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     self.pictureButtonPressed = NO;
+    self.swipeIndex = 0;
 
     [super viewWillAppear:YES];
     [self.nameageLabel removeFromSuperview];
@@ -69,29 +70,46 @@
     [self.bioTextView removeFromSuperview];
     [self.profileImageView removeFromSuperview];
     [self.logoutButton removeFromSuperview];
-    [self.pictureScroll removeFromSuperview];
+    [self.largeImageView removeFromSuperview];
 
     [self getParseData];
 }
-
 
 -(void)addViewsToScrollView {
 
     self.verticalOffset = 0.0;
 
     if (self.pictureButtonPressed) {
-        self.pictureScroll = [[UIScrollView alloc] initWithFrame:CGRectMake(self.scrollView.frame.origin.x, self.verticalOffset, self.scrollView.frame.size.width, self.scrollView.frame.size.width)];
-        self.pictureScroll.backgroundColor = [UIColor blackColor];
 
-        [self.scrollView addSubview:self.pictureScroll];
-        self.verticalOffset = self.verticalOffset + self.pictureScroll.frame.size.height + 10;
+        self.largeImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.origin.x, self.verticalOffset, self.view.frame.size.width, self.view.frame.size.width)];
+        [self.largeImageView setUserInteractionEnabled:YES];
+
+        self.largeImageView.image = [self.imagesArray objectAtIndex:self.swipeIndex];
+
+        UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
+        UISwipeGestureRecognizer *swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissLargePics:)];
+
+        // Setting the swipe direction.
+        [swipeLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
+        [swipeRight setDirection:UISwipeGestureRecognizerDirectionRight];
+
+        // Adding stuff to the superview
+        [self.largeImageView addGestureRecognizer:swipeLeft];
+        [self.largeImageView addGestureRecognizer:swipeRight];
+        [self.view addGestureRecognizer:tap];
+        [self.scrollView addSubview:self.largeImageView];
+
+        self.verticalOffset = self.verticalOffset + self.largeImageView.frame.size.height + 10;
     }
 
     else {
-        self.verticalOffset = 30.0;
+
+    self.verticalOffset = 30.0;
+        
     //Add imageview
     self.profileImageView = [[UIImageView alloc] init];
-    self.profileImageView.frame = CGRectMake((self.scrollView.frame.size.width/2) - 75, self.verticalOffset, 150, 150);
+    self.profileImageView.frame = CGRectMake((self.scrollView.frame.size.width/2) - 100, self.verticalOffset, 200, 200);
     self.profileImageView.image = self.profileImage;
     self.profileImageView.layer.cornerRadius = 5.0f;
     self.profileImageView.layer.masksToBounds = YES;
@@ -292,11 +310,15 @@
          self.sexualOrientation = @"Interested in: Other";
      }
 
+    self.imagesArray = [NSMutableArray new];
+
     if ([[PFUser currentUser]objectForKey:@"picture"] != nil) {
         PFFile *file = [[PFUser currentUser]objectForKey:@"picture"];
         [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error)
          {
              self.profileImage = [UIImage imageWithData:data];
+             [self.imagesArray addObject:self.profileImage];
+             [self getArrayOfImages];
              [self addViewsToScrollView];
          }];
         }
@@ -305,6 +327,24 @@
         [self addViewsToScrollView];
     }
 }
+
+-(void)getArrayOfImages
+{
+    NSArray *tempArray = [[PFUser currentUser] objectForKey:@"imagesArray"];
+
+    if (tempArray) {
+        for (PFFile *file in tempArray) {
+            [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+                if (data) {
+                    UIImage *image = [UIImage imageWithData:data];
+                    [self.imagesArray addObject:image];
+                    NSLog(@"images array count: %lu", (unsigned long)self.imagesArray.count);
+                }
+            }];
+        }
+    }
+}
+
 
 #pragma mark - Segue Methods
 
@@ -333,9 +373,68 @@
     [self.bioTextView removeFromSuperview];
     [self.profileImageView removeFromSuperview];
     [self.logoutButton removeFromSuperview];
-    [self.pictureScroll removeFromSuperview];
 
     [self addViewsToScrollView];
 }
 
+- (void)handleSwipe:(UISwipeGestureRecognizer *)swipe {
+
+    if (swipe.direction == UISwipeGestureRecognizerDirectionLeft) {
+        NSLog(@"Left Swipe");
+        if (self.swipeIndex == self.imagesArray.count -1) {
+            NSLog(@"Swipe Index = %ld", (long)self.swipeIndex);
+        }
+        else {
+            self.swipeIndex += 1;
+            self.largeImageView.image = [self.imagesArray objectAtIndex:self.swipeIndex];
+            NSLog(@"Swipe Index = %ld", (long)self.swipeIndex);
+        }
+    }
+
+    if (swipe.direction == UISwipeGestureRecognizerDirectionRight) {
+        NSLog(@"Right Swipe");
+        if (self.swipeIndex == 0) {
+            NSLog(@"Swipe Index = %ld", (long)self.swipeIndex);
+        }
+        else {
+            self.swipeIndex -= 1;
+            self.largeImageView.image = [self.imagesArray objectAtIndex:self.swipeIndex];
+            NSLog(@"Swipe Index = %ld", (long)self.swipeIndex);
+        }
+    }
+}
+
+-(void)dismissLargePics:(id)sender
+{
+
+    NSLog(@"I ran");
+    self.pictureButtonPressed = NO;
+
+    [self.nameageLabel removeFromSuperview];
+    [self.genderLabel removeFromSuperview];
+    [self.interestedLabel removeFromSuperview];
+    [self.favDrinkLabel removeFromSuperview];
+    [self.aboutMeLabel removeFromSuperview];
+    [self.bioTextView removeFromSuperview];
+    [self.profileImageView removeFromSuperview];
+    [self.logoutButton removeFromSuperview];
+    [self.largeImageView removeFromSuperview];
+
+    [self addViewsToScrollView];
+}
+
+
+
+
+
 @end
+
+
+
+
+
+
+
+
+
+

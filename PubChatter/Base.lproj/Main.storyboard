@@ -21,7 +21,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wh2-Nn-Hjw">
-                                <rect key="frame" x="14" y="63" width="292" height="438"/>
+                                <rect key="frame" x="0.0" y="63" width="320" height="460"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <connections>
                                     <outlet property="delegate" destination="lwU-9d-CM2" id="qbS-1K-Kne"/>
@@ -53,9 +53,9 @@
                         <constraints>
                             <constraint firstItem="vwY-0H-4Sx" firstAttribute="top" secondItem="NOX-p5-blG" secondAttribute="top" id="HpH-SU-WrP"/>
                             <constraint firstItem="vwY-0H-4Sx" firstAttribute="leading" secondItem="NOX-p5-blG" secondAttribute="leading" id="Meg-Jt-AJE"/>
-                            <constraint firstItem="Wh2-Nn-Hjw" firstAttribute="leading" secondItem="NOX-p5-blG" secondAttribute="leading" constant="14" id="SOM-nt-JdT"/>
+                            <constraint firstItem="Wh2-Nn-Hjw" firstAttribute="leading" secondItem="NOX-p5-blG" secondAttribute="leading" id="SOM-nt-JdT"/>
                             <constraint firstItem="vwY-0H-4Sx" firstAttribute="centerX" secondItem="Wh2-Nn-Hjw" secondAttribute="centerX" id="ZzS-SY-ln3"/>
-                            <constraint firstItem="D1X-bu-eZx" firstAttribute="top" secondItem="Wh2-Nn-Hjw" secondAttribute="bottom" constant="23" id="lQp-Oe-kLN"/>
+                            <constraint firstItem="D1X-bu-eZx" firstAttribute="top" secondItem="Wh2-Nn-Hjw" secondAttribute="bottom" constant="1" id="lQp-Oe-kLN"/>
                             <constraint firstItem="Wh2-Nn-Hjw" firstAttribute="top" secondItem="NOX-p5-blG" secondAttribute="top" constant="63" id="tES-W7-W4l"/>
                         </constraints>
                     </view>
