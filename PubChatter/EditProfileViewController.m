@@ -11,7 +11,7 @@
 #import "UIColor+DesignColors.h"
 #import "CustomCollectionViewCell.h"
 
-@interface EditProfileViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, UIPickerViewDataSource,UIPickerViewDelegate, UIScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
+@interface EditProfileViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, UIPickerViewDataSource,UIPickerViewDelegate, UIScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *nameTextField;
 @property (nonatomic, strong) UIImagePickerController *cameraController;
 @property (weak, nonatomic) IBOutlet UITextField *ageLabel;
@@ -25,6 +25,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *genderLabel;
 @property (weak, nonatomic) IBOutlet UIButton *editProfileButton;
 @property (strong, nonatomic) UIButton *addPhotos;
+@property (strong, nonatomic) UIButton *deletePhotoButton;
 @property NSArray *genderArray;
 @property NSArray *interestedArray;
 @property NSString *genderString;
@@ -37,6 +38,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *doneButtonOutlet;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButtonOutlet;
 @property BOOL profilePic;
+@property UITapGestureRecognizer *tap;
+@property NSInteger indexOfImageToBeDeleted;
 
 
 @end
@@ -51,7 +54,7 @@
 
     self.scrollView.delegate = self;
     self.bioTextView.delegate = self;
-
+    self.collectionView.delegate = self;
 
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
@@ -68,6 +71,13 @@
     {
         self.cameraController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     }
+
+    // attach long press gesture to collectionView
+    UILongPressGestureRecognizer *lpgr = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handlePress:)];
+    lpgr.minimumPressDuration = .3; //seconds
+    lpgr.delegate = self;
+    [self.collectionView addGestureRecognizer:lpgr];
+
 
     [self setFields];
 }
@@ -151,7 +161,7 @@
                          if (counter == self.pffilesArray.count) {
                              [self.collectionView reloadData];
                              [self createAddPhotosButton];
-                             NSLog(@"Number of images: %lu", (unsigned long)self.imagesArray.count);
+                             NSLog(@"Image files count = %lu , Images count = %lu", (unsigned long)self.pffilesArray.count, (unsigned long)self.imagesArray.count);
                              self.activityIndicator.hidden = YES;
                              [self.activityIndicator stopAnimating];
                          }
@@ -218,8 +228,6 @@
     }
 
     else {
-            [self.imagesArray addObject:resizedImage];
-            NSLog(@"Images array count: %lu", (unsigned long)self.imagesArray.count);
             NSData *imageData = UIImagePNGRepresentation(resizedImage);
             PFFile *imageFile = [PFFile fileWithData:imageData];
             [self.pffilesArray addObject:imageFile];
@@ -227,10 +235,11 @@
             [[PFUser currentUser] setObject:self.pffilesArray forKey:@"imagesArray"];
             [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (!error) {
-                    NSLog(@"Images array was successfully saved");
+                    [self.imagesArray addObject:resizedImage];
                     self.doneButtonOutlet.enabled = YES;
                     [self.collectionView reloadData];
                     [self createAddPhotosButton];
+                    NSLog(@"Image files count = %lu , Images count = %lu", (unsigned long)self.pffilesArray.count, (unsigned long)self.imagesArray.count);
                 }
                 else
                 {
@@ -275,7 +284,6 @@
     [self.addPhotos removeFromSuperview];
 
     if (self.imagesArray.count < 5) {
-        NSLog(@"I ran");
 
     NSInteger numberOfPhotosInCollectionView = self.imagesArray.count;
     CGFloat imagewidth = 64.0;
@@ -292,7 +300,6 @@
     if (self.imagesArray.count > 3) {
         [self.addPhotos setImage:[UIImage imageNamed:@"profile-placeholder"] forState:UIControlStateNormal];
         [self.addPhotos setBackgroundColor:[UIColor buttonColor]];
-        NSLog(@"I ran");
     }
     else {
         [self.addPhotos setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
@@ -303,6 +310,7 @@
     self.addPhotos.layer.borderColor = [[UIColor buttonColor] CGColor];
     [self.scrollView addSubview:self.addPhotos];
     }
+
     self.activityIndicator.hidden = YES;
     [self.activityIndicator stopAnimating];
 }
@@ -387,10 +395,7 @@
     return UIEdgeInsetsMake(0, 0, 0, 0);
 }
 
-//- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
-//{
-//    return 0.0;
-//}
+
 
 #pragma mark - UITextView Delegate Methods
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
@@ -539,6 +544,123 @@
     [self.view endEditing:YES];
 }
 
+- (void)handlePress:(UILongPressGestureRecognizer *)press
+{
+    if (press.state != UIGestureRecognizerStateEnded) {
+        return;
+    }
+
+    CGPoint p = [press locationInView:self.collectionView];
+    NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:p];
+    if (indexPath == nil){
+        NSLog(@"couldn't find index path");
+    } else
+    {
+        self.indexOfImageToBeDeleted = indexPath.row;
+        NSLog(@"Index path: %ld", self.indexOfImageToBeDeleted);
+
+        UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+        [self makeDeleteButtonForCell:cell];
+    }
+}
+
+-(void)makeDeleteButtonForCell:(UICollectionViewCell *)cell
+{
+    NSLog(@"Method to create delete button ran");
+
+    self.deletePhotoButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [self.deletePhotoButton addTarget:self
+                       action:@selector(deleteImage:)
+             forControlEvents:UIControlEventTouchUpInside];
+    self.deletePhotoButton.frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height);
+
+    [self.deletePhotoButton setBackgroundColor:[UIColor clearColor]];
+    [self.deletePhotoButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    [self.deletePhotoButton setTitle:@"X" forState:UIControlStateNormal];
+    self.deletePhotoButton.layer.cornerRadius = self.deletePhotoButton.frame.size.width / 2;
+    self.deletePhotoButton.titleLabel.font = [UIFont systemFontOfSize:58.0];
+    self.deletePhotoButton.layer.borderWidth = 2.0f;
+    self.deletePhotoButton.layer.borderColor = [[UIColor redColor] CGColor];
+
+    self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeDeleteButtonFromSuperView:)];
+
+    [self.view addGestureRecognizer:self.tap];
+
+    self.bioTextView.editable = NO;
+    [self.nameTextField setUserInteractionEnabled:NO];
+    [self.ageLabel setUserInteractionEnabled:NO];
+    [self.favoriteDrinkLabel setUserInteractionEnabled:NO];
+    [self.addPhotos setUserInteractionEnabled:NO];
+    [self.editProfileButton setUserInteractionEnabled:NO];
+    [self.genderPicker setUserInteractionEnabled:NO];
+
+    NSLog(@"%@", cell);
+
+    [self.collectionView addSubview:self.deletePhotoButton];
+}
+
+-(void)deleteImage:(id)sender
+{
+    NSLog(@"Delete button pushed");
+
+    [self.pffilesArray removeObjectAtIndex:self.indexOfImageToBeDeleted];
+
+    [[PFUser currentUser] setObject:self.pffilesArray forKey:@"imagesArray"];
+    [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (!error) {
+            [self.imagesArray removeObjectAtIndex:self.indexOfImageToBeDeleted];
+            NSLog(@"Image files count = %lu , Images count = %lu", (unsigned long)self.pffilesArray.count, (unsigned long)self.imagesArray.count);
+            [self.collectionView reloadData];
+            [self createAddPhotosButton];
+            [self.deletePhotoButton removeFromSuperview];
+            self.deletePhotoButton = nil;
+            [self.view removeGestureRecognizer:self.tap];
+
+            self.bioTextView.editable = YES;
+            [self.nameTextField setUserInteractionEnabled:YES];
+            [self.ageLabel setUserInteractionEnabled:YES];
+            [self.favoriteDrinkLabel setUserInteractionEnabled:YES];
+            [self.addPhotos setUserInteractionEnabled:YES];
+            [self.editProfileButton setUserInteractionEnabled:YES];
+            [self.genderPicker setUserInteractionEnabled:YES];
+
+            self.tap = nil;
+        }
+        else
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unable to remove image" message:@"Please try again" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [alert show];
+            [self.deletePhotoButton removeFromSuperview];
+            self.deletePhotoButton = nil;
+            [self.view removeGestureRecognizer:self.tap];
+            self.tap = nil;
+
+            self.bioTextView.editable = YES;
+            [self.nameTextField setUserInteractionEnabled:YES];
+            [self.ageLabel setUserInteractionEnabled:YES];
+            [self.favoriteDrinkLabel setUserInteractionEnabled:YES];
+            [self.addPhotos setUserInteractionEnabled:YES];
+            [self.editProfileButton setUserInteractionEnabled:YES];
+            [self.genderPicker setUserInteractionEnabled:YES];
+        }
+    }];
+}
+
+-(void)removeDeleteButtonFromSuperView:(id)sender
+{
+    [self.deletePhotoButton removeFromSuperview];
+    self.deletePhotoButton = nil;
+    [self.view removeGestureRecognizer:self.tap];
+    self.tap = nil;
+
+    self.bioTextView.editable = YES;
+    [self.nameTextField setUserInteractionEnabled:YES];
+    [self.ageLabel setUserInteractionEnabled:YES];
+    [self.favoriteDrinkLabel setUserInteractionEnabled:YES];
+    [self.addPhotos setUserInteractionEnabled:YES];
+    [self.editProfileButton setUserInteractionEnabled:YES];
+    [self.genderPicker setUserInteractionEnabled:YES];
+}
 
 
 @end

@@ -406,7 +406,6 @@
 
 -(void)dismissLargePics:(id)sender
 {
-
     NSLog(@"I ran");
     self.pictureButtonPressed = NO;
 
