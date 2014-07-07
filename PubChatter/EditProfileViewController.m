@@ -388,6 +388,7 @@
 {
     CustomCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
     cell.imageView.image = [self.imagesArray objectAtIndex:indexPath.row];
+    cell.layer.cornerRadius = 5.0f;
     return cell;
 }
 
