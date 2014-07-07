@@ -253,11 +253,9 @@
 
 -(void)browser:(MCNearbyServiceBrowser *)browser lostPeer:(MCPeerID *)peerID
 {
-//    [self.advertisingUsers removeObject:peerID.displayName];
+
     if (![self.connectedArray containsObject:peerID.displayName])
     {
-        [self.advertisingUsers removeObject:peerID.displayName];
-
         NSMutableArray *array = [NSMutableArray arrayWithArray:self.foundPeersArray];
 
         for (NSString *displayname in array)
