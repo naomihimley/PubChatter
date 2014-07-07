@@ -1,14 +1,14 @@
 //
-//  ChatLabel.m
+//  CustomCollectionViewCell.m
 //  PubChatter
 //
-//  Created by David Warner on 7/3/14.
+//  Created by David Warner on 7/5/14.
 //  Copyright (c) 2014 Naomi Himley. All rights reserved.
 //
 
-#import "ChatLabel.h"
+#import "CustomCollectionViewCell.h"
 
-@implementation ChatLabel
+@implementation CustomCollectionViewCell
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -17,11 +17,6 @@
         // Initialization code
     }
     return self;
-}
-
-- (void)drawTextInRect:(CGRect)rect {
-    UIEdgeInsets insets = {5, 5, 5, 5};
-    [super drawTextInRect:UIEdgeInsetsInsetRect(rect, insets)];
 }
 
 /*

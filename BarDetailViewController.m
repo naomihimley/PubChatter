@@ -37,6 +37,7 @@
 @property (strong, nonatomic)  NSString *numberOfUsersInBarString;
 @property (strong, nonatomic)  NSString *ratingString;
 @property (strong, nonatomic)  UIView *ratingBackgroundView;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @property Bar *bar;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -50,19 +51,17 @@
 {
     [super viewDidLoad];
     self.scrollView.delegate = self;
-    self.view.backgroundColor = [UIColor clearColor];
+    self.view.backgroundColor = [UIColor blackColor];
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
+    self.activityIndicator.hidden = NO;
+    [self.activityIndicator startAnimating];
     [self.navigationController.navigationBar setTintColor:[UIColor buttonColor]];
     [self.refreshButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
     [self.refreshButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
     [self.refreshButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
-    self.refreshButtonOutlet.layer.cornerRadius = 5.0f;
-    self.refreshButtonOutlet.layer.masksToBounds = YES;
-    self.refreshButtonOutlet.layer.borderWidth = 2.0f;
-    self.refreshButtonOutlet.layer.borderColor= [[UIColor buttonColor]CGColor];
 
     [self.barNameLabel removeFromSuperview];
     [self.barAddressLabel removeFromSuperview];
@@ -141,18 +140,23 @@
 
     textLabelsOffset = textLabelsOffset + self.distanceFromUserLabel.frame.size.height + 10;
 
-        self.telephoneOutlet = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        [self.telephoneOutlet addTarget:self
-               action:@selector(onTelephoneButtonPressed:)
-     forControlEvents:UIControlEventTouchUpInside];
+    self.telephoneOutlet = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    self.telephoneOutlet.frame = CGRectMake(10, textLabelsOffset, (self.scrollView.frame.size.width - self.barImageView.frame.size.width - 30), 30);
+    [self.telephoneOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+    self.telephoneOutlet.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+
+    if (self.barFromSourceVC.telephone) {
         [self.telephoneOutlet setTitle:[NSString stringWithFormat:@"(%@) %@-%@", [self.barFromSourceVC.telephone substringWithRange:NSMakeRange(0, 3)], [self.barFromSourceVC.telephone substringWithRange:NSMakeRange(3, 3)], [self.barFromSourceVC.telephone substringWithRange:NSMakeRange(6, 4)]] forState:UIControlStateNormal];
-        self.telephoneOutlet.frame = CGRectMake(10, textLabelsOffset, (self.scrollView.frame.size.width - self.barImageView.frame.size.width - 30), 30);
-        [self.telephoneOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
- //       [self.telephoneOutlet setTitleColor:[UIColor whiteColor] forState:uicontrolstat];
 
-
-        self.telephoneOutlet.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        [self.scrollView addSubview:self.telephoneOutlet];
+        [self.telephoneOutlet addTarget:self
+                                 action:@selector(onTelephoneButtonPressed:)
+                       forControlEvents:UIControlEventTouchUpInside];
+        }
+    else {
+        [self.telephoneOutlet setTitle:@"Tel # unavailable" forState:UIControlStateNormal];
+        self.telephoneOutlet.enabled = NO;
+    }
+    [self.scrollView addSubview:self.telephoneOutlet];
 
     textLabelsOffset = textLabelsOffset + self.telephoneOutlet.frame.size.height + 10;
 
@@ -253,6 +257,8 @@
     [self.barRatingLabel clipsToBounds];
     self.barRatingLabel.textColor = [UIColor whiteColor];
     [self.ratingBackgroundView addSubview:self.barRatingLabel];
+    self.activityIndicator.hidden = YES;
+    [self.activityIndicator stopAnimating];
 }
 
 - (void)onTelephoneButtonPressed:(id)sender
@@ -284,17 +290,14 @@
                 NSArray *array = [[objects firstObject] objectForKey:@"usersInBar"];
                 NSInteger pubChattersInBar = array.count;
                 self.numberOfUsersInBarString = [NSString stringWithFormat:@"%ld PubChat users in %@", (long)pubChattersInBar, self.barFromSourceVC.name];
-                NSLog(@"Chatters present");
             }
 
         else {
             self.numberOfUsersInBarString = [NSString stringWithFormat:@"No PubChat users in %@", self.barFromSourceVC.name];
-            NSLog(@"No chatters present");
             }
         }
         else {
         self.numberOfUsersInBarString = [NSString stringWithFormat:@"No PubChat users in %@", self.barFromSourceVC.name];
-            NSLog(@"Bar not found");
         }
         [self findBar];
     }];

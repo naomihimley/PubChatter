@@ -34,7 +34,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *searchBar;
 @property (weak, nonatomic) IBOutlet UIButton *redrawAreaButtonOutlet;
 @property (weak, nonatomic) IBOutlet UIButton *rateBarButton;
-@property (weak, nonatomic) IBOutlet UIView *searchBackGroundView;
+//@property (weak, nonatomic) IBOutlet UIView *searchBackGroundView;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButtonOutlet;
 @property CGFloat span;
 @property CGFloat SWBoundsLatitude;
@@ -66,26 +66,30 @@
                                                  name:@"userEnteredBar"
                                                object:nil];
 
-
     // Do set up work, set querystring, mapspan, and begin looking for user location.
-    self.searchBar.delegate = self;
-    self.activityIndicatorOutlet.hidden = YES;
     self.didCheckForBeaconMonitoring = NO;
     self.initialMapLoad = YES;
     self.queryString = @"bar";
     self.mapSpan = MKCoordinateSpanMake(0.01, 0.01);
     self.toggleControlOutlet.selectedSegmentIndex = 0;
-    self.currentLocationButtonOutlet.hidden = NO;
-    self.mapView.hidden = NO;
-    self.redrawAreaButtonOutlet.hidden = NO;
-    self.redrawAreaButtonOutlet.layer.cornerRadius = 5.0f;
-    self.tableView.hidden = YES;
     self.locationManager = [[CLLocationManager alloc] init];
     [self.locationManager startUpdatingLocation];
-    self.locationManager.delegate = self;
     self.searchActivated = NO;
     self.redrawActivated = NO;
+
+    //Set delegates
+    self.searchBar.delegate = self;
+    self.locationManager.delegate = self;
+
+    //Views set to hidden on initial load
+    self.activityIndicatorOutlet.hidden = YES;
     self.rateBarButton.hidden = YES;
+    self.tableView.hidden = YES;
+
+    //Views set to show on initial load
+    self.mapView.hidden = NO;
+    self.redrawAreaButtonOutlet.hidden = NO;
+    self.currentLocationButtonOutlet.hidden = NO;
 
     // Set drawerview actions
     self.revealViewController.delegate = self;
@@ -103,7 +107,6 @@
 {
     [super viewWillAppear:animated];
     self.isUserInteraction = YES;
-
 }
 
 // Finds user location and sets the userLocation property
@@ -158,27 +161,6 @@
     // Call method to get JSON with boundary box parameters, "bar" search term, 20 results
     [self getYelpJSONFromMapRedraw:@"bar" andSWLatitude:self.SWBoundsLatitude andSWLongitude:self.SWBoundsLongitude andNELatitude:self.NEBoundsLatitude andNELongitude:self.NEBoundsLongitude andSortType:@"1" andNumResults:@"20" andLongitude:0.0 andLatitude:0.0];
 }
-
-// Enables search on keyPad search button pressed.
-//-(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
-//{
-//    self.activityIndicatorOutlet.hidden = NO;
-//    [self.activityIndicatorOutlet startAnimating];
-//
-//    // Set search boolean.
-//    self.searchActivated  = YES;
-//
-//    // Clear the map of previous annotations and set queryString from user input.
-//    [self.mapView removeAnnotations:self.mapView.annotations];
-//    self.queryString = self.searchBar.text;
-//    self.searchBar.text = nil;
-//
-//    // Finds the single best result based on querystring input and user's current location.
-//    [self getYelpJSONFromMapRedraw:self.queryString andSWLatitude:0.0 andSWLongitude:0.0 andNELatitude:0.0 andNELongitude:0.0 andSortType:@"0" andNumResults:@"1" andLongitude:self.userLocation.coordinate.longitude andLatitude:self.userLocation.coordinate.latitude];
-//
-//    // Dismiss keyboard.
-//    [self.searchBar endEditing:YES];
-//}
 
 // Toggles mapview and tableview
 - (IBAction)onToggleMapListViewPressed:(id)sender
@@ -768,41 +750,44 @@ calloutAccessoryControlTapped:(UIControl *)control
 {
     //Segmented control.
     self.toggleControlOutlet.backgroundColor = [UIColor whiteColor];
+    self.toggleControlOutlet.alpha = .9f;
 
     //Redraw button.
     [self.redrawAreaButtonOutlet setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.redrawAreaButtonOutlet.layer.borderWidth = 1.0f;
     self.redrawAreaButtonOutlet.layer.borderColor = [[UIColor clearColor] CGColor];
     self.redrawAreaButtonOutlet.backgroundColor = [UIColor blackColor];
+    self.redrawAreaButtonOutlet.layer.cornerRadius = 5.0f;
+    self.redrawAreaButtonOutlet.alpha = .9f;
 
     //Tableview
     self.tableView.backgroundColor = [UIColor clearColor];
 
-
+    //View
     self.view.backgroundColor = [UIColor clearColor];
 
-
+    //Activity indicator
     self.activityIndicatorOutlet.color = [UIColor backgroundColor];
+
+    //"Rate bar" button
     [self.rateBarButton setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
     [self.rateBarButton setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
     [self.rateBarButton setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
     self.rateBarButton.backgroundColor = [UIColor clearColor];
-//    self.rateBarButton.layer.cornerRadius = 5.0f;
-//    self.rateBarButton.layer.masksToBounds = YES;
-//    self.rateBarButton.layer.borderWidth = 2.0f;
-//    self.rateBarButton.layer.borderColor= [[UIColor buttonColor]CGColor];
+
+    //Tab bar
     [self.tabBarController.tabBar setTintColor:[UIColor whiteColor]];
+
+    //Cancel button
     [self.cancelButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
     self.cancelButtonOutlet.layer.borderWidth = 2.0f;
     self.cancelButtonOutlet.layer.borderColor = [[UIColor buttonColor] CGColor];
     self.cancelButtonOutlet.layer.cornerRadius = 5.0f;
 
-    self.searchBackGroundView.alpha = 0.0f;
-//    self.currentLocationButtonOutlet.backgroundColor = [UIColor whiteColor];
+    //Snap to current location button
     self.currentLocationButtonOutlet.layer.borderWidth = 2.0f;
     self.currentLocationButtonOutlet.layer.cornerRadius = 5.0f;
     self.currentLocationButtonOutlet.layer.borderColor = [[UIColor blackColor] CGColor];
-
 }
 
 #pragma mark - other methods

@@ -62,7 +62,13 @@
     return [UIColor colorWithRed:red green:green blue:blue alpha:1];
 }
 
-
++(UIColor *)textFieldColor
+{
+    CGFloat red = 204/255.0;
+    CGFloat green = 205.0/255.0;
+    CGFloat blue = 199.0/255.0;
+    return [UIColor colorWithRed:red green:green blue:blue alpha:1];
+}
 
 
 

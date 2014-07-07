@@ -13,7 +13,6 @@
 #import "SWRevealViewController.h"
 #import "UIColor+DesignColors.h"
 #import "ChatTableViewCell.h"
-#import "ChatLabel.h"
 
 @interface ChatBoxViewController ()<UITextFieldDelegate, UIAlertViewDelegate, UITableViewDelegate, UITableViewDataSource, SWRevealViewControllerDelegate>
 @property PFUser *chatingUser;
@@ -110,7 +109,6 @@
 {
     [UIView animateWithDuration:0.25 animations:^{
         self.view.frame = CGRectMake(self.view.frame.origin.x, self.viewy, self.view.frame.size.width, self.view.frame.size.height);
-
     }];
 }
 
@@ -124,7 +122,6 @@
             [self fetch];
         });
     }
-
 }
 
 //notification from when you click the "CHAT" button in the drawer
@@ -163,7 +160,6 @@
         //load an empty tableView because you dont have a conversation started with that person.
         self.sortedArray = [NSArray new];
         [self.tableView reloadData];
-
     }
 }
 
@@ -192,14 +188,14 @@
     [cell.leftLabel  setText:message.text];
     [cell layoutSubviews];
     CGFloat height = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
-    return height + 10;
+
+    return height + 5;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 70;
 }
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -211,31 +207,53 @@
     if (self.sortedArray)
     {
         Message *message = [self.sortedArray objectAtIndex:indexPath.row];
+
         if ([message.isMyMessage isEqual:@0]) {
             ChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+            cell.backgroundColor = [UIColor clearColor];
+
+            //Set text and styling for lefthand message bubble.
             [cell.leftLabel setText:message.text];
             cell.leftLabel.textAlignment = NSTextAlignmentLeft;
-            cell.backgroundColor = [UIColor clearColor];
-            cell.leftLabel.textColor = [UIColor backgroundColor];
+            cell.leftLabel.textColor = [UIColor whiteColor];
             cell.leftLabel.layer.cornerRadius = 10.0f;
             cell.leftLabel.layer.masksToBounds = YES;
-            cell.leftLabel.backgroundColor = [[UIColor textColor] colorWithAlphaComponent:0.9];
+            cell.leftLabel.backgroundColor = [UIColor backgroundColor];
             cell.leftLabel.hidden = NO;
             cell.rightLabel.hidden = YES;
+
+            //Set styling for message bubble edge.
+            cell.leftBorderEdge.layer.cornerRadius = 15.0f;
+            cell.leftBorderEdge.layer.masksToBounds = YES;
+            cell.leftBorderEdge.layer.borderWidth = 1.0f;
+            cell.leftBorderEdge.backgroundColor = [UIColor backgroundColor];
+            cell.leftBorderEdge.layer.borderColor = [[UIColor whiteColor] CGColor];
+            cell.leftBorderEdge.textColor = [UIColor clearColor];
+
             return cell;
         }
         else
         {
             ChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell2"];
+            cell.backgroundColor = [UIColor clearColor];
+
+            //Set text and styling for righthand message bubble.
             [cell.rightLabel setText:message.text];
             cell.rightLabel.textAlignment = NSTextAlignmentRight;
-            cell.backgroundColor = [UIColor clearColor];
-            cell.rightLabel.textColor = [UIColor whiteColor];
+            cell.rightLabel.textColor = [UIColor blackColor];
             cell.rightLabel.layer.cornerRadius = 10.0f;
             cell.rightLabel.layer.masksToBounds = YES;
-            cell.rightLabel.backgroundColor = [[UIColor backgroundColor] colorWithAlphaComponent:0.9];
+            cell.rightLabel.backgroundColor = [UIColor textFieldColor];
+            cell.rightLabel.hidden = YES;
             cell.rightLabel.hidden = NO;
-            cell.leftLabel.hidden = YES;
+
+            //Set styling for right message bubble edge.
+            cell.rightBorderEdge.layer.cornerRadius = 15.0f;
+            cell.rightBorderEdge.layer.masksToBounds = YES;
+            cell.rightBorderEdge.layer.borderWidth = 1.0f;
+            cell.rightBorderEdge.backgroundColor = [UIColor textFieldColor];
+            cell.rightBorderEdge.layer.borderColor = [[UIColor blackColor] CGColor];
+            cell.rightBorderEdge.textColor = [UIColor clearColor];
 
             return cell;
         }
@@ -309,6 +327,7 @@
                 [moc save:nil];
                 [self fetch];
             }
+
             else
             {
                 NSFetchRequest *request = [[NSFetchRequest alloc]initWithEntityName:@"Peer"];
@@ -361,7 +380,6 @@
 # pragma mark - Button Actions
 - (IBAction)onButtonPressedSendChat:(id)sender
 {
-
     if (self.appDelegate.mcManager.session.connectedPeers.count > 0) {
         if(self.chattingUserPeerID)
         {
@@ -410,12 +428,11 @@
     self.tableView.separatorColor = [UIColor clearColor];
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"river"]];
 
-
     UIImage *icon = [UIImage imageNamed:@"UserListIcon"];
     UIImageView *iconView = [[UIImageView alloc]initWithImage:icon];
     iconView.frame = CGRectMake((self.findPubChattersButton.frame.size.width/2) - 15, (self.findPubChattersButton.frame.size.height/2) - 15, 30, 30);
     [self.findPubChattersButton addSubview:iconView];
     [self.findPubChattersButton setBackgroundColor:[UIColor clearColor]];
-
 }
+
 @end

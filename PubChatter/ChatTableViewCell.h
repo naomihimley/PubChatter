@@ -7,10 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ChatLabel.h"
 
 @interface ChatTableViewCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet ChatLabel *rightLabel;
-@property (weak, nonatomic) IBOutlet ChatLabel *leftLabel;
+@property (weak, nonatomic) IBOutlet UILabel *rightLabel;
+@property (weak, nonatomic) IBOutlet UILabel *leftLabel;
+
+//The labels below are used to create some spacing between the right/left Label text and the edge of "message bubble"
+@property (weak, nonatomic) IBOutlet UILabel *rightBorderEdge;
+@property (weak, nonatomic) IBOutlet UILabel *leftBorderEdge;
 
 @end
