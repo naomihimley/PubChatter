@@ -12,7 +12,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "BarDetailViewController.h"
 
-@interface ProfileViewController ()<CLLocationManagerDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, UIScrollViewDelegate>
+@interface ProfileViewController ()<CLLocationManagerDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, UIScrollViewDelegate, UINavigationBarDelegate, UINavigationControllerDelegate>
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSString *gender;
 @property (strong, nonatomic) NSString *bioText;
@@ -33,6 +33,7 @@
 @property (strong, nonatomic) UIImageView *profileImageView;
 @property (strong, nonatomic) UIImageView *largeImageView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (strong, nonatomic) UIPageControl *pageControl;
 
 @property BOOL pictureButtonPressed;
 @property CGFloat verticalOffset;
@@ -48,7 +49,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.navigationController.delegate = self;
     self.view.backgroundColor = [UIColor clearColor];
+//    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"river"]];
     [self.editButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
     [self.editButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateHighlighted];
     [self.editButtonOutlet setTitleColor:[UIColor buttonColor] forState:UIControlStateSelected];
@@ -71,6 +74,8 @@
     [self.profileImageView removeFromSuperview];
     [self.logoutButton removeFromSuperview];
     [self.largeImageView removeFromSuperview];
+    [self.pageControl removeFromSuperview];
+    [self setStyle];
 
     [self getParseData];
 }
@@ -80,6 +85,10 @@
     self.verticalOffset = 0.0;
 
     if (self.pictureButtonPressed) {
+        self.swipeIndex = 0;
+        NSLog(@"images array count: %lu", (unsigned long)self.imagesArray.count);
+
+        //Add large imageview
 
         self.largeImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.origin.x, self.verticalOffset, self.view.frame.size.width, self.view.frame.size.width)];
         [self.largeImageView setUserInteractionEnabled:YES];
@@ -94,11 +103,21 @@
         [swipeLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
         [swipeRight setDirection:UISwipeGestureRecognizerDirectionRight];
 
+        //Add Page Control to navbar
+        self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(self.navigationController.navigationBar.frame.size.width / 2 - 50, self.navigationController.navigationBar.frame.origin.y, 100, 20)];
+        self.pageControl.numberOfPages = self.imagesArray.count;
+        self.pageControl.currentPageIndicatorTintColor = [UIColor buttonColor];
+        UINavigationController *navCon  = (UINavigationController*) [self.navigationController.viewControllers objectAtIndex:0];
+        navCon.navigationItem.title = @"";
+        self.editButtonOutlet.enabled = NO;
+        self.editButtonOutlet.titleLabel.textColor = [UIColor clearColor];
+
         // Adding stuff to the superview
         [self.largeImageView addGestureRecognizer:swipeLeft];
         [self.largeImageView addGestureRecognizer:swipeRight];
         [self.view addGestureRecognizer:tap];
         [self.scrollView addSubview:self.largeImageView];
+        [self.navigationController.navigationBar addSubview:self.pageControl];
 
         self.verticalOffset = self.verticalOffset + self.largeImageView.frame.size.height + 10;
     }
@@ -230,7 +249,6 @@
 
     self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, self.verticalOffset);
     self.scrollView.contentMode = UIViewContentModeScaleAspectFit;
-    [self setStyle];
 }
 
 -(void)logUserOut:(id)sender
@@ -358,7 +376,10 @@
 {
     //Style nameagelabel
     self.navigationController.navigationBar.backgroundColor = [UIColor navBarColor];
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"river"]];
+    UINavigationController *navCon  = (UINavigationController*) [self.navigationController.viewControllers objectAtIndex:0];
+        navCon.navigationItem.title = @"Profile";
+    self.editButtonOutlet.enabled = YES;
+    self.editButtonOutlet.titleLabel.textColor = [UIColor buttonColor];
 }
 
 -(void)getUserPictures:(id)sender
@@ -373,6 +394,8 @@
     [self.bioTextView removeFromSuperview];
     [self.profileImageView removeFromSuperview];
     [self.logoutButton removeFromSuperview];
+    [self.pageControl removeFromSuperview];
+    [self setStyle];
 
     [self addViewsToScrollView];
 }
@@ -380,7 +403,6 @@
 - (void)handleSwipe:(UISwipeGestureRecognizer *)swipe {
 
     if (swipe.direction == UISwipeGestureRecognizerDirectionLeft) {
-        NSLog(@"Left Swipe");
         if (self.swipeIndex == self.imagesArray.count -1) {
             NSLog(@"Swipe Index = %ld", (long)self.swipeIndex);
         }
@@ -388,11 +410,11 @@
             self.swipeIndex += 1;
             self.largeImageView.image = [self.imagesArray objectAtIndex:self.swipeIndex];
             NSLog(@"Swipe Index = %ld", (long)self.swipeIndex);
+            self.pageControl.currentPage = self.swipeIndex;
         }
     }
 
     if (swipe.direction == UISwipeGestureRecognizerDirectionRight) {
-        NSLog(@"Right Swipe");
         if (self.swipeIndex == 0) {
             NSLog(@"Swipe Index = %ld", (long)self.swipeIndex);
         }
@@ -400,13 +422,13 @@
             self.swipeIndex -= 1;
             self.largeImageView.image = [self.imagesArray objectAtIndex:self.swipeIndex];
             NSLog(@"Swipe Index = %ld", (long)self.swipeIndex);
+            self.pageControl.currentPage = self.swipeIndex;
         }
     }
 }
 
 -(void)dismissLargePics:(id)sender
 {
-    NSLog(@"I ran");
     self.pictureButtonPressed = NO;
 
     [self.nameageLabel removeFromSuperview];
@@ -418,6 +440,8 @@
     [self.profileImageView removeFromSuperview];
     [self.logoutButton removeFromSuperview];
     [self.largeImageView removeFromSuperview];
+    [self.pageControl removeFromSuperview];
+    [self setStyle];
 
     [self addViewsToScrollView];
 }

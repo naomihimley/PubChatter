@@ -149,6 +149,7 @@
 
     self.imagesArray = [NSMutableArray new];
     self.pffilesArray = [[PFUser currentUser] objectForKey:@"imagesArray"];
+    NSLog(@"PFFiles Array count: %lu", (unsigned long)self.pffilesArray.count);
         if (self.pffilesArray) {
             NSInteger counter = 0;
             for (PFFile *imageFile in self.pffilesArray) {
@@ -229,8 +230,14 @@
 
     else {
             NSData *imageData = UIImagePNGRepresentation(resizedImage);
+            NSLog(@"Image data: %@", imageData);
+
             PFFile *imageFile = [PFFile fileWithData:imageData];
+            NSLog(@"Image file: %@", imageFile);
+
             [self.pffilesArray addObject:imageFile];
+            NSLog(@"PFFiles Array count: %lu", (unsigned long)self.pffilesArray.count);
+
 
             [[PFUser currentUser] setObject:self.pffilesArray forKey:@"imagesArray"];
             [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {

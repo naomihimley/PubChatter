@@ -35,6 +35,7 @@
 @property (strong, nonatomic) UIImageView *largeImageView;
 @property (strong, nonatomic) UIImageView *profileImageView;
 @property (strong, nonatomic) UIButton *pictureButton;
+@property (strong, nonatomic) UIPageControl *pageControl;
 
 @property BOOL pictureButtonPressed;
 @property CGFloat verticalOffset;
@@ -100,11 +101,19 @@
         [swipeLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
         [swipeRight setDirection:UISwipeGestureRecognizerDirectionRight];
 
-        // Adding the swipe gesture on image view
+        //Add Page Control to navbar
+        self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(self.navigationController.navigationBar.frame.size.width / 2 - 50, self.navigationController.navigationBar.frame.origin.y, 100, 20)];
+        self.pageControl.numberOfPages = self.imagesArray.count;
+        self.pageControl.currentPageIndicatorTintColor = [UIColor buttonColor];
+        UINavigationController *navCon  = (UINavigationController*) [self.navigationController.viewControllers objectAtIndex:0];
+        navCon.navigationItem.title = @"";
+
+        // Adding views and gestures to superview
         [self.largeImageView addGestureRecognizer:swipeLeft];
         [self.largeImageView addGestureRecognizer:swipeRight];
         [self.view addGestureRecognizer:tap];
         [self.scrollView addSubview:self.largeImageView];
+        [self.navigationController.navigationBar addSubview:self.pageControl];
 
         self.verticalOffset = self.verticalOffset + self.largeImageView.frame.size.height + 10;
     }
@@ -385,6 +394,7 @@
         else {
             self.swipeIndex += 1;
             self.largeImageView.image = [self.imagesArray objectAtIndex:self.swipeIndex];
+            self.pageControl.currentPage = self.swipeIndex;
             NSLog(@"Swipe Index = %ld", (long)self.swipeIndex);
         }
     }
@@ -397,6 +407,7 @@
         else {
             self.swipeIndex -= 1;
             self.largeImageView.image = [self.imagesArray objectAtIndex:self.swipeIndex];
+            self.pageControl.currentPage = self.swipeIndex;
             NSLog(@"Swipe Index = %ld", (long)self.swipeIndex);
         }
     }

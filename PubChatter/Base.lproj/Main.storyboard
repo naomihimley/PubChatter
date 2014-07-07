@@ -735,7 +735,7 @@
             </objects>
             <point key="canvasLocation" x="1421" y="-606"/>
         </scene>
-        <!--Profile View Controller - Profile-->
+        <!--Profile View Controller-->
         <scene sceneID="ie5-IB-Wxh">
             <objects>
                 <viewController id="TiO-qo-PR7" customClass="ProfileViewController" sceneMemberID="viewController">
@@ -770,7 +770,7 @@
                             <constraint firstItem="c7y-Sf-chb" firstAttribute="top" secondItem="W0y-Y8-11J" secondAttribute="top" id="u7P-G8-2qX"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Profile" id="oSW-J4-SVr">
+                    <navigationItem key="navigationItem" id="oSW-J4-SVr">
                         <barButtonItem key="rightBarButtonItem" style="plain" id="ILm-Te-sLl">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="8KS-Y5-jes">
                                 <rect key="frame" x="233" y="5" width="71" height="33"/>
