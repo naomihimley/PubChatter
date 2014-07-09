@@ -60,33 +60,40 @@
 
 -(void)createRateIndicator
 {
+    // Create the sliding rate indicator and add to view (eventually replace view with better-looking image)
     CGFloat indicatorWidth = 50;
     self.rateIndicator = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - indicatorWidth, self.view.frame.size.height/2, indicatorWidth, 30)];
-    self.rateIndicator.backgroundColor = [UIColor redColor];
-
+    self.rateIndicator.backgroundColor = [UIColor buttonColor];
     [self.view addSubview:self.rateIndicator];
 
-    self.dynamicAnimator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
-
-    self.dynamicItemBehaviorIndicator = [[UIDynamicItemBehavior alloc] initWithItems:@[self.rateIndicator]];
-    self.dynamicItemBehaviorIndicator.density = 100000;
-    self.dynamicItemBehaviorIndicator.allowsRotation = NO;
-    [self.dynamicAnimator addBehavior:self.dynamicItemBehaviorIndicator];
-
+    // Set up pan gesture recognizer
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     [self.view addGestureRecognizer:pan];
 }
 
 - (void)handlePan:(UIPanGestureRecognizer *)pan
 {
+    // Lock rate indicator x location and make y location the locationinview of pan gesture recognizer. Creates the up/down sliding effect.
     self.rateIndicator.center = CGPointMake(self.rateIndicator.center.x, [pan locationInView:self.view].y);
     [self.dynamicAnimator updateItemUsingCurrentState:self.rateIndicator];
 
-//    CGFloat red = 204/255.0;
-//    CGFloat green = 205.0/255.0;
-//    CGFloat blue = 199.0/255.0;
-//    UIColor *backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:1];
+    // Dynamically update the background color based on pan gesture locationinview.
 
+    // Max RGB value
+    CGFloat max = 255.0;
+
+    // Scale pan locationinview to the (0-255) range of RGB values.
+    CGFloat redScaler = ([pan locationInView:self.view].y/self.view.frame.size.height)*255;
+    CGFloat blueScaler = max -  ([pan locationInView:self.view].y/self.view.frame.size.height)*255;
+
+    // Apply scaler values to background color. When pan is at the bottom of the view, blueScaler is low and redScaler is high (i.e. more red), and vice versa.
+    CGFloat red = redScaler/255.0;
+    CGFloat green = 0.0/255.0;
+    CGFloat blue = blueScaler/255.0;
+    UIColor *backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:1];
+
+    // Set background color.
+    self.view.backgroundColor = backgroundColor;
 }
 
 #pragma mark - Notifications
