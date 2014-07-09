@@ -18,7 +18,13 @@
 @property (weak, nonatomic) IBOutlet UIButton *rateBarButtonOutlet;
 @property Bar *bar;
 @property Rating *rating;
+@property UIView *rateIndicator;
 @property (weak, nonatomic) IBOutlet UILabel *inABarLabel;
+@property UIDynamicAnimator *dynamicAnimator;
+@property UIPushBehavior *pushBehavior;
+@property UIDynamicItemBehavior *dynamicItemBehaviorIndicator;
+
+
 -(void)userEnteredBar:(NSNotification *)notification;
 
 @end
@@ -48,7 +54,39 @@
     self.sliderOutlet.enabled = NO;
     self.rateBarButtonOutlet.enabled = NO;
     [self checkIfUserisInBar];
+    [self createRateIndicator];
     [self style];
+}
+
+-(void)createRateIndicator
+{
+    CGFloat indicatorWidth = 50;
+    self.rateIndicator = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - indicatorWidth, self.view.frame.size.height/2, indicatorWidth, 30)];
+    self.rateIndicator.backgroundColor = [UIColor redColor];
+
+    [self.view addSubview:self.rateIndicator];
+
+    self.dynamicAnimator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
+
+    self.dynamicItemBehaviorIndicator = [[UIDynamicItemBehavior alloc] initWithItems:@[self.rateIndicator]];
+    self.dynamicItemBehaviorIndicator.density = 100000;
+    self.dynamicItemBehaviorIndicator.allowsRotation = NO;
+    [self.dynamicAnimator addBehavior:self.dynamicItemBehaviorIndicator];
+
+    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+    [self.view addGestureRecognizer:pan];
+}
+
+- (void)handlePan:(UIPanGestureRecognizer *)pan
+{
+    self.rateIndicator.center = CGPointMake(self.rateIndicator.center.x, [pan locationInView:self.view].y);
+    [self.dynamicAnimator updateItemUsingCurrentState:self.rateIndicator];
+
+//    CGFloat red = 204/255.0;
+//    CGFloat green = 205.0/255.0;
+//    CGFloat blue = 199.0/255.0;
+//    UIColor *backgroundColor = [UIColor colorWithRed:red green:green blue:blue alpha:1];
+
 }
 
 #pragma mark - Notifications
