@@ -18,16 +18,18 @@
 @property Bar *bar;
 @property Rating *rating;
 @property UIView *rateIndicator;
-@property UILabel *label1;
-@property UILabel *label2;
-@property UILabel *label3;
-@property UILabel *label4;
-@property UILabel *label5;
-@property UILabel *label6;
-@property UILabel *label7;
-@property CGFloat labelWidth;
-@property CGFloat labelHeight;
-@property (weak, nonatomic) IBOutlet UILabel *inABarLabel;
+@property UIButton *button1;
+@property UIButton *button2;
+@property UIButton *button3;
+@property UIButton *button4;
+@property UIButton *button5;
+@property UIButton *button6;
+@property UIButton *button7;
+@property UIView *ratingView;
+@property NSMutableArray *buttonsArray;
+@property CGFloat ratingViewHeight;
+@property CGFloat buttonWidth;
+@property CGFloat buttonHeight;
 @property UIPushBehavior *pushBehavior;
 @property UIDynamicItemBehavior *dynamicItemBehaviorIndicator;
 
@@ -56,20 +58,94 @@
 {
     [super viewDidAppear:animated];
 
-    [self.label1 removeFromSuperview];
-    [self.label2 removeFromSuperview];
-    [self.label3 removeFromSuperview];
-    [self.label4 removeFromSuperview];
-    [self.label5 removeFromSuperview];
-    [self.label6 removeFromSuperview];
-    [self.label7 removeFromSuperview];
-    [self.rateIndicator removeFromSuperview];
+    [self removeViewFromSuperview];
 
-    NSLog(@"view did appear");
-    [self checkIfUserisInBar];
-    [self createRateIndicatorandLabels];
     [self style];
 }
+
+-(void)removeViewFromSuperview
+{
+    [self.button1 removeFromSuperview];
+    [self.button2 removeFromSuperview];
+    [self.button3 removeFromSuperview];
+    [self.button4 removeFromSuperview];
+    [self.button5 removeFromSuperview];
+    [self.button6 removeFromSuperview];
+    [self.button7 removeFromSuperview];
+    [self.ratingView removeFromSuperview];
+    [self.rateIndicator removeFromSuperview];
+
+    [self checkIfUserisInBar];
+}
+
+#pragma mark - Parse Methods
+-(void)checkIfUserisInBar
+{
+    NSLog(@"Checking if user is in a bar");
+    PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
+    [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
+    [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if ([objects firstObject]) {
+            self.bar = [objects firstObject];
+            UINavigationController *navCon  = (UINavigationController*) [self.navigationController.viewControllers objectAtIndex:0];
+            navCon.navigationItem.title = self.bar.barName;
+            [self checkIfUserHasRatedBar];
+            NSLog(@"User is in: %@", self.bar.barName);
+        }
+        else
+        {
+        }
+    }];
+}
+
+-(void)checkIfUserHasRatedBar
+{
+    NSLog(@"Checking for rating");
+    PFQuery *queryForRating = [PFQuery queryWithClassName:@"Rating"];
+    [queryForRating whereKey:@"user" equalTo:[PFUser currentUser]];
+    [queryForRating whereKey:@"bar" equalTo:self.bar];
+    [queryForRating findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if ([objects firstObject])
+        {
+            self.rating = [objects firstObject];
+            [self createRatingLabel];
+            NSLog(@"User has rated %@: %@", self.bar.barName, self.rating.userRating);
+        }
+        else{
+            [self createRatingLabel];
+            NSLog(@"User has not rated %@", self.bar.barName);
+        }
+    }];
+}
+
+-(void)createRatingLabel
+{
+    CGFloat statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
+    CGFloat navBarHeight = self.navigationController.navigationBar.frame.size.height;
+    self.ratingViewHeight = 60.0f;
+
+    self.ratingView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.origin.x + 55, statusBarHeight + navBarHeight, self.view.frame.size.width -50, self.ratingViewHeight)];
+    self.ratingView.backgroundColor = [UIColor clearColor];
+    self.ratingView.layer.borderWidth = 2.0f;
+    self.ratingView.layer.borderColor = [[UIColor buttonColor] CGColor];
+    [self.view addSubview:self.ratingView];
+
+    UILabel *ratingTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, self.ratingView.frame.size.width -20, self.ratingView.frame.size.height - 20)];
+
+    if (self.rating) {
+        ratingTextLabel.text = [NSString stringWithFormat:@"Your rating: %@", self.rating.userRating];
+    }
+    else {
+        ratingTextLabel.text = [NSString stringWithFormat:@"Rate %@", self.bar.barName];;
+    }
+
+    ratingTextLabel.textColor = [UIColor buttonColor];
+    ratingTextLabel.textAlignment = NSTextAlignmentCenter;
+    [self.ratingView addSubview:ratingTextLabel];
+
+    [self createRateIndicatorandLabels];
+}
+
 
 -(void)createRateIndicatorandLabels
 {
@@ -90,75 +166,123 @@
     CGFloat navBarHeight = self.navigationController.navigationBar.frame.size.height;
 
     //Create labels
-    self.labelWidth = 150;
-    self.labelHeight = (self.view.frame.size.height - statusBarHeight - navBarHeight)/7;
-    CGFloat verticalOffset = statusBarHeight + navBarHeight;
+    self.buttonWidth = 150;
+    self.buttonHeight = (self.view.frame.size.height - statusBarHeight - navBarHeight - self.ratingViewHeight)/7;
+    CGFloat verticalOffset = statusBarHeight + navBarHeight + self.ratingViewHeight;
 
-    self.label1 = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width - (self.labelWidth/2), verticalOffset, self.labelWidth, self.labelHeight)];
-    self.label1.text = @"   Bro";
-    self.label1.textColor = [UIColor buttonColor];
-    self.label1.backgroundColor = [UIColor clearColor];
-    self.label1.layer.borderWidth = 2.0f;
-    self.label1.layer.borderColor = [[UIColor buttonColor] CGColor];
-    self.label1.layer.cornerRadius = 5.0f;
-    [self.view addSubview:self.label1];
-    verticalOffset = verticalOffset + self.labelHeight;
+    self.buttonsArray = [NSMutableArray new];
 
-    self.label2 = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width - (self.labelWidth/2), verticalOffset, self.labelWidth, self.labelHeight)];
-    self.label2.text = @"   Artsy";
-    self.label2.textColor = [UIColor buttonColor];
-    self.label2.backgroundColor = [UIColor clearColor];
-    self.label2.layer.borderWidth = 2.0f;
-    self.label2.layer.borderColor = [[UIColor buttonColor] CGColor];
-    self.label2.layer.cornerRadius = 5.0f;
-    [self.view addSubview:self.label2];
-    verticalOffset = verticalOffset + self.labelHeight;
+    self.button1 = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - (self.buttonWidth/2), verticalOffset, self.buttonWidth, self.buttonHeight)];
+    [self.button1 setTitle:@"Bro" forState:UIControlStateNormal];
+    self.button1.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [self.button1 setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+    self.button1.backgroundColor = [UIColor clearColor];
+    self.button1.layer.borderWidth = 2.0f;
+    self.button1.layer.borderColor = [[UIColor buttonColor] CGColor];
+    self.button1.layer.cornerRadius = 5.0f;
+    self.button1.enabled = NO;
+    [self.buttonsArray addObject:self.button1];
+    [self.button1 addTarget:self
+                          action:@selector(buttonSelected:)
+                forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.button1];
+    verticalOffset = verticalOffset + self.buttonHeight;
 
-    self.label3 = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width - (self.labelWidth/2), verticalOffset, self.labelWidth, self.labelHeight)];
-    self.label3.text = @"   Chill";
-    self.label3.textColor = [UIColor buttonColor];
-    self.label3.backgroundColor = [UIColor clearColor];
-    self.label3.layer.borderWidth = 2.0f;
-    self.label3.layer.borderColor = [[UIColor buttonColor] CGColor];
-    self.label3.layer.cornerRadius = 5.0f;
-    [self.view addSubview:self.label3];
-    verticalOffset = verticalOffset + self.labelHeight;
+    self.button2 = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - (self.buttonWidth/2), verticalOffset, self.buttonWidth, self.buttonHeight)];
+    [self.button2 setTitle:@"Artsy" forState:UIControlStateNormal];
+    self.button2.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [self.button2 setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+    self.button2.backgroundColor = [UIColor clearColor];
+    self.button2.layer.borderWidth = 2.0f;
+    self.button2.layer.borderColor = [[UIColor buttonColor] CGColor];
+    self.button2.layer.cornerRadius = 5.0f;
+    self.button2.enabled = NO;
+    [self.buttonsArray addObject:self.button2];
+    [self.button2 addTarget:self
+                     action:@selector(buttonSelected:)
+           forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.button1];
+    [self.view addSubview:self.button2];
+    verticalOffset = verticalOffset + self.buttonHeight;
 
-    self.label4 = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width - (self.labelWidth/2), verticalOffset, self.labelWidth, self.labelHeight)];
-    self.label4.text = @"   Hipster";
-    self.label4.textColor = [UIColor buttonColor];
-    self.label4.backgroundColor = [UIColor clearColor];
-    self.label4.layer.borderWidth = 2.0f;
-    self.label4.layer.borderColor = [[UIColor buttonColor] CGColor];
-    self.label4.layer.cornerRadius = 5.0f;    [self.view addSubview:self.label4];
-    verticalOffset = verticalOffset + self.labelHeight;
+    self.button3 = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - (self.buttonWidth/2), verticalOffset, self.buttonWidth, self.buttonHeight)];
+    [self.button3 setTitle:@"Chill" forState:UIControlStateNormal];
+    self.button3.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [self.button3 setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+    self.button3.backgroundColor = [UIColor clearColor];
+    self.button3.layer.borderWidth = 2.0f;
+    self.button3.layer.borderColor = [[UIColor buttonColor] CGColor];
+    self.button3.layer.cornerRadius = 5.0f;
+    self.button3.enabled = NO;
+    [self.buttonsArray addObject:self.button3];
+    [self.button3 addTarget:self
+                     action:@selector(buttonSelected:)
+           forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.button3];
+    verticalOffset = verticalOffset + self.buttonHeight;
 
-    self.label5 = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width - (self.labelWidth/2), verticalOffset, self.labelWidth, self.labelHeight)];
-    self.label5.text = @"   Classy";
-    self.label5.textColor = [UIColor buttonColor];
-    self.label5.backgroundColor = [UIColor clearColor];
-    self.label5.layer.borderWidth = 2.0f;
-    self.label5.layer.borderColor = [[UIColor buttonColor] CGColor];
-    self.label5.layer.cornerRadius = 5.0f;    [self.view addSubview:self.label5];
-    verticalOffset = verticalOffset + self.labelHeight;
+    self.button4 = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - (self.buttonWidth/2), verticalOffset, self.buttonWidth, self.buttonHeight)];
+    [self.button4 setTitle:@"Hipster" forState:UIControlStateNormal];
+    self.button4.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [self.button4 setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+    self.button4.backgroundColor = [UIColor clearColor];
+    self.button4.layer.borderWidth = 2.0f;
+    self.button4.layer.borderColor = [[UIColor buttonColor] CGColor];
+    self.button4.layer.cornerRadius = 5.0f;
+    self.button4.enabled = NO;
+    [self.buttonsArray addObject:self.button4];
+    [self.button4 addTarget:self
+                     action:@selector(buttonSelected:)
+           forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.button4];
+    verticalOffset = verticalOffset + self.buttonHeight;
 
-    self.label6 = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width - (self.labelWidth/2), verticalOffset, self.labelWidth, self.labelHeight)];
-    self.label6.text = @"   Clubby";
-    self.label6.textColor = [UIColor buttonColor];
-    self.label6.backgroundColor = [UIColor clearColor];
-    self.label6.layer.borderWidth = 2.0f;
-    self.label6.layer.borderColor = [[UIColor buttonColor] CGColor];
-    self.label6.layer.cornerRadius = 5.0f;    [self.view addSubview:self.label6];
-    verticalOffset = verticalOffset + self.labelHeight;
+    self.button5 = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - (self.buttonWidth/2), verticalOffset, self.buttonWidth, self.buttonHeight)];
+    [self.button5 setTitle:@"Classy" forState:UIControlStateNormal];
+    self.button5.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [self.button5 setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+    self.button5.backgroundColor = [UIColor clearColor];
+    self.button5.layer.borderWidth = 2.0f;
+    self.button5.layer.borderColor = [[UIColor buttonColor] CGColor];
+    self.button5.layer.cornerRadius = 5.0f;
+    self.button5.enabled = NO;
+    [self.buttonsArray addObject:self.button5];
+    [self.button5 addTarget:self
+                     action:@selector(buttonSelected:)
+           forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.button5];
+    verticalOffset = verticalOffset + self.buttonHeight;
 
-    self.label7 = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width - (self.labelWidth/2), verticalOffset, self.labelWidth, self.labelHeight)];
-    self.label7.text = @"   Dive";
-    self.label7.textColor = [UIColor buttonColor];
-    self.label7.backgroundColor = [UIColor clearColor];
-    self.label7.layer.borderWidth = 2.0f;
-    self.label7.layer.borderColor = [[UIColor buttonColor] CGColor];
-    self.label7.layer.cornerRadius = 5.0f;
-    [self.view addSubview:self.label7];
+    self.button6 = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - (self.buttonWidth/2), verticalOffset, self.buttonWidth, self.buttonHeight)];
+    [self.button6 setTitle:@"Dive" forState:UIControlStateNormal];
+    self.button6.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [self.button6 setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+    self.button6.backgroundColor = [UIColor clearColor];
+    self.button6.layer.borderWidth = 2.0f;
+    self.button6.layer.borderColor = [[UIColor buttonColor] CGColor];
+    self.button6.layer.cornerRadius = 5.0f;
+    self.button6.enabled = NO;
+    [self.buttonsArray addObject:self.button6];
+    [self.button6 addTarget:self
+                     action:@selector(buttonSelected:)
+           forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.button6];
+    verticalOffset = verticalOffset + self.buttonHeight;
+
+    self.button7 = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - (self.buttonWidth/2), verticalOffset, self.buttonWidth, self.buttonHeight)];
+    [self.button7 setTitle:@"Clubby" forState:UIControlStateNormal];
+    self.button7.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [self.button7 setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+    self.button7.backgroundColor = [UIColor clearColor];
+    self.button7.layer.borderWidth = 2.0f;
+    self.button7.layer.borderColor = [[UIColor buttonColor] CGColor];
+    self.button7.layer.cornerRadius = 5.0f;
+    self.button7.enabled = NO;
+    [self.buttonsArray addObject:self.button7];
+    [self.button7 addTarget:self
+                     action:@selector(buttonSelected:)
+           forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.button7];
 }
 
 - (void)handlePan:(UIPanGestureRecognizer *)pan
@@ -167,172 +291,206 @@
     self.rateIndicator.center = CGPointMake(self.rateIndicator.center.x, [pan locationInView:self.view].y);
 
     // Slide out the label views when the indicator view is in their vertical range.
-    if ([pan locationInView:self.view].y > self.label1.frame.origin.y && [pan locationInView:self.view].y < self.label1.frame.origin.y + self.label1.frame.size.height) {
+    if ([pan locationInView:self.view].y > self.button1.frame.origin.y && [pan locationInView:self.view].y < self.button1.frame.origin.y + self.button1.frame.size.height) {
         [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.2];
+        [UIView setAnimationDuration:0.3];
         [UIView setAnimationDelay:0.0];
         [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
 
-        self.label1.frame = CGRectMake(self.view.frame.size.width - self.labelWidth, self.label1.frame.origin.y, self.labelWidth, self.labelHeight);
-        self.label1.backgroundColor = [UIColor buttonColor];
-        self.label1.textColor = [UIColor blackColor];
+        self.button1.frame = CGRectMake(self.view.frame.size.width - self.buttonWidth, self.button1.frame.origin.y, self.buttonWidth, self.buttonHeight);
+        self.button1.backgroundColor = [UIColor buttonColor];
+        [self.button1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        self.button1.enabled = YES;
         [UIView commitAnimations];
     }
     else {
         [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.2];
+        [UIView setAnimationDuration:0.3];
         [UIView setAnimationDelay:0.0];
         [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
 
-        self.label1.frame = CGRectMake(self.view.frame.size.width - (self.labelWidth/2), self.label1.frame.origin.y, self.labelWidth, self.labelHeight);
-        self.label1.backgroundColor = [UIColor clearColor];
-        self.label1.textColor = [UIColor buttonColor];
-
+        self.button1.frame = CGRectMake(self.view.frame.size.width - (self.buttonWidth/2), self.button1.frame.origin.y, self.buttonWidth, self.buttonHeight);
+        self.button1.backgroundColor = [UIColor clearColor];
+        [self.button1 setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+        self.button1.enabled = NO;
         [UIView commitAnimations];
     }
 
-    if ([pan locationInView:self.view].y > self.label2.frame.origin.y && [pan locationInView:self.view].y < self.label2.frame.origin.y + self.label2.frame.size.height) {
+    if ([pan locationInView:self.view].y > self.button2.frame.origin.y && [pan locationInView:self.view].y < self.button2.frame.origin.y + self.button2.frame.size.height) {
         [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.2];
+        [UIView setAnimationDuration:0.3];
         [UIView setAnimationDelay:0.0];
         [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
 
-        self.label2.frame = CGRectMake(self.view.frame.size.width - self.labelWidth, self.label2.frame.origin.y, self.labelWidth, self.labelHeight);
-        self.label2.backgroundColor = [UIColor buttonColor];
-        self.label2.textColor = [UIColor blackColor];
-
-        [UIView commitAnimations];
-    }
-    else {
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.2];
-        [UIView setAnimationDelay:0.0];
-        [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-
-        self.label2.frame = CGRectMake(self.view.frame.size.width - (self.labelWidth/2), self.label2.frame.origin.y, self.labelWidth, self.labelHeight);
-        self.label2.backgroundColor = [UIColor clearColor];
-        self.label2.textColor = [UIColor buttonColor];
-
-        [UIView commitAnimations];
-
-    }
-
-    if ([pan locationInView:self.view].y > self.label3.frame.origin.y && [pan locationInView:self.view].y < self.label3.frame.origin.y + self.label3.frame.size.height) {
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.2];
-        [UIView setAnimationDelay:0.0];
-        [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-
-        self.label3.frame = CGRectMake(self.view.frame.size.width - self.labelWidth, self.label3.frame.origin.y, self.labelWidth, self.labelHeight);
-        self.label3.backgroundColor = [UIColor buttonColor];
-        self.label3.textColor = [UIColor blackColor];
-
+        self.button2.frame = CGRectMake(self.view.frame.size.width - self.buttonWidth, self.button2.frame.origin.y, self.buttonWidth, self.buttonHeight);
+        self.button2.backgroundColor = [UIColor buttonColor];
+        [self.button2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        self.button2.enabled = YES;
         [UIView commitAnimations];
     }
     else {
         [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.2];
+        [UIView setAnimationDuration:0.3];
         [UIView setAnimationDelay:0.0];
         [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
 
-        self.label3.frame = CGRectMake(self.view.frame.size.width - (self.labelWidth/2), self.label3.frame.origin.y, self.labelWidth, self.labelHeight);
-        self.label3.backgroundColor = [UIColor clearColor];
-        self.label3.textColor = [UIColor buttonColor];
-        [UIView commitAnimations];
-        
-    }
-
-    if ([pan locationInView:self.view].y > self.label4.frame.origin.y && [pan locationInView:self.view].y < self.label4.frame.origin.y + self.label4.frame.size.height) {
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.2];
-        [UIView setAnimationDelay:0.0];
-        [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-
-        self.label4.frame = CGRectMake(self.view.frame.size.width - self.labelWidth, self.label4.frame.origin.y, self.labelWidth, self.labelHeight);
-        self.label4.backgroundColor = [UIColor buttonColor];
-        self.label4.textColor = [UIColor blackColor];
+        self.button2.frame = CGRectMake(self.view.frame.size.width - (self.buttonWidth/2), self.button2.frame.origin.y, self.buttonWidth, self.buttonHeight);
+        self.button2.backgroundColor = [UIColor clearColor];
+        [self.button2 setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+        self.button2.enabled = NO;
         [UIView commitAnimations];
     }
-    else {
+
+    if ([pan locationInView:self.view].y > self.button3.frame.origin.y && [pan locationInView:self.view].y < self.button3.frame.origin.y + self.button3.frame.size.height) {
         [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.2];
+        [UIView setAnimationDuration:0.3];
         [UIView setAnimationDelay:0.0];
         [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
 
-        self.label4.frame = CGRectMake(self.view.frame.size.width - (self.labelWidth/2), self.label4.frame.origin.y, self.labelWidth, self.labelHeight);
-        self.label4.backgroundColor = [UIColor clearColor];
-        self.label4.textColor = [UIColor buttonColor];
-        [UIView commitAnimations];
-
-    }
-
-    if ([pan locationInView:self.view].y > self.label5.frame.origin.y && [pan locationInView:self.view].y < self.label5.frame.origin.y + self.label5.frame.size.height) {
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.2];
-        [UIView setAnimationDelay:0.0];
-        [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-
-        self.label5.frame = CGRectMake(self.view.frame.size.width - self.labelWidth, self.label5.frame.origin.y, self.labelWidth, self.labelHeight);
-        self.label5.backgroundColor = [UIColor buttonColor];
-        self.label5.textColor = [UIColor blackColor];
+        self.button3.frame = CGRectMake(self.view.frame.size.width - self.buttonWidth, self.button3.frame.origin.y, self.buttonWidth, self.buttonHeight);
+        self.button3.backgroundColor = [UIColor buttonColor];
+        [self.button3 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        self.button3.enabled = YES;
         [UIView commitAnimations];
     }
     else {
         [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.2];
+        [UIView setAnimationDuration:0.3];
         [UIView setAnimationDelay:0.0];
         [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
 
-        self.label5.frame = CGRectMake(self.view.frame.size.width - (self.labelWidth/2), self.label5.frame.origin.y, self.labelWidth, self.labelHeight);
-        self.label5.backgroundColor = [UIColor clearColor];
-        self.label5.textColor = [UIColor buttonColor];
-        [UIView commitAnimations];
-        
-    }
-
-    if ([pan locationInView:self.view].y > self.label6.frame.origin.y && [pan locationInView:self.view].y < self.label6.frame.origin.y + self.label6.frame.size.height) {
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.2];
-        [UIView setAnimationDelay:0.0];
-        [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-
-        self.label6.frame = CGRectMake(self.view.frame.size.width - self.labelWidth, self.label6.frame.origin.y, self.labelWidth, self.labelHeight);
-        self.label6.backgroundColor = [UIColor buttonColor];
-        self.label6.textColor = [UIColor blackColor];
+        self.button3.frame = CGRectMake(self.view.frame.size.width - (self.buttonWidth/2), self.button3.frame.origin.y, self.buttonWidth, self.buttonHeight);
+        self.button3.backgroundColor = [UIColor clearColor];
+        [self.button3 setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+        self.button3.enabled = NO;
         [UIView commitAnimations];
     }
-    else {
+
+    if ([pan locationInView:self.view].y > self.button4.frame.origin.y && [pan locationInView:self.view].y < self.button4.frame.origin.y + self.button4.frame.size.height) {
         [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.2];
+        [UIView setAnimationDuration:0.3];
         [UIView setAnimationDelay:0.0];
         [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
 
-        self.label6.frame = CGRectMake(self.view.frame.size.width - (self.labelWidth/2), self.label6.frame.origin.y, self.labelWidth, self.labelHeight);
-        self.label6.backgroundColor = [UIColor clearColor];
-        self.label6.textColor = [UIColor buttonColor];
-        [UIView commitAnimations];
-    }
-    if ([pan locationInView:self.view].y > self.label7.frame.origin.y && [pan locationInView:self.view].y < self.label7.frame.origin.y + self.label7.frame.size.height) {
-        [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.2];
-        [UIView setAnimationDelay:0.0];
-        [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-
-        self.label7.frame = CGRectMake(self.view.frame.size.width - self.labelWidth, self.label7.frame.origin.y, self.labelWidth, self.labelHeight);
-        self.label7.backgroundColor = [UIColor buttonColor];
-        self.label7.textColor = [UIColor blackColor];
+        self.button4.frame = CGRectMake(self.view.frame.size.width - self.buttonWidth, self.button4.frame.origin.y, self.buttonWidth, self.buttonHeight);
+        self.button4.backgroundColor = [UIColor buttonColor];
+        [self.button4 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        self.button4.enabled = YES;
         [UIView commitAnimations];
     }
     else {
         [UIView beginAnimations:nil context:nil];
-        [UIView setAnimationDuration:0.2];
+        [UIView setAnimationDuration:0.3];
         [UIView setAnimationDelay:0.0];
         [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
 
-        self.label7.frame = CGRectMake(self.view.frame.size.width - (self.labelWidth/2), self.label7.frame.origin.y, self.labelWidth, self.labelHeight);
-        self.label7.backgroundColor = [UIColor clearColor];
-        self.label7.textColor = [UIColor buttonColor];
+        self.button4.frame = CGRectMake(self.view.frame.size.width - (self.buttonWidth/2), self.button4.frame.origin.y, self.buttonWidth, self.buttonHeight);
+        self.button4.backgroundColor = [UIColor clearColor];
+        [self.button4 setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+        self.button4.enabled = NO;
         [UIView commitAnimations];
+    }
+
+    if ([pan locationInView:self.view].y > self.button5.frame.origin.y && [pan locationInView:self.view].y < self.button5.frame.origin.y + self.button5.frame.size.height) {
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.3];
+        [UIView setAnimationDelay:0.0];
+        [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+
+        self.button5.frame = CGRectMake(self.view.frame.size.width - self.buttonWidth, self.button5.frame.origin.y, self.buttonWidth, self.buttonHeight);
+        self.button5.backgroundColor = [UIColor buttonColor];
+        [self.button5 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        self.button5.enabled = YES;
+        [UIView commitAnimations];
+    }
+    else {
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.3];
+        [UIView setAnimationDelay:0.0];
+        [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+
+        self.button5.frame = CGRectMake(self.view.frame.size.width - (self.buttonWidth/2), self.button5.frame.origin.y, self.buttonWidth, self.buttonHeight);
+        self.button5.backgroundColor = [UIColor clearColor];
+        [self.button5 setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+        self.button5.enabled = NO;
+        [UIView commitAnimations];
+    }
+
+    if ([pan locationInView:self.view].y > self.button6.frame.origin.y && [pan locationInView:self.view].y < self.button6.frame.origin.y + self.button6.frame.size.height) {
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.3];
+        [UIView setAnimationDelay:0.0];
+        [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+
+        self.button6.frame = CGRectMake(self.view.frame.size.width - self.buttonWidth, self.button6.frame.origin.y, self.buttonWidth, self.buttonHeight);
+        self.button6.backgroundColor = [UIColor buttonColor];
+        [self.button6 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        self.button6.enabled = YES;
+        [UIView commitAnimations];
+    }
+    else {
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.3];
+        [UIView setAnimationDelay:0.0];
+        [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+
+        self.button6.frame = CGRectMake(self.view.frame.size.width - (self.buttonWidth/2), self.button6.frame.origin.y, self.buttonWidth, self.buttonHeight);
+        self.button6.backgroundColor = [UIColor clearColor];
+        [self.button6 setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+        self.button6.enabled = NO;
+        [UIView commitAnimations];
+    }
+
+    if ([pan locationInView:self.view].y > self.button7.frame.origin.y && [pan locationInView:self.view].y < self.button7.frame.origin.y + self.button7.frame.size.height) {
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.3];
+        [UIView setAnimationDelay:0.0];
+        [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+
+        self.button7.frame = CGRectMake(self.view.frame.size.width - self.buttonWidth, self.button7.frame.origin.y, self.buttonWidth, self.buttonHeight);
+        self.button7.backgroundColor = [UIColor buttonColor];
+        [self.button7 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        self.button7.enabled = YES;
+        [UIView commitAnimations];
+    }
+    else {
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.3];
+        [UIView setAnimationDelay:0.0];
+        [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+
+        self.button7.frame = CGRectMake(self.view.frame.size.width - (self.buttonWidth/2), self.button7.frame.origin.y, self.buttonWidth, self.buttonHeight);
+        self.button7.backgroundColor = [UIColor clearColor];
+        [self.button7 setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+        self.button7.enabled = NO;
+        [UIView commitAnimations];
+    }
+}
+
+-(void)buttonSelected:(id)sender
+{
+    for (UIButton *button in self.buttonsArray) {
+        if ([button isEnabled]) {
+            NSString *userSelection = button.titleLabel.text;
+            if (self.rating) {
+                NSLog(@"User is changing their rating");
+                self.rating.userRating = userSelection;
+                [self.rating saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    [self removeViewFromSuperview];
+                }];
+            }
+            else {
+                NSLog(@"User is rating bar for the first time");
+                Rating *barRating = [Rating objectWithClassName:@"Rating"];
+                [barRating setObject:userSelection forKey:@"userRating"];
+                [barRating setObject:[PFUser currentUser] forKey:@"user"];
+                [barRating setObject:self.bar forKey:@"bar"];
+
+                [barRating saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    [self removeViewFromSuperview];
+                }];
+            }
+        }
     }
 }
 
@@ -343,71 +501,16 @@
     NSString *barName = [[notification userInfo] objectForKey:@"barName"];
     if ([barName isEqualToString:@"PubChat"])
     {
-        self.inABarLabel.text = @"Not in a Bar";
     }
     else
     {
-        self.inABarLabel.text = barName;
     }
 }
 
-#pragma mark - Parse Methods
--(void)checkIfUserisInBar
-{
-    PFQuery *queryForBar = [PFQuery queryWithClassName:@"Bar"];
-    [queryForBar whereKey:@"usersInBar" equalTo:[PFUser currentUser]];
-    [queryForBar findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if ([objects firstObject]) {
-            self.bar = [objects firstObject];
-            NSLog(@"they are in this bar: %@", [self.bar objectForKey:@"barName"]);
-            self.inABarLabel.text = [self.bar objectForKey:@"barName"];
-            [self checkIfUserHasRatedBar];
-        }
-        else
-        {
-            self.inABarLabel.text = @"Not in a Bar";
-        }
-    }];
-}
-
--(void)checkIfUserHasRatedBar
-{
-    PFQuery *queryForRating = [PFQuery queryWithClassName:@"Rating"];
-    [queryForRating whereKey:@"user" equalTo:[PFUser currentUser]];
-    [queryForRating findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if ([objects firstObject])
-        {
-            self.rating = [objects firstObject];
-        }
-    }];
-}
-
-#pragma mark - Button Pressed Methods
-//- (IBAction)onRateButtonPressed:(id)sender
-//{
-//    if (self.rating) {
-//        NSInteger rtg= @(self.sliderOutlet.value).intValue;
-//        NSNumber *rating = @(rtg);
-//        [self.rating setObject:rating forKey:@"rating"];
-//        [self.rating saveInBackground];
-//    }
-//
-//    else
-//    {
-//        NSInteger rtg= @(self.sliderOutlet.value).intValue;
-//        NSNumber *rating = @(rtg);
-//        Rating *barRating = [Rating objectWithClassName:@"Rating"];
-//        [barRating setObject:rating forKey:@"rating"];
-//        [barRating setObject:[PFUser currentUser] forKey:@"user"];
-//        [barRating setObject:self.bar forKey:@"bar"];
-//        [barRating saveInBackground];
-//    }
-//}
 
 #pragma mark - Style Method
 - (void)style
 {
-    self.inABarLabel.textColor = [UIColor nameColor];
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"river"]];
 }
 

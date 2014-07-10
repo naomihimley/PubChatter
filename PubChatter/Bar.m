@@ -10,6 +10,8 @@
 
 @implementation Bar
 
+@dynamic barName;
+
 +(id)parseClassName
 {
     return @"Bar";

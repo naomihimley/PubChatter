@@ -11,7 +11,7 @@
 @interface Rating : PFObject <PFSubclassing>
 
 +(id)parseClassName;
-@property NSNumber *rating;
+@property NSString *userRating;
 @property NSString *user;
 @property NSString *bar;
 

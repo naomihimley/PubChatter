@@ -11,5 +11,7 @@
 @interface Bar : PFObject <PFSubclassing>
 
 +(id)parseClassName;
+@property NSString *barName;
+
 
 @end

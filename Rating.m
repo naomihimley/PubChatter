@@ -10,7 +10,7 @@
 
 @implementation Rating
 
-@dynamic rating;
+@dynamic userRating;
 @dynamic user;
 @dynamic bar;
 
