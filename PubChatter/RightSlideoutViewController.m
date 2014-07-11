@@ -153,136 +153,64 @@
     CGFloat indicatorWidth = 100;
 
     self.rateIndicator = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.size.height/2, indicatorWidth, 30)];
-    self.rateIndicator.backgroundColor = [UIColor buttonColor];
-    self.rateIndicator.layer.cornerRadius = 50.f;
+    self.rateIndicator.backgroundColor = [UIColor redColor];
+    self.rateIndicator.layer.cornerRadius = 50;
     [self.view addSubview:self.rateIndicator];
 
     // Set up pan gesture recognizer
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     [self.view addGestureRecognizer:pan];
 
+    //Create buttons
+    self.buttonsArray = [NSMutableArray new];
+
+    self.button1 = [UIButton new];
+    self.button2 = [UIButton new];
+    self.button3 = [UIButton new];
+    self.button4 = [UIButton new];
+    self.button5 = [UIButton new];
+    self.button6 = [UIButton new];
+    self.button7 = [UIButton new];
+
+    [self.button1 setTitle:@"Bro" forState:UIControlStateNormal];
+    [self.button2 setTitle:@"Artsy" forState:UIControlStateNormal];
+    [self.button3 setTitle:@"Chill" forState:UIControlStateNormal];
+    [self.button4 setTitle:@"Hipster" forState:UIControlStateNormal];
+    [self.button5 setTitle:@"Classy" forState:UIControlStateNormal];
+    [self.button6 setTitle:@"Dive" forState:UIControlStateNormal];
+    [self.button7 setTitle:@"Clubby" forState:UIControlStateNormal];
+
+    [self.buttonsArray addObject:self.button1];
+    [self.buttonsArray addObject:self.button2];
+    [self.buttonsArray addObject:self.button3];
+    [self.buttonsArray addObject:self.button4];
+    [self.buttonsArray addObject:self.button5];
+    [self.buttonsArray addObject:self.button6];
+    [self.buttonsArray addObject:self.button7];
+
     // Get status and nav bar height so vertical offset and height of labels can be set precisely.
     CGFloat statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
     CGFloat navBarHeight = self.navigationController.navigationBar.frame.size.height;
 
-    //Create labels
-    self.buttonWidth = 150;
-    self.buttonHeight = (self.view.frame.size.height - statusBarHeight - navBarHeight - self.ratingViewHeight)/7;
+    self.buttonWidth = 150.0f;
+    self.buttonHeight = (self.view.frame.size.height - statusBarHeight - navBarHeight - self.ratingViewHeight)/self.buttonsArray.count;
     CGFloat verticalOffset = statusBarHeight + navBarHeight + self.ratingViewHeight;
 
-    self.buttonsArray = [NSMutableArray new];
-
-    self.button1 = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - (self.buttonWidth/2), verticalOffset, self.buttonWidth, self.buttonHeight)];
-    [self.button1 setTitle:@"Bro" forState:UIControlStateNormal];
-    self.button1.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [self.button1 setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
-    self.button1.backgroundColor = [UIColor clearColor];
-    self.button1.layer.borderWidth = 2.0f;
-    self.button1.layer.borderColor = [[UIColor buttonColor] CGColor];
-    self.button1.layer.cornerRadius = 5.0f;
-    self.button1.enabled = NO;
-    [self.buttonsArray addObject:self.button1];
-    [self.button1 addTarget:self
-                          action:@selector(buttonSelected:)
-                forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.button1];
-    verticalOffset = verticalOffset + self.buttonHeight;
-
-    self.button2 = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - (self.buttonWidth/2), verticalOffset, self.buttonWidth, self.buttonHeight)];
-    [self.button2 setTitle:@"Artsy" forState:UIControlStateNormal];
-    self.button2.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [self.button2 setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
-    self.button2.backgroundColor = [UIColor clearColor];
-    self.button2.layer.borderWidth = 2.0f;
-    self.button2.layer.borderColor = [[UIColor buttonColor] CGColor];
-    self.button2.layer.cornerRadius = 5.0f;
-    self.button2.enabled = NO;
-    [self.buttonsArray addObject:self.button2];
-    [self.button2 addTarget:self
-                     action:@selector(buttonSelected:)
-           forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.button1];
-    [self.view addSubview:self.button2];
-    verticalOffset = verticalOffset + self.buttonHeight;
-
-    self.button3 = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - (self.buttonWidth/2), verticalOffset, self.buttonWidth, self.buttonHeight)];
-    [self.button3 setTitle:@"Chill" forState:UIControlStateNormal];
-    self.button3.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [self.button3 setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
-    self.button3.backgroundColor = [UIColor clearColor];
-    self.button3.layer.borderWidth = 2.0f;
-    self.button3.layer.borderColor = [[UIColor buttonColor] CGColor];
-    self.button3.layer.cornerRadius = 5.0f;
-    self.button3.enabled = NO;
-    [self.buttonsArray addObject:self.button3];
-    [self.button3 addTarget:self
-                     action:@selector(buttonSelected:)
-           forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.button3];
-    verticalOffset = verticalOffset + self.buttonHeight;
-
-    self.button4 = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - (self.buttonWidth/2), verticalOffset, self.buttonWidth, self.buttonHeight)];
-    [self.button4 setTitle:@"Hipster" forState:UIControlStateNormal];
-    self.button4.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [self.button4 setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
-    self.button4.backgroundColor = [UIColor clearColor];
-    self.button4.layer.borderWidth = 2.0f;
-    self.button4.layer.borderColor = [[UIColor buttonColor] CGColor];
-    self.button4.layer.cornerRadius = 5.0f;
-    self.button4.enabled = NO;
-    [self.buttonsArray addObject:self.button4];
-    [self.button4 addTarget:self
-                     action:@selector(buttonSelected:)
-           forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.button4];
-    verticalOffset = verticalOffset + self.buttonHeight;
-
-    self.button5 = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - (self.buttonWidth/2), verticalOffset, self.buttonWidth, self.buttonHeight)];
-    [self.button5 setTitle:@"Classy" forState:UIControlStateNormal];
-    self.button5.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [self.button5 setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
-    self.button5.backgroundColor = [UIColor clearColor];
-    self.button5.layer.borderWidth = 2.0f;
-    self.button5.layer.borderColor = [[UIColor buttonColor] CGColor];
-    self.button5.layer.cornerRadius = 5.0f;
-    self.button5.enabled = NO;
-    [self.buttonsArray addObject:self.button5];
-    [self.button5 addTarget:self
-                     action:@selector(buttonSelected:)
-           forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.button5];
-    verticalOffset = verticalOffset + self.buttonHeight;
-
-    self.button6 = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - (self.buttonWidth/2), verticalOffset, self.buttonWidth, self.buttonHeight)];
-    [self.button6 setTitle:@"Dive" forState:UIControlStateNormal];
-    self.button6.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [self.button6 setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
-    self.button6.backgroundColor = [UIColor clearColor];
-    self.button6.layer.borderWidth = 2.0f;
-    self.button6.layer.borderColor = [[UIColor buttonColor] CGColor];
-    self.button6.layer.cornerRadius = 5.0f;
-    self.button6.enabled = NO;
-    [self.buttonsArray addObject:self.button6];
-    [self.button6 addTarget:self
-                     action:@selector(buttonSelected:)
-           forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.button6];
-    verticalOffset = verticalOffset + self.buttonHeight;
-
-    self.button7 = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - (self.buttonWidth/2), verticalOffset, self.buttonWidth, self.buttonHeight)];
-    [self.button7 setTitle:@"Clubby" forState:UIControlStateNormal];
-    self.button7.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [self.button7 setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
-    self.button7.backgroundColor = [UIColor clearColor];
-    self.button7.layer.borderWidth = 2.0f;
-    self.button7.layer.borderColor = [[UIColor buttonColor] CGColor];
-    self.button7.layer.cornerRadius = 5.0f;
-    self.button7.enabled = NO;
-    [self.buttonsArray addObject:self.button7];
-    [self.button7 addTarget:self
-                     action:@selector(buttonSelected:)
-           forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.button7];
+    for (UIButton *button in self.buttonsArray) {
+        button.frame = CGRectMake(self.view.frame.size.width - (self.buttonWidth/2), verticalOffset, self.buttonWidth, self.buttonHeight);
+        button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        [button setTitleColor:[UIColor buttonColor] forState:UIControlStateNormal];
+        button.backgroundColor = [UIColor clearColor];
+        button.layer.borderWidth = 2.0f;
+        button.layer.borderColor = [[UIColor buttonColor] CGColor];
+        button.layer.cornerRadius = 5.0f;
+        button.enabled = NO;
+        [button addTarget:self
+                         action:@selector(buttonSelected:)
+               forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:button];
+        verticalOffset = verticalOffset + self.buttonHeight;
+    }
 }
 
 - (void)handlePan:(UIPanGestureRecognizer *)pan
