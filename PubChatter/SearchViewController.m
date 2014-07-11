@@ -562,8 +562,9 @@
     else {
     MKPinAnnotationView *pin = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:nil];
     pin.canShowCallout = YES;
+    pin.image = [UIImage imageNamed:@"app_icon_map"];
     pin.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-    pin.pinColor = MKPinAnnotationColorGreen;
+//    pin.pinColor = MKPinAnnotationColorGreen;
     return pin;
     }
 }

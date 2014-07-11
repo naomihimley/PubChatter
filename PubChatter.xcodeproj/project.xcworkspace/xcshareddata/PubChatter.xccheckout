@@ -5,11 +5,13 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>98C04F6D-3A28-41A6-9274-AB69B568254A</string>
+	<string>0E8B63ED-AAB1-414C-9887-EBB8B018CB83</string>
 	<key>IDESourceControlProjectName</key>
 	<string>PubChatter</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
+		<key>82A36386-6338-45B5-BA7A-050B1886C5D6</key>
+		<string>https://github.com/drw86312/core-plot.git</string>
 		<key>92E2F8A0-6B27-4491-8018-B486542B4166</key>
 		<string>https://github.com/naomihimley/PubChatter.git</string>
 	</dict>
@@ -17,6 +19,8 @@
 	<string>PubChatter.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
+		<key>82A36386-6338-45B5-BA7A-050B1886C5D6</key>
+		<string>../../../../core-plot</string>
 		<key>92E2F8A0-6B27-4491-8018-B486542B4166</key>
 		<string>../..</string>
 	</dict>
@@ -28,6 +32,14 @@
 	<string>92E2F8A0-6B27-4491-8018-B486542B4166</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>82A36386-6338-45B5-BA7A-050B1886C5D6</string>
+			<key>IDESourceControlWCCName</key>
+			<string>core-plot</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
