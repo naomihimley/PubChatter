@@ -254,6 +254,8 @@
 -(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [self dismissViewControllerAnimated:YES completion:nil];
+    self.addPhotos.enabled = YES;
+    self.doneButtonOutlet.enabled = YES;
 }
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
