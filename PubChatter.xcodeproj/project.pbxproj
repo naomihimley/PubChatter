@@ -392,6 +392,8 @@
 		9BDBE55C194FA44F0045C05B /* UserProfileVCs */ = {
 			isa = PBXGroup;
 			children = (
+				0EB31FFC194BC176005A3B82 /* ProfileViewController.h */,
+				0EB31FFD194BC176005A3B82 /* ProfileViewController.m */,
 				0ECEAF1D195D1A8400B92C40 /* InitialViewController.h */,
 				0ECEAF1E195D1A8400B92C40 /* InitialViewController.m */,
 				0ECEAF161958BDEA00B92C40 /* LoginViewController.h */,
@@ -400,8 +402,6 @@
 				B0782CD0194F850B0022E6E7 /* EditProfileViewController.m */,
 				0ECB142D1967D71E00F8AF74 /* CustomCollectionViewCell.h */,
 				0ECB142E1967D71E00F8AF74 /* CustomCollectionViewCell.m */,
-				0EB31FFC194BC176005A3B82 /* ProfileViewController.h */,
-				0EB31FFD194BC176005A3B82 /* ProfileViewController.m */,
 			);
 			name = UserProfileVCs;
 			path = ..;

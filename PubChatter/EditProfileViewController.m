@@ -11,7 +11,7 @@
 #import "UIColor+DesignColors.h"
 #import "CustomCollectionViewCell.h"
 
-@interface EditProfileViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, UIPickerViewDataSource,UIPickerViewDelegate, UIScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate>
+@interface EditProfileViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, UIPickerViewDataSource,UIPickerViewDelegate, UIScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UITextField *nameTextField;
 @property (nonatomic, strong) UIImagePickerController *cameraController;
 @property (weak, nonatomic) IBOutlet UITextField *ageLabel;
@@ -64,20 +64,12 @@
     self.cameraController = [[UIImagePickerController alloc] init];
     self.cameraController.delegate = self;
     [self.cameraController setAllowsEditing:YES];
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        self.cameraController.sourceType = UIImagePickerControllerSourceTypeCamera;
-    }
-    else
-    {
-        self.cameraController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    }
 
     // attach long press gesture to collectionView
     UILongPressGestureRecognizer *lpgr = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handlePress:)];
     lpgr.minimumPressDuration = .3; //seconds
     lpgr.delegate = self;
     [self.collectionView addGestureRecognizer:lpgr];
-
 
     [self setFields];
 }
@@ -230,11 +222,7 @@
 
     else {
             NSData *imageData = UIImagePNGRepresentation(resizedImage);
-            NSLog(@"Image data: %@", imageData);
-
             PFFile *imageFile = [PFFile fileWithData:imageData];
-            NSLog(@"Image file: %@", imageFile);
-
             [self.pffilesArray addObject:imageFile];
             NSLog(@"PFFiles Array count: %lu", (unsigned long)self.pffilesArray.count);
 
@@ -324,11 +312,37 @@
 
 -(void)onAddPhotoButtonPressed:(id)sender
 {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Take a photo or select an existing photo" message:nil delegate:self cancelButtonTitle:@"Take photo" otherButtonTitles:@"Choose photo", nil];
+    [alert show];
     self.profilePic = NO;
     self.addPhotos.enabled = NO;
-    [self presentViewController:self.cameraController animated:NO completion:^{}];
 }
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+            self.cameraController.sourceType = UIImagePickerControllerSourceTypeCamera;
+            [self presentViewController:self.cameraController animated:NO completion:^{}];
+        }
+        else
+        {
+            UIAlertView *secondAlert = [[UIAlertView alloc] initWithTitle:@"Unable to access camera" message:@"Try choosing a photo from your photo library" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [secondAlert show];
+        }
+    }
+    else if (buttonIndex == 1) {
+        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+            self.cameraController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            [self presentViewController:self.cameraController animated:NO completion:^{}];
+        }
+        else
+        {
+            UIAlertView *secondAlert = [[UIAlertView alloc] initWithTitle:@"Unable to access photo library" message:@"Try taking a photo with the camera" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [secondAlert show];
+        }
+    }
+}
 - (IBAction)onDoneButtonPressed:(id)sender
 {
     self.activityIndicator.hidden = NO;
@@ -602,8 +616,6 @@
     [self.editProfileButton setUserInteractionEnabled:NO];
     [self.genderPicker setUserInteractionEnabled:NO];
 
-    NSLog(@"%@", cell);
-
     [self.collectionView addSubview:self.deletePhotoButton];
 }
 
@@ -669,6 +681,8 @@
     [self.editProfileButton setUserInteractionEnabled:YES];
     [self.genderPicker setUserInteractionEnabled:YES];
 }
+
+
 
 
 @end

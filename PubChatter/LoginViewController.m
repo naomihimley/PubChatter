@@ -34,7 +34,7 @@
     self.fields = PFLogInFieldsFacebook | PFLogInFieldsSignUpButton | PFLogInFieldsDefault;
 
     //Request Facebook permissions.
-    self.facebookPermissions = @[@"public_profile", @"user_about_me", @"user_birthday", @"user_relationship_details"];
+    self.facebookPermissions = @[@"public_profile", @"user_about_me", @"user_birthday", @"user_relationship_details", @"user_photos"];
 
     return self;
 }
