@@ -163,6 +163,8 @@
             }
         else
         {
+            NSLog(@"No Pffiles array");
+            self.pffilesArray = [NSMutableArray new];
             [self.collectionView reloadData];
             [self createAddPhotosButton];
         }
