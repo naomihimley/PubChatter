@@ -172,13 +172,13 @@
     self.button6 = [UIButton new];
     self.button7 = [UIButton new];
 
-    [self.button1 setTitle:@"Bro" forState:UIControlStateNormal];
-    [self.button2 setTitle:@"Artsy" forState:UIControlStateNormal];
-    [self.button3 setTitle:@"Chill" forState:UIControlStateNormal];
-    [self.button4 setTitle:@"Hipster" forState:UIControlStateNormal];
-    [self.button5 setTitle:@"Classy" forState:UIControlStateNormal];
-    [self.button6 setTitle:@"Dive" forState:UIControlStateNormal];
-    [self.button7 setTitle:@"Clubby" forState:UIControlStateNormal];
+    [self.button1 setTitle:@"   Bro" forState:UIControlStateNormal];
+    [self.button2 setTitle:@"   Artsy" forState:UIControlStateNormal];
+    [self.button3 setTitle:@"   Chill" forState:UIControlStateNormal];
+    [self.button4 setTitle:@"   Hipster" forState:UIControlStateNormal];
+    [self.button5 setTitle:@"   Classy" forState:UIControlStateNormal];
+    [self.button6 setTitle:@"   Dive" forState:UIControlStateNormal];
+    [self.button7 setTitle:@"   Clubby" forState:UIControlStateNormal];
 
     [self.buttonsArray addObject:self.button1];
     [self.buttonsArray addObject:self.button2];
@@ -402,7 +402,9 @@
             NSString *userSelection = button.titleLabel.text;
             if (self.rating) {
                 NSLog(@"User is changing their rating");
-                self.rating.userRating = userSelection;
+                NSString *selectionWithoutSpaces = [userSelection stringByReplacingOccurrencesOfString:@" " withString:@""];
+                NSLog(@"%@", selectionWithoutSpaces);
+                self.rating.userRating = selectionWithoutSpaces;
                 [self.rating saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                     [self removeViewFromSuperview];
                 }];
@@ -410,7 +412,8 @@
             else {
                 NSLog(@"User is rating bar for the first time");
                 Rating *barRating = [Rating objectWithClassName:@"Rating"];
-                [barRating setObject:userSelection forKey:@"userRating"];
+                NSString *selectionWithoutSpaces = [userSelection stringByReplacingOccurrencesOfString:@" " withString:@""];
+                [barRating setObject:selectionWithoutSpaces forKey:@"userRating"];
                 [barRating setObject:[PFUser currentUser] forKey:@"user"];
                 [barRating setObject:self.bar forKey:@"bar"];
 
