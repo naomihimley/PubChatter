@@ -11,6 +11,7 @@
 #import "Bar.h"
 #import "Rating.h"
 #import <Parse/Parse.h>
+#import <CoreGraphics/CoreGraphics.h>
 #import "UIColor+DesignColors.h"
 
 @interface BarDetailViewController () <UIScrollViewDelegate>
@@ -80,9 +81,8 @@
 
 -(void)setViewContent
 {
-//    CGFloat statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
-//    CGFloat navBarHeight = self.navigationController.navigationBar.frame.size.height;
-//    CGFloat topOfView = statusBarHeight + navBarHeight;
+    NSLog(@"Setting views");
+    // Set the initil vertical offset (used for setting the vertical position of views) to zero.
     CGFloat verticalOffset = 0.0f;
 
     // Create number of users in bar label.
@@ -99,137 +99,86 @@
 
     verticalOffset = verticalOffset + numberOfUsersInBarLabel.frame.size.height;
 
+    // If there is at least one rating, create the column chart showing ratings. Otherwise just display the Yelp data.
     if (self.ratingsArray) {
 
-    // Dynamically set bar widths to a fraction of the first bar width.
+    // Set the top bar width. The widths of the bars below will be dyamically set as fraction of the top bar width.
     CGFloat firstBarWidth = self.view.frame.size.width - 100;
-
-    NSDictionary *firstDictionary = [self.ratingsArray objectAtIndex:0];
-    NSNumber *firstDictionaryRatingCount = [firstDictionary objectForKey:@"Count"];
-    CGFloat firstDictRatingFloat = firstDictionaryRatingCount.floatValue;
-
-    NSDictionary *secondDictionary = [self.ratingsArray objectAtIndex:1];
-    NSNumber *secondDictionaryRatingCount = [secondDictionary objectForKey:@"Count"];
-    CGFloat secondDictRatingFloat = secondDictionaryRatingCount.floatValue;
-    CGFloat secondBarWidth = (secondDictRatingFloat / firstDictRatingFloat) * firstBarWidth;
-
-    NSDictionary *thirdDictionary = [self.ratingsArray objectAtIndex:2];
-    NSNumber *thirdDictionaryRatingCount = [thirdDictionary objectForKey:@"Count"];
-    CGFloat thirdDictRatingFloat = thirdDictionaryRatingCount.floatValue;
-    CGFloat thirdBarWidth = (thirdDictRatingFloat / firstDictRatingFloat) * firstBarWidth;
-
-    NSDictionary *fourthDictionary = [self.ratingsArray objectAtIndex:3];
-    NSNumber *fourthDictionaryRatingCount = [fourthDictionary objectForKey:@"Count"];
-    CGFloat fourthDictRatingFloat = fourthDictionaryRatingCount.floatValue;
-    CGFloat fourthBarWidth = (fourthDictRatingFloat / firstDictRatingFloat) * firstBarWidth;
-
-    NSDictionary *fifthDictionary = [self.ratingsArray objectAtIndex:4];
-    NSNumber *fifthDictionaryRatingCount = [fifthDictionary objectForKey:@"Count"];
-    CGFloat fifthDictRatingFloat = fifthDictionaryRatingCount.floatValue;
-    CGFloat fifthBarWidth = (fifthDictRatingFloat / firstDictRatingFloat) * firstBarWidth;
-
-    NSDictionary *sixthDictionary = [self.ratingsArray objectAtIndex:5];
-    NSNumber *sixthDictionaryRatingCount = [sixthDictionary objectForKey:@"Count"];
-    CGFloat sixthDictRatingFloat = sixthDictionaryRatingCount.floatValue;
-    CGFloat sixthBarWidth = (sixthDictRatingFloat / firstDictRatingFloat) * firstBarWidth;
-
-    NSDictionary *seventhDictionary = [self.ratingsArray objectAtIndex:6];
-    NSNumber *seventhDictionaryRatingCount = [seventhDictionary objectForKey:@"Count"];
-    CGFloat seventhDictRatingFloat = seventhDictionaryRatingCount.floatValue;
-    CGFloat seventhBarWidth = (seventhDictRatingFloat / firstDictRatingFloat) * firstBarWidth;
+    CGFloat firstDictRatingFloat = [[[self.ratingsArray objectAtIndex:0] objectForKey:@"Count"] floatValue];
 
     CGFloat barheight = 30.0f;
 
-    NSMutableArray *barViewsArray = [NSMutableArray new];
-    NSMutableArray *barLabelsArray = [NSMutableArray new];
-
-    // Create first bar and label
+    // Create views
     UIView *firstBar = [[UIView alloc] init];
-    firstBar.frame = CGRectMake(self.view.frame.origin.x, verticalOffset, firstBarWidth, barheight);
-    [barViewsArray addObject:firstBar];
-    UILabel *firstBarLabel = [[UILabel alloc] init];
-    firstBarLabel.frame = CGRectMake(self.view.frame.origin.x + firstBar.frame.size.width, verticalOffset, self.view.frame.size.width - firstBar.frame.size.width, barheight);
-    firstBarLabel.text = [NSString stringWithFormat:@"  %@: %@", [firstDictionary objectForKey:@"userRating"], [firstDictionary objectForKey:@"Count"]];
-    [barLabelsArray addObject:firstBarLabel];
-    verticalOffset = verticalOffset + firstBarLabel.frame.size.height;
-
-    // Create second bar and label
     UIView *secondBar = [[UIView alloc] init];
-    secondBar.frame = CGRectMake(self.view.frame.origin.x, verticalOffset, secondBarWidth, barheight);
-    [barViewsArray addObject:secondBar];
-    UILabel *secondBarLabel = [[UILabel alloc] init];
-    secondBarLabel.frame = CGRectMake(self.view.frame.origin.x + secondBar.frame.size.width, verticalOffset, self.view.frame.size.width - secondBar.frame.size.width, barheight);
-    secondBarLabel.text = [NSString stringWithFormat:@"  %@: %@", [secondDictionary objectForKey:@"userRating"], [secondDictionary objectForKey:@"Count"]];
-    [barLabelsArray addObject:secondBarLabel];
-    verticalOffset = verticalOffset + secondBarLabel.frame.size.height;
-
-    // Create third bar and label
     UIView *thirdBar = [[UIView alloc] init];
-    thirdBar.frame = CGRectMake(self.view.frame.origin.x, verticalOffset, thirdBarWidth, barheight);
-    [barViewsArray addObject:thirdBar];
-    UILabel *thirdBarLabel = [[UILabel alloc] init];
-    thirdBarLabel.frame = CGRectMake(self.view.frame.origin.x + thirdBar.frame.size.width, verticalOffset, self.view.frame.size.width - thirdBar.frame.size.width, barheight);
-    thirdBarLabel.text = [NSString stringWithFormat:@"  %@: %@", [thirdDictionary objectForKey:@"userRating"], [thirdDictionary objectForKey:@"Count"]];
-    [barLabelsArray addObject:thirdBarLabel];
-    verticalOffset = verticalOffset + thirdBarLabel.frame.size.height;
-
-    // Create fourth bar and label
     UIView *fourthBar = [[UIView alloc] init];
-    fourthBar.frame = CGRectMake(self.view.frame.origin.x, verticalOffset, fourthBarWidth, barheight);
-    [barViewsArray addObject:fourthBar];
-    UILabel *fourthBarLabel = [[UILabel alloc] init];
-    fourthBarLabel.frame = CGRectMake(self.view.frame.origin.x + fourthBar.frame.size.width, verticalOffset, self.view.frame.size.width - fourthBar.frame.size.width, barheight);
-    fourthBarLabel.text = [NSString stringWithFormat:@"  %@: %@", [fourthDictionary objectForKey:@"userRating"], [fourthDictionary objectForKey:@"Count"]];
-    [barLabelsArray addObject:fourthBarLabel];
-    verticalOffset = verticalOffset + fourthBarLabel.frame.size.height;
-
-    // Create fifth bar and label
     UIView *fifthBar = [[UIView alloc] init];
-    fifthBar.frame = CGRectMake(self.view.frame.origin.x, verticalOffset, fifthBarWidth, barheight);
-    [barViewsArray addObject:fifthBar];
-    UILabel *fifthBarLabel = [[UILabel alloc] init];
-    fifthBarLabel.frame = CGRectMake(self.view.frame.origin.x + fifthBar.frame.size.width, verticalOffset, self.view.frame.size.width - fifthBar.frame.size.width, barheight);
-    fifthBarLabel.text = [NSString stringWithFormat:@"  %@: %@", [fifthDictionary objectForKey:@"userRating"], [fifthDictionary objectForKey:@"Count"]];
-    [barLabelsArray addObject:fifthBarLabel];
-    verticalOffset = verticalOffset + fifthBarLabel.frame.size.height;
-
-    // Create sixth bar and label
     UIView *sixthBar = [[UIView alloc] init];
-    sixthBar.frame = CGRectMake(self.view.frame.origin.x, verticalOffset, sixthBarWidth, barheight);
-    [barViewsArray addObject:sixthBar];
-    UILabel *sixthBarLabel = [[UILabel alloc] init];
-    sixthBarLabel.frame = CGRectMake(self.view.frame.origin.x + sixthBar.frame.size.width, verticalOffset, self.view.frame.size.width - sixthBar.frame.size.width, barheight);
-    sixthBarLabel.text = [NSString stringWithFormat:@"  %@: %@", [sixthDictionary objectForKey:@"userRating"], [sixthDictionary objectForKey:@"Count"]];
-    [barLabelsArray addObject:sixthBarLabel];
-    verticalOffset = verticalOffset + sixthBarLabel.frame.size.height;
-
-    // Create seventh bar and label
     UIView *seventhBar = [[UIView alloc] init];
-    seventhBar.frame = CGRectMake(self.view.frame.origin.x, verticalOffset, seventhBarWidth, barheight);
+
+    // Create views array and add views.
+    NSMutableArray *barViewsArray = [NSMutableArray new];
+
+    [barViewsArray addObject:firstBar];
+    [barViewsArray addObject:secondBar];
+    [barViewsArray addObject:thirdBar];
+    [barViewsArray addObject:fourthBar];
+    [barViewsArray addObject:fifthBar];
+    [barViewsArray addObject:sixthBar];
     [barViewsArray addObject:seventhBar];
-    UILabel *seventhBarLabel = [[UILabel alloc] init];
-    seventhBarLabel.frame = CGRectMake(self.view.frame.origin.x + seventhBar.frame.size.width, verticalOffset, self.view.frame.size.width - seventhBar.frame.size.width, barheight);
-    seventhBarLabel.text = [NSString stringWithFormat:@"  %@: %@", [seventhDictionary objectForKey:@"userRating"], [seventhDictionary objectForKey:@"Count"]];
-    [barLabelsArray addObject:seventhBarLabel];
-    verticalOffset = verticalOffset + seventhBarLabel.frame.size.height;
 
-    for (UIView *view in barViewsArray) {
-        view.backgroundColor = [UIColor buttonColor];
-        view.layer.borderWidth = 2.0f;
-        view.layer.borderColor = [[UIColor buttonColor] CGColor];
-        view.layer.borderWidth = 2.0f;
-        view.layer.borderColor = [[UIColor blackColor] CGColor];
-        view.alpha = 0.5f;
-        [self.scrollView addSubview:view];
-    }
+    // Set a counter and iterate through views array, adding animation and a label to the right of the view.
+    NSInteger counter = 0;
+        for (UIView *view in barViewsArray) {
 
-    for (UILabel *label in barLabelsArray) {
-        label.textColor = [UIColor whiteColor];
-        label.backgroundColor = [UIColor clearColor];
-        [self.scrollView addSubview:label];
+            // Create an initial frame for the view with a width of 1 pixel, the animation will expand the bars out to right of the view.
+            view.frame = CGRectMake(self.view.frame.origin.x, verticalOffset, 1, barheight);
+            [self.scrollView addSubview:view];
+
+            // Style the view
+            view.backgroundColor = [UIColor buttonColor];
+            view.layer.borderWidth = 2.0f;
+            view.layer.borderColor = [[UIColor buttonColor] CGColor];
+            view.layer.borderColor = [[UIColor blackColor] CGColor];
+            view.alpha = 0.5f;
+
+            // Add animation to expand the view outward
+            [UIView beginAnimations:nil context:nil];
+            [UIView setAnimationDuration:1.0];
+            [UIView setAnimationDelay:0.0];
+            [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+
+            // Dynamically set bar widths as a fraction of the top bar width.
+            if (counter == 0) {
+                view.frame = CGRectMake(self.view.frame.origin.x, verticalOffset, firstBarWidth, barheight);
+            }
+            else {
+                // Takes the ratings count and makes it a fraction of the top bar ratings count. Bar width is the product of that fraction and the first bar's width.
+                CGFloat barFloat = [[[self.ratingsArray objectAtIndex:counter] objectForKey:@"Count"] floatValue];
+                CGFloat barWidth = (barFloat / firstDictRatingFloat) * firstBarWidth;
+                view.frame = CGRectMake(self.view.frame.origin.x, verticalOffset, barWidth, barheight);
+            }
+
+            // Commit the view animation
+            [UIView commitAnimations];
+
+            // Create a lable displaying the rating and the number of users that have given said bar that rating.
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.origin.x + view.frame.size.width, verticalOffset, self.view.frame.size.width - view.frame.size.width, barheight)];
+            label.text = [NSString stringWithFormat:@"  %@: %@", [[self.ratingsArray objectAtIndex:counter] objectForKey:@"userRating"], [[self.ratingsArray objectAtIndex:counter] objectForKey:@"Count"]];
+
+            // Style the label and add label to scrollview
+            label.textColor = [UIColor whiteColor];
+            label.backgroundColor = [UIColor clearColor];
+            [self.scrollView addSubview:label];
+
+            // Increment counter and vertical offset.
+            counter += 1;
+            verticalOffset = verticalOffset + barheight;
         }
     }
 
+    // Move down 20 pixels, and add bar information views.
     verticalOffset = verticalOffset + 20.0f;
 
     //Add imageview
