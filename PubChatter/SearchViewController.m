@@ -211,10 +211,10 @@
     if (self.redrawActivated && self.initialMapLoad) {
         NSLog(@"Initial mapview load");
 
-        NSLog(@"latitude : %f", latitude);
-        NSLog(@"longitude: %f", longitude);
-        NSLog(@"# results %@", numResults);
-        NSLog(@"sort type :%@", sortType);
+//        NSLog(@"latitude : %f", latitude);
+//        NSLog(@"longitude: %f", longitude);
+//        NSLog(@"# results %@", numResults);
+//        NSLog(@"sort type :%@", sortType);
 
         self.request = [TDOAuth URLRequestForPath:@"/v2/search" GETParameters:@{@"term": query, @"ll": [NSString stringWithFormat:@"%f,%f", latitude, longitude], @"limit" : numResults, @"sort" : sortType}
                                              host:@"api.yelp.com"
